@@ -4,11 +4,9 @@ Cursor agent skills for designing and building [Vulcan/DataOS](https://dataosinf
 
 Run a single command to scaffold two powerful Cursor agent skills and the full Vulcan reference docs into any project.
 
-## Installation
+## Usage
 
-### Option 1 — Full install (recommended)
-
-Installs the skills **and** the Vulcan reference docs your project needs:
+Installs the skills and the Vulcan reference docs your project needs:
 
 ```bash
 # Interactive — prompts you to pick an engine
@@ -42,16 +40,6 @@ Which engine would you like to install examples for?
 Enter number (0–10):
 ```
 
-### Option 2 — Skills only via `npx skills` (universal)
-
-Works with Cursor, Claude Code, Codex, Windsurf, and [70+ other agents](https://github.com/vercel-labs/skills#supported-agents):
-
-```bash
-npx skills add Akshayram11/builder-skills -a cursor
-```
-
-> **Note:** This installs the SKILL.md files only — it does **not** copy the `docs/` folder.
-> The skills rely on `docs/vulcan-book/` to function. Run Option 1 to get the full setup.
 
 ## What gets installed
 
