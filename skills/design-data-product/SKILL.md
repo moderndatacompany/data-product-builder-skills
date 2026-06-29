@@ -62,6 +62,60 @@ When a docs page you used has a reference URL, show it to the user as "Reference
 
 ## Workflow
 
+### Stage 0: PREREQUISITES CHECK (Mandatory — Run Before Anything Else)
+
+**Goal**: Confirm the two required tools are available before starting the design session. If either is missing, stop and help the user resolve it.
+
+#### Check 1 — Data Product MCP (`dataproduct-mcp/api/v1`)
+
+Verify the Data Product MCP server is reachable. Call `search(index="data_product_search_index")` (zero arguments). This is the fastest round-trip that proves the MCP is live.
+
+- **Pass**: the call returns any result (even an empty list) without an auth or connection error → proceed to Check 2.
+- **Fail**: the call errors, times out, or returns an authentication/connection error →
+
+> "To design a data product I need access to the Data Product MCP (`dataproduct-mcp/api/v1`), but I can't reach it right now.
+>
+> **To fix this:**
+> 1. Open **Cursor Settings → MCP** and confirm a server named `dataproduct-mcp` (or similar) is listed and enabled.
+> 2. If it is not listed, add it — your workspace admin should have the connection URL and credentials.
+> 3. Once the server shows a green status, restart this session and try again.
+>
+> I'll wait here until the MCP is reachable."
+
+Do NOT proceed past this check if the MCP is unreachable.
+
+---
+
+#### Check 2 — `search` Tool
+
+Confirm the `search` tool is available in the current session. The same call used in Check 1 already exercises `search` — if it succeeded, this check passes automatically.
+
+If Check 1 passed but `search` later returns `tool not found` or a similar "unknown tool" error at any point during the session:
+
+> "The `search` tool is no longer available in this session. This tool is required for table discovery and data product lookup.
+>
+> **To fix this:**
+> 1. Confirm the Data Product MCP server is still connected in **Cursor Settings → MCP**.
+> 2. Refresh or restart the session, then re-run the skill.
+>
+> I'll pause here until `search` is available."
+
+---
+
+#### Prerequisites Result
+
+Once both checks pass, display exactly this banner before starting Stage 1:
+
+> **Prerequisites check passed.**
+> - Data Product MCP (`dataproduct-mcp/api/v1`): connected
+> - `search` tool: available
+>
+> Ready to begin the design session.
+
+Then continue to Stage 1.
+
+---
+
 ### Stage 1: DISCOVER
 
 **Goal**: Understand what the user wants to build.
