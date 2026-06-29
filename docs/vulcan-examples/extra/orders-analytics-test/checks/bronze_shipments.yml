@@ -1,0 +1,90 @@
+checks:
+  bronze_v1.shipments:
+    completeness:
+      - missing_count(shipment_id) = 0:
+          name: no_missing_shipment_ids
+          attributes:
+            description: "All shipments must have a shipment ID"
+      
+      - missing_count(order_id) = 0:
+          name: no_missing_order_ids
+          attributes:
+            description: "All shipments must have an order ID"
+      
+      - missing_count(shipped_date) = 0:
+          name: no_missing_shipped_dates
+          attributes:
+            description: "All shipments must have a shipped date"
+      
+      - missing_count(carrier) = 0:
+          name: no_missing_carriers
+          attributes:
+            description: "All shipments must have a carrier"
+      
+      # This will FAIL - we have ~900 shipments (90% of 1000 orders)
+      - row_count > 950:
+          name: high_shipment_rate
+          attributes:
+            description: "Should have more than 950 shipments (EXPECTED TO FAIL)"
+    
+    validity:
+      - failed rows:
+          name: positive_shipment_ids
+          fail query: |
+            SELECT shipment_id, order_id, shipped_date, carrier
+            FROM bronze_v1.shipments
+            WHERE shipment_id <= 0
+          samples limit: 10
+          attributes:
+            description: "Shipment IDs must be positive"
+      
+      - failed rows:
+          name: valid_carriers
+          fail query: |
+            SELECT shipment_id, order_id, shipped_date, carrier
+            FROM bronze_v1.shipments
+            WHERE carrier NOT IN ('DHL', 'UPS', 'FedEx', 'USPS', 'BlueDart')
+          samples limit: 10
+          attributes:
+            description: "Carriers must be from valid set"
+      
+      - failed rows:
+          name: valid_order_references
+          fail query: |
+            SELECT s.shipment_id, s.order_id, s.shipped_date
+            FROM bronze_v1.shipments s
+            LEFT JOIN bronze_v1.orders o ON s.order_id = o.order_id
+            WHERE o.order_id IS NULL
+          samples limit: 10
+          attributes:
+            description: "All shipments must reference valid orders"
+      
+      - failed rows:
+          name: shipped_after_order
+          fail query: |
+            SELECT s.shipment_id, s.order_id, o.order_date, s.shipped_date
+            FROM bronze_v1.shipments s
+            INNER JOIN bronze_v1.orders o ON s.order_id = o.order_id
+            WHERE s.shipped_date < DATE(o.order_date)
+          samples limit: 10
+          attributes:
+            description: "Shipment date must be on or after order date"
+      
+      # This will FAIL - checking for same-day shipments only (data_gen creates 0-5 day delays)
+      - failed rows:
+          name: same_day_shipping_check
+          fail query: |
+            SELECT s.shipment_id, s.order_id, o.order_date, s.shipped_date
+            FROM bronze_v1.shipments s
+            INNER JOIN bronze_v1.orders o ON s.order_id = o.order_id
+            WHERE s.shipped_date > DATE(o.order_date)
+          samples limit: 10
+          attributes:
+            description: "All shipments should be same-day (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(shipment_id) = 0:
+          name: unique_shipment_ids
+          attributes:
+            description: "Shipment IDs must be unique"
+

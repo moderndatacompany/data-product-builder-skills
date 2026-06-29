@@ -1,0 +1,3 @@
+kind: metric
+name: count_products
+measure: product.count_products

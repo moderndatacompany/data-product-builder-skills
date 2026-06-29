@@ -1,0 +1,58 @@
+version: v1alpha
+type: vulcan
+name: cobs-analytics-forest
+description: COBS customer order behavior segmentation analytics on Snowflake.
+tags:
+  - cobs
+  - customer-segmentation
+  - behavioral-analytics
+  - snowflake
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: pacific
+  engine: snowflake
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/extra/customer-usecase/cobs
+    secret: ct-onboarding:git-sync
+  depots:
+    - dataos://snowflakevulcan?purpose=rw
+  workflow:
+    schedule:
+      crons:
+        - '0 0 * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - run
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"

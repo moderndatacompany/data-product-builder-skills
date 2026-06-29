@@ -1,0 +1,3 @@
+kind: metric
+name: total_shipped_orders
+measure: sales_funnel.total_shipped_orders

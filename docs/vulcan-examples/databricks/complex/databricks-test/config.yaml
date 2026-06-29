@@ -1,0 +1,42 @@
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: b2b-saas-databricks
+display_name: B2B SaaS Analytics
+description: B2B SaaS analytics data product with customer segmentation, subscription revenue, and product usage tracking on Databricks.
+tags:
+  - databricks
+  - b2b
+  - saas
+  - analytics
+domain: marketing
+model_defaults:
+  dialect: databricks
+  cron: '@daily'
+
+gateways:
+  default:
+    connection:
+      type: databricks
+      server_hostname: "{{ env_var('DATABRICKS_HOST', '') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH', '') }}"
+      access_token: "{{ env_var('DATABRICKS_TOKEN', '') }}"
+      catalog: "{{ env_var('DATABRICKS_CATALOG', 'workspace') }}"
+
+    # state_connection:
+    #   type: postgres
+    #   host: statestore
+    #   port: "5432"
+    #   database: statestore
+    #   user: "vulcan"
+    #   password: "vulcan"
+    # state_schema: "hello"

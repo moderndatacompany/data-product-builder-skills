@@ -1,0 +1,117 @@
+checks:
+  silver_v1.dim_product_profile:
+    completeness:
+      - missing_count(product_id) = 0:
+          name: no_missing_product_ids
+          attributes:
+            description: "All profiles must have a product ID"
+      
+      - missing_count(product_name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All profiles must have a product name"
+      
+      - missing_count(category) = 0:
+          name: no_missing_categories
+          attributes:
+            description: "All profiles must have a category"
+      
+      - missing_count(product_performance) = 0:
+          name: no_missing_performance
+          attributes:
+            description: "All profiles must have a performance classification"
+      
+      - row_count > 50:
+          name: sufficient_product_profiles
+          attributes:
+            description: "At least 50 product profiles"
+    
+    validity:
+      - failed rows:
+          name: valid_performance_categories
+          fail query: |
+            SELECT product_id, product_name, product_performance
+            FROM silver_v1.dim_product_profile
+            WHERE product_performance NOT IN ('Best Seller', 'Good Performer', 'Slow Mover', 'New', 'Stale')
+          samples limit: 10
+          attributes:
+            description: "Product performance must be from valid set"
+      
+      - failed rows:
+          name: non_negative_orders
+          fail query: |
+            SELECT product_id, product_name, total_orders
+            FROM silver_v1.dim_product_profile
+            WHERE total_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Total orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT product_id, product_name, total_revenue
+            FROM silver_v1.dim_product_profile
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Total revenue cannot be negative"
+      
+      - failed rows:
+          name: positive_current_price
+          fail query: |
+            SELECT product_id, product_name, current_price
+            FROM silver_v1.dim_product_profile
+            WHERE current_price <= 0
+          samples limit: 10
+          attributes:
+            description: "Current price must be positive"
+      
+      - failed rows:
+          name: valid_customer_penetration
+          fail query: |
+            SELECT product_id, product_name, customer_penetration_pct, unique_customers
+            FROM silver_v1.dim_product_profile
+            WHERE customer_penetration_pct < 0 OR customer_penetration_pct > 100
+          samples limit: 10
+          attributes:
+            description: "Customer penetration must be between 0 and 100 percent"
+      
+      - failed rows:
+          name: positive_revenue_rank
+          fail query: |
+            SELECT product_id, product_name, category, revenue_rank_in_category
+            FROM silver_v1.dim_product_profile
+            WHERE revenue_rank_in_category <= 0
+          samples limit: 10
+          attributes:
+            description: "Revenue rank must be positive"
+      
+      # This will FAIL - checking for all best sellers
+      - failed rows:
+          name: all_best_sellers_check
+          fail query: |
+            SELECT product_id, product_name, product_performance, total_orders
+            FROM silver_v1.dim_product_profile
+            WHERE product_performance != 'Best Seller'
+          samples limit: 10
+          attributes:
+            description: "All products should be best sellers (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for minimum sales threshold
+      - failed rows:
+          name: minimum_sales_check
+          fail query: |
+            SELECT product_id, product_name, total_quantity_sold, product_performance
+            FROM silver_v1.dim_product_profile
+            WHERE total_quantity_sold < 50
+          samples limit: 10
+          attributes:
+            description: "All products should have sold at least 50 units (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(product_id) = 0:
+          name: unique_product_ids
+          attributes:
+            description: "Product IDs must be unique"
+

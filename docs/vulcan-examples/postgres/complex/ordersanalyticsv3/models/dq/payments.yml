@@ -1,0 +1,23 @@
+# kind: dq — converted from checks/payments.yml
+kind: dq
+name: payments_dq
+depends_on: sales.payments
+rules:
+- failed rows:
+    name: negative_payment_amounts
+    dimension: validity
+    fail query: |
+      SELECT payment_id, order_id, payment_date, amount
+      FROM sales.payments
+      WHERE amount < 0
+    samples limit: 10
+    description: Payment amounts must not be negative
+- failed rows:
+    name: invalid_payment_status
+    dimension: validity
+    fail query: |
+      SELECT payment_id, order_id, status
+      FROM sales.payments
+      WHERE status NOT IN ('Paid', 'Pending', 'Refunded')
+    samples limit: 10
+    description: Payment status must be one of the allowed values

@@ -1,0 +1,33 @@
+customer_id,customer_name,customer_type,industry,company_size,account_tier,primary_contact_name,primary_contact_email,billing_address_city,billing_address_state,billing_address_country,account_manager_id,account_status,created_date,last_modified_date
+CUST-001,Apex Manufacturing Co,OEM,Manufacturing,Enterprise,Strategic,John Smith,john.smith@apex-mfg.com,Chicago,IL,US,AM-001,Active,2022-01-15,2024-11-20
+CUST-002,Global Parts Distributing,Distributor,Distribution,Large,Strategic,Maria Garcia,maria.garcia@globalparts.com,Dallas,TX,US,AM-002,Active,2021-06-10,2024-12-01
+CUST-003,Summit Engineering Ltd,Direct,Engineering,Mid-Market,Standard,David Chen,david.chen@summiteng.com,Seattle,WA,US,AM-001,Active,2022-03-22,2024-10-15
+CUST-004,Precision Tooling Inc,OEM,Manufacturing,Large,Strategic,Sarah Johnson,sarah.j@precisiontool.com,Detroit,MI,US,AM-003,Active,2021-09-05,2024-11-30
+CUST-005,Valley Supply Chain,Distributor,Logistics,Mid-Market,Standard,Robert Lee,robert.lee@valleysc.com,Phoenix,AZ,US,AM-002,Active,2022-07-18,2024-09-25
+CUST-006,Northern Industrial Corp,OEM,Manufacturing,Enterprise,Strategic,Emily Watson,emily.w@northernindustrial.com,Minneapolis,MN,US,AM-001,Active,2021-02-28,2024-12-10
+CUST-007,Pacific Trade Solutions,Direct,Trading,Small,Small,Kevin Park,kevin.park@pacifictrade.com,Portland,OR,US,AM-004,Active,2023-01-12,2024-08-30
+CUST-008,Midwest Components LLC,Distributor,Distribution,Mid-Market,Standard,Lisa Brown,lisa.brown@midwestcomp.com,Columbus,OH,US,AM-003,Active,2022-05-30,2024-11-15
+CUST-009,Coastal Automation Group,OEM,Automation,Large,Strategic,James Wilson,james.w@coastalauto.com,San Diego,CA,US,AM-001,Active,2021-08-14,2024-12-05
+CUST-010,Heritage Fabrication Works,Direct,Manufacturing,Small,Small,Nancy Taylor,nancy.t@heritagefab.com,Nashville,TN,US,AM-004,Active,2023-04-20,2024-07-22
+CUST-011,Atlas Logistics Partners,Distributor,Logistics,Large,Standard,Michael Davis,michael.d@atlaslogistics.com,Atlanta,GA,US,AM-002,Active,2022-02-14,2024-10-30
+CUST-012,Sterling Industrial Supply,Distributor,Distribution,Enterprise,Strategic,Jennifer Martinez,jennifer.m@sterlingind.com,Houston,TX,US,AM-003,Active,2021-04-08,2024-11-28
+CUST-013,Quantum Technologies Inc,OEM,Technology,Mid-Market,Standard,Thomas Anderson,thomas.a@quantumtech.com,Austin,TX,US,AM-001,Active,2022-09-01,2024-09-15
+CUST-014,Eagle Manufacturing Group,OEM,Manufacturing,Large,Strategic,Amanda White,amanda.w@eaglemfg.com,Pittsburgh,PA,US,AM-002,Active,2021-11-20,2024-12-08
+CUST-015,Frontier Supply Co,Direct,Distribution,Small,Small,Christopher Hall,chris.h@frontiersupply.com,Denver,CO,US,AM-004,Active,2023-06-15,2024-08-10
+CUST-016,Pinnacle Automation Systems,OEM,Automation,Mid-Market,Standard,Stephanie Clark,steph.c@pinnacleauto.com,Charlotte,NC,US,AM-003,Active,2022-08-22,2024-10-20
+CUST-017,Great Lakes Distribution,Distributor,Distribution,Large,Strategic,Richard Thompson,richard.t@greatlakesdist.com,Milwaukee,WI,US,AM-001,Active,2021-07-03,2024-11-25
+CUST-018,Sunrise Electronics Corp,Direct,Electronics,Mid-Market,Standard,Michelle Lewis,michelle.l@sunriseelec.com,San Jose,CA,US,AM-002,Active,2022-12-10,2024-09-05
+CUST-019,Titan Heavy Industries,OEM,Manufacturing,Enterprise,Strategic,William King,william.k@titanheavy.com,Cleveland,OH,US,AM-001,Active,2021-01-25,2024-12-12
+CUST-020,Central Wholesale Group,Distributor,Distribution,Mid-Market,Standard,Patricia Young,patricia.y@centralwholesale.com,Kansas City,MO,US,AM-003,Active,2022-04-17,2024-10-10
+CUST-021,Redwood Precision Parts,OEM,Manufacturing,Large,Standard,Daniel Harris,daniel.h@redwoodparts.com,Sacramento,CA,US,AM-002,Active,2022-06-28,2024-11-05
+CUST-022,Metro Supply Network,Distributor,Distribution,Small,Small,Laura Robinson,laura.r@metrosupply.com,Tampa,FL,US,AM-004,Active,2023-03-08,2024-07-15
+CUST-023,Cascade Engineering Solutions,Direct,Engineering,Mid-Market,Standard,Steven Walker,steven.w@cascadeeng.com,Boise,ID,US,AM-001,Active,2022-10-14,2024-09-20
+CUST-024,Liberty Industrial Holdings,OEM,Manufacturing,Enterprise,Strategic,Karen Allen,karen.a@libertyind.com,Philadelphia,PA,US,AM-003,Active,2021-05-12,2024-12-02
+CUST-025,Bayshore Components Inc,Direct,Manufacturing,Small,Small,Brian Scott,brian.s@bayshorecomp.com,Jacksonville,FL,US,AM-004,Active,2023-08-01,2024-08-20
+CUST-026,Heartland Machine Works,OEM,Manufacturing,Mid-Market,Standard,Angela Green,angela.g@heartlandmachine.com,Omaha,NE,US,AM-002,Active,2022-11-05,2024-10-25
+CUST-027,Summit Wholesale Partners,Distributor,Distribution,Large,Strategic,Mark Adams,mark.a@summitwholesale.com,St. Louis,MO,US,AM-001,Active,2021-10-18,2024-11-18
+CUST-028,Pacific Rim Manufacturing,OEM,Manufacturing,Large,Standard,Sandra Nelson,sandra.n@pacificrim-mfg.com,Los Angeles,CA,US,AM-003,Active,2022-01-30,2024-09-30
+CUST-029,Vanguard Technical Services,Direct,Engineering,Mid-Market,Standard,Timothy Hill,timothy.h@vanguardtech.com,Raleigh,NC,US,AM-002,Active,2022-07-07,2024-10-15
+CUST-030,Horizon Supply International,Distributor,Distribution,Enterprise,Strategic,Rebecca Moore,rebecca.m@horizonsupply.com,Miami,FL,US,AM-001,Active,2021-03-15,2024-12-15
+CUST-031,Ironworks Manufacturing Ltd,OEM,Manufacturing,Small,Small,Jason Campbell,jason.c@ironworksmfg.com,Birmingham,AL,US,AM-004,Inactive,2023-05-20,2024-06-10
+CUST-032,Diamond Industrial Group,OEM,Manufacturing,Large,Standard,Catherine Baker,catherine.b@diamondind.com,Indianapolis,IN,US,AM-002,Active,2022-03-10,2024-11-10

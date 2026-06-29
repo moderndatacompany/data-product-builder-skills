@@ -1,0 +1,347 @@
+# Converted from legacy: semantics/adobe_checkout.yaml
+kind: semantic
+name: adobe_checkout
+depends_on: web_analytics_gold.ADOBE_CHECKOUT
+ai_context:
+  instructions: >
+    Use this semantic model for questions about adobe checkout. Prefer its measures
+    for aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "adobe checkout"
+    - "adobe_checkout"
+    - "adobe"
+    - "checkout"
+  examples:
+    - "Show adobe checkout trends over time."
+    - "Break down adobe checkout by key dimensions."
+
+measures:
+- name: total_revenues
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total revenues. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total revenues"
+      - "total_revenues"
+      - "total"
+      - "revenues"
+    examples:
+      - "What is total revenues by month?"
+      - "Compare total revenues across key segments."
+  type: number
+  expression: SUM({adobe_checkout.REVENUE})
+  description: Total revenue generated from the product.
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_revenues
+  - finance.gross_sales
+- name: total_revenues_from_list
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total revenues from list. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total revenues from list"
+      - "total_revenues_from_list"
+      - "total"
+      - "revenues"
+    examples:
+      - "What is total revenues from list by month?"
+      - "Compare total revenues from list across key segments."
+  type: number
+  expression: SUM(CASE WHEN {adobe_checkout.LIST_TYPE} IS NOT NULL THEN {adobe_checkout.REVENUE} ELSE 0 END)
+  description: Total revenue generated from list pages.
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_revenues_from_list
+  - finance.gross_sales
+- name: checkout_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for checkout count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "checkout count"
+      - "checkout_count"
+      - "checkout"
+      - "count"
+    examples:
+      - "What is checkout count by month?"
+      - "Compare checkout count across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {adobe_checkout.C_EVENT_LIST} LIKE '%1%' THEN {adobe_checkout.HITID} END)
+  description: Provides total checkout count happened within the same cart ID from Add to Cart to checkout.
+  tags:
+  - metric
+  terms:
+  - metric.checkout_count
+- name: total_atc_events
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total atc events. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total atc events"
+      - "total_atc_events"
+      - "total"
+      - "atc"
+    examples:
+      - "What is total atc events by month?"
+      - "Compare total atc events across key segments."
+  type: count_distinct
+  expression: '{adobe_checkout.HITID}'
+  description: Total Add to Cart events
+  tags:
+  - metric
+  terms:
+  - metric.total_atc_events
+- name: unique_carts
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for unique carts. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "unique carts"
+      - "unique_carts"
+      - "unique"
+      - "carts"
+    examples:
+      - "What is unique carts by month?"
+      - "Compare unique carts across key segments."
+  type: count_distinct
+  expression: '{adobe_checkout.CART_ID}'
+  description: Unique carts created
+  tags:
+  - metric
+  terms:
+  - metric.unique_carts
+- name: unique_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for unique orders. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "unique orders"
+      - "unique_orders"
+      - "unique"
+      - "orders"
+    examples:
+      - "What is unique orders by month?"
+      - "Compare unique orders across key segments."
+  type: count_distinct
+  expression: '{adobe_checkout.C_ORDER_NUMBER}'
+  description: Unique orders placed
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.unique_orders
+  - metric.order_count
+- name: unique_accounts
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for unique accounts. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "unique accounts"
+      - "unique_accounts"
+      - "unique"
+      - "accounts"
+    examples:
+      - "What is unique accounts by month?"
+      - "Compare unique accounts across key segments."
+  type: count_distinct
+  expression: '{adobe_checkout.ACCOUNT_UNIQUE_ID}'
+  description: Unique accounts making purchases
+  tags:
+  - metric
+  terms:
+  - metric.unique_accounts
+segments:
+- name: is_app
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is app subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "is app"
+      - "is_app"
+      - "app"
+    examples:
+      - "Show revenue for is app."
+      - "How many records are in is app?"
+  expression: '{adobe_checkout.DIGITAL_PLATFORM} = ''App'''
+  description: App checkouts
+  tags:
+  - metric
+  terms:
+  - metric.is_app
+- name: is_web
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is web subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "is web"
+      - "is_web"
+      - "web"
+    examples:
+      - "Show revenue for is web."
+      - "How many records are in is web?"
+  expression: '{adobe_checkout.DIGITAL_PLATFORM} = ''Web'''
+  description: Web checkouts
+  tags:
+  - metric
+  terms:
+  - metric.is_web
+- name: is_favorites_list
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is favorites list subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is favorites list"
+      - "is_favorites_list"
+      - "favorites"
+      - "list"
+    examples:
+      - "Show revenue for is favorites list."
+      - "How many records are in is favorites list?"
+  expression: '{adobe_checkout.LIST_TYPE} = ''Favorites'''
+  description: Checkouts from Favorites list
+  tags:
+  - metric
+  terms:
+  - metric.is_favorites_list
+- name: is_my_list
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is my list subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is my list"
+      - "is_my_list"
+      - "list"
+    examples:
+      - "Show revenue for is my list."
+      - "How many records are in is my list?"
+  expression: '{adobe_checkout.LIST_TYPE} = ''My List'''
+  description: Checkouts from My List
+  tags:
+  - metric
+  terms:
+  - metric.is_my_list
+- name: is_previously_purchased
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is previously purchased subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is previously purchased"
+      - "is_previously_purchased"
+      - "previously"
+      - "purchased"
+    examples:
+      - "Show revenue for is previously purchased."
+      - "How many records are in is previously purchased?"
+  expression: '{adobe_checkout.LIST_TYPE} = ''Previously Purchased'''
+  description: Checkouts from Previously Purchased
+  tags:
+  - metric
+  terms:
+  - metric.is_previously_purchased
+- name: is_ready_to_reorder
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is ready to reorder subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is ready to reorder"
+      - "is_ready_to_reorder"
+      - "ready"
+      - "reorder"
+    examples:
+      - "Show revenue for is ready to reorder."
+      - "How many records are in is ready to reorder?"
+  expression: '{adobe_checkout.LIST_TYPE} = ''Ready to Reorder'''
+  description: Checkouts from Ready to Reorder
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.is_ready_to_reorder
+  - metric.order_count
+- name: is_customers_like_you
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is customers like you subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is customers like you"
+      - "is_customers_like_you"
+      - "customers"
+      - "like"
+    examples:
+      - "Show revenue for is customers like you."
+      - "How many records are in is customers like you?"
+  expression: '{adobe_checkout.LIST_TYPE} = ''Customers Like You'''
+  description: Checkouts from Customers Like You recommendations
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.is_customers_like_you
+  - metric.customer_count
+- name: is_algorithmic
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is algorithmic subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is algorithmic"
+      - "is_algorithmic"
+      - "algorithmic"
+    examples:
+      - "Show revenue for is algorithmic."
+      - "How many records are in is algorithmic?"
+  expression: '{adobe_checkout.LIST_ALGORITHMIC_TYPE} = ''Algorithmic'''
+  description: Algorithmic recommendations
+  tags:
+  - metric
+  terms:
+  - metric.is_algorithmic
+- name: is_non_algorithmic
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is non algorithmic subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is non algorithmic"
+      - "is_non_algorithmic"
+      - "non"
+      - "algorithmic"
+    examples:
+      - "Show revenue for is non algorithmic."
+      - "How many records are in is non algorithmic?"
+  expression: '{adobe_checkout.LIST_ALGORITHMIC_TYPE} = ''Non-Algorithmic'''
+  description: Non-algorithmic (manual) lists
+  tags:
+  - metric
+  terms:
+  - metric.is_non_algorithmic

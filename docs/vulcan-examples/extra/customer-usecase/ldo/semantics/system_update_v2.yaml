@@ -1,0 +1,54 @@
+models:
+  lenovo.ldo.system_update_v2:
+    alias: system_update
+
+    joins:
+      system_update_devices:
+        type: one_to_many
+        expression: "{system_update.PACKAGE_ID} = {system_update_devices.PACKAGE_ID}"
+    
+    dimensions:
+      includes:
+        - PACKAGE_ID
+        - PACKAGE_NAME
+        - PACKAGE_DESCRIPTION
+        - PACKAGE_VERSION
+        - CURRENT_INSTALLED_VERSION
+        - PACKAGE_RELEASE_DATE
+        - PACKAGE_TYPE
+        - CATEGORY
+        - PACKAGE_SEVERITY
+        - PACKAGE_REBOOT_TYPE
+        - TEST_STATE
+
+    measures:
+      no_of_critical_firmware_updates:
+        type: sum
+        expression: "CASE WHEN {system_update.PACKAGE_SEVERITY} = 'CRITICAL' AND {system_update.PACKAGE_TYPE} = 'Firmware' THEN 1 ELSE 0 END"
+        description: "Total number of critical firmware updates."
+      
+      no_of_critical_updates_requires_reboot:
+        type: sum
+        expression: "CASE WHEN {system_update.PACKAGE_SEVERITY} = 'CRITICAL' AND {system_update.PACKAGE_REBOOT_TYPE} != 'NoRebootRequired' THEN 1 ELSE 0 END"
+        description: "Total number of critical updates that require a reboot."
+      
+      number_of_system_updates:
+        type: count_distinct
+        expression: "{system_update.PACKAGE_ID}"
+        description: "Total number of all system updates available in the organization."
+      
+      total_critical_system_updates:
+        type: count_distinct
+        expression: "CASE WHEN {system_update.PACKAGE_SEVERITY} = 'CRITICAL' THEN {system_update.PACKAGE_ID} ELSE NULL END"
+        description: "Total number of critical system updates only, i.e. system updates with severity = Critical."
+      
+      total_optional_system_updates:
+        type: count_distinct
+        expression: "CASE WHEN {system_update.PACKAGE_SEVERITY} = 'OPTIONAL' THEN {system_update.PACKAGE_ID} ELSE NULL END"
+        description: "Total number of optional system updates only, i.e. system updates with severity = Optional."
+      
+      total_recommended_system_updates:
+        type: count_distinct
+        expression: "CASE WHEN {system_update.PACKAGE_SEVERITY} = 'RECOMMENDED' THEN {system_update.PACKAGE_ID} ELSE NULL END"
+        description: "Total number of recommended system updates only, i.e. system updates with severity = Recommended."
+

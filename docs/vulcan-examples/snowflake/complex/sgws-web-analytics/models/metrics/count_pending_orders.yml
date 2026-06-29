@@ -1,0 +1,5 @@
+kind: metric
+name: count_pending_orders
+measure: orders.count_pending_orders
+ts: orders.order_date
+granularity: day

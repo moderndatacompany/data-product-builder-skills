@@ -1,0 +1,36 @@
+models:
+  SALES.PRODUCTS:
+    alias: products
+    
+    dimensions:
+      includes:
+        - PRODUCT_ID
+        - PRODUCT_NAME
+        - CATEGORY
+        - SUBCATEGORY
+        - BRAND
+        - COLOR
+        - SIZE
+        - PRICE
+        - RATING
+        - STOCK_QUANTITY
+        - DISCONTINUED
+    
+    measures:
+      total_products:
+        type: count
+        expression: "{products.PRODUCT_ID}"
+        description: "Total number of products"
+      
+      active_products:
+        type: count
+        expression: "{products.PRODUCT_ID}"
+        filters:
+          - "{products.DISCONTINUED} = FALSE"
+        description: "Number of active (non-discontinued) products"
+    
+    segments:
+      high_rated_products:
+        expression: |
+          {products.RATING} >= 4.0
+        description: "Products with rating >= 4.0"

@@ -1,0 +1,136 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - COBS (Snowflake)
+# ==============================================================================
+
+# Basic Information
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: cobs-analytics-forest
+display_name: COBS - Customer Order Behavior Segmentation
+tenant: ct-onboarding
+description: COBS (Customer Order Behavior Segmentation) is a production-grade behavioral analytics data product that transforms raw transactional data into actionable customer intelligence. Using RFM-style analytics combined with proof product adoption metrics, COBS segments customers into 8 distinct behavioral cohorts (Outperformers, Web Loyalist, Promising, Newly Activated, Novice, Infrequent, Lapsed, Lost) with early-warning detection for at-risk accounts.
+
+# Classification
+tags:
+  - cobs
+  - customer_segmentation
+  - behavioral_analytics
+  - rfm_analysis
+  - sales_analytics
+  - customer_analytics
+  - snowflake
+  - cloud-warehouse
+
+terms:
+  - glossary.data_product
+  - glossary.customer_segmentation
+  - glossary.behavioral_analytics
+  - glossary.rfm_model
+  - glossary.sales_operations
+
+# Domain
+domain: sales_operations
+
+# ==============================================================================
+# Analytics & Telemetry (Vulcan CloudEvents)
+# ==============================================================================
+analytics:
+  enabled: false
+  # base_url: "https://your-dataos-instance.dataos.app/cloudevents/api/v1"
+  # api_key: ""
+  # source_name: "cobs_analytics"
+
+# ==============================================================================
+# Virtual Environment
+# ==============================================================================
+# virtual_environment_mode: dev_only
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+# ==============================================================================
+# Object Store Configuration (Query Service)
+# ==============================================================================
+# object_store:
+#   provider: minio
+#   bucket: warehouse1
+#   base_path: cobs/queries
+#   compression: snappy
+#   presigned_url_expiry_mins: 60
+#   credentials:
+#     endpoint_url: http://localhost:9000
+#     access_key_id: admin
+#     secret_access_key: password
+#     region: us-east-1
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'
+  cron: '@daily'
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://snowflakevulcan
+
+    # state_schema: cobs1
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+openlineage:
+  enabled: false
+  url: https://forest-020226.dataos.cloud/hera
+  timeout_seconds: 30
+  api_key: dnVsY2FuLjJjZmVlMGMyLTk4MGItNDJlYS05N2IzLTdmYTI4NzU1OTgxNDE4NjIyY2I0MWY1OTYwZTFkNmQ1Yzg3MDA2MWE2OTIz
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+      - migration_start
+      - migration_end
+      - migration_failure
+      - plan_change
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+users:
+  - username: rohitrajtmdcio
+    email: rohit.raj@tmdc.io
+    type: OWNER
+  - username: shreyasikarwartmdcio
+    email: shreya.sikarwar@tmdc.io
+    type: CONTRIBUTOR

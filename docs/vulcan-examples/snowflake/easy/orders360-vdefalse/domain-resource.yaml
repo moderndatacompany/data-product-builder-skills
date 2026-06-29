@@ -1,0 +1,71 @@
+version: v1alpha
+type: vulcan
+name: orders360-vdefalse
+description: >-
+  Orders360 (VDE Disabled) Snowflake data product - five-model layered sales
+  analytics pipeline (customers, products, orders, customer_orders,
+  daily_sales_summary) materialized directly into the SALES_ANALYTICS schema
+  without a semantic layer or seed data.
+tags:
+  - snowflake
+  - orders360
+  - sales_analytics
+  - vde_disabled
+  - layered_modeling
+spec:
+  runAsUser: "anushkarakeshtmdcio"
+  compute: pacific
+  engine: snowflake
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/snowflake/easy/orders360-vdefalse
+    secret: se-sandbox:gitsecretsn
+  depots:
+    - dataos://snowflakevulcan?purpose=rw
+  workflow:
+    type: schedule
+    schedule:
+      crons:
+        - '0 3 * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    migrate:
+      command:
+        - vulcan
+      arguments:
+        - migrate
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"

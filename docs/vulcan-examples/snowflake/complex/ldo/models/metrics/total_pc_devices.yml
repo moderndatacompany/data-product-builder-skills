@@ -1,0 +1,3 @@
+kind: metric
+name: total_pc_devices
+measure: devices.total_pc_devices

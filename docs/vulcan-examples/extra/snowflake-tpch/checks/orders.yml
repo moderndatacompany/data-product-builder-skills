@@ -1,0 +1,50 @@
+checks:
+  test_db.vulcan_test_project.orders:
+    completeness:
+      - missing_count(orderkey) = 0:
+          name: orderkey_not_null
+          attributes:
+            description: "ORDERS.ORDERKEY must be non-null"
+      - missing_count(custkey) = 0:
+          name: custkey_not_null
+          attributes:
+            description: "ORDERS.CUSTKEY must be non-null"
+      - missing_count(orderdate) = 0:
+          name: orderdate_not_null
+          attributes:
+            description: "ORDERS.ORDERDATE must be non-null"
+      - row_count > 0:
+          name: orders_has_rows
+          attributes:
+            description: "ORDERS should not be empty"
+
+    uniqueness:
+      - duplicate_count(orderkey) = 0:
+          name: orderkey_unique
+          attributes:
+            description: "ORDERS.ORDERKEY must be unique"
+
+    validity:
+      - failed rows:
+          name: orders_customer_fk_exists
+          fail query: |
+            SELECT o.*
+            FROM test_db.vulcan_test_project.orders o
+            LEFT JOIN test_db.vulcan_test_project.customer c
+              ON o.custkey = c.custkey
+            WHERE c.custkey IS NULL
+          samples limit: 10
+          attributes:
+            description: "Every ORDERS.CUSTKEY must exist in CUSTOMER.CUSTKEY"
+
+      - failed rows:
+          name: totalprice_non_negative
+          fail query: |
+            SELECT orderkey, custkey, totalprice
+            FROM test_db.vulcan_test_project.orders
+            WHERE totalprice < 0
+          samples limit: 10
+          attributes:
+            description: "ORDERS.TOTALPRICE should be non-negative"
+
+

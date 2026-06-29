@@ -1,0 +1,9 @@
+kind: metric
+name: active_products
+measure: products.active_products
+ts: products.release_date
+granularity: month
+dimensions:
+  - products.category
+  - products.brand
+description: Number of active (non-discontinued) products

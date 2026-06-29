@@ -1,0 +1,68 @@
+# kind: dq — converted from checks/03-accuracy.yaml (table 1 of 3)
+kind: dq
+name: stg_part_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_part
+
+rules:
+- min(p_retailprice) >= 0:
+    name: min_retailprice_non_negative
+    dimension: accuracy
+    description: "Minimum retail price must be >= 0"
+
+- max(p_retailprice) <= 1000000:
+    name: max_retailprice_reasonable
+    dimension: accuracy
+    description: Maximum retail price should be reasonable
+
+- avg(p_retailprice) > 0:
+    name: avg_retailprice_positive
+    dimension: accuracy
+    description: Average retail price should be positive
+
+- row_count > 0:
+    name: parts_exist
+    dimension: completeness
+    description: Part table must not be empty
+---
+# kind: dq — converted from checks/03-accuracy.yaml (table 2 of 3)
+kind: dq
+name: region_daily_revenue_dq
+depends_on: mys3lh02depot.tpch_lakehouse.region_daily_revenue
+
+rules:
+- group by:
+    name: revenue_by_region
+    dimension: accuracy
+    description: Total revenue per region must be non-negative
+    query: |
+      SELECT r_regionkey, r_name, SUM(total_revenue) AS total_rev
+      FROM mys3lh02depot.tpch_lakehouse.region_daily_revenue
+      GROUP BY r_regionkey, r_name
+    fields: [r_regionkey, r_name]
+    checks: [{total_rev: {fail: when < 0, name: region_revenue_non_negative}}]
+---
+# kind: dq — converted from checks/03-accuracy.yaml (table 3 of 3)
+kind: dq
+name: customer_360_dq
+depends_on: mys3lh02depot.tpch_lakehouse.customer_360
+
+rules:
+- failed rows:
+    name: negative_revenue
+    dimension: accuracy
+    description: Total revenue cannot be negative
+    fail query: |
+      SELECT c_custkey, total_revenue
+      FROM mys3lh02depot.tpch_lakehouse.customer_360
+      WHERE total_revenue < 0
+    samples limit: 10
+
+- failed rows:
+    name: negative_order_count
+    dimension: accuracy
+    description: Order count cannot be negative
+    fail query: |
+      SELECT c_custkey, order_count
+      FROM mys3lh02depot.tpch_lakehouse.customer_360
+      WHERE order_count < 0
+    samples limit: 10

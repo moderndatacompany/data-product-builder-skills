@@ -1,0 +1,3 @@
+kind: metric
+name: gross_revenue
+measure: lineitems.gross_revenue

@@ -1,0 +1,94 @@
+# ============================================================================
+# SEMANTIC MODEL: Production Operations Analytics - Equipment OEE Facts
+# ============================================================================
+# Model: techfab_gold.equipment_oee_metrics
+# Description: Equipment-level OEE calculations with availability, performance, 
+#              and quality components for equipment performance monitoring
+#              and bottleneck identification
+# ============================================================================
+
+models:
+  MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS:
+    alias: fct_equipment_oee
+    
+    dimensions:
+      includes:
+        - EQUIPMENT_ID
+        - EQUIPMENT_NAME
+        - EQUIPMENT_TYPE
+        - PLANT_CODE
+        - PLANT_NAME
+        - METRIC_DATE
+    
+    measures:
+      good_units:
+        type: number
+        expression: "SUM({fct_equipment_oee.GOOD_UNITS})"
+        description: "Total good units produced by equipment"
+      
+      total_units:
+        type: number
+        expression: "SUM({fct_equipment_oee.TOTAL_UNITS})"
+        description: "Total units produced including rejects"
+      
+      total_downtime_hours:
+        type: number
+        expression: "SUM({fct_equipment_oee.TOTAL_DOWNTIME_HOURS})"
+        description: "Total equipment downtime in hours"
+      
+      total_production_hours:
+        type: number
+        expression: "SUM({fct_equipment_oee.TOTAL_PRODUCTION_HOURS})"
+        description: "Total production time in hours"
+      
+      availability_pct:
+        type: number
+        expression: "AVG({fct_equipment_oee.AVAILABILITY_PCT})"
+        description: "Equipment availability component of OEE"
+      
+      performance_pct:
+        type: number
+        expression: "AVG({fct_equipment_oee.PERFORMANCE_PCT})"
+        description: "Equipment performance efficiency component"
+      
+      quality_pct:
+        type: number
+        expression: "AVG({fct_equipment_oee.QUALITY_PCT})"
+        description: "Quality rate component of OEE"
+      
+      oee_pct:
+        type: number
+        expression: "AVG({fct_equipment_oee.OEE_PCT})"
+        description: "Overall Equipment Effectiveness percentage"
+      
+      mttr_hours:
+        type: number
+        expression: "AVG({fct_equipment_oee.MTTR_HOURS})"
+        description: "Mean Time To Repair in hours"
+      
+      mtbf_hours:
+        type: number
+        expression: "AVG({fct_equipment_oee.MTBF_HOURS})"
+        description: "Mean Time Between Failures in hours"
+    
+    segments:
+      world_class_oee:
+        expression: "{fct_equipment_oee.OEE_PCT} >= 85"
+        description: "Equipment achieving world-class OEE levels"
+      
+      underperforming_equipment:
+        expression: "{fct_equipment_oee.OEE_PCT} < 65"
+        description: "Equipment requiring immediate improvement focus"
+      
+      availability_issues:
+        expression: "{fct_equipment_oee.AVAILABILITY_PCT} < 90"
+        description: "Equipment with significant downtime problems"
+      
+      quality_issues:
+        expression: "{fct_equipment_oee.QUALITY_PCT} < 95"
+        description: "Equipment with quality defect problems"
+
+    joins:
+      fct_production_daily:
+        type: one_to_one
+        expression: "{fct_equipment_oee.PLANT_CODE} = {fct_production_daily.PLANT_CODE} AND {fct_equipment_oee.METRIC_DATE} = {fct_production_daily.CONFIRMATION_DATE}"

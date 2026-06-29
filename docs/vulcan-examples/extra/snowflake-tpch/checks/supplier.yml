@@ -1,0 +1,40 @@
+checks:
+  test_db.vulcan_test_project.supplier:
+    completeness:
+      - missing_count(suppkey) = 0:
+          name: suppkey_not_null
+          attributes:
+            description: "SUPPLIER.SUPPKEY must be non-null"
+      - missing_count(nationkey) = 0:
+          name: nationkey_not_null
+          attributes:
+            description: "SUPPLIER.NATIONKEY must be non-null"
+      - missing_count(name) = 0:
+          name: supplier_name_not_null
+          attributes:
+            description: "SUPPLIER.NAME must be non-null"
+      - row_count > 0:
+          name: supplier_has_rows
+          attributes:
+            description: "SUPPLIER should not be empty"
+
+    uniqueness:
+      - duplicate_count(suppkey) = 0:
+          name: suppkey_unique
+          attributes:
+            description: "SUPPLIER.SUPPKEY must be unique"
+
+    validity:
+      - failed rows:
+          name: supplier_nation_fk_exists
+          fail query: |
+            SELECT s.*
+            FROM test_db.vulcan_test_project.supplier s
+            LEFT JOIN test_db.vulcan_test_project.nation n
+              ON s.nationkey = n.nationkey
+            WHERE n.nationkey IS NULL
+          samples limit: 10
+          attributes:
+            description: "Every SUPPLIER.NATIONKEY must exist in NATION.NATIONKEY"
+
+

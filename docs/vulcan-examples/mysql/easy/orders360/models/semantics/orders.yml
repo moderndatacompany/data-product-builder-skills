@@ -1,0 +1,128 @@
+# Converted from legacy: semantics/orders.yml
+kind: semantic
+name: orders
+depends_on: sales.orders
+dimensions:
+- order_date
+- customer_id
+- product_id
+- quantity
+- discount
+- total_amount
+- order_id
+measures:
+- name: total_orders
+  type: count_distinct
+  expression: '{orders.order_id}'
+  description: Total number of orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_orders
+  - metric.order_count
+- name: total_revenue
+  type: sum
+  expression: '{orders.total_amount}'
+  description: Total revenue from all orders
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_revenue
+  - finance.gross_sales
+- name: average_order_value
+  type: avg
+  expression: '{orders.total_amount}'
+  description: Average value per order
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_order_value
+  - metric.aggregate
+- name: total_quantity_sold
+  type: sum
+  expression: '{orders.quantity}'
+  description: Total quantity of items sold
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: total_discount_amount
+  type: sum
+  expression: '{orders.unit_price} * {orders.quantity} * {orders.discount}'
+  description: Total discount amount applied
+  tags:
+  - revenue
+  - discount
+  - metric
+  terms:
+  - revenue.discount
+  - finance.discounts_given
+- name: total_tax_collected
+  type: sum
+  expression: '{orders.tax}'
+  description: Total tax collected
+  tags:
+  - financial
+  - tax
+  - metric
+  terms:
+  - finance.tax_collected
+  - metric.tax_total
+- name: total_shipping_cost
+  type: sum
+  expression: '{orders.shipping_cost}'
+  description: Total shipping costs
+  tags:
+  - financial
+  - shipping
+  - metric
+  terms:
+  - finance.shipping_cost
+  - metric.shipping_total
+segments:
+- name: recent_orders
+  expression: '{orders.order_date} >= CURRENT_DATE - INTERVAL 7 DAY'
+  description: Orders placed in the last 7 days
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recent_orders
+  - segment.recent
+- name: high_value_orders
+  expression: '{orders.total_amount} >= 500'
+  description: Orders with total amount >= $500
+  tags:
+  - revenue
+  - high_value
+  - segment
+  terms:
+  - revenue.premium
+  - segment.high_value_orders
+- name: discounted_orders
+  expression: '{orders.discount} > 0'
+  description: Orders with discount applied
+  tags:
+  - revenue
+  - discount
+  - metric
+  terms:
+  - revenue.discount
+  - finance.discounts_given
+joins:
+- name: customers
+  type: many_to_one
+  expression: '{orders.customer_id} = {customers.customer_id}'
+- name: products
+  type: many_to_one
+  expression: '{orders.product_id} = {products.product_id}'

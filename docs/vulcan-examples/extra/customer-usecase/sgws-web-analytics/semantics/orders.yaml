@@ -1,0 +1,90 @@
+# ============================================================================
+# SEMANTIC MODEL: Orders
+# ============================================================================
+# Orders data - note: not in dp_web_heartbeat reference but included for completeness
+# ============================================================================
+
+models:
+  web_analytics_gold.ORDERS:
+    alias: orders
+    # description: "Table containing information about orders"
+    
+    dimensions:
+      excludes: []
+    
+    measures:
+      count_orders:
+        type: count_distinct
+        expression: "{orders.ORDER_PK}"
+        description: "Total number of orders"
+      
+      count_approved_orders:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Approved' THEN {orders.ORDER_PK} END)"
+        description: "Approved orders"
+      
+      count_rejected_orders:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Rejected' THEN {orders.ORDER_PK} END)"
+        description: "Rejected orders"
+      
+      count_pending_orders:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Pending' THEN {orders.ORDER_PK} END)"
+        description: "Pending orders"
+      
+      total_order_value:
+        type: sum
+        expression: "{orders.ORDER_NET_AMT}"
+        description: "Total order value"
+      
+      total_cases:
+        type: sum
+        expression: "{orders.CASES}"
+        description: "Total cases ordered"
+      
+      total_bottles:
+        type: sum
+        expression: "{orders.BOTTLES}"
+        description: "Total bottles ordered"
+      
+      unique_customers:
+        type: count_distinct
+        expression: "{orders.CUSTOMER_NO}"
+        description: "Unique ordering customers"
+      
+      avg_order_value:
+        type: number
+        expression: "SUM({orders.ORDER_NET_AMT}) / NULLIF(COUNT(DISTINCT {orders.ORDER_PK}), 0)"
+        description: "Average order value"
+      
+      approval_rate:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Approved' THEN {orders.ORDER_PK} END) * 100.0 / NULLIF(COUNT(DISTINCT {orders.ORDER_PK}), 0)"
+        description: "Order approval rate percentage"
+      
+      rejection_rate:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Rejected' THEN {orders.ORDER_PK} END) * 100.0 / NULLIF(COUNT(DISTINCT {orders.ORDER_PK}), 0)"
+        description: "Order rejection rate percentage"
+    
+    segments:
+      is_approved:
+        expression: "{orders.ORDER_STATUS} = 'Approved'"
+        description: "Approved orders"
+      
+      is_rejected_status:
+        expression: "{orders.ORDER_STATUS} = 'Rejected'"
+        description: "Rejected orders"
+      
+      is_pending:
+        expression: "{orders.ORDER_STATUS} = 'Pending'"
+        description: "Pending orders"
+      
+      is_cancelled:
+        expression: "{orders.ORDER_STATUS} = 'Cancelled'"
+        description: "Cancelled orders"
+      
+      has_rejection_code:
+        expression: "{orders.IS_REJECTED} = true"
+        description: "Orders with rejection codes"

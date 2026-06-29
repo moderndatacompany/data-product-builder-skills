@@ -1,0 +1,5 @@
+plan_code,plan_name,base_price,max_seats,features
+free,Free Plan,0,3,"dashboard,basic_reports"
+starter,Starter Plan,99,10,"dashboard,reports,email_support"
+pro,Professional Plan,299,25,"dashboard,reports,analytics,api_access,priority_support"
+enterprise,Enterprise Plan,1000,unlimited,"all_features,custom_integrations,dedicated_support,sla"

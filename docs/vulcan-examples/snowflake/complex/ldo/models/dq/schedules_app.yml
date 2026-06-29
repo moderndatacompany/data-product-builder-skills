@@ -1,0 +1,73 @@
+# kind: dq — converted from checks/schedules_app.yml
+kind: dq
+name: schedules_app_dq
+depends_on: lenovo.ldo.schedules_app
+rules:
+- row_count > 0:
+    name: schedule_records_exist
+    dimension: completeness
+    description: At least one schedule record should exist
+- missing_count(_ID) = 0:
+    name: no_missing_id
+    dimension: completeness
+    description: All records must have an _id
+- missing_count(DEVICE_ID) = 0:
+    name: no_missing_device_id
+    dimension: completeness
+    description: All schedules must be linked to a device
+- missing_count(STATUS) = 0:
+    name: no_missing_status
+    dimension: completeness
+    description: All schedules must have a status
+- failed rows:
+    name: invalid_status
+    dimension: validity
+    fail query: |
+      SELECT _ID, STATUS, DEVICE_ID, PACKAGE_NAME
+      FROM lenovo.ldo.schedules_app
+      WHERE STATUS NOT IN ('EXECUTED', 'SCHEDULED')
+        AND STATUS IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Status must be EXECUTED or SCHEDULED
+- failed rows:
+    name: display_before_actual
+    dimension: validity
+    fail query: |
+      SELECT _ID, ACTUAL_DATE_TIME, DISPLAY_DATE_TIME, DEVICE_ID, PACKAGE_NAME
+      FROM lenovo.ldo.schedules_app
+      WHERE DISPLAY_DATE_TIME > ACTUAL_DATE_TIME
+        AND ACTUAL_DATE_TIME IS NOT NULL
+        AND DISPLAY_DATE_TIME IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Display date should not be after actual date
+- failed rows:
+    name: executed_in_future
+    dimension: validity
+    fail query: |
+      SELECT _ID, ACTUAL_DATE_TIME, STATUS, DEVICE_ID, PACKAGE_NAME
+      FROM lenovo.ldo.schedules_app
+      WHERE STATUS = 'EXECUTED'
+        AND ACTUAL_DATE_TIME > CURRENT_TIMESTAMP
+        AND __DELETED = 'False'
+    samples limit: 5
+    description: Executed schedules cannot have future actual date time
+- failed rows:
+    name: scheduled_without_package
+    dimension: validity
+    fail query: |
+      SELECT _ID, PACKAGE_ID, APP_PACKAGE_ID, STATUS, DEVICE_ID
+      FROM lenovo.ldo.schedules_app
+      WHERE STATUS = 'SCHEDULED'
+        AND PACKAGE_ID IS NULL
+        AND APP_PACKAGE_ID IS NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Scheduled deployments must have a package reference
+- failed rows:
+    name: duplicate_schedule_ids
+    dimension: consistency
+    fail query: "SELECT \n  _ID,\n  COUNT(*) as RECORD_COUNT\nFROM lenovo.ldo.schedules_app\nWHERE __DELETED = 'False'\nGROUP BY _ID\nHAVING COUNT(*) > 1\n"
+    samples limit: 10
+    description: Each _id should be unique among active records

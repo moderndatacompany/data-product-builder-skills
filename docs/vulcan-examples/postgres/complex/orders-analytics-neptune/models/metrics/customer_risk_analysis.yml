@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: customer_risk_analysis
+measure: rfm.at_risk_count
+ts: customer_profile.last_order_date
+dimensions:
+- rfm.region_name
+- rfm.rfm_segment
+description: At-risk customer analysis for retention campaigns
+tags:
+- rfm
+- churn
+- retention
+terms:
+- rfm.risk_analysis
+- churn.at_risk_customers

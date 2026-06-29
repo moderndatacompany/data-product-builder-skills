@@ -1,0 +1,22 @@
+models:
+  mys3lh02depot.tpch_lakehouse.order_line_summary:
+    alias: order_line_summary
+    dimensions:
+      includes:
+        - l_orderkey
+        - o_custkey
+        - o_orderdate
+
+    measures:
+      sum_total_quantity:
+        type: sum
+        expression: "{order_line_summary.total_quantity}"
+      sum_total_revenue:
+        type: sum
+        expression: "{order_line_summary.total_revenue}"
+      count_orders:
+        type: count
+        expression: "{order_line_summary.l_orderkey}"
+      avg_line_count:
+        type: avg
+        expression: "{order_line_summary.line_count}"

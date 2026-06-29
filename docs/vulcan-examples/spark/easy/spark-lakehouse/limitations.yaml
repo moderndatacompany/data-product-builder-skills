@@ -1,0 +1,3 @@
+limitations:
+  - Requires running Spark cluster
+  - Data processed via Spark executors

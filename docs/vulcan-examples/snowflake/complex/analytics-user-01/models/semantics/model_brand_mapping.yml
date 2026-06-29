@@ -1,0 +1,113 @@
+# Converted from legacy: semantics/model_brand_mapping.yml
+kind: semantic
+name: model_brand_mapping
+depends_on: LENOVO.USDK.MODEL_BRAND_MAPPING
+ai_context:
+  instructions: >
+    Use this semantic model for questions about model brand mapping. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "model brand mapping"
+    - "model_brand_mapping"
+    - "model"
+    - "brand"
+  examples:
+    - "Show model brand mapping trends over time."
+    - "Break down model brand mapping by key dimensions."
+
+dimensions:
+- MTM
+- BRAND
+- PRODUCT_NAME
+- CATEGORY
+- PRODUCT_SEGMENT
+- FORM_FACTOR
+- GEN
+measures:
+- name: total_models
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total models. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total models"
+      - "total_models"
+      - "total"
+      - "models"
+    examples:
+      - "What is total models by month?"
+      - "Compare total models across key segments."
+  type: count_distinct
+  expression: '{model_brand_mapping.MTM}'
+  description: Total number of unique product models (MTM codes)
+  tags:
+  - metric
+  terms:
+  - metric.total_models
+- name: total_brands
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total brands. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total brands"
+      - "total_brands"
+      - "total"
+      - "brands"
+    examples:
+      - "What is total brands by month?"
+      - "Compare total brands across key segments."
+  type: count_distinct
+  expression: '{model_brand_mapping.BRAND}'
+  description: Total number of unique brands
+  tags:
+  - metric
+  terms:
+  - metric.total_brands
+- name: commercial_models
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for commercial models. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "commercial models"
+      - "commercial_models"
+      - "commercial"
+      - "models"
+    examples:
+      - "What is commercial models by month?"
+      - "Compare commercial models across key segments."
+  type: count_distinct
+  expression: '{model_brand_mapping.MTM}'
+  filters:
+  - '{model_brand_mapping.PRODUCT_SEGMENT} = ''Commercial'''
+  description: Number of models in commercial segment
+  tags:
+  - metric
+  terms:
+  - metric.commercial_models
+segments:
+- name: thinkpad_products
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the thinkpad products subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "thinkpad products"
+      - "thinkpad_products"
+      - "thinkpad"
+      - "products"
+    examples:
+      - "Show revenue for thinkpad products."
+      - "How many records are in thinkpad products?"
+  expression: '{model_brand_mapping.BRAND} = ''ThinkPad'''
+  description: ThinkPad brand products
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.thinkpad_products
+  - metric.product_count

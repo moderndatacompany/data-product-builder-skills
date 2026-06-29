@@ -1,0 +1,144 @@
+checks:
+  silver_v2alpha.dim_customer_profile:
+    completeness:
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All profiles must have a customer ID"
+      
+      - missing_count(customer_name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All profiles must have a customer name"
+      
+      - missing_count(email) = 0:
+          name: no_missing_emails
+          attributes:
+            description: "All profiles must have an email"
+      
+      - missing_count(customer_segment) = 0:
+          name: no_missing_segments
+          attributes:
+            description: "All profiles must have a customer segment"
+      
+      - row_count > 50:
+          name: sufficient_customer_profiles
+          attributes:
+            description: "At least 50 customer profiles"
+    
+    validity:
+      - failed rows:
+          name: valid_segments
+          fail query: |
+            SELECT customer_id, customer_name, customer_segment
+            FROM silver_v2alpha.dim_customer_profile
+            WHERE customer_segment NOT IN ('High Value', 'Medium Value', 'Low Value', 'Churned', 'New')
+          samples limit: 10
+          attributes:
+            description: "Customer segments must be from valid set"
+      
+      - failed rows:
+          name: non_negative_orders
+          fail query: |
+            SELECT customer_id, customer_name, total_orders
+            FROM silver_v2alpha.dim_customer_profile
+            WHERE total_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Total orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT customer_id, customer_name, total_revenue
+            FROM silver_v2alpha.dim_customer_profile
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Total revenue cannot be negative"
+      
+      - failed rows:
+          name: positive_avg_order_value
+          fail query: |
+            SELECT customer_id, customer_name, avg_order_value, total_orders
+            FROM silver_v2alpha.dim_customer_profile
+            WHERE total_orders > 0 AND avg_order_value <= 0
+          samples limit: 10
+          attributes:
+            description: "Average order value must be positive when orders exist"
+      
+      # This will FAIL - checking for all high-value customers
+      - failed rows:
+          name: all_high_value_check
+          fail query: |
+            SELECT customer_id, customer_name, customer_segment, total_revenue
+            FROM silver_v2alpha.dim_customer_profile
+            WHERE customer_segment != 'High Value'
+          samples limit: 10
+          attributes:
+            description: "All customers should be high value (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for minimum revenue threshold
+      - failed rows:
+          name: minimum_revenue_check
+          fail query: |
+            SELECT customer_id, customer_name, total_revenue, customer_segment
+            FROM silver_v2alpha.dim_customer_profile
+            WHERE total_revenue < 1000
+          samples limit: 10
+          attributes:
+            description: "All customers should have at least $1000 revenue (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(customer_id) = 0:
+          name: unique_customer_ids
+          attributes:
+            description: "Customer IDs must be unique"
+      
+      - duplicate_count(email) = 0:
+          name: unique_emails
+          attributes:
+            description: "Email addresses must be unique"
+    
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in customer profile count using historic data"
+      
+      - anomaly detection for missing_count(customer_id):
+          name: missing_customer_id_anomaly
+          attributes:
+            description: "Detect anomalies in missing customer ID count"
+      
+      - anomaly detection for avg(total_revenue):
+          name: avg_revenue_anomaly
+          attributes:
+            description: "Detect anomalies in average customer revenue"
+      
+      - anomaly detection for avg(total_orders):
+          name: avg_orders_anomaly
+          attributes:
+            description: "Detect anomalies in average number of orders per customer"
+      
+      - anomaly detection for distinct_count(customer_segment):
+          name: segment_count_anomaly
+          attributes:
+            description: "Detect anomalies in number of distinct customer segments"
+    
+    timeliness:
+      - change for row_count >= -5%:
+          name: row_count_timeliness_check
+          attributes:
+            description: "Alert if customer profile count drops more than 5% from same day last week"
+      
+      - change for avg(total_revenue) between -20% and 20%:
+          name: avg_revenue_timeliness_check
+          attributes:
+            description: "Alert if average customer revenue changes more than 20% from same day last week"
+      
+      - change for distinct_count(customer_segment) >= -15%:
+          name: segment_count_timeliness_check
+          attributes:
+            description: "Alert if distinct segment count drops more than 15% from same day last week"
+

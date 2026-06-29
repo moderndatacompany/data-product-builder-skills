@@ -1,0 +1,97 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - Orders360 (VDE Enabled) on Snowflake
+# ==============================================================================
+# Compact Snowflake data product demonstrating the full Vulcan stack
+# (models + semantics + metrics + checks + audits + tests + seeds)
+# materialized into the DEMODB schema, with VDE (Virtual Data Environments)
+# turned ON so plans run against isolated virtual schemas before promotion.
+# ==============================================================================
+
+vde: true
+display_name: Orders360 test(VDE Enabled)
+discoverable: true
+version: 0.1.0
+alignment: source_aligned
+# domain / reference_links are still rejected by the local dev54 wheel.
+# Uncomment both before deploying to DataOS.
+domain: sales_operations
+tags:
+  - snowflake
+  - orders360
+  - sales
+  - vde_enabled
+  - seed_driven
+  - dimension_modeling
+  - incremental
+  - demo
+terms:
+  - glossary.data_product
+  - glossary.sales_dimension
+  - glossary.order_fact
+  - glossary.virtual_data_environment
+# reference_links:
+#   - name: Document
+#     href: https://tmdc-io.github.io/vulcan-book/
+
+name: orders360-vdetrue
+# tenant: se-sandbox
+description: >-
+  Orders360 (VDE Enabled) is a compact Snowflake sales analytics data product
+  that materializes a customer segment lookup seed, a customer dimension, and
+  an incrementally-loaded orders fact into the DEMODB schema. It demonstrates
+  the complete Vulcan stack - seeds, FULL and INCREMENTAL_BY_TIME_RANGE models,
+  semantics, business metrics, data-quality checks, audits, and unit tests -
+  with Virtual Data Environments (vde) enabled so every plan is validated in an
+  isolated virtual schema before changes touch production.
+
+# --- Gateway Connection -------------------------------------------------------
+# Direct Snowflake connection. Credentials read from shell env vars - just
+# `export` them in the venv session before running vulcan. For DataOS
+# deployment, swap the snowflake block for the depot one below.
+gateways:
+  default:
+    # connection:
+    #   type: snowflake
+    #   account:   "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+    #   user:      "{{ env_var('SNOWFLAKE_USER') }}"
+    #   password:  "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+    #   role:      "{{ env_var('SNOWFLAKE_ROLE') }}"
+    #   warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+    #   database:  VULCAN
+    # DataOS deployment alternative - replace the snowflake block above with:
+    connection:
+      type: depot
+      address: dataos://snowflakevulcan
+
+default_gateway: default
+
+# --- Model Defaults -----------------------------------------------------------
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'
+  cron: '@daily'
+
+# --- Linting Rules ------------------------------------------------------------
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections
+
+# --- Notifications ------------------------------------------------------------
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_failure
+      - run_failure
+      - audit_failure
+      - check_failure
+      - plan_change
+
+# --- Users & Access Control ---------------------------------------------------
+users:
+  - username: anushka
+    email: anushka.rakesh@tmdc.io
+    type: OWNER

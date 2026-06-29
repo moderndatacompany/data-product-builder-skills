@@ -1,0 +1,16 @@
+user_id,email,company_name,signup_date,plan_type,status,company_size,signup_channel,industry
+1,john@acme.com,Acme Corp,2024-01-15,enterprise,active,enterprise,sales,tech
+2,sarah_invalid_email,Startup Inc,2024-02-01,pro,active,startup,paid_search,finance
+3,mike@midsize.com,MidSize LLC,2024-01-20,starter,churned,mid_market,organic,healthcare
+4,lisa.fintech.co,FinTech Co,2024-01-25,pro,active,startup,referral,finance
+5,david@retail.net,Retail Net,2024-02-10,enterprise,active,enterprise,sales,retail
+6,anna@health.org,Health Org,2024-02-15,starter,active,mid_market,organic,healthcare
+7,carlos@tech.ai,Tech AI,2024-01-30,free,active,startup,paid_search,tech
+8,emma@consulting.biz,Consulting Biz,2024-02-05,pro,suspended,mid_market,referral,consulting
+9,james@manufacturing.inc,Manufacturing Inc,2024-01-10,enterprise,active,enterprise,sales,manufacturing
+10,sophia@education.edu,Education Edu,2024-02-20,starter,active,mid_market,organic,education
+11,ryan@logistics.com,Logistics Com,2024-01-28,pro,churned,startup,paid_search,logistics
+12,olivia@media.tv,Media TV,2024-02-12,free,active,startup,organic,media
+13,noah@insurance.co,Insurance Co,2024-01-18,enterprise,active,enterprise,sales,insurance
+14,ava@nonprofit.org,NonProfit Org,2024-02-08,starter,active,mid_market,referral,nonprofit
+15,william@energy.net,Energy Net,2024-01-22,pro,active,enterprise,paid_search,energy

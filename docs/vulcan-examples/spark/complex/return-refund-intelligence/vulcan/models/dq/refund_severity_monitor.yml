@@ -1,0 +1,26 @@
+# kind: dq — converted from checks/refund_severity_monitor.yml
+kind: dq
+name: refund_severity_monitor_dq
+depends_on: qcommerce_returns_gold.refund_severity_monitor
+
+rules:
+- row_count >= 4:
+    name: minimum_severity_rows
+    dimension: completeness
+    description: At least four severity monitor rows should exist
+
+- missing_count(refund_severity_band) = 0:
+    name: no_missing_severity_band
+    dimension: completeness
+    description: Every severity row must have a severity band
+
+- invalid_count(avg_refund_amount) = 0:
+    name: avg_refund_amount_non_negative
+    dimension: validity
+    description: Average refund amount must be non-negative
+    valid min: 0
+
+- duplicate_count(ds, city, refund_severity_band) = 0:
+    name: unique_ds_city_severity
+    dimension: uniqueness
+    description: Each ds, city, and severity band combination must be unique

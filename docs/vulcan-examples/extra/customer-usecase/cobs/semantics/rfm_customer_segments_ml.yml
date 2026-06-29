@@ -1,0 +1,257 @@
+models:
+  cobs.rfm_customer_segments_ml:
+    alias: rfm_segments
+    
+    dimensions:
+      includes:
+        - ACCOUNT_ID
+        - DATE
+        - SALES_BUCKET
+        - SEGMENT
+    
+    measures:
+      # Customer Counts
+      total_customers:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        description: "Total number of unique customers"
+      
+      # Segment-based Counts
+      champions_count:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        filters:
+          - "{rfm_segments.SEGMENT} = 'Champions'"
+        description: "Number of Champion customers"
+      
+      loyal_customers:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        filters:
+          - "{rfm_segments.SEGMENT} = 'Loyal'"
+        description: "Number of Loyal customers"
+      
+      at_risk_customers:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        filters:
+          - "{rfm_segments.SEGMENT} = 'At Risk'"
+        description: "Number of At Risk customers"
+      
+      lapsed_customers:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        filters:
+          - "{rfm_segments.SEGMENT} = 'Lapsed'"
+        description: "Number of Lapsed customers"
+      
+      newly_activated_customers:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        filters:
+          - "{rfm_segments.SEGMENT} = 'Newly Activated'"
+        description: "Number of Newly Activated customers"
+      
+      outperformers:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        filters:
+          - "{rfm_segments.SEGMENT} = 'Outperformers'"
+        description: "Number of Outperformer customers"
+      
+      dropping_customers:
+        type: count_distinct
+        expression: "{rfm_segments.ACCOUNT_ID}"
+        filters:
+          - "{rfm_segments.DROPPING} = TRUE"
+        description: "Number of customers with dropping wallet share"
+      
+      # Revenue Measures
+      total_proof_revenue:
+        type: sum
+        expression: "{rfm_segments.R12_PROOF_REV}"
+        description: "Total proof revenue over 12 months"
+      
+      total_revenue:
+        type: sum
+        expression: "{rfm_segments.R12_TOTAL_REV}"
+        description: "Total revenue over 12 months"
+      
+      total_non_proof_revenue:
+        type: sum
+        expression: "{rfm_segments.R12_NON_PROOF_REV}"
+        description: "Total non-proof revenue over 12 months"
+      
+      average_revenue_per_customer:
+        type: avg
+        expression: "{rfm_segments.R12_TOTAL_REV}"
+        description: "Average revenue per customer over 12 months"
+      
+      average_proof_revenue:
+        type: avg
+        expression: "{rfm_segments.R12_PROOF_REV}"
+        description: "Average proof revenue per customer over 12 months"
+      
+      # Invoice/Frequency Measures
+      total_proof_invoices:
+        type: sum
+        expression: "{rfm_segments.R12_PROOF_INVOICES}"
+        description: "Total number of proof invoices over 12 months"
+      
+      total_invoices:
+        type: sum
+        expression: "{rfm_segments.R12_TOTAL_INVOICES}"
+        description: "Total number of invoices over 12 months"
+      
+      average_invoices_per_customer:
+        type: avg
+        expression: "{rfm_segments.R12_TOTAL_INVOICES}"
+        description: "Average number of invoices per customer over 12 months"
+      
+      # Wallet & Order Share Measures
+      average_wallet_share:
+        type: avg
+        expression: "{rfm_segments.R12_WALLET_SHARE}"
+        description: "Average wallet share across customers"
+      
+      average_order_share:
+        type: avg
+        expression: "{rfm_segments.R12_ORDER_SHARE}"
+        description: "Average order share across customers"
+      
+      # Recency & Tenure Measures
+      average_recency:
+        type: avg
+        expression: "{rfm_segments.PROOF_RECENCY}"
+        description: "Average days since last proof transaction"
+      
+      average_tenure:
+        type: avg
+        expression: "{rfm_segments.PROOF_TENURE}"
+        description: "Average customer tenure in days"
+      
+      # RFM Score Measures
+      average_recency_score:
+        type: avg
+        expression: "{rfm_segments.RECENCY_SCORE}"
+        description: "Average recency score (1-5, lower is better)"
+      
+      average_frequency_score:
+        type: avg
+        expression: "{rfm_segments.FREQUENCY_SCORE}"
+        description: "Average frequency score (1-5, higher is better)"
+      
+      average_wallet_score:
+        type: avg
+        expression: "{rfm_segments.WALLET_SCORE}"
+        description: "Average wallet score (1-5, higher is better)"
+    
+    segments:
+      # Segment-based Filters
+      high_value_segments:
+        expression: |
+          {rfm_segments.SEGMENT} IN ('Champions', 'Loyal', 'Outperformers')
+        description: "High-value customer segments (Champions, Loyal, Outperformers)"
+      
+      at_risk_segments:
+        expression: |
+          {rfm_segments.SEGMENT} IN ('At Risk', 'About to Sleep', 'Cannot Lose Them')
+        description: "Customers requiring immediate attention"
+      
+      inactive_segments:
+        expression: |
+          {rfm_segments.SEGMENT} IN ('Lapsed', 'Hibernating')
+        description: "Inactive or lapsed customers"
+      
+      # Score-based Segments
+      high_engagement:
+        expression: |
+          {rfm_segments.RECENCY_SCORE} <= 2 AND {rfm_segments.FREQUENCY_SCORE} >= 4
+        description: "Highly engaged customers (recent and frequent)"
+      
+      low_engagement:
+        expression: |
+          {rfm_segments.RECENCY_SCORE} >= 4 OR {rfm_segments.FREQUENCY_SCORE} <= 2
+        description: "Low engagement customers"
+      
+      top_wallet_share:
+        expression: |
+          {rfm_segments.WALLET_SCORE} >= 4
+        description: "Customers with high wallet share"
+      
+      # Sales Bucket Segments
+      enterprise_customers:
+        expression: |
+          {rfm_segments.SALES_BUCKET} IN ('7. 300K-400K', '8. 400K-500K', '9. 500K+')
+        description: "Enterprise-level customers (300K+ revenue)"
+      
+      mid_market_customers:
+        expression: |
+          {rfm_segments.SALES_BUCKET} IN ('5. 100K-200K', '6. 200K-300K')
+        description: "Mid-market customers (100K-300K revenue)"
+      
+      smb_customers:
+        expression: |
+          {rfm_segments.SALES_BUCKET} IN ('1. 0-25K', '2. 25-50K', '3. 50-75K', '4. 75-100K')
+        description: "Small and medium business customers (0-100K revenue)"
+      
+      # Behavioral Segments
+      dropping_high_value:
+        expression: |
+          {rfm_segments.DROPPING} = TRUE AND {rfm_segments.SALES_BUCKET} >= '5. 100K-200K'
+        description: "High-value customers with declining wallet share"
+      
+      recent_activation:
+        expression: |
+          {rfm_segments.ACTIVATION_DATE} >= CURRENT_DATE() - INTERVAL '90 days'
+        description: "Customers activated in the last 90 days"
+      
+      long_tenure:
+        expression: |
+          {rfm_segments.PROOF_TENURE} >= 365
+        description: "Customers with tenure over 1 year"
+      
+      recent_activity:
+        expression: |
+          {rfm_segments.PROOF_RECENCY} <= 30
+        description: "Customers with activity in the last 30 days"
+      
+      inactive_30_days:
+        expression: |
+          {rfm_segments.PROOF_RECENCY} > 30 AND {rfm_segments.PROOF_RECENCY} <= 90
+        description: "Customers inactive for 30-90 days"
+      
+      inactive_90_days:
+        expression: |
+          {rfm_segments.PROOF_RECENCY} > 90
+        description: "Customers inactive for more than 90 days"
+      
+      # Revenue-based Segments
+      high_proof_revenue:
+        expression: |
+          {rfm_segments.R12_PROOF_REV} >= 100000
+        description: "Customers with proof revenue >= $100K"
+      
+      high_wallet_share:
+        expression: |
+          {rfm_segments.R12_WALLET_SHARE} >= 0.7
+        description: "Customers with wallet share >= 70%"
+      
+      frequent_buyers:
+        expression: |
+          {rfm_segments.R12_PROOF_INVOICES} >= 50
+        description: "Customers with 50+ proof invoices in 12 months"
+      
+      # Combined Risk Segments
+      critical_attention_needed:
+        expression: |
+          ({rfm_segments.DROPPING} = TRUE OR {rfm_segments.SEGMENT} IN ('At Risk', 'Cannot Lose Them'))
+          AND {rfm_segments.SALES_BUCKET} >= '5. 100K-200K'
+        description: "High-value customers requiring critical attention"
+      
+      reactivation_opportunity:
+        expression: |
+          {rfm_segments.SEGMENT} IN ('Lapsed', 'Hibernating')
+          AND {rfm_segments.PROOF_TENURE} >= 180
+        description: "Lapsed customers with established history (reactivation opportunity)"
+

@@ -1,0 +1,127 @@
+checks:
+  gold_v1.rfm_customer_segmentation:
+    completeness:
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All RFM records must have a customer ID"
+      
+      - missing_count(customer_name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All RFM records must have a customer name"
+      
+      - missing_count(rfm_segment) = 0:
+          name: no_missing_segments
+          attributes:
+            description: "All RFM records must have a segment"
+      
+      - missing_count(recency_score) = 0:
+          name: no_missing_recency_scores
+          attributes:
+            description: "All RFM records must have a recency score"
+      
+      - missing_count(frequency_score) = 0:
+          name: no_missing_frequency_scores
+          attributes:
+            description: "All RFM records must have a frequency score"
+      
+      - missing_count(monetary_score) = 0:
+          name: no_missing_monetary_scores
+          attributes:
+            description: "All RFM records must have a monetary score"
+    
+    validity:
+      - failed rows:
+          name: valid_recency_scores
+          fail query: |
+            SELECT customer_id, customer_name, recency_score
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE recency_score < 1 OR recency_score > 5
+          samples limit: 10
+          attributes:
+            description: "Recency scores must be between 1 and 5"
+      
+      - failed rows:
+          name: valid_frequency_scores
+          fail query: |
+            SELECT customer_id, customer_name, frequency_score
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE frequency_score < 1 OR frequency_score > 5
+          samples limit: 10
+          attributes:
+            description: "Frequency scores must be between 1 and 5"
+      
+      - failed rows:
+          name: valid_monetary_scores
+          fail query: |
+            SELECT customer_id, customer_name, monetary_score
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE monetary_score < 1 OR monetary_score > 5
+          samples limit: 10
+          attributes:
+            description: "Monetary scores must be between 1 and 5"
+      
+      - failed rows:
+          name: valid_rfm_segments
+          fail query: |
+            SELECT customer_id, customer_name, rfm_segment
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE rfm_segment NOT IN (
+              'Champions', 'Loyal Customers', 'Potential Loyalists', 
+              'Recent Customers', 'Promising', 'Customers Needing Attention',
+              'About to Sleep', 'At Risk', 'Cannot Lose Them', 
+              'Hibernating', 'Lost'
+            )
+          samples limit: 10
+          attributes:
+            description: "RFM segments must be from valid set"
+      
+      - failed rows:
+          name: non_negative_frequency
+          fail query: |
+            SELECT customer_id, customer_name, frequency_orders
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE frequency_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Frequency orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_monetary
+          fail query: |
+            SELECT customer_id, customer_name, monetary_value
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE monetary_value < 0
+          samples limit: 10
+          attributes:
+            description: "Monetary value cannot be negative"
+      
+      # This will FAIL - checking for all champions
+      - failed rows:
+          name: all_champions_check
+          fail query: |
+            SELECT customer_id, customer_name, rfm_segment, rfm_score
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE rfm_segment != 'Champions'
+          samples limit: 10
+          attributes:
+            description: "All customers should be Champions (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for high RFM scores only
+      - failed rows:
+          name: high_rfm_score_check
+          fail query: |
+            SELECT customer_id, customer_name, rfm_score, rfm_segment
+            FROM gold_v1.rfm_customer_segmentation
+            WHERE rfm_score < 12
+          samples limit: 10
+          attributes:
+            description: "All customers should have RFM score >= 12 (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(customer_id) = 0:
+          name: unique_customer_ids
+          attributes:
+            description: "Customer IDs must be unique"
+

@@ -1,0 +1,74 @@
+models:
+  sales.orders:
+    alias: orders    
+    dimensions:
+      includes:
+        - order_date
+        - customer_id
+        - product_id
+        - quantity
+        - discount
+        - total_amount
+        - order_id
+    
+    measures:
+      total_orders:
+        type: count_distinct
+        expression: "{orders.order_id}"
+        description: "Total number of orders"
+      
+      total_revenue:
+        type: sum
+        expression: "{orders.total_amount}"
+        description: "Total revenue from all orders"
+      
+      average_order_value:
+        type: avg
+        expression: "{orders.total_amount}"
+        description: "Average value per order"
+      
+      total_quantity_sold:
+        type: sum
+        expression: "{orders.quantity}"
+        description: "Total quantity of items sold"
+      
+      total_discount_amount:
+        type: sum
+        expression: "{orders.unit_price} * {orders.quantity} * {orders.discount}"
+        description: "Total discount amount applied"
+      
+      total_tax_collected:
+        type: sum
+        expression: "{orders.tax}"
+        description: "Total tax collected"
+      
+      total_shipping_cost:
+        type: sum
+        expression: "{orders.shipping_cost}"
+        description: "Total shipping costs"
+    
+    segments:
+      recent_orders:
+        expression: |
+          {orders.order_date} >= CURRENT_DATE - INTERVAL '7 days'
+        description: "Orders placed in the last 7 days"
+        
+      high_value_orders:
+        expression: |
+          {orders.total_amount} >= 500
+        description: "Orders with total amount >= $500"
+        
+      discounted_orders:
+        expression: |
+          {orders.discount} > 0
+        description: "Orders with discount applied"
+    
+    joins:
+      customers:
+        type: many_to_one
+        expression: "{orders.customer_id} = {customers.customer_id}"
+      
+      products:
+        type: many_to_one
+        expression: "{orders.product_id} = {products.product_id}"
+

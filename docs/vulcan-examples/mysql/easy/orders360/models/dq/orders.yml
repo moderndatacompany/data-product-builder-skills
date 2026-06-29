@@ -1,0 +1,12 @@
+# kind: dq — converted from checks/orders.yml
+kind: dq
+name: orders_dq
+depends_on: sales.orders
+rules:
+- failed rows:
+    name: negative_order_amounts
+    dimension: validity
+    fail query: "SELECT order_id, order_date, customer_id, quantity, unit_price, total_amount\nFROM sales.orders\nWHERE quantity < 0 \n   OR unit_price < 0 \n   OR discount < 0 \n   OR tax < 0 \n   OR shipping_cost\
+      \ < 0 \n   OR total_amount < 0\n"
+    samples limit: 10
+    description: Order amounts cannot be negative

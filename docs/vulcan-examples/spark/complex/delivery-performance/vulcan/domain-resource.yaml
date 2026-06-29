@@ -1,0 +1,68 @@
+version: v1alpha
+type: vulcan
+name: delivery-performance
+tags:
+  - quick-commerce
+  - delivery-operations
+  - logistics
+  - spark
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: product-sandbox-compute 
+  engine: spark
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=shreya-examples'
+      - '--submodules=off'
+    baseDir: vulcan-examples/engines/spark/demo/delivery-performance
+    secret: engineering:git-sync
+  depots:
+    - dataos://productsandboxlhdepot?purpose=rw
+  workflow:
+    type: schedule
+    schedule:
+      crons:
+      - '*/30 * * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'Asia/Kolkata'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "300m"
+        memory: "768Mi"
+      limit:
+        cpu: "2000m"
+        memory: "4Gi"
+
+    migrate:
+      command:
+        - vulcan
+      arguments:
+        - migrate
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 2
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "2000m"
+        memory: "2Gi"

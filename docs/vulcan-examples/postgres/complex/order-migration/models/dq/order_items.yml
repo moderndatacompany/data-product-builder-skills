@@ -1,0 +1,30 @@
+# kind: dq — converted from checks/order_items.yml
+kind: dq
+name: order_items_dq
+depends_on: sales.order_items
+rules:
+- failed rows:
+    name: invalid_line_amount_inputs
+    dimension: validity
+    fail query: |
+      SELECT order_item_id, order_id, product_id, quantity, unit_price, discount_rate, tax_rate
+      FROM sales.order_items
+      WHERE quantity <= 0
+         OR unit_price < 0
+         OR discount_rate < 0
+         OR discount_rate > 1
+         OR tax_rate < 0
+    samples limit: 10
+    description: Order item inputs must be within valid ranges
+- failed rows:
+    name: negative_line_totals
+    dimension: validity
+    fail query: |
+      SELECT order_item_id, order_id, line_subtotal, line_discount, line_tax, line_total
+      FROM sales.order_items
+      WHERE line_subtotal < 0
+         OR line_discount < 0
+         OR line_tax < 0
+         OR line_total < 0
+    samples limit: 10
+    description: Derived line amounts must not be negative

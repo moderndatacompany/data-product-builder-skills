@@ -1,0 +1,13 @@
+limitations:
+  - Demo dataset with consumer analytics events (~395 records in parquet file)
+  - De-duplication required for accurate device counts across roll-up windows
+  - Daily averages (allowing duplicates) vs cumulative metrics (unique devices)
+  - Snowflake cloud warehouse as data platform (VULCAN.USDK schema)
+  # data_sources:
+  #   - Postgres database (localhost:5433)
+  #   - Schema: vulcan_demo (bronze layer)
+  # sla:
+  #   bronze_refresh: "5 minutes for orders/order_items, 15 minutes for dimensions"
+  #   silver_refresh: "5-15 minutes depending on model"
+  #   gold_refresh: "5 minutes for advanced analytics"
+  #   availability: "99.5% uptime target"

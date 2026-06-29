@@ -1,0 +1,42 @@
+models:
+  sales.payments:
+    alias: payments
+
+    dimensions:
+      includes:
+        - payment_id
+        - order_id
+        - payment_date
+        - payment_method
+        - provider
+        - transaction_id
+        - status
+        - amount
+
+    measures:
+      total_payments:
+        type: count_distinct
+        expression: "{payments.payment_id}"
+
+      total_paid_amount:
+        type: sum
+        expression: "{payments.amount}"
+
+      avg_payment_amount:
+        type: avg
+        expression: "{payments.amount}"
+
+    segments:
+      refunded_payments:
+        expression: |
+          {payments.status} = 'Refunded'
+
+      pending_payments:
+        expression: |
+          {payments.status} = 'Pending'
+
+    joins:
+      orders:
+        type: many_to_one
+        expression: "{payments.order_id} = {orders.order_id}"
+

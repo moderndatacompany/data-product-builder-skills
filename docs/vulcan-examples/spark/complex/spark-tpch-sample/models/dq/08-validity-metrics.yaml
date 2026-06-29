@@ -1,0 +1,31 @@
+# kind: dq — converted from checks/08-validity-metrics.yaml (table 1 of 2)
+kind: dq
+name: tpch_customer_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1
+
+rules:
+- failed rows:
+    name: valid_mktsegment
+    dimension: validity
+    description: Market segment must be one of the 5 TPC-H segments
+    fail query: |
+      SELECT c_custkey, c_mktsegment
+      FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1
+      WHERE c_mktsegment NOT IN ('AUTOMOBILE', 'BUILDING', 'FURNITURE', 'HOUSEHOLD', 'MACHINERY')
+    samples limit: 5
+
+- duplicate_count(c_custkey) = 0:
+    name: unique_custkey
+    dimension: uniqueness
+    description: Customer key must be unique
+---
+# kind: dq — converted from checks/08-validity-metrics.yaml (table 2 of 2)
+kind: dq
+name: full_customer_orders_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1
+
+rules:
+- duplicate_count(c_custkey) = 0:
+    name: unique_custkey
+    dimension: uniqueness
+    description: Customer key must be unique in customer orders summary

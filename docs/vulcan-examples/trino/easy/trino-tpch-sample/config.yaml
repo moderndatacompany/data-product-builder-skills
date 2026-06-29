@@ -1,0 +1,64 @@
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: trino-analytics-prod
+display_name: Trino TPC-H Production
+description: "Production Trino analytics on TPC-H customer data with projection-based credentials and depot integration."
+tags:
+  - trino
+  - tpch
+  - production
+  - analytics
+
+model_defaults:
+  dialect: trino
+  cron: '@daily'
+
+linter:
+  enabled: true
+
+gateways:
+  default:
+    connection:
+      type: trino
+      host: "{{ env_var('TRINO_HOST', '') }}"
+      port: 7432
+      user: "{{ env_var('TRINO_USER', '') }}"
+      catalog: "{{ env_var('TRINO_CATALOG', '') }}"
+      http_scheme: https
+      method: basic
+      password: "{{ env_var('TRINO_PASSWORD', '') }}"
+      verify: true
+
+
+# gateways:
+#   default:
+#     connection:
+#       type: trino
+#       host: tcp.comet-040726.dataos.cloud
+#       port: 7432
+#       user: shreyasikarwartmdcio
+#       catalog: testawslhnewdepot
+#       http_scheme: https
+#       method: basic
+#       password: eyJjbHVzdGVyIjogInZ1bGNhbmNvbWV0IiwgImFwaWtleSI6ICJkWE5sWm5Wc2JIbGZiRzkyWldSZmNIVndYekl3TWpZd05EQTVMbVl5WTJRMU5tSm1MVFF3TWprdE5HVXlPQzA0T0dNM0xXSXhNbVl5TldNellUSTVOVEl5WmpBeVpHVTVNMlptWkRnMll6QXhZakprTWpNek5XWTBOR00wT1dVNCIsICJ0ZW5hbnQiOiAibWF4aW11cyJ9Cg==
+#       verify: true
+
+#     state_connection:
+#       type: postgres
+#       host: statestore
+#       port: 5432
+#       user: vulcan
+#       password: vulcan
+#       database: statestore
+#     state_schema: trino_testingg

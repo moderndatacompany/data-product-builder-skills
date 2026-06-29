@@ -1,0 +1,75 @@
+version: v1alpha
+type: vulcan
+name: b2b-saas-databricks
+tags:
+  - databricks
+  - b2b
+  - saas
+  - analytics
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: comet-compute
+  engine: databricks
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=shreya-examples'
+      - '--submodules=off'
+    baseDir: vulcan-examples/databricks/demo/databricks_test
+    secret: engineering:git-sync
+  use:
+    projection:
+      secrets:
+        - id: engineering:databricks-secret
+          contextAlias: dbk
+      projections:
+        envVars:
+          - key: DATABRICKS_HOST
+            template: "{{ secrets['dbk'].DATABRICKS_HOST | base64_decode }}"
+          - key: DATABRICKS_HTTP_PATH
+            template: "{{ secrets['dbk'].DATABRICKS_HTTP_PATH | base64_decode }}"
+          - key: DATABRICKS_TOKEN
+            template: "{{ secrets['dbk'].DATABRICKS_TOKEN | base64_decode }}"
+          - key: DATABRICKS_CATALOG
+            template: "{{ secrets['dbk'].DATABRICKS_CATALOG | base64_decode }}"
+
+  workflow:
+    schedule:
+      crons:
+      - '*/5 * * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - run
+
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+

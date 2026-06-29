@@ -1,0 +1,35 @@
+test_sales_analytics_orders_single:
+  model: DEMODB.VDEFALSE.ORDERS
+  description: >-
+    Single-record test for the orders model inside the incremental window.
+  vars:
+    start: '2025-03-01'
+    end: '2025-03-31'
+
+  inputs:
+    VULCAN.RAW.ORDERS:
+      rows:
+        - ORDER_ID: O100
+          ORDER_DATE: '2025-03-15'
+          CUSTOMER_ID: C100
+          PRODUCT_ID: P100
+          QUANTITY: 2
+          UNIT_PRICE: 29.99
+          DISCOUNT: 0.10
+          TAX: 4.32
+          SHIPPING_COST: 5.99
+          TOTAL_AMOUNT: 64.29
+
+  outputs:
+    query:
+      rows:
+        - ORDER_ID: "O100"
+          ORDER_DATE: "2025-03-15"
+          CUSTOMER_ID: "C100"
+          PRODUCT_ID: "P100"
+          QUANTITY: 2
+          UNIT_PRICE: 29.99
+          DISCOUNT: 0.1
+          TAX: 4.32
+          SHIPPING_COST: 5.99
+          TOTAL_AMOUNT: 64.29

@@ -1,0 +1,81 @@
+# kind: dq — converted from checks/fct_inventory_optimization.yml
+kind: dq
+name: fct_inventory_optimization_dq
+depends_on: ERP_PLATFORM.GOLD.FCT_INVENTORY_OPTIMIZATION
+
+rules:
+- row_count >= 500:
+    name: minimum_inventory_records
+    dimension: completeness
+    description: At least 500 material-plant inventory records should exist
+
+- missing_count(inventory_opt_key) = 0:
+    name: no_missing_inventory_opt_key
+    dimension: completeness
+    description: All records must have an inventory_opt_key
+
+- missing_count(material_number) = 0:
+    name: no_missing_material_number
+    dimension: completeness
+    description: All records must have a material_number
+
+- missing_count(plant_code) = 0:
+    name: no_missing_plant_code
+    dimension: completeness
+    description: All records must have a plant_code
+
+- missing_count(current_inventory_qty) = 0:
+    name: no_missing_current_inventory_qty
+    dimension: completeness
+    description: All records must have a current_inventory_qty
+
+- invalid_count(current_inventory_qty) = 0:
+    name: current_inventory_qty_non_negative
+    dimension: validity
+    description: Current inventory quantity must be non-negative
+    valid min: 0
+
+- invalid_count(stockout_risk_score) = 0:
+    name: stockout_risk_score_valid_range
+    dimension: validity
+    description: Stockout risk score must be between 0 and 100
+    valid min: 0
+    valid max: 100
+
+- invalid_percent(abc_classification) < 1%:
+    name: valid_abc_classification
+    dimension: validity
+    description: ABC classification must be A, B, or C
+    valid values: [A, B, C]
+
+- invalid_count(reorder_point) = 0:
+    name: reorder_point_non_negative
+    dimension: validity
+    description: Reorder point must be non-negative
+    valid min: 0
+
+- invalid_count(safety_stock_level) = 0:
+    name: safety_stock_non_negative
+    dimension: validity
+    description: Safety stock level must be non-negative
+    valid min: 0
+
+- duplicate_count(inventory_opt_key) = 0:
+    name: unique_inventory_opt_keys
+    dimension: uniqueness
+    description: Each inventory_opt_key must be unique
+
+- avg(current_inventory_qty) > 0:
+    name: average_inventory_positive
+    dimension: accuracy
+    description: Average inventory quantity should be positive
+
+- failed rows:
+    name: inventory_value_consistent
+    dimension: accuracy
+    description: "If inventory qty > 0, value should also be positive"
+    fail query: |
+      SELECT inventory_opt_key, current_inventory_qty, current_inventory_value_usd
+      FROM ERP_PLATFORM.GOLD.FCT_INVENTORY_OPTIMIZATION
+      WHERE current_inventory_qty > 0 AND current_inventory_value_usd <= 0
+    samples limit: 10

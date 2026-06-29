@@ -1,0 +1,37 @@
+models:
+  sales.customers:
+    alias: customers
+
+    measures:
+      total_customers:
+        type: count
+        expression: "{customers.customer_id}"
+      
+      active_customers:
+        type: count
+        expression: "{customers.customer_id}"
+        filters:
+          - "{customers.account_status} = 'Active'"
+      
+      platinum_customers:
+        type: count
+        expression: "{customers.customer_id}"
+        filters:
+          - "{customers.customer_segment} = 'Platinum'"
+      
+      average_loyalty_score:
+        type: avg
+        expression: "{customers.loyalty_score}"
+    
+    segments:
+      high_value_customers:
+        expression: |
+          {customers.customer_segment} IN ('Platinum', 'Gold')
+        
+      recent_signups:
+        expression: |
+          {customers.signup_date} >= CURRENT_DATE - INTERVAL '30 days'
+        
+      at_risk_customers:
+        expression: |
+          {customers.account_status} = 'Inactive' OR {customers.account_status} = 'Suspended'

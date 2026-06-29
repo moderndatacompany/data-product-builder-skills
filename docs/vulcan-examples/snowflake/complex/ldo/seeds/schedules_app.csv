@@ -1,0 +1,7 @@
+_id,org_id,subscription_id,device_id,package_id,operation_type,status,actual_date_time,display_date_time,app_package_id,package_type,url,manifest_url,package_platform,package_name,package_version,package_publisher,package_file_name,_class
+SCH001,ORG001,SUB001,DEV001,PKG001,APPDEPLOY,SCHEDULED,1704067200000,1704067200000,APP001,app,https://apps.example.com/app1,https://apps.example.com/app1/manifest,Windows,Microsoft Teams,2.1.0,Microsoft,teams_setup.exe,com.lenovo.SchedulesApp
+SCH002,ORG001,SUB002,DEV002,PKG002,APPDEPLOY,EXECUTED,1704070800000,1704070800000,APP002,app,https://apps.example.com/app2,https://apps.example.com/app2/manifest,Windows,Slack,4.35.126,Slack Technologies,slack_installer.exe,com.lenovo.SchedulesApp
+SCH003,ORG002,SUB003,DEV003,PKG003,APPDEPLOY,SCHEDULED,1704074400000,1704074400000,APP003,app,https://apps.example.com/app3,https://apps.example.com/app3/manifest,Android,Zoom,5.16.5,Zoom Video Communications,zoom.apk,com.lenovo.SchedulesApp
+SCH004,ORG002,SUB004,DEV004,PKG004,APPDEPLOY,EXECUTED,1704078000000,1704078000000,APP004,app,https://apps.example.com/app4,https://apps.example.com/app4/manifest,Windows,Chrome,120.0.6099.109,Google LLC,chrome_installer.exe,com.lenovo.SchedulesApp
+SCH005,ORG003,SUB005,DEV005,PKG005,APPDEPLOY,SCHEDULED,1704081600000,1704081600000,APP005,app,https://apps.example.com/app5,https://apps.example.com/app5/manifest,Windows,Adobe Acrobat,23.8.20555,Adobe Inc,acrobat_dc.exe,com.lenovo.SchedulesApp
+

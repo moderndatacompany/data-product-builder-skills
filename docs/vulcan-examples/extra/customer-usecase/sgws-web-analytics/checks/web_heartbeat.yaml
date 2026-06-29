@@ -1,0 +1,77 @@
+# ============================================================================
+# CHECKS: Web Heartbeat Data Quality Monitoring
+# ============================================================================
+# Owner: rohitrajtmdcio
+# Description: Data quality checks for Adobe Analytics clickstream ensuring
+#              hit tracking integrity, session management, and platform validity
+# ============================================================================
+
+checks:
+  web_analytics_gold.WEB_HEARTBEAT:
+    
+    # ==================== COMPLETENESS ====================
+    completeness:
+      - row_count > 0:
+          name: web_heartbeat_records_exist
+          attributes:
+            description: "Web analytics heartbeat must contain clickstream hit data"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(hitid) = 0:
+          name: hitid_required
+          attributes:
+            description: "All web hits must have an Adobe Analytics hit identifier"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(date_time) = 0:
+          name: datetime_required
+          attributes:
+            description: "All web hits must have a timestamp for temporal analysis"
+            owner: "rohitrajtmdcio"
+      
+      - missing_percent(sessionid) < 5:
+          name: sessionid_completeness
+          attributes:
+            description: "At least 95% of hits should have session identifiers for journey tracking"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== VALIDITY ====================
+    validity:
+      - failed rows:
+          name: invalid_digital_platform
+          fail query: |
+            SELECT uuid, hitid, digitalplatform
+            FROM web_analytics_gold.WEB_HEARTBEAT
+            WHERE digitalplatform NOT IN ('App', 'Web')
+              AND digitalplatform IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Digital platform must be either App (mobile application) or Web (browser)"
+            owner: "rohitrajtmdcio"
+      
+      - failed rows:
+          name: invalid_page_event
+          fail query: |
+            SELECT uuid, hitid, page_event
+            FROM web_analytics_gold.WEB_HEARTBEAT
+            WHERE page_event < 0 OR page_event > 100
+          samples limit: 10
+          attributes:
+            description: "Page event codes should be within valid Adobe Analytics range (0-100)"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== UNIQUENESS ====================
+    uniqueness:
+      - duplicate_count(uuid) = 0:
+          name: web_hit_uuid_unique
+          attributes:
+            description: "Web hit UUID must be unique for each clickstream event"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== TIMELINESS ====================
+    timeliness:
+      - row_count > 0:
+          name: recent_clickstream_data
+          attributes:
+            description: "Clickstream data should be current for real-time analytics"
+            owner: "rohitrajtmdcio"

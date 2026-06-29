@@ -1,0 +1,88 @@
+checks:
+  bronze_v1.products:
+    completeness:
+      - missing_count(product_id) = 0:
+          name: no_missing_product_ids
+          attributes:
+            description: "All products must have a product ID"
+      
+      - missing_count(name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All products must have a name"
+      
+      - missing_count(category) = 0:
+          name: no_missing_categories
+          attributes:
+            description: "All products must have a category"
+      
+      - missing_count(price) = 0:
+          name: no_missing_prices
+          attributes:
+            description: "All products must have a price"
+      
+      # This will FAIL - we have ~90-240 products (3-8 per 30 suppliers)
+      - row_count > 500:
+          name: high_product_count
+          attributes:
+            description: "Should have more than 500 products (EXPECTED TO FAIL)"
+    
+    validity:
+      - failed rows:
+          name: positive_product_ids
+          fail query: |
+            SELECT product_id, name, category, price
+            FROM bronze_v1.products
+            WHERE product_id <= 0
+          samples limit: 10
+          attributes:
+            description: "Product IDs must be positive"
+      
+      - failed rows:
+          name: positive_prices
+          fail query: |
+            SELECT product_id, name, category, price
+            FROM bronze_v1.products
+            WHERE price <= 0
+          samples limit: 10
+          attributes:
+            description: "Prices must be positive"
+      
+      - failed rows:
+          name: valid_categories
+          fail query: |
+            SELECT product_id, name, category
+            FROM bronze_v1.products
+            WHERE category NOT IN ('Widgets', 'Gadgets', 'Doohickeys', 'Thingamajigs')
+          samples limit: 10
+          attributes:
+            description: "Categories must be from valid set"
+      
+      - failed rows:
+          name: valid_supplier_references
+          fail query: |
+            SELECT p.product_id, p.name, p.supplier_id
+            FROM bronze_v1.products p
+            LEFT JOIN bronze_v1.suppliers s ON p.supplier_id = s.supplier_id
+            WHERE s.supplier_id IS NULL
+          samples limit: 10
+          attributes:
+            description: "All products must reference valid suppliers"
+      
+      # This will FAIL - checking for prices < 50 (data_gen creates 1-500)
+      - failed rows:
+          name: minimum_price_check
+          fail query: |
+            SELECT product_id, name, category, price
+            FROM bronze_v1.products
+            WHERE price < 50
+          samples limit: 10
+          attributes:
+            description: "All products should be priced at least $50 (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(product_id) = 0:
+          name: unique_product_ids
+          attributes:
+            description: "Product IDs must be unique"
+

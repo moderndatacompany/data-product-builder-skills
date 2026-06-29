@@ -1,0 +1,12 @@
+warehouse_id,region_id,name
+1,1,North Distribution Center
+2,2,South Fulfillment Hub
+3,3,East Logistics Center
+4,4,West Storage Facility
+5,5,Central Warehouse
+6,1,North Regional Depot
+7,2,South Operations Center
+8,3,East Distribution Point
+9,4,West Fulfillment Center
+10,5,Central Logistics Hub
+

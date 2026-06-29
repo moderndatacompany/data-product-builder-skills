@@ -1,0 +1,17 @@
+order_id,customer_id,order_date,order_status,shipping_address,billing_address,total_amount,discount_amount,tax_amount,payment_method
+1001,1,2024-01-16,completed,"123 Tech St, San Francisco, CA","123 Tech St, San Francisco, CA",5000.00,500.00,450.00,credit_card
+1002,2,2024-02-02,completed,"456 Startup Ave, Austin, TX","456 Startup Ave, Austin, TX",1200.00,0.00,108.00,credit_card
+1003,3,2024-01-21,shipped,"789 Market Blvd, Chicago, IL","789 Market Blvd, Chicago, IL",3500.00,350.00,283.50,bank_transfer
+1004,4,2024-01-11,completed,"321 Enterprise Dr, New York, NY","321 Enterprise Dr, New York, NY",8000.00,800.00,648.00,credit_card
+1005,5,2024-02-16,pending,"654 Small Biz Ln, Seattle, WA","654 Small Biz Ln, Seattle, WA",800.00,0.00,72.00,credit_card
+1006,1,2024-02-20,completed,"123 Tech St, San Francisco, CA","123 Tech St, San Francisco, CA",4500.00,450.00,364.50,credit_card
+1007,6,2024-01-26,completed,"987 Retail Rd, Los Angeles, CA","987 Retail Rd, Los Angeles, CA",2800.00,280.00,227.20,bank_transfer
+1008,7,2024-02-06,cancelled,"147 Finance St, Boston, MA","147 Finance St, Boston, MA",6000.00,600.00,486.00,credit_card
+1009,8,2024-01-31,completed,"258 Healthcare Way, Miami, FL","258 Healthcare Way, Miami, FL",3200.00,320.00,259.20,credit_card
+1010,9,2024-02-11,shipped,"369 Consulting Ave, Denver, CO","369 Consulting Ave, Denver, CO",1500.00,0.00,135.00,credit_card
+1011,10,2024-01-19,completed,"741 Manufacturing Pkwy, Detroit, MI","741 Manufacturing Pkwy, Detroit, MI",7500.00,750.00,607.50,bank_transfer
+1012,2,2024-02-25,completed,"456 Startup Ave, Austin, TX","456 Startup Ave, Austin, TX",1800.00,180.00,145.80,credit_card
+1013,3,2024-02-28,pending,"789 Market Blvd, Chicago, IL","789 Market Blvd, Chicago, IL",4000.00,400.00,324.00,bank_transfer
+1014,4,2024-02-15,completed,"321 Enterprise Dr, New York, NY","321 Enterprise Dr, New York, NY",9000.00,900.00,729.00,credit_card
+1015,6,2024-02-22,shipped,"987 Retail Rd, Los Angeles, CA","987 Retail Rd, Los Angeles, CA",3000.00,300.00,243.00,bank_transfer
+

@@ -1,0 +1,37 @@
+# Converted from legacy: semantics/device_os.yaml
+kind: semantic
+name: device_os
+depends_on: lenovo.ldo.device_os
+ai_context:
+  instructions: >
+    Use this semantic model for questions about device os. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "device os"
+    - "device_os"
+    - "device"
+  examples:
+    - "Show device os trends over time."
+    - "Break down device os by key dimensions."
+
+measures:
+- name: number_of_os
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for number of os. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "number of os"
+      - "number_of_os"
+      - "number"
+    examples:
+      - "What is number of os by month?"
+      - "Compare number of os across key segments."
+  type: count
+  expression: '{device_os.CURRENT_OS_ID}'
+  description: Total number of operating systems available.
+  tags:
+  - metric
+  terms:
+  - metric.number_of_os

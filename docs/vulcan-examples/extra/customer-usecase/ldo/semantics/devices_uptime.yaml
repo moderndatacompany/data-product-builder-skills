@@ -1,0 +1,47 @@
+models:
+  lenovo.ldo.devices_uptime:
+    alias: devices_uptime
+    
+    dimensions:
+      includes:
+        - DEVICE_ID
+        - NETWORK
+        - LAST_CHANGE_TO_OFFLINE
+        - LAST_CHANGE_TO_ONLINE
+
+      
+      # device_uptime:
+      #   type: number
+      #   expression: |
+      #     CASE 
+      #       WHEN {devices_uptime.NETWORK} = 'ONLINE' 
+      #       THEN DATE_DIFF('MINUTE', {devices_uptime.LAST_CHANGE_TO_ONLINE}, CURRENT_TIMESTAMP)
+      #       ELSE NULL
+      #     END
+      #   description: "Time since the device is ONLINE in minutes."
+      
+      # device_downtime:
+      #   type: number
+      #   expression: |
+      #     CASE 
+      #       WHEN {devices_uptime.NETWORK} = 'OFFLINE' 
+      #       THEN DATE_DIFF('MINUTE', {devices_uptime.LAST_CHANGE_TO_OFFLINE}, CURRENT_TIMESTAMP)
+      #       ELSE NULL
+      #     END
+      #   description: "Time since the device is OFFLINE in minutes."
+    
+    measures:
+      total_online_devices:
+        type: count_distinct
+        expression: "{devices_uptime.DEVICE_ID}"
+        filters:
+          - "{devices_uptime.NETWORK} = 'ONLINE'"
+        description: "Total number of devices that are currently online, indicating device connectivity."
+      
+      total_offline_devices:
+        type: count_distinct
+        expression: "{devices_uptime.DEVICE_ID}"
+        filters:
+          - "{devices_uptime.NETWORK} = 'OFFLINE'"
+        description: "Total number of devices that are currently offline, indicating device connectivity."
+

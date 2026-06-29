@@ -1,0 +1,64 @@
+# ============================================================================
+# CHECKS: Customer Data Quality Monitoring
+# ============================================================================
+# Owner: rohitrajtmdcio
+# Description: Data quality checks for customer dimension ensuring completeness,
+#              validity of business classifications, and customer premise types
+# ============================================================================
+
+checks:
+  web_analytics_gold.CUSTOMER:
+    
+    # ==================== COMPLETENESS ====================
+    completeness:
+      - row_count > 0:
+          name: customer_records_exist
+          attributes:
+            description: "Customer dimension must contain at least one record"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(customer_name) = 0:
+          name: customer_name_required
+          attributes:
+            description: "All customers must have a business name for identification"
+            owner: "rohitrajtmdcio"
+      
+      - missing_percent(email) < 80:
+          name: customer_email_completeness
+          attributes:
+            description: "At least 20% of customers should have email addresses for communication"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== VALIDITY ====================
+    validity:
+      - failed rows:
+          name: invalid_sales_bucket
+          fail query: |
+            SELECT customer_id, customer_name, sales_bucket
+            FROM web_analytics_gold.CUSTOMER
+            WHERE sales_bucket NOT IN ('$0-$25k', '$25k-$50k', '$50k-$75k', '$75k-$100k', '$100k-$200k', '$200k-$300k', '$300k-$400k', '$400k-$500k', '$500k+')
+              AND sales_bucket IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Sales bucket must be one of the predefined revenue tier classifications"
+            owner: "rohitrajtmdcio"
+      
+      - failed rows:
+          name: invalid_customer_premise
+          fail query: |
+            SELECT customer_id, customer_name, customer_premise
+            FROM web_analytics_gold.CUSTOMER
+            WHERE customer_premise NOT IN ('On Premise', 'Off Premise', 'Any', '')
+              AND customer_premise IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Customer premise type must be valid alcohol consumption location classification"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== UNIQUENESS ====================
+    uniqueness:
+      - duplicate_count(customer_id) = 0:
+          name: customer_id_unique
+          attributes:
+            description: "Customer ID must be unique across all records"
+            owner: "rohitrajtmdcio"

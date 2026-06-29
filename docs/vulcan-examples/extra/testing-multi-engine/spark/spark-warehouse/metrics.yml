@@ -1,0 +1,90 @@
+metrics:
+  monthly_growth:
+    measure: users.new_signups
+    time: users.signup_date
+    dimensions:
+      - users.signup_channel
+      - users.plan_type
+      - users.industry
+    description: "Monthly user acquisition by channel, plan, and industry"
+    tags:
+      - growth
+      - acquisition
+      - metric
+    terms:
+      - glossary.user_acquisition
+      - glossary.growth_metric
+    
+  # revenue_trends:
+  #   measure: subscriptions.total_mrr
+  #   time: subscriptions.start_date
+  #   dimensions:
+  #     - subscriptions.plan_type
+  #     # - users.company_size
+  #     - subscriptions.billing_cycle
+  #   description: "MRR growth trends by plan type and company size"
+    
+  product_engagement:
+    measure: usage_events.daily_active_users
+    time: usage_events.event_date
+    dimensions:
+      - usage_events.feature_name
+      - users.plan_type
+    description: "Daily active users by feature and subscription plan"
+    tags:
+      - engagement
+      - dau
+      - metric
+    terms:
+      - glossary.user_engagement
+      - glossary.daily_active_users
+    
+  churn_analysis:
+    measure: subscriptions.churn_count
+    time: subscriptions.end_date
+    dimensions:
+      - subscriptions.plan_type
+      - users.company_size
+      - users.signup_channel
+    description: "Churn patterns by plan, company size, and acquisition channel"
+    
+  cohort_retention:
+    measure: users.active_users
+    time: users.signup_date
+    dimensions:
+      - users.signup_channel
+      - subscriptions.plan_type
+    description: "User retention by signup cohort and plan type"
+    
+  arr_growth:
+    measure: subscriptions.total_arr
+    time: subscriptions.start_date
+    dimensions:
+      - subscriptions.plan_type
+      - users.industry
+      - subscriptions.billing_cycle
+    description: "Annual Recurring Revenue growth by plan and industry"
+    tags:
+      - revenue
+      - arr
+      - metric
+    terms:
+      - glossary.annual_recurring_revenue
+      - glossary.revenue_metric
+    
+  # feature_adoption:
+  #   measure: usage_events.feature_adoption_rate
+  #   time: usage_events.event_date
+  #   dimensions:
+  #     - usage_events.feature_name
+  #     - users.plan_type
+  #     - users.company_size
+  #   description: "Feature adoption rates by user segment"
+    
+  # api_usage_trends:
+  #   measure: usage_events.api_usage_count
+  #   time: usage_events.event_date
+  #   dimensions:
+  #     - users.plan_type
+  #     - users.industry
+  #   description: "API usage patterns by customer segment"

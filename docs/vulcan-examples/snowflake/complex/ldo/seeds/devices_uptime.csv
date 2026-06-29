@@ -1,0 +1,7 @@
+_id,_class,device_id,network,last_change_to_online,last_change_to_offline,total_minutes_online,total_minutes_offline
+UP001,com.lenovo.DevicesUptime,DEV001,ONLINE,1704063600000,1704060000000,14400,120
+UP002,com.lenovo.DevicesUptime,DEV002,ONLINE,1704067200000,1704064800000,12000,180
+UP003,com.lenovo.DevicesUptime,DEV003,OFFLINE,1704056400000,1704070800000,10800,240
+UP004,com.lenovo.DevicesUptime,DEV004,ONLINE,1704074400000,1704072000000,16200,90
+UP005,com.lenovo.DevicesUptime,DEV005,ONLINE,1704078000000,1704075600000,13500,150
+

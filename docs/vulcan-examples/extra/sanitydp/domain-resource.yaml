@@ -1,0 +1,68 @@
+version: v1alpha
+type: vulcan
+name: sanityactivation
+tags:
+  - sanity
+spec:
+  runAsUser: "dedevtmdcio"
+  compute: comet-compute   #change as per the compute name
+  engine: snowflake
+  repo: 
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/sanitydp
+    secret: engineering:git-sync   #tenant:secret-name
+  depots:
+    - dataos://snowflakevulcan?purpose=rw
+  workflow:
+    type: schedule
+    schedule:
+      crons:
+        - '*/45 * * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    migrate:
+      command:
+        - vulcan
+      arguments:
+
+
+        - migrate
+    plan:
+      command:
+        - vulcan
+      arguments:
+
+
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+
+
+        - --log-to-stdout
+        - run
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"

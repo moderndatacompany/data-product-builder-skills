@@ -1,0 +1,38 @@
+models:
+  raw.raw_orders:
+    alias: orders
+    description: "Orders fact table tracking customer purchases with product references and revenue"
+
+    dimensions:
+      includes:
+        - order_id
+        - order_date
+        - customer_id
+        - product_id
+        - total_amount
+    measures:
+      total_orders:
+        type: count_distinct
+        expression: "{orders.order_id}"
+        description: "Total number of orders"
+
+      total_revenue:
+        type: sum
+        expression: "{orders.total_amount}"
+        format: currency
+        description: "Total revenue from all orders"
+
+    segments:
+      recent_orders:
+        expression: |
+          {orders.order_date} >= CURRENT_DATE - INTERVAL '7 days'
+        description: "Orders placed in the last 7 days"
+
+    joins:
+      customers:
+        type: many_to_one
+        expression: "{orders.customer_id} = {customers.customer_id}"
+
+      products:
+        type: many_to_one
+        expression: "{orders.product_id} = {products.product_id}"

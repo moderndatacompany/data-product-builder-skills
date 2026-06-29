@@ -1,0 +1,142 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_lineitems
+          attributes:
+            description: "At least one line item exists"
+      - missing_count(l_orderkey) = 0:
+          name: no_missing_orderkey
+          attributes:
+            description: "Composite PK part 1 must not be null"
+      - missing_count(l_linenumber) = 0:
+          name: no_missing_linenumber
+          attributes:
+            description: "Composite PK part 2 must not be null"
+      - missing_count(l_quantity) = 0:
+          name: no_missing_quantity
+          attributes:
+            description: "Quantity must always be populated"
+      - missing_count(l_extendedprice) = 0:
+          name: no_missing_extendedprice
+          attributes:
+            description: "Extended price must always be populated"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_quantity
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_quantity
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_quantity <= 0
+          samples limit: 5
+          attributes:
+            description: "Quantity must be positive"
+      - failed rows:
+          name: negative_extendedprice
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_extendedprice
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_extendedprice < 0
+          samples limit: 5
+          attributes:
+            description: "Extended price cannot be negative"
+      - failed rows:
+          name: discount_out_of_range
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_discount
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_discount < 0 OR l_discount > 0.10
+          samples limit: 5
+          attributes:
+            description: "Discount must be between 0 and 0.10 (TPC-H spec)"
+      - failed rows:
+          name: tax_out_of_range
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_tax
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_tax < 0 OR l_tax > 0.08
+          samples limit: 5
+          attributes:
+            description: "Tax must be between 0 and 0.08 (TPC-H spec)"
+      - failed rows:
+          name: invalid_returnflag
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_returnflag
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_returnflag NOT IN ('A', 'N', 'R')
+          samples limit: 5
+          attributes:
+            description: "Return flag must be A, N, or R"
+      - failed rows:
+          name: invalid_linestatus
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_linestatus
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_linestatus NOT IN ('F', 'O')
+          samples limit: 5
+          attributes:
+            description: "Line status must be F (fulfilled) or O (open)"
+      - failed rows:
+          name: invalid_shipmode
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_shipmode
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_shipmode NOT IN ('AIR', 'FOB', 'MAIL', 'RAIL', 'REG AIR', 'SHIP', 'TRUCK')
+          samples limit: 5
+          attributes:
+            description: "Ship mode must be one of the 7 TPC-H modes"
+      - failed rows:
+          name: ship_before_commit
+          fail query: |
+            SELECT l_orderkey, l_linenumber, l_shipdate, l_commitdate
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1
+            WHERE l_receiptdate < l_shipdate
+          samples limit: 5
+          attributes:
+            description: "Receipt date should not be before ship date"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(l_orderkey, l_linenumber) = 0:
+          name: unique_lineitem
+          attributes:
+            description: "Composite key (orderkey, linenumber) must be unique"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: orphan_orderkey
+          fail query: |
+            SELECT l.l_orderkey, l.l_linenumber
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1 l
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1 o
+              ON o.o_orderkey = l.l_orderkey
+            WHERE o.o_orderkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every lineitem orderkey must exist in orders table"
+      - failed rows:
+          name: orphan_partkey
+          fail query: |
+            SELECT l.l_orderkey, l.l_linenumber, l.l_partkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1 l
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_part_sf1 p
+              ON p.p_partkey = l.l_partkey
+            WHERE p.p_partkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every lineitem partkey must exist in part table"
+      - failed rows:
+          name: orphan_suppkey
+          fail query: |
+            SELECT l.l_orderkey, l.l_linenumber, l.l_suppkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1 l
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_supplier_sf1 s
+              ON s.s_suppkey = l.l_suppkey
+            WHERE s.s_suppkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every lineitem suppkey must exist in supplier table"

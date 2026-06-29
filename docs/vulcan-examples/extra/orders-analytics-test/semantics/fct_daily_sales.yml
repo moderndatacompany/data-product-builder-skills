@@ -1,0 +1,249 @@
+models:
+  silver_v1.fct_daily_sales:
+    alias: daily_sales
+    
+    # ============================================================================
+    # MEASURES
+    # ============================================================================
+    measures:
+      total_daily_orders:
+        type: sum
+        expression: "{daily_sales.total_orders}"
+        description: "Total number of orders across all days"
+        tags:
+          - sales
+          - orders
+          - metric
+        terms:
+          - sales.total_orders
+          - metric.order_count
+      
+      total_daily_revenue:
+        type: sum
+        expression: "{daily_sales.total_revenue}"
+        format: currency
+        description: "Total revenue across all days"
+        tags:
+          - revenue
+          - financial
+          - sales
+        terms:
+          - sales.total_revenue
+          - finance.revenue
+      
+      avg_order_value_across_days:
+        type: avg
+        expression: "{daily_sales.avg_order_value}"
+        format: currency
+        description: "Average order value across all days"
+        tags:
+          - revenue
+          - financial
+          - average
+        terms:
+          - sales.aov
+          - finance.average_order_value
+      
+      total_items_sold_agg:
+        type: sum
+        expression: "{daily_sales.total_items_sold}"
+        description: "Total quantity of items sold"
+        tags:
+          - inventory
+          - sales
+          - metric
+        terms:
+          - inventory.items_sold
+          - sales.quantity
+      
+      total_shipments_agg:
+        type: sum
+        expression: "{daily_sales.total_shipments}"
+        description: "Total number of shipments"
+        tags:
+          - logistics
+          - fulfillment
+          - metric
+        terms:
+          - logistics.shipment_count
+          - fulfillment.shipments
+      
+      avg_shipment_rate:
+        type: avg
+        expression: "{daily_sales.shipment_rate}"
+        description: "Average percentage of orders shipped"
+        tags:
+          - logistics
+          - fulfillment
+          - ratio
+        terms:
+          - logistics.shipment_rate
+          - fulfillment.conversion
+      
+      weekend_revenue:
+        type: sum
+        expression: "{daily_sales.total_revenue}"
+        filters:
+          - "{daily_sales.is_weekend} = TRUE"
+        format: currency
+        description: "Total revenue from weekend sales"
+        tags:
+          - revenue
+          - weekend
+          - trend
+        terms:
+          - sales.weekend_revenue
+          - trend.weekend_performance
+      
+      weekday_revenue:
+        type: sum
+        expression: "{daily_sales.total_revenue}"
+        filters:
+          - "{daily_sales.is_weekend} = FALSE"
+        format: currency
+        description: "Total revenue from weekday sales"
+        tags:
+          - revenue
+          - weekday
+          - trend
+        terms:
+          - sales.weekday_revenue
+          - trend.weekday_performance
+      
+      weekend_order_count:
+        type: sum
+        expression: "{daily_sales.total_orders}"
+        filters:
+          - "{daily_sales.is_weekend} = TRUE"
+        description: "Total orders placed on weekends"
+        tags:
+          - orders
+          - weekend
+          - trend
+        terms:
+          - sales.weekend_orders
+          - trend.weekend_volume
+    
+    # ============================================================================
+    # SEGMENTS
+    # ============================================================================
+    segments:
+      high_revenue_days:
+        expression: "{daily_sales.total_revenue} >= 5000"
+        description: "Days with revenue >= $5,000"
+        tags:
+          - revenue
+          - performance
+          - segment
+        terms:
+          - sales.high_revenue
+          - performance.strong_days
+      
+      recent_7_days:
+        expression: "{daily_sales.order_date} >= CURRENT_DATE - INTERVAL '7 days'"
+        description: "Last 7 days of sales"
+        tags:
+          - temporal
+          - recent
+          - analysis
+        terms:
+          - time.recent_week
+          - analysis.last_7_days
+      
+      recent_30_days:
+        expression: "{daily_sales.order_date} >= CURRENT_DATE - INTERVAL '30 days'"
+        description: "Last 30 days of sales"
+        tags:
+          - temporal
+          - recent
+          - analysis
+        terms:
+          - time.recent_month
+          - analysis.last_30_days
+      
+      high_volume_days:
+        expression: "{daily_sales.total_orders} >= 10"
+        description: "Days with 10+ orders"
+        tags:
+          - volume
+          - performance
+          - segment
+        terms:
+          - sales.high_volume
+          - performance.busy_days
+      
+      low_shipment_performance:
+        expression: "{daily_sales.shipment_rate} < 0.8"
+        description: "Days with shipment rate below 80%"
+        tags:
+          - logistics
+          - alert
+          - performance
+        terms:
+          - logistics.low_performance
+          - alert.shipment_issues
+      
+      weekend_sales:
+        expression: "{daily_sales.is_weekend} = TRUE"
+        description: "Sales that occurred on weekends (Saturday/Sunday)"
+        tags:
+          - temporal
+          - weekend
+          - pattern
+        terms:
+          - time.weekend
+          - pattern.weekend_sales
+      
+      weekday_sales:
+        expression: "{daily_sales.is_weekend} = FALSE"
+        description: "Sales that occurred on weekdays (Monday-Friday)"
+        tags:
+          - temporal
+          - weekday
+          - pattern
+        terms:
+          - time.weekday
+          - pattern.weekday_sales
+    
+    # ============================================================================
+    # DIMENSIONS
+    # ============================================================================
+    joins:
+      customer_profile:
+        type: many_to_one
+        expression: "{daily_sales.customer_id} = {customer_profile.customer_id}"
+      
+      product_profile:
+        type: many_to_one
+        expression: "{daily_sales.product_id} = {product_profile.product_id}"
+    
+    dimensions:
+      includes:
+        - order_date
+        - day_of_week
+        - is_weekend
+        - region_id
+        - region_name
+        - customer_id
+        - product_id
+      
+      # enhancements:
+      #   - name: order_date
+      #     granularities:
+      #       - name: daily
+      #         interval: "1 day"
+      #         description: "Daily sales aggregation"
+      #       - name: weekly
+      #         interval: "1 week"
+      #         description: "Weekly sales rollup"
+      #       - name: monthly
+      #         interval: "1 month"
+      #         description: "Monthly sales rollup"
+      #       - name: quarterly
+      #         interval: "3 months"
+      #         description: "Quarterly sales rollup"
+      
+      # proxies:
+      #   - name: customer_lifetime_value
+      #     measure: customer_profile.total_customer_revenue
+

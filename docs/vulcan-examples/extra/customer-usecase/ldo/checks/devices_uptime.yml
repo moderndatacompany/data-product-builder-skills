@@ -1,0 +1,96 @@
+# checks/devices_uptime.yml
+# Quality checks for devices uptime
+# Reference: https://tmdc-io.github.io/vulcan-book/components/checks/checks/
+
+checks:
+  lenovo.ldo.devices_uptime:
+    # Completeness: Ensure uptime data exists
+    completeness:
+      - row_count > 0:
+          name: uptime_records_exist
+          attributes:
+            description: "At least one uptime record should exist"
+            #severity: error
+
+      - missing_count(DEVICE_ID) = 0:
+          name: no_missing_device_id
+          attributes:
+            description: "All records must have a device_id"
+            #severity: error
+
+      - missing_count(NETWORK) = 0:
+          name: no_missing_network
+          attributes:
+            description: "All devices must have a network status"
+            #severity: error
+
+    # Validity: Check uptime data quality
+    validity:
+      - failed rows:
+          name: invalid_network
+          fail query: |
+            SELECT DEVICE_ID, NETWORK
+            FROM lenovo.ldo.devices_uptime
+            WHERE NETWORK NOT IN ('ONLINE', 'OFFLINE')
+              AND NETWORK IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Network status must be ONLINE or OFFLINE"
+            #severity: error
+
+      - failed rows:
+          name: online_without_online_timestamp
+          fail query: |
+            SELECT DEVICE_ID, NETWORK, LAST_CHANGE_TO_ONLINE
+            FROM lenovo.ldo.devices_uptime
+            WHERE NETWORK = 'ONLINE'
+              AND LAST_CHANGE_TO_ONLINE IS NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Online devices should have last_change_to_online timestamp"
+            #severity: warning
+
+      - failed rows:
+          name: offline_without_offline_timestamp
+          fail query: |
+            SELECT DEVICE_ID, NETWORK, LAST_CHANGE_TO_OFFLINE
+            FROM lenovo.ldo.devices_uptime
+            WHERE NETWORK = 'OFFLINE'
+              AND LAST_CHANGE_TO_OFFLINE IS NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Offline devices should have last_change_to_offline timestamp"
+            #severity: warning
+
+      - failed rows:
+          name: future_online_timestamp
+          fail query: |
+            SELECT DEVICE_ID, LAST_CHANGE_TO_ONLINE, NETWORK
+            FROM lenovo.ldo.devices_uptime
+            WHERE LAST_CHANGE_TO_ONLINE > CURRENT_TIMESTAMP
+              AND __DELETED = 'False'
+          samples limit: 5
+          attributes:
+            description: "Last change to online timestamp cannot be in the future"
+            #severity: error
+
+    # Consistency: Validate uptime data
+    consistency:
+      - failed rows:
+          name: duplicate_device_records
+          fail query: |
+            SELECT 
+              DEVICE_ID,
+              COUNT(*) as RECORD_COUNT
+            FROM lenovo.ldo.devices_uptime
+            WHERE __DELETED = 'False'
+            GROUP BY DEVICE_ID
+            HAVING COUNT(*) > 1
+          samples limit: 10
+          attributes:
+            description: "Each device should have only one active uptime record"
+            #severity: error
+

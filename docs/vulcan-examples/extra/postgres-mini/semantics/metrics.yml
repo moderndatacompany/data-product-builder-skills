@@ -1,0 +1,13 @@
+metrics:
+  revenue_trends:
+    measure: daily_sales.total_daily_revenue
+    time: daily_sales.order_date
+    dimensions:
+      - daily_sales.total_orders
+    description: "Revenue trends over time with order volume"
+
+  order_volume:
+    measure: daily_sales.total_daily_orders
+    time: daily_sales.order_date
+    description: "Order volume trends over time"
+

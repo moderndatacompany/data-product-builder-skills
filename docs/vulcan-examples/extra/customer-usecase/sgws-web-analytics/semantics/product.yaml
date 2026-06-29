@@ -1,0 +1,40 @@
+# ============================================================================
+# SEMANTIC MODEL: Product (Aligned with dp_web_heartbeat/model/tables/product.yaml)
+# ============================================================================
+
+models:
+  web_analytics_gold.PRODUCT:
+    alias: product
+    # description: "Table containing information about product"
+    
+    dimensions:
+      excludes: []
+    
+    measures:
+      count_products:
+        type: count_distinct
+        expression: "{product.SITE_ITEM_PK_PRODUCT}"
+        description: "Total unique products"
+      
+      count_brands:
+        type: count_distinct
+        expression: "{product.BRAND_NAME}"
+        description: "Total unique brands"
+      
+      count_suppliers:
+        type: count_distinct
+        expression: "{product.SUPPLIER}"
+        description: "Total unique suppliers"
+    
+    segments:
+      is_beer:
+        expression: "UPPER({product.CLASS}) = 'BEER'"
+        description: "Beer products"
+      
+      is_wine:
+        expression: "UPPER({product.CLASS}) = 'WINE'"
+        description: "Wine products"
+      
+      is_spirits:
+        expression: "UPPER({product.CLASS}) IN ('RUM', 'WHISKEY', 'VODKA', 'TEQUILA', 'GIN')"
+        description: "Spirits products"

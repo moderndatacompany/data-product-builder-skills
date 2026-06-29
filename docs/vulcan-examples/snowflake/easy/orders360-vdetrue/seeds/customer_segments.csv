@@ -1,0 +1,13 @@
+SEGMENT_CODE,SEGMENT_NAME,SEGMENT_TIER,DISCOUNT_RATE,DESCRIPTION
+Platinum,Platinum,4,0.20,Top-tier loyalty customers with the highest discount and concierge support
+PlatinumVIP,Platinum VIP,4,0.25,Invitation-only VIP customers with white-glove service and the maximum discount
+Corporate,Corporate,4,0.22,Enterprise corporate accounts with negotiated pricing and a dedicated account manager
+Gold,Gold,3,0.15,High-value loyal customers with elevated benefits and priority shipping
+GoldPlus,Gold Plus,3,0.17,Upgraded gold customers approaching the platinum tier threshold
+Wholesale,Wholesale,3,0.18,Bulk-purchase wholesale accounts with volume-based discount
+Partner,Channel Partner,3,0.16,Reseller and channel-partner accounts with partnership discount
+Silver,Silver,2,0.10,Mid-tier customers with standard discount access
+SilverPlus,Silver Plus,2,0.12,Engaged silver-tier customers nearing the gold upgrade threshold
+Bronze,Bronze,1,0.05,Entry-tier customers with introductory benefits
+Student,Student,1,0.08,Verified student accounts with educational discount
+Retail,Retail,0,0.00,Default retail customers without segment benefits

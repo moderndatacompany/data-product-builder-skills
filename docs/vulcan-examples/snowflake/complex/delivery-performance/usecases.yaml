@@ -1,0 +1,6 @@
+use_cases:
+  - Daily city-level delivery KPI monitoring
+  - Customer tier delay and failure analysis
+  - Rider efficiency benchmarking
+  - Delivery issue categorization and business impact analysis
+  - Semantic-ready Gold layer for dashboards and self-serve analytics

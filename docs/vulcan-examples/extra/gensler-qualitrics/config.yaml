@@ -1,0 +1,226 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - Gensler Qualtrics
+# ==============================================================================
+
+# Basic Information
+name: gensler-qualitrics
+display_name: Gensler Qualtrics Survey Analytics
+tenant: marketing
+description: |
+  Gensler Qualtrics Survey Analytics is a data product that processes survey responses, 
+  definitions, and schemas from Qualtrics surveys loaded into Snowflake. It provides 
+  structured analytics on employee engagement, customer satisfaction, and workspace 
+  planning surveys.
+
+# Classification
+tags:
+  - qualtrics
+  - surveys
+  - analytics
+  - snowflake
+  - gensler
+  - employee_engagement
+  - workspace_planning
+
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.survey_data
+
+# Domain
+domain: marketing
+
+# ==============================================================================
+# Analytics & Telemetry (Vulcan CloudEvents)
+# ==============================================================================
+analytics:
+  enabled: false  # Set to true and provide api_key to enable in production
+  # base_url: "https://your-dataos-instance.dataos.app/cloudevents/api/v1"
+  # api_key: ""  # Required when enabled: true
+  # source_name: "gensler_qualtrics_snowflake"
+  # enable_search: true
+  # retention_days: 90
+
+# ==============================================================================
+# Virtual Environment
+# ==============================================================================
+# Use Python virtual environment only in dev, not in production containers
+# virtual_environment_mode: dev_only
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+# linter:
+#   enabled: true
+#   warn_rules:
+#     - RequireGrainForAllModels          # All models should define grain
+#     - RequireAuditsForAllKindsExceptEmbedded  # Models should have assertions
+#     - RequireChecksForModels            # Models should have data quality checks
+#     - PreferAssertions                  # Prefer assertions over audits
+#     - NoMissingAudits                   # Ensure no models are missing audits/assertions
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'  # Default start date for incremental models
+  cron: '*/5 * * * *'  # Default: Every 5 minutes
+
+# ==============================================================================
+# Transpiler Service (SQL Dialect Translation)
+# ==============================================================================
+transpiler:
+  base_url: "http://vulcan-transpiler:4000/transpiler"
+  timeout: 30
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+gateways:
+  default:
+    # Primary Snowflake connection (where models are materialized)
+    connection:
+      type: snowflake
+      account: EQZOTUQ-JCA67320
+      user: SHREYA
+      warehouse: COMPUTE_WH
+      database: VULCAN
+      role: ACCOUNTADMIN
+      authenticator: snowflake_jwt
+      private_key_path: .secrets/snowflake_private_key.p8
+      private_key_passphrase: shreya
+
+    # PostgreSQL state management connection (tracks model versions, runs, snapshots)
+    state_connection:
+      type: postgres
+      host: localhost
+      port: 5431
+      user: vulcan
+      password: vulcan
+      database: statestore
+
+    # State schema (stores Vulcan metadata)
+    state_schema: gensler_qualtrics1
+
+    # Gateway-specific variables (available in models, checks via ${variable_name})
+    variables:
+      env: development
+      region: us-east-1
+      data_retention_days: 365
+      # Source schemas/tables
+      raw_schema: QUALTRICS
+      raw_responses_table: QUALTRICS_RESPONSES_RAW
+      raw_definition_table: QUALTRICS_DEFINITION
+      raw_schema_table: QUALTRICS_RESPONSE_SCHEMA
+      # Target schemas
+      bronze_schema: QUALTRICS_BRONZE
+      silver_schema: QUALTRICS_SILVER
+      gold_schema: QUALTRICS_GOLD
+      # Data quality thresholds
+      min_response_count: 30
+      min_survey_count: 10
+      max_response_age_days: 365
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+# Tracks data lineage, dependencies, and transformations
+# openlineage:
+#   enabled: false  # Set to true to enable lineage tracking
+#   url: http://127.0.0.1:8000  # Marquez or OpenLineage collector URL
+#   timeout_seconds: 10
+#   api_key: ""  # Optional API key for authentication
+
+# ==============================================================================
+# GraphQL API Configuration
+# ==============================================================================
+# Enables GraphQL API for semantic layer queries
+# graphql:
+#   base_url: http://vulcan-graphql:3000
+#   timeout: 60
+
+# ==============================================================================
+# Heimdall Authentication (Enterprise Security)
+# ==============================================================================
+# heimdall:
+#   enabled: false  # Set to true for production with DataOS
+#   base_url: "https://your-dataos-instance.dataos.app/heimdall"
+#   timeout: 10
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+# notification_targets:
+#   - type: console
+#     notify_on:
+#       - apply_start
+#       - apply_end
+#       - apply_failure
+#       - run_start
+#       - run_end
+#       - run_failure
+#       - audit_failure
+#       - check_start
+#       - check_end
+#       - check_failure
+#
+#   - type: slack
+#     webhook_url: "${SLACK_WEBHOOK_URL}"
+#     notify_on:
+#       - apply_failure
+#       - run_failure
+#       - audit_failure
+#       - check_failure
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+# users:
+#   - username: shreya
+#     email: shreya@gensler.com
+#     type: OWNER
+#   - username: marketing_team
+#     email: marketing@gensler.com
+#     type: CONTRIBUTOR
+
+# ==============================================================================
+# Connection Notes
+# ==============================================================================
+# 
+# Snowflake Authentication Setup:
+# 
+# 1. Generate key pair (one-time):
+#    openssl genrsa -out snowflake_key.pem 2048
+#    openssl rsa -in snowflake_key.pem -pubout -out snowflake_key.pub
+#    
+# 2. Encrypt private key with passphrase:
+#    openssl pkcs8 -topk8 -inform PEM -outform PEM \
+#      -in snowflake_key.pem -out snowflake_key.p8 \
+#      -v2 aes256cbc -passphrase pass:YOUR_PASSPHRASE
+#    
+# 3. Assign public key to Snowflake user:
+#    ALTER USER SHREYA SET RSA_PUBLIC_KEY='MIIBIjANBg...';
+#    
+# 4. Grant required privileges:
+#    GRANT USAGE ON WAREHOUSE COMPUTE_WH TO USER SHREYA;
+#    GRANT USAGE ON DATABASE VULCAN TO USER SHREYA;
+#    GRANT CREATE SCHEMA ON DATABASE VULCAN TO USER SHREYA;
+#    GRANT USAGE, CREATE TABLE ON SCHEMA VULCAN.QUALTRICS TO USER SHREYA;
+#    
+# 5. Store credentials securely:
+#    export SNOWFLAKE_PRIVATE_KEY_PASSPHRASE="your_passphrase"
+#    export SNOWFLAKE_ACCOUNT="EQZOTUQ-JCA67320"
+#
+# PostgreSQL State Database:
+# - Stores Vulcan/SQLMesh state (model versions, runs, snapshots)
+# - Connection: localhost:5431/statestore (user: vulcan, password: vulcan)
+# - State schema: gensler_qualtrics
+#
+# Data Loading:
+# - Run: python data-movement-nilus/gensler-qualtrics-api/generate_and_load_qualtrics_data.py
+# - Creates 10-15 surveys with 30-150 responses each
+# - Loads to VULCAN.QUALTRICS schema:
+#   * QUALTRICS_RESPONSES_RAW (responseId, values, labels, displayedFields, displayedValues, surveyId, created_at)
+#   * QUALTRICS_DEFINITION (survey_id, payload, created_at)
+#   * QUALTRICS_RESPONSE_SCHEMA (survey_id, payload, created_at)

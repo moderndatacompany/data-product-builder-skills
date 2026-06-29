@@ -1,0 +1,62 @@
+version: v1alpha
+type: vulcan
+name: supply-chain-inventory-optimization
+tags:
+  - supply-chain
+  - inventory-management
+  - procurement
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: demo-compute
+  engine: snowflake
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=shreya-examples'
+      - '--submodules=off'
+    baseDir: vulcan-examples/snowflake/demo/supply-chain-inventory-optimization
+    secret: demo:git-sync
+  depots:
+    - dataos://erpplatform?purpose=rw
+  workflow:
+    schedule:
+      crons:
+      - '0 0 * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 5
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "4000m"
+        memory: "3Gi"
+
+

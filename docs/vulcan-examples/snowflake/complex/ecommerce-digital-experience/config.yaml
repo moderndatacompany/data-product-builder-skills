@@ -1,0 +1,105 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - TechFab E-Commerce & Digital Experience Analytics
+# ==============================================================================
+
+# Basic Information
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: ecommerce-digital-experience
+display_name: E-Commerce & Digital Experience Analytics
+description: B2B e-commerce platform analytics tracking website behavior, conversion funnels, and cart abandonment for digital journey optimization and online revenue growth.
+
+# Classification
+tags:
+  - ecommerce
+  - web-analytics
+  - digital-experience
+
+terms:
+  - conversion-rate
+  - cart-abandonment
+  - session-analytics
+
+# Domain
+domain: ecommerce_analytics
+
+# ==============================================================================
+# Analytics & Telemetry (Vulcan CloudEvents)
+# ==============================================================================
+# analytics:
+#   enabled: false  # Set to true and provide api_key to enable in production
+  # api_key: ${VULCAN_API_KEY}
+  # api_base_url: https://your-dataos-instance.com
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+model_defaults:
+  dialect: snowflake
+  start: '2024-07-01'  # Start of clickstream data
+  cron: '@daily'  # Daily refresh for all models
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://snowflakewarehouse?purpose=rw
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+openlineage:
+  enabled: false
+  # url: https://your-dataos-instance.dataos.cloud/hera
+  # timeout_seconds: 30
+  # api_key: ${OPENLINEAGE_API_KEY}
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+      - migration_start
+      - migration_end
+      - migration_failure
+      - plan_change
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+users:
+  - username: anujsohanitmdc.io
+    email: anuj.sohani@tmdc.io
+    type: OWNER
+  - username: aakanshajainctmdcio
+    email: aakansha.jain@tmdc.io
+    type: CONTRIBUTOR

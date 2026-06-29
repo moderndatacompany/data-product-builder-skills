@@ -1,0 +1,19 @@
+checks:
+  test_db.vulcan_test_project.region:
+    completeness:
+      - missing_count(regionkey) = 0:
+          name: regionkey_not_null
+          attributes:
+            description: "REGION.REGIONKEY must be non-null"
+      - row_count > 0:
+          name: region_has_rows
+          attributes:
+            description: "REGION should not be empty"
+
+    uniqueness:
+      - duplicate_count(regionkey) = 0:
+          name: regionkey_unique
+          attributes:
+            description: "REGION.REGIONKEY must be unique"
+
+

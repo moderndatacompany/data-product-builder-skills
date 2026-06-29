@@ -1,0 +1,6 @@
+kind: metric
+name: total_revenue
+measure: orders.total_revenue
+ts: orders.order_date
+granularity: day
+description: "Total revenue from all orders"

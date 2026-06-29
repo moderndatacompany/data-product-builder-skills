@@ -1,0 +1,40 @@
+# Converted from legacy: semantics/region.yml
+kind: semantic
+name: regions
+depends_on: test_db.vulcan_test_project.region
+ai_context:
+  instructions: >
+    Use this semantic model for questions about regions. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "regions"
+  examples:
+    - "Show regions trends over time."
+    - "Break down regions by key dimensions."
+
+dimensions:
+- REGIONKEY
+- NAME
+- COMMENT
+measures:
+- name: total_regions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total regions. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total regions"
+      - "total_regions"
+      - "total"
+      - "regions"
+    examples:
+      - "What is total regions by month?"
+      - "Compare total regions across key segments."
+  type: count
+  expression: '*'
+  description: Total number of regions
+  tags:
+  - metric
+  terms:
+  - metric.total_regions

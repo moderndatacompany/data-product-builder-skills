@@ -1,0 +1,5 @@
+limitations:
+  - Demo dataset with consumer analytics events (~395 records in parquet file)
+  - De-duplication required for accurate device counts across roll-up windows
+  - Daily averages (allowing duplicates) vs cumulative metrics (unique devices)
+  - Snowflake cloud warehouse as data platform (VULCAN.USDK schema)

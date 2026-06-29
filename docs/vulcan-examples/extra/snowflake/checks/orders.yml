@@ -1,0 +1,18 @@
+checks:
+  SALES.ORDERS:
+
+    validity:
+      - failed rows:
+          name: negative_order_amounts
+          fail query: |
+            SELECT ORDER_ID, ORDER_DATE, CUSTOMER_ID, QUANTITY, UNIT_PRICE, TOTAL_AMOUNT
+            FROM SALES.ORDERS
+            WHERE QUANTITY < 0 
+               OR UNIT_PRICE < 0 
+               OR DISCOUNT < 0 
+               OR TAX < 0 
+               OR SHIPPING_COST < 0 
+               OR TOTAL_AMOUNT < 0
+          samples limit: 10
+          attributes:
+            description: "Order amounts cannot be negative"

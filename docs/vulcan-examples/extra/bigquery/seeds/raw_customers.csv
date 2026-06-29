@@ -1,0 +1,12 @@
+customer_id,first_name,last_name,email,phone,address_line1,address_line2,city,state,postal_code,customer_segment,account_status,signup_date,loyalty_score
+C001,Alice,Johnson,alice.johnson@example.com,555-0101,123 Main St,Apt 4B,New York,NY,10001,Platinum,Active,2022-01-15,92
+C002,Bob,Smith,bob.smith@example.com,555-0102,456 Oak Ave,,Los Angeles,CA,90001,Gold,Active,2022-03-20,78
+C003,Carol,Williams,carol.williams@example.com,555-0103,789 Pine Rd,Suite 100,Chicago,IL,60601,Silver,Active,2022-05-10,65
+C004,David,Brown,david.brown@example.com,555-0104,321 Elm St,,Houston,TX,77001,Bronze,Inactive,2021-08-25,45
+C005,Eva,Davis,eva.davis@example.com,555-0105,654 Maple Dr,Unit 7,Phoenix,AZ,85001,Platinum,Active,2023-02-14,88
+C006,Frank,Miller,frank.miller@example.com,555-0106,987 Cedar Ln,,Philadelphia,PA,19101,Gold,Active,2022-11-30,72
+C007,Grace,Wilson,grace.wilson@example.com,555-0107,147 Birch Way,Apt 12,San Antonio,TX,78201,Silver,Suspended,2021-04-18,35
+C008,Henry,Moore,henry.moore@example.com,555-0108,258 Spruce Ct,,San Diego,CA,92101,Bronze,Active,2023-06-22,52
+C009,Ivy,Taylor,ivy.taylor@example.com,555-0109,369 Walnut Blvd,Suite 500,Dallas,TX,75201,Platinum,Active,2022-09-05,95
+C010,Jack,Anderson,jack.anderson@example.com,555-0110,741 Ash St,,San Jose,CA,95101,Gold,Active,2023-01-08,81
+

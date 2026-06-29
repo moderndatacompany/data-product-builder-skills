@@ -1,0 +1,253 @@
+checks:
+  cobs.rfm_customer_segments_ml:
+    validity:
+      - failed rows:
+          name: unique_account_date
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              COUNT(*) as duplicate_count
+            FROM cobs.rfm_customer_segments_ml
+            GROUP BY ACCOUNT_ID, DATE
+            HAVING COUNT(*) > 1
+          samples limit: 5
+          attributes:
+            description: "Account_ID and date combination must be unique (grain validation)"
+      - failed rows:
+          name: valid_segment_values
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              SEGMENT
+            FROM cobs.rfm_customer_segments_ml
+            WHERE SEGMENT NOT IN (
+              'Champions', 'Loyal', 'Potential Loyalists', 'New Customers', 
+              'Promising', 'Need Attention', 'About to Sleep', 'At Risk', 
+              'Cannot Lose Them', 'Hibernating', 'Lapsed', 'Newly Activated', 
+              'Outperformers', 'Dropping'
+            )
+          samples limit: 10
+          attributes:
+            description: "Segment must be one of the valid predefined segments"
+      - failed rows:
+          name: rfm_scores_in_range
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              RECENCY_SCORE,
+              FREQUENCY_SCORE,
+              WALLET_SCORE
+            FROM cobs.rfm_customer_segments_ml
+            WHERE RECENCY_SCORE NOT BETWEEN 1 AND 5
+               OR FREQUENCY_SCORE NOT BETWEEN 1 AND 5
+               OR WALLET_SCORE NOT BETWEEN 1 AND 5
+          samples limit: 10
+          attributes:
+            description: "RFM scores must be between 1 and 5 (quintile range)"
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              R12_PROOF_REV,
+              R12_TOTAL_REV,
+              R12_NON_PROOF_REV
+            FROM cobs.rfm_customer_segments_ml
+            WHERE R12_Proof_Rev < 0 
+               OR R12_Total_Rev < 0 
+               OR R12_Non_Proof_Rev < 0
+          samples limit: 10
+          attributes:
+            description: "All revenue values must be non-negative"
+    #   - failed rows:
+    #       name: non_negative_invoices
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           R12_Proof_Invoices,
+    #           R12_Total_Invoices,
+    #           R12_Non_Proof_Invoices
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE R12_Proof_Invoices < 0 
+    #            OR R12_Total_Invoices < 0 
+    #            OR R12_Non_Proof_Invoices < 0
+    #       samples limit: 10
+    #       attributes:
+    #         description: "All invoice counts must be non-negative"
+    #   - failed rows:
+    #       name: wallet_share_valid_range
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           R12_Wallet_Share,
+    #           R12_Order_Share
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE (R12_Wallet_Share < 0 OR R12_Wallet_Share > 1)
+    #            OR (R12_Order_Share < 0 OR R12_Order_Share > 1)
+    #       samples limit: 10
+    #       attributes:
+    #         description: "Wallet share and order share must be between 0 and 1"
+    #   - failed rows:
+    #       name: proof_revenue_not_exceeds_total
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           R12_Proof_Rev,
+    #           R12_Total_Rev,
+    #           R12_Proof_Rev - R12_Total_Rev AS difference
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE R12_Proof_Rev > R12_Total_Rev
+    #       samples limit: 10
+    #       attributes:
+    #         description: "Proof revenue should not exceed total revenue"
+    #   - failed rows:
+    #       name: proof_invoices_not_exceeds_total
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           R12_Proof_Invoices,
+    #           R12_Total_Invoices,
+    #           R12_Proof_Invoices - R12_Total_Invoices AS difference
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE R12_Proof_Invoices > R12_Total_Invoices
+    #       samples limit: 10
+    #       attributes:
+    #         description: "Proof invoice count should not exceed total invoice count"
+    #   - failed rows:
+    #       name: dropping_flag_logic_validation
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           segment,
+    #           dropping
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE dropping = TRUE 
+    #           AND segment != 'Dropping'
+    #       samples limit: 10
+    #       attributes:
+    #         description: "If dropping flag is true, segment must be 'Dropping'"
+
+      
+    #   - failed rows:
+    #       name: lapsed_customers_no_proof_revenue
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           segment,
+    #           R12_Proof_Rev
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE segment = 'Lapsed' 
+    #           AND R12_Proof_Rev > 0
+    #       samples limit: 10
+    #       attributes:
+    #         description: "Lapsed customers should have zero proof revenue"
+      
+    #   - failed rows:
+    #       name: activation_date_before_analysis_date
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           activation_date
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE activation_date > date
+    #       samples limit: 10
+    #       attributes:
+    #         description: "Activation date must be before or equal to analysis date"
+    #   - failed rows:
+    #       name: non_negative_recency_tenure
+    #       fail query: |
+    #         SELECT 
+    #           Account_ID,
+    #           date,
+    #           proof_recency,
+    #           proof_tenure
+    #         FROM cobs.rfm_customer_segments_ml
+    #         WHERE proof_recency < 0 
+    #            OR proof_tenure < 0
+    #       samples limit: 10
+    #       attributes:
+    #         description: "Recency and tenure values must be non-negative"
+    completeness:
+      - failed rows:
+          name: required_fields_not_null
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              SALES_BUCKET,
+              SEGMENT
+            FROM cobs.rfm_customer_segments_ml
+            WHERE ACCOUNT_ID IS NULL
+               OR DATE IS NULL
+               OR SALES_BUCKET IS NULL
+               OR segment IS NULL
+          samples limit: 10
+          attributes:
+            description: "Critical fields (Account_ID, date, Sales_Bucket, segment) must not be null"
+      - failed rows:
+          name: rfm_scores_completeness
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              SEGMENT,
+              RECENCY_SCORE,
+              FREQUENCY_SCORE,
+              WALLET_SCORE
+            FROM cobs.rfm_customer_segments_ml
+            WHERE segment NOT IN ('Lapsed', 'Newly Activated')
+              AND (RECENCY_SCORE IS NULL 
+                OR FREQUENCY_SCORE IS NULL 
+                OR WALLET_SCORE IS NULL)
+          samples limit: 10
+          attributes:
+            description: "RFM scores should not be null for non-Lapsed/Newly Activated segments"
+
+
+    consistency:
+      - failed rows:
+          name: calculated_non_proof_revenue_matches
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              R12_TOTAL_REV,
+              R12_PROOF_REV,
+              R12_NON_PROOF_REV,
+              (R12_TOTAL_REV - R12_PROOF_REV) AS expected_non_proof,
+              ABS(R12_NON_PROOF_REV - (R12_TOTAL_REV - R12_PROOF_REV)) AS difference
+            FROM cobs.rfm_customer_segments_ml
+            WHERE ABS(R12_NON_PROOF_REV - (R12_TOTAL_REV - R12_PROOF_REV)) > 0.01
+          samples limit: 10
+          attributes:
+            description: "Non-proof revenue should equal total revenue minus proof revenue"
+
+      
+      - failed rows:
+          name: calculated_non_proof_invoices_matches
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              R12_TOTAL_INVOICES,
+              R12_PROOF_INVOICES,
+              R12_NON_PROOF_INVOICES,
+              (R12_TOTAL_INVOICES - R12_PROOF_INVOICES) AS expected_non_proof
+            FROM cobs.rfm_customer_segments_ml
+            WHERE R12_NON_PROOF_INVOICES != (R12_TOTAL_INVOICES - R12_PROOF_INVOICES)
+          samples limit: 10
+          attributes:
+            description: "Non-proof invoices should equal total invoices minus proof invoices"
+
+

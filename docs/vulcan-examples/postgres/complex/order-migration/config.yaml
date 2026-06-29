@@ -1,0 +1,106 @@
+vde: false
+display_name: Order Migration
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: engineering
+tags:
+  - postgres
+  - sales
+  - analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: order-migration
+tenant: engineering
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity across the e-commerce platform.
+
+# # --- Gateway Connection ---
+# gateways:
+#   postgres:
+#     connection:
+#       type: postgres
+#       host: warehouse
+#       port: 5432
+#       user: vulcan
+#       password: vulcan
+#       database: warehouse
+#       # concurrent_tasks: 4
+#       # register_comments: True
+#       # pre_ping: True
+#       # pretty_sql: False
+#       # schema_differ_overrides: 
+#       # catalog_type_overrides: 
+#       # keepalives_idle: 
+#       # connect_timeout: 10
+#       # role: 
+#       # sslmode: 
+#       # application_name: 
+
+# default_gateway: postgres
+
+# transpiler:
+#   # Override via VULCAN_TRANSPILER_BASE_URL for host runs if needed.
+#   base_url: "{{ env_var('VULCAN_TRANSPILER_BASE_URL', 'http://vulcan-transpiler:4000/transpiler') }}"
+
+# --- Model Defaults ---
+# https://tmdc-io.github.io/vulcan-book/
+
+model_defaults:
+  dialect: postgres
+  start: '2025-01-01'  # Default start date for incremental models
+  cron: '*/45 * * * *'  # Default: Every 15 minutes (overridden per model)
+  # Note: Orders/order_items use */5 minutes, dimensions use */15-20 minutes
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+# Database connections and state management
+gateways:
+  default:
+    # Primary data connection (where models are materialized)
+    connection:
+      type: depot
+      address: dataos://vulcanpgdepot
+    #   type: postgres
+    #   host: localhost
+    #   port: 5433
+    #   user: vulcan
+    #   password: vulcan
+    #   database: warehouse
+    #   # Docs: https://sqlmesh.readthedocs.io/en/latest/integrations/engines/postgres/
+
+    # # State management connection (tracks model versions, runs, snapshots)
+    # # Recommended: Use separate database for state in production
+    # state_connection:
+    #   type: postgres
+    #   host: localhost
+    #   port: 5431
+    #   user: vulcan
+    #   password: vulcan
+    #   database: statestore
+    #   # For production, consider using dedicated state database:
+    #   # port: 5431
+    #   # database: statestore
+
+    # State schema (stores Vulcan metadata)
+    # state_schema: postgres_ecommerce_state1
+
+    # Gateway-specific variables (available in models, checks via ${variable_name})
+variables:
+  env: development
+  region: us-west-2
+  data_retention_days: 365
+  alert_threshold: 100
+  bronze_schema: vulcan_demo
+  silver_schema: silver
+  gold_schema: gold
+  min_customer_count: 50
+  min_order_count: 500
+
+#

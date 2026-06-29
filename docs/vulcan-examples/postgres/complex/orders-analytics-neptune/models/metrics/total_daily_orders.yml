@@ -1,0 +1,3 @@
+kind: metric
+name: total_daily_orders
+measure: daily_sales.total_daily_orders

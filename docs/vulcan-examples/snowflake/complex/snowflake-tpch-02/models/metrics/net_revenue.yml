@@ -1,0 +1,3 @@
+kind: metric
+name: net_revenue
+measure: lineitems.net_revenue

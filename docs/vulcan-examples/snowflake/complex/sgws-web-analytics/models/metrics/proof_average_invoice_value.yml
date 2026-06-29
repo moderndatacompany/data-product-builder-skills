@@ -1,0 +1,3 @@
+kind: metric
+name: proof_average_invoice_value
+measure: sales.proof_average_invoice_value

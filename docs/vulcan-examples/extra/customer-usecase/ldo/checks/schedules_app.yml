@@ -1,0 +1,105 @@
+# checks/schedules_app.yml
+# Quality checks for app deployment schedules
+# Reference: https://tmdc-io.github.io/vulcan-book/components/checks/checks/
+
+checks:
+  lenovo.ldo.schedules_app:
+    # Completeness: Ensure schedule data exists
+    completeness:
+      - row_count > 0:
+          name: schedule_records_exist
+          attributes:
+            description: "At least one schedule record should exist"
+            #severity: error
+
+      - missing_count(_ID) = 0:
+          name: no_missing_id
+          attributes:
+            description: "All records must have an _id"
+            #severity: error
+
+      - missing_count(DEVICE_ID) = 0:
+          name: no_missing_device_id
+          attributes:
+            description: "All schedules must be linked to a device"
+            #severity: error
+
+      - missing_count(STATUS) = 0:
+          name: no_missing_status
+          attributes:
+            description: "All schedules must have a status"
+            #severity: error
+
+    # Validity: Check schedule data quality
+    validity:
+      - failed rows:
+          name: invalid_status
+          fail query: |
+            SELECT _ID, STATUS, DEVICE_ID, PACKAGE_NAME
+            FROM lenovo.ldo.schedules_app
+            WHERE STATUS NOT IN ('EXECUTED', 'SCHEDULED')
+              AND STATUS IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Status must be EXECUTED or SCHEDULED"
+            #severity: error
+
+      - failed rows:
+          name: display_before_actual
+          fail query: |
+            SELECT _ID, ACTUAL_DATE_TIME, DISPLAY_DATE_TIME, DEVICE_ID, PACKAGE_NAME
+            FROM lenovo.ldo.schedules_app
+            WHERE DISPLAY_DATE_TIME > ACTUAL_DATE_TIME
+              AND ACTUAL_DATE_TIME IS NOT NULL
+              AND DISPLAY_DATE_TIME IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Display date should not be after actual date"
+            #severity: warning
+
+      - failed rows:
+          name: executed_in_future
+          fail query: |
+            SELECT _ID, ACTUAL_DATE_TIME, STATUS, DEVICE_ID, PACKAGE_NAME
+            FROM lenovo.ldo.schedules_app
+            WHERE STATUS = 'EXECUTED'
+              AND ACTUAL_DATE_TIME > CURRENT_TIMESTAMP
+              AND __DELETED = 'False'
+          samples limit: 5
+          attributes:
+            description: "Executed schedules cannot have future actual date time"
+            #severity: error
+
+      - failed rows:
+          name: scheduled_without_package
+          fail query: |
+            SELECT _ID, PACKAGE_ID, APP_PACKAGE_ID, STATUS, DEVICE_ID
+            FROM lenovo.ldo.schedules_app
+            WHERE STATUS = 'SCHEDULED'
+              AND PACKAGE_ID IS NULL
+              AND APP_PACKAGE_ID IS NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Scheduled deployments must have a package reference"
+            #severity: error
+
+    # Consistency: Validate schedule data
+    consistency:
+      - failed rows:
+          name: duplicate_schedule_ids
+          fail query: |
+            SELECT 
+              _ID,
+              COUNT(*) as RECORD_COUNT
+            FROM lenovo.ldo.schedules_app
+            WHERE __DELETED = 'False'
+            GROUP BY _ID
+            HAVING COUNT(*) > 1
+          samples limit: 10
+          attributes:
+            description: "Each _id should be unique among active records"
+            #severity: error
+

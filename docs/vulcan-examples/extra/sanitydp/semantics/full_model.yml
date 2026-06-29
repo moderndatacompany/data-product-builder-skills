@@ -1,0 +1,16 @@
+models:
+  lenovo.vulcan_example.full_model:
+    alias: full_model
+    
+    
+    measures:
+      total_orders:
+        type: sum
+        expression: "{full_model.NUM_ORDERS}"
+        description: "Total number of orders"
+      
+      avg_orders_per_item:
+        type: avg
+        expression: "{full_model.NUM_ORDERS}"
+        description: "Average orders per item"
+  

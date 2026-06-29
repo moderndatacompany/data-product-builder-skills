@@ -1,0 +1,35 @@
+name: sanityactivation
+display_name: Sanity Check
+tenant: engineering #change as per tenant
+description: Purpose to check the sanity of the data product
+tags:
+  - sanity
+
+terms:
+  - glossary.data_product
+
+domain: sanity
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://snowflakevulcan  #change as per the depot name
+
+default_gateway: default
+
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'
+  cron: '@daily'
+
+
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - plan_change
+
+users:
+  - username: Nikhil
+    email: nikhil.singh@tmdc.io
+    type: OWNER

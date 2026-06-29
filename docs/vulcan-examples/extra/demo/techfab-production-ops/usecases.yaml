@@ -1,0 +1,9 @@
+use_cases:
+  - Production volume and efficiency tracking across 10 plants
+  - Equipment utilization and OEE (Overall Equipment Effectiveness) analysis
+  - Quality metrics monitoring (scrap rate, rework rate, first pass yield)
+  - Downtime root cause analysis and MTTR/MTBF calculation
+  - Plant-level performance comparison and benchmarking
+  - Shift-based productivity analysis
+  - Preventive maintenance planning and optimization
+  - Work order completion tracking and cycle time analysis

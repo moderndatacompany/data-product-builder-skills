@@ -1,0 +1,15 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: registration_to_order_conversion
+measure: sales_funnel.avg_registration_conversion
+ts: sales_funnel.funnel_date
+dimensions:
+- sales_funnel.region_name
+description: Registration to first order conversion by region
+tags:
+- funnel
+- conversion
+- acquisition
+terms:
+- funnel.registration_conversion
+- conversion.acquisition_rate

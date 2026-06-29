@@ -1,0 +1,198 @@
+# kind: dq — converted from checks/flattened_main_base_table.yml
+kind: dq
+name: FLATTENED_MAIN_BASE_TABLE_dq
+depends_on: LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+rules:
+- missing_count(EVENT_DATE) = 0:
+    name: no_missing_event_dates
+    dimension: completeness
+    description: All records must have an event date
+- missing_count(ANONYMOUS_DEVICE_IDV1) = 0:
+    name: no_missing_device_ids
+    dimension: completeness
+    description: All records must have a device identifier
+- missing_count(ACTION) = 0:
+    name: no_missing_actions
+    dimension: completeness
+    description: All records must have an action type
+- missing_count(ROLLUP_TYPE) = 0:
+    name: no_missing_rollup_type
+    dimension: completeness
+    description: All records must have a rollup type
+- row_count > 1000:
+    name: sufficient_events
+    dimension: completeness
+    description: At least 1000 flattened events should be present
+- missing_count(MANUFACTURER) < 20%:
+    name: acceptable_missing_manufacturer
+    dimension: completeness
+    description: Less than 20% of records should have missing manufacturer
+- missing_count(MODEL) < 30%:
+    name: acceptable_missing_model
+    dimension: completeness
+    description: Less than 30% of records should have missing model information
+- failed rows:
+    name: missing_required_fields
+    dimension: validity
+    fail query: "SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, ACTION, ROLLUP_TYPE\nFROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE\nWHERE EVENT_DATE IS NULL \n   OR ANONYMOUS_DEVICE_IDV1 IS NULL \n   OR ACTION\
+      \ IS NULL \n   OR ROLLUP_TYPE IS NULL\n"
+    samples limit: 10
+    description: Event date, device ID, action, and rollup type are required fields
+- failed rows:
+    name: invalid_action_values
+    dimension: validity
+    fail query: |
+      SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, ACTION, NAME
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+      WHERE ACTION NOT IN ('Engaged Activity', 'All Activity', 'Install Base', 'PageView')
+    samples limit: 10
+    description: 'Action must be one of: Engaged Activity, All Activity, Install Base, PageView'
+- failed rows:
+    name: invalid_rollup_type_values
+    dimension: validity
+    fail query: |
+      SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, ROLLUP_TYPE
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+      WHERE ROLLUP_TYPE NOT IN ('yesterday', 'last_7_days', 'last_30_days', 'last_90_days', 'last_180_days', 'last_365_days')
+    samples limit: 10
+    description: 'Rollup type must be one of: yesterday, last_7_days, last_30_days, last_90_days, last_180_days, last_365_days'
+- failed rows:
+    name: future_event_dates
+    dimension: validity
+    fail query: |
+      SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, ACTION
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+      WHERE EVENT_DATE > CURRENT_DATE()
+    samples limit: 10
+    description: Event dates cannot be in the future
+- failed rows:
+    name: event_dates_too_old
+    dimension: validity
+    fail query: |
+      SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, ACTION
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+      WHERE EVENT_DATE < '2020-01-01'
+    samples limit: 10
+    description: Event dates before 2020 are likely data quality issues
+- failed rows:
+    name: negative_hardware_age
+    dimension: validity
+    fail query: |
+      SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, HW_IN_USE_YEARS, MODEL
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+      WHERE HW_IN_USE_YEARS < 0
+    samples limit: 10
+    description: Hardware age cannot be negative
+- failed rows:
+    name: unrealistic_hardware_age
+    dimension: validity
+    fail query: |
+      SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, HW_IN_USE_YEARS, MODEL
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+      WHERE HW_IN_USE_YEARS > 30
+    samples limit: 10
+    description: Hardware age greater than 30 years is unrealistic and indicates data quality issue
+- failed rows:
+    name: invalid_geo_code_format
+    dimension: validity
+    fail query: "SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, GEO\nFROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE\nWHERE GEO IS NOT NULL \n  AND (LENGTH(GEO) > 3 OR GEO !~ '^[A-Z]{2,3}$')\n"
+    samples limit: 10
+    description: Geographic code should be 2-3 character uppercase country code
+- failed rows:
+    name: empty_device_type
+    dimension: validity
+    fail query: |
+      SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, DEVICE_TYPE
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+      WHERE DEVICE_TYPE = '' OR TRIM(DEVICE_TYPE) = ''
+    samples limit: 10
+    description: Device type should not be empty string
+- failed rows:
+    name: invalid_os_version_format
+    dimension: validity
+    fail query: "SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, OS_VERSION\nFROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE\nWHERE OS_VERSION IS NOT NULL \n  AND OS_VERSION !~ '^[0-9]+\\\\.[0-9]+\\\\.[0-9]+$'\n \
+      \ AND OS_VERSION != 'Not Found'\n"
+    samples limit: 10
+    description: OS version should be in format X.X.X or 'Not Found'
+- duplicate_count(ANONYMOUS_DEVICE_IDV1, EVENT_DATE, ACTION, ROLLUP_TYPE) < 100:
+    name: acceptable_duplicate_combinations
+    dimension: uniqueness
+    description: Some duplicate device-date-action combinations are acceptable
+- failed rows:
+    name: rollup_type_date_mismatch
+    dimension: consistency
+    fail query: "SELECT EVENT_DATE, ANONYMOUS_DEVICE_IDV1, ROLLUP_TYPE\nFROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE\nWHERE ROLLUP_TYPE = 'yesterday' \n  AND EVENT_DATE != DATEADD(DAY, -1, CURRENT_DATE)\n"
+    samples limit: 10
+    description: Yesterday rollup should only contain data from yesterday
+- failed rows:
+    name: missing_corresponding_all_activity
+    dimension: consistency
+    fail query: |
+      SELECT DISTINCT e.EVENT_DATE, e.ANONYMOUS_DEVICE_IDV1, e.ACTION
+      FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE e
+      WHERE e.ACTION = 'Engaged Activity'
+        AND NOT EXISTS (
+          SELECT 1 FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE a
+          WHERE a.ANONYMOUS_DEVICE_IDV1 = e.ANONYMOUS_DEVICE_IDV1
+            AND a.EVENT_DATE = e.EVENT_DATE
+            AND a.ACTION = 'All Activity'
+            AND a.ROLLUP_TYPE = e.ROLLUP_TYPE
+        )
+    samples limit: 10
+    description: Every Engaged Activity should have a corresponding All Activity record
+- anomaly detection for row_count:
+    name: row_count_anomaly
+    dimension: accuracy
+    description: Detect anomalies in daily flattened event count
+- anomaly detection for avg(HW_IN_USE_YEARS):
+    name: avg_hardware_age_anomaly
+    dimension: accuracy
+    description: Detect anomalies in average hardware age
+- anomaly detection for count_distinct(ANONYMOUS_DEVICE_IDV1):
+    name: unique_device_count_anomaly
+    dimension: accuracy
+    description: Detect anomalies in unique device count
+- change for row_count >= -40%:
+    name: row_count_drop_check
+    dimension: timeliness
+    description: Alert if event count drops more than 40% from previous day
+- change same day last week for row_count > -30:
+    name: weekly_row_count_comparison
+    dimension: timeliness
+    description: Compare event count to same day last week
+- change avg last 7 for row_count between -50 and +100:
+    name: weekly_average_comparison
+    dimension: timeliness
+    description: Event count should be within reasonable range of 7-day average
+- anomaly detection for row_count:
+    name: timeliness_anomaly_detection
+    dimension: timeliness
+    description: Detect timing-based anomalies in row count
+- failed rows:
+    name: rollup_type_distribution_anomaly
+    dimension: conformity
+    fail query: |
+      WITH rollup_counts AS (
+        SELECT ROLLUP_TYPE, COUNT(*) as cnt
+        FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+        GROUP BY ROLLUP_TYPE
+      )
+      SELECT ROLLUP_TYPE, cnt
+      FROM rollup_counts
+      WHERE cnt < (SELECT AVG(cnt) * 0.1 FROM rollup_counts)
+    samples limit: 10
+    description: Each rollup type should have reasonable distribution (at least 10% of average)
+- failed rows:
+    name: action_type_distribution_anomaly
+    dimension: conformity
+    fail query: |
+      WITH action_counts AS (
+        SELECT ACTION, COUNT(*) as cnt
+        FROM LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+        GROUP BY ACTION
+      )
+      SELECT ACTION, cnt
+      FROM action_counts
+      WHERE cnt < (SELECT AVG(cnt) * 0.05 FROM action_counts)
+    samples limit: 10
+    description: Each action type should have reasonable distribution (at least 5% of average)

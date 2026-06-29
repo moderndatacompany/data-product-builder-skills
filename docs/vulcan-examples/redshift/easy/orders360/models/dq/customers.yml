@@ -1,0 +1,14 @@
+# kind: dq — converted from checks/customers.yml
+kind: dq
+name: customers_dq
+depends_on: sales.customers
+rules:
+- failed rows:
+    name: invalid_email_format
+    dimension: validity
+    fail query: |
+      SELECT customer_id, full_name, email
+      FROM sales.customers
+      WHERE email NOT LIKE '%@%' OR email IS NULL
+    samples limit: 10
+    description: Email addresses must be in valid format

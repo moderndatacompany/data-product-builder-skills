@@ -1,0 +1,16 @@
+# kind: dq — converted from checks/03-group-by.yaml
+kind: dq
+name: region_daily_orders_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.region_daily_orders_sf1
+
+rules:
+- group by:
+    name: order_count_by_region
+    dimension: accuracy
+    description: Order count per region must be non-negative
+    query: |
+      SELECT r_regionkey, r_name, SUM(order_count) AS total_orders
+      FROM lhs3ny001depot.tpch_sparkv3.region_daily_orders_sf1
+      GROUP BY r_regionkey, r_name
+    fields: [r_regionkey, r_name]
+    checks: [{total_orders: {fail: when < 0, name: region_orders_non_negative}}]

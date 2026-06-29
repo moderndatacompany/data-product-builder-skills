@@ -1,0 +1,91 @@
+# kind: dq — converted from checks/fct_customer_lifetime_value.yml
+kind: dq
+name: fct_customer_lifetime_value_dq
+depends_on: CUSTOMER_PLATFORM.GOLD.FCT_CUSTOMER_LIFETIME_VALUE
+
+rules:
+- row_count >= 300:
+    name: minimum_clv_records
+    dimension: completeness
+    description: At least 300 customer CLV records should exist
+
+- missing_count(customer_id) = 0:
+    name: no_missing_customer_id
+    dimension: completeness
+    description: All records must have a customer_id
+
+- missing_count(customer_lifetime_value) = 0:
+    name: no_missing_clv_calculation
+    dimension: completeness
+    description: All records must have a calculated CLV value
+
+- missing_count(segment_name) = 0:
+    name: no_missing_segment_name
+    dimension: completeness
+    description: All records must have a segment name from RFM model
+
+- invalid_count(total_revenue) = 0:
+    name: total_revenue_non_negative
+    dimension: validity
+    description: Total revenue must be non-negative
+    valid min: 0
+
+- invalid_count(avg_order_value) = 0:
+    name: avg_order_value_non_negative
+    dimension: validity
+    description: Average order value must be non-negative
+    valid min: 0
+
+- invalid_count(customer_lifetime_value) = 0:
+    name: clv_non_negative
+    dimension: validity
+    description: Customer lifetime value must be non-negative
+    valid min: 0
+
+- invalid_count(total_orders) = 0:
+    name: total_orders_non_negative
+    dimension: validity
+    description: Total orders must be non-negative
+    valid min: 0
+
+- invalid_count(customer_tenure_months) = 0:
+    name: tenure_months_non_negative
+    dimension: validity
+    description: Customer tenure in months must be non-negative
+    valid min: 0
+
+- failed rows:
+    name: customer_exists_in_rfm
+    dimension: validity
+    description: All customers in CLV must exist in RFM model
+    fail query: |
+      SELECT clv.customer_id, clv.customer_name
+      FROM CUSTOMER_PLATFORM.GOLD.FCT_CUSTOMER_LIFETIME_VALUE clv
+      LEFT JOIN CUSTOMER_PLATFORM.GOLD.FCT_CUSTOMER_RFM rfm ON clv.customer_id = rfm.customer_id
+      WHERE rfm.customer_id IS NULL
+    samples limit: 10
+
+- duplicate_count(customer_id) = 0:
+    name: unique_customer_ids
+    dimension: uniqueness
+    description: Each customer_id must be unique (one CLV record per customer)
+
+- avg(customer_lifetime_value) > 25000:
+    name: average_clv_reasonable
+    dimension: accuracy
+    description: Average CLV should exceed $25K for B2B industrial customers
+
+- avg(total_revenue) > 30000:
+    name: average_total_revenue_reasonable
+    dimension: accuracy
+    description: Average total revenue should exceed $30K
+
+- avg(avg_order_value) > 5000:
+    name: average_order_value_reasonable
+    dimension: accuracy
+    description: Average order value should exceed $5K for B2B
+
+- avg(customer_tenure_months) > 1:
+    name: average_tenure_reasonable
+    dimension: accuracy
+    description: Average customer tenure should exceed 1 month

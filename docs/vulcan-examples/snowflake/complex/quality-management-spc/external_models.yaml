@@ -1,0 +1,34 @@
+- name: '"QMS_PLATFORM"."BRONZE"."QUALITY_INSPECTIONS"'
+  columns:
+    inspection_id: INTEGER
+    inspection_type: VARCHAR(50)
+    work_order_id: INTEGER
+    material_number: VARCHAR(50)
+    lot_number: VARCHAR(50)
+    inspection_date: DATE
+    inspector_id: VARCHAR(20)
+    sample_size: INTEGER
+    defects_found: INTEGER
+    pass_fail_status: VARCHAR(20)
+    defect_code: VARCHAR(20)
+    inspection_notes: TEXT
+    created_at: TIMESTAMP
+
+- name: '"QMS_PLATFORM"."BRONZE"."SPC_DATA"'
+  columns:
+    measurement_id: INTEGER
+    work_order_id: INTEGER
+    equipment_id: VARCHAR(20)
+    material_number: VARCHAR(50)
+    measurement_timestamp: TIMESTAMP
+    parameter_name: VARCHAR(100)
+    measured_value: DECIMAL(10, 4)
+    target_value: DECIMAL(10, 4)
+    lower_spec_limit: DECIMAL(10, 4)
+    upper_spec_limit: DECIMAL(10, 4)
+    lower_control_limit: DECIMAL(10, 4)
+    upper_control_limit: DECIMAL(10, 4)
+    out_of_control_flag: BOOLEAN
+    out_of_spec_flag: BOOLEAN
+    operator_id: VARCHAR(20)
+

@@ -1,0 +1,3 @@
+kind: metric
+name: average_tenure
+measure: rfm_segments.average_tenure

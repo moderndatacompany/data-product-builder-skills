@@ -1,0 +1,36 @@
+# kind: dq — converted from checks/supplier.yml
+kind: dq
+name: supplier_dq
+depends_on: test_db.vulcan_test_project.supplier
+rules:
+- missing_count(suppkey) = 0:
+    name: suppkey_not_null
+    dimension: completeness
+    description: SUPPLIER.SUPPKEY must be non-null
+- missing_count(nationkey) = 0:
+    name: nationkey_not_null
+    dimension: completeness
+    description: SUPPLIER.NATIONKEY must be non-null
+- missing_count(name) = 0:
+    name: supplier_name_not_null
+    dimension: completeness
+    description: SUPPLIER.NAME must be non-null
+- row_count > 0:
+    name: supplier_has_rows
+    dimension: completeness
+    description: SUPPLIER should not be empty
+- duplicate_count(suppkey) = 0:
+    name: suppkey_unique
+    dimension: uniqueness
+    description: SUPPLIER.SUPPKEY must be unique
+- failed rows:
+    name: supplier_nation_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT s.*
+      FROM test_db.vulcan_test_project.supplier s
+      LEFT JOIN test_db.vulcan_test_project.nation n
+        ON s.nationkey = n.nationkey
+      WHERE n.nationkey IS NULL
+    samples limit: 10
+    description: Every SUPPLIER.NATIONKEY must exist in NATION.NATIONKEY

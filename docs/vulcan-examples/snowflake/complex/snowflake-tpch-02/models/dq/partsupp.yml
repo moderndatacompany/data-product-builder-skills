@@ -1,0 +1,67 @@
+# kind: dq — converted from checks/partsupp.yml
+kind: dq
+name: partsupp_dq
+depends_on: test_db.vulcan_test_project.partsupp
+rules:
+- missing_count(partkey) = 0:
+    name: partkey_not_null
+    dimension: completeness
+    description: PARTSUPP.PARTKEY must be non-null
+- missing_count(suppkey) = 0:
+    name: suppkey_not_null
+    dimension: completeness
+    description: PARTSUPP.SUPPKEY must be non-null
+- row_count > 0:
+    name: partsupp_has_rows
+    dimension: completeness
+    description: PARTSUPP should not be empty
+- failed rows:
+    name: partsupp_part_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT ps.*
+      FROM test_db.vulcan_test_project.partsupp ps
+      LEFT JOIN test_db.vulcan_test_project.part p
+        ON ps.partkey = p.partkey
+      WHERE p.partkey IS NULL
+    samples limit: 10
+    description: Every PARTSUPP.PARTKEY must exist in PART.PARTKEY
+- failed rows:
+    name: partsupp_supplier_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT ps.*
+      FROM test_db.vulcan_test_project.partsupp ps
+      LEFT JOIN test_db.vulcan_test_project.supplier s
+        ON ps.suppkey = s.suppkey
+      WHERE s.suppkey IS NULL
+    samples limit: 10
+    description: Every PARTSUPP.SUPPKEY must exist in SUPPLIER.SUPPKEY
+- failed rows:
+    name: availqty_non_negative
+    dimension: validity
+    fail query: |
+      SELECT partkey, suppkey, availqty
+      FROM test_db.vulcan_test_project.partsupp
+      WHERE availqty < 0
+    samples limit: 10
+    description: PARTSUPP.AVAILQTY should be non-negative
+- failed rows:
+    name: supplycost_non_negative
+    dimension: validity
+    fail query: |
+      SELECT partkey, suppkey, supplycost
+      FROM test_db.vulcan_test_project.partsupp
+      WHERE supplycost < 0
+    samples limit: 10
+    description: PARTSUPP.SUPPLYCOST should be non-negative
+- failed rows:
+    name: partsupp_composite_key_unique
+    dimension: uniqueness
+    fail query: |
+      SELECT partkey, suppkey, COUNT(*) AS cnt
+      FROM test_db.vulcan_test_project.partsupp
+      GROUP BY partkey, suppkey
+      HAVING COUNT(*) > 1
+    samples limit: 10
+    description: PARTSUPP composite key (PARTKEY, SUPPKEY) must be unique

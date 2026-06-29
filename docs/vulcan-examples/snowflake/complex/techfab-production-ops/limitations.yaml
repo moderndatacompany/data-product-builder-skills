@@ -1,0 +1,6 @@
+limitations:
+  - Historical data from July 2024 to December 2024 (6 months)
+  - 60,000 production confirmations and 12,000 downtime events
+  - Data from 10 plants (P01-P10) with 1,250 equipment items
+  - Daily data refresh via full reload
+  - Snowflake cloud warehouse as data platform

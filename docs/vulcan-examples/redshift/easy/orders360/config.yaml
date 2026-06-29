@@ -1,0 +1,55 @@
+vde: false
+display_name: Orders360
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: sales
+tags:
+  - redshift
+  - sales
+  - analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: orders360
+tenant: sales
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity on Redshift.
+
+# --- Gateway Connection ---
+gateways:
+  default:
+    connection:
+      type: redshift
+      host: {{ env_var('REDSHIFT_HOST') }}
+      port: {{ env_var('REDSHIFT_PORT') }}
+      user: {{ env_var('REDSHIFT_USER') }}
+      password: {{ env_var('REDSHIFT_PASSWORD') }}
+      database: {{ env_var('REDSHIFT_DATABASE') }}
+    state_connection:
+      type: postgres
+      host: {{ env_var('STATESTORE_HOST') }}
+      port: {{ env_var('STATESTORE_PORT') }}
+      database: {{ env_var('STATESTORE_DATABASE') }}
+      user: {{ env_var('STATESTORE_USER') }}
+      password: {{ env_var('STATESTORE_PASSWORD') }}
+
+default_gateway: default
+
+# --- Model Defaults ---
+model_defaults:
+  dialect: redshift
+  start: 2024-01-01
+  cron: '@daily'
+
+# --- Linting Rules ---
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections

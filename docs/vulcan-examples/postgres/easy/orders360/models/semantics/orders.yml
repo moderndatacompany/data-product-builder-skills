@@ -1,0 +1,296 @@
+# Converted from legacy: semantics/orders.yml
+kind: semantic
+name: orders
+depends_on: sales.orders
+description: "Orders fact table with revenue, quantity, and shipping details"
+
+ai_context:
+  instructions: >
+    Use this semantic model for questions about orders. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "orders"
+  examples:
+    - "Show orders trends over time."
+    - "Break down orders by key dimensions."
+
+dimensions:
+  - order_date
+  - customer_id
+  - product_id
+  - quantity
+  - discount
+  - total_amount
+  - order_id
+
+measures:
+  - name: total_orders
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total orders. Respect its aggregation
+        type and any configured filters before comparing or segmenting results.
+      synonyms:
+        - "total orders"
+        - "total_orders"
+        - "total"
+        - "orders"
+      examples:
+        - "What is total orders by month?"
+        - "Compare total orders across key segments."
+    type: count_distinct
+    expression: "{orders.order_id}"
+    description: "Total number of orders"
+    tags:
+      - order
+      - count
+      - metric
+    terms:
+      - order.total_orders
+      - metric.order_count
+
+  - name: total_revenue
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total revenue. Respect its aggregation
+        type and any configured filters before comparing or segmenting results.
+      synonyms:
+        - "total revenue"
+        - "total_revenue"
+        - "total"
+        - "revenue"
+      examples:
+        - "What is total revenue by month?"
+        - "Compare total revenue across key segments."
+    type: sum
+    expression: "{orders.total_amount}"
+    description: "Total revenue from all orders"
+    tags:
+      - revenue
+      - financial
+      - metric
+    terms:
+      - revenue.total_revenue
+      - finance.gross_sales
+
+  - name: average_order_value
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for average order value. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "average order value"
+        - "average_order_value"
+        - "average"
+        - "order"
+      examples:
+        - "What is average order value by month?"
+        - "Compare average order value across key segments."
+    type: avg
+    expression: "{orders.total_amount}"
+    description: "Average value per order"
+    tags:
+      - revenue
+      - average
+      - metric
+    terms:
+      - revenue.average_order_value
+      - metric.aov
+
+  - name: total_quantity_sold
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total quantity sold. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "total quantity sold"
+        - "total_quantity_sold"
+        - "total"
+        - "quantity"
+      examples:
+        - "What is total quantity sold by month?"
+        - "Compare total quantity sold across key segments."
+    type: sum
+    expression: "{orders.quantity}"
+    description: "Total quantity of items sold"
+    tags:
+      - order
+      - inventory
+      - metric
+    terms:
+      - order.total_quantity
+      - inventory.units_sold
+
+  - name: total_discount_amount
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total discount amount. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "total discount amount"
+        - "total_discount_amount"
+        - "total"
+        - "discount"
+      examples:
+        - "What is total discount amount by month?"
+        - "Compare total discount amount across key segments."
+    type: sum
+    expression: "{orders.unit_price} * {orders.quantity} * {orders.discount}"
+    description: "Total discount amount applied"
+    tags:
+      - revenue
+      - discount
+      - metric
+    terms:
+      - revenue.total_discount
+      - finance.discounts_given
+
+  - name: total_tax_collected
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total tax collected. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "total tax collected"
+        - "total_tax_collected"
+        - "total"
+        - "tax"
+      examples:
+        - "What is total tax collected by month?"
+        - "Compare total tax collected across key segments."
+    type: sum
+    expression: "{orders.tax}"
+    description: "Total tax collected"
+    tags:
+      - financial
+      - tax
+      - metric
+    terms:
+      - finance.tax_collected
+      - metric.tax_total
+
+  - name: total_shipping_cost
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total shipping cost. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "total shipping cost"
+        - "total_shipping_cost"
+        - "total"
+        - "shipping"
+      examples:
+        - "What is total shipping cost by month?"
+        - "Compare total shipping cost across key segments."
+    type: sum
+    expression: "{orders.shipping_cost}"
+    description: "Total shipping costs"
+    tags:
+      - financial
+      - shipping
+      - metric
+    terms:
+      - finance.shipping_cost
+      - metric.shipping_total
+
+segments:
+  - name: recent_orders
+    ai_context:
+      instructions: >
+        Apply this segment when the question asks for the recent orders subset. Combine it
+        with measures to answer filtered business questions.
+      synonyms:
+        - "recent orders"
+        - "recent_orders"
+        - "recent"
+        - "orders"
+      examples:
+        - "Show revenue for recent orders."
+        - "How many records are in recent orders?"
+    expression: "{orders.order_date} >= CURRENT_DATE - INTERVAL '7 days'"
+    description: "Orders placed in the last 7 days"
+    tags:
+      - order
+      - temporal
+      - recent
+    terms:
+      - order.recent
+      - temporal.last_7_days
+
+  - name: high_value_orders
+    ai_context:
+      instructions: >
+        Apply this segment when the question asks for the high value orders subset.
+        Combine it with measures to answer filtered business questions.
+      synonyms:
+        - "high value orders"
+        - "high_value_orders"
+        - "high"
+        - "value"
+      examples:
+        - "Show revenue for high value orders."
+        - "How many records are in high value orders?"
+    expression: "{orders.total_amount} >= 500"
+    description: "Orders with total amount >= $500"
+    tags:
+      - revenue
+      - high_value
+      - segment
+    terms:
+      - order.high_value
+      - revenue.premium
+
+  - name: discounted_orders
+    ai_context:
+      instructions: >
+        Apply this segment when the question asks for the discounted orders subset.
+        Combine it with measures to answer filtered business questions.
+      synonyms:
+        - "discounted orders"
+        - "discounted_orders"
+        - "discounted"
+        - "orders"
+      examples:
+        - "Show revenue for discounted orders."
+        - "How many records are in discounted orders?"
+    expression: "{orders.discount} > 0"
+    description: "Orders with discount applied"
+    tags:
+      - order
+      - discount
+      - segment
+    terms:
+      - order.discounted
+      - revenue.discounted_orders
+
+joins:
+  - name: customers
+    ai_context:
+      instructions: >
+        Use this join when a question needs attributes or metrics from customers. Keep the
+        configured join relationship to avoid double counting.
+      synonyms:
+        - "customers"
+      examples:
+        - "Analyze this model with customers attributes."
+        - "Break measures down by customers."
+    type: many_to_one
+    expression: "{orders.customer_id} = {customers.customer_id}"
+
+  - name: products
+    ai_context:
+      instructions: >
+        Use this join when a question needs attributes or metrics from products. Keep the
+        configured join relationship to avoid double counting.
+      synonyms:
+        - "products"
+      examples:
+        - "Analyze this model with products attributes."
+        - "Break measures down by products."
+    type: many_to_one
+    expression: "{orders.product_id} = {products.product_id}"

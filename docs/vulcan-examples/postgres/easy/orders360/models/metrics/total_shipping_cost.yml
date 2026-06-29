@@ -1,0 +1,6 @@
+kind: metric
+name: total_shipping_cost
+measure: orders.total_shipping_cost
+ts: orders.order_date
+granularity: day
+description: "Total shipping costs"

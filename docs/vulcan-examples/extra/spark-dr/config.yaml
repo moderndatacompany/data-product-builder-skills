@@ -1,0 +1,30 @@
+name: sdp02
+tenant: system
+description: Spark + Iceberg example with MinIO object storage and PostgreSQL state store.
+tags:
+  - spark
+  - iceberg
+  - analytics
+  - lakehouse
+domain: analytics
+model_defaults:
+  dialect: spark2
+  cron: '*/5 * * * *'  # Every 5 minutes
+
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions  # Yellow warning, doesn't block
+    - nomissingaudits
+
+# Suppress analytics warning
+analytics:
+  enabled: false
+
+
+gateways:
+  default:
+    connection:
+      type: lakehouse
+      addresses:
+        - dataos://avulcanawslh?purpose=rw

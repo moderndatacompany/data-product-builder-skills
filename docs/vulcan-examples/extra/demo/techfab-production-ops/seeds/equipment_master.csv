@@ -1,0 +1,1251 @@
+equipment_id,equipment_name,equipment_type,plant_code,work_center,manufacturer,acquisition_date,theoretical_capacity_hour,installation_status
+EQ-P01-0001,Solder Station G,Soldering,P01,WC-SOL-02,BTU International,2024-07-19,238,Active
+EQ-P01-0002,Wave Solder Beta,Wave Solder,P01,WC-WSL-01,Heller Industries,2025-01-23,105,Active
+EQ-P01-0003,X-Ray System G,X-Ray,P01,WC-XRY-01,Nikon Metrology,2021-01-28,200,Active
+EQ-P01-0004,Assembly Station 6,SMT Assembly,P01,WC-SMT-03,Panasonic,2022-12-30,89,Active
+EQ-P01-0005,Conformal Coater Eta,Coating,P01,WC-COT-01,Nordson,2022-02-01,138,Active
+EQ-P01-0006,SMT Line 9,SMT Assembly,P01,WC-SMT-03,Juki,2025-03-25,191,Active
+EQ-P01-0007,X-Ray Inspector Gamma,X-Ray,P01,WC-XRY-01,Nordson,2018-09-12,108,Active
+EQ-P01-0008,Wave Solder 2,Soldering,P01,WC-SOL-01,Heller Industries,2021-01-10,212,Active
+EQ-P01-0009,Functional Tester 2,Test Station,P01,WC-TST-02,National Instruments,2018-03-30,224,Active
+EQ-P01-0010,X-Ray Inspector IV,X-Ray,P01,WC-XRY-01,Dage,2021-11-09,119,Maintenance
+EQ-P01-0011,Wave Solder G,Wave Solder,P01,WC-WSL-01,Pillarhouse,2016-11-23,58,Active
+EQ-P01-0012,Stencil Printer 5,Printing,P01,WC-PRT-01,MPM,2023-09-24,217,Active
+EQ-P01-0013,Reflow Oven H,Reflow,P01,WC-RFL-02,Heller Industries,2017-10-04,193,Active
+EQ-P01-0014,X-Ray System G,X-Ray,P01,WC-XRY-01,Viscom,2024-07-24,180,Active
+EQ-P01-0015,SMT Cell C,SMT Assembly,P01,WC-SMT-01,Fuji Corporation,2017-03-25,224,Active
+EQ-P01-0016,Selective Solder IV,Soldering,P01,WC-SOL-02,Ersa,2020-03-06,114,Maintenance
+EQ-P01-0017,SMT Cell 2,SMT Assembly,P01,WC-SMT-03,Fuji Corporation,2017-06-29,214,Active
+EQ-P01-0018,SPI System Alpha,Inspection,P01,WC-INS-01,Saki,2018-01-06,234,Active
+EQ-P01-0019,Wave System Plus,Wave Solder,P01,WC-WSL-01,Pillarhouse,2019-04-14,100,Active
+EQ-P01-0020,AOI Inspector Prime,Test Station,P01,WC-TST-01,Thermotron,2025-11-23,78,Maintenance
+EQ-P01-0021,AOI Inspector Zeta,Inspection,P01,WC-INS-01,Nordson,2025-02-25,237,Active
+EQ-P01-0022,Solder Station V,Soldering,P01,WC-SOL-01,Nordson,2019-12-13,92,Active
+EQ-P01-0023,X-Ray Inspector 4,X-Ray,P01,WC-XRY-01,Viscom,2021-08-21,221,Active
+EQ-P01-0024,Reflow Oven H,Reflow,P01,WC-RFL-02,Rehm,2023-08-05,66,Active
+EQ-P01-0025,X-Ray Inspector Alpha,X-Ray,P01,WC-XRY-01,Creative Electron,2025-04-26,231,Active
+EQ-P01-0026,P&P Unit Epsilon,Pick and Place,P01,WC-PPL-01,Yamaha,2020-05-07,110,Active
+EQ-P01-0027,Reflow System H,Reflow,P01,WC-RFL-01,Heller Industries,2017-04-25,171,Active
+EQ-P01-0028,Placement Machine II,Pick and Place,P01,WC-PPL-01,Yamaha,2022-02-20,158,Active
+EQ-P01-0029,Assembly Station 6,SMT Assembly,P01,WC-SMT-01,Fuji Corporation,2017-02-18,77,Active
+EQ-P01-0030,Pick and Place II,Pick and Place,P01,WC-PPL-02,Samsung,2024-01-21,121,Active
+EQ-P01-0031,Solder Station Max,Soldering,P01,WC-SOL-01,Ersa,2016-09-26,53,Maintenance
+EQ-P01-0032,P&P Unit V,Pick and Place,P01,WC-PPL-02,Fuji Corporation,2023-09-19,152,Maintenance
+EQ-P01-0033,ICT Tester 1,Test Station,P01,WC-TST-01,Nikon Metrology,2017-04-27,250,Active
+EQ-P01-0034,Stencil Printer E,Printing,P01,WC-PRT-02,ASM,2022-10-14,105,Maintenance
+EQ-P01-0035,X-Ray System Delta,X-Ray,P01,WC-XRY-01,Creative Electron,2025-07-20,199,Active
+EQ-P01-0036,Wave Solder D,Wave Solder,P01,WC-WSL-01,Pillarhouse,2025-05-06,202,Active
+EQ-P01-0037,Placement Machine H,Pick and Place,P01,WC-PPL-01,Assembleon,2019-08-15,202,Active
+EQ-P01-0038,Wave Solder F,Soldering,P01,WC-SOL-02,Ersa,2018-08-08,233,Active
+EQ-P01-0039,Vision Inspector 4,Inspection,P01,WC-INS-01,Saki,2020-12-26,130,Maintenance
+EQ-P01-0040,Selective Solder Eta,Soldering,P01,WC-SOL-02,BTU International,2025-04-16,187,Active
+EQ-P01-0041,AOI Inspector H,Inspection,P01,WC-INS-02,Nordson,2021-12-20,122,Active
+EQ-P01-0042,Wave System Eta,Wave Solder,P01,WC-WSL-01,Ersa,2016-04-07,84,Active
+EQ-P01-0043,Wave Solder 3,Soldering,P01,WC-SOL-01,Nordson,2019-05-01,103,Active
+EQ-P01-0044,P&P Unit Delta,Pick and Place,P01,WC-PPL-02,Juki,2025-01-28,212,Active
+EQ-P01-0045,SPI System A,Inspection,P01,WC-INS-01,Koh Young,2018-12-20,117,Active
+EQ-P01-0046,Reflow Oven Theta,Reflow,P01,WC-RFL-02,Rehm,2025-04-08,226,Maintenance
+EQ-P01-0047,Wave Solder II,Wave Solder,P01,WC-WSL-01,Heller Industries,2024-09-06,60,Active
+EQ-P01-0048,SMT Cell H,SMT Assembly,P01,WC-SMT-01,Yamaha,2018-08-20,76,Active
+EQ-P01-0049,Wave Solder C,Wave Solder,P01,WC-WSL-01,Seho,2017-02-21,95,Active
+EQ-P01-0050,Assembly Station I,SMT Assembly,P01,WC-SMT-03,Panasonic,2017-02-12,221,Active
+EQ-P01-0051,Placement Machine Eta,Pick and Place,P01,WC-PPL-01,Juki,2021-10-28,59,Active
+EQ-P01-0052,P&P Unit 4,Pick and Place,P01,WC-PPL-02,Fuji Corporation,2016-11-29,108,Active
+EQ-P01-0053,P&P Unit Epsilon,Pick and Place,P01,WC-PPL-02,Assembleon,2017-06-10,121,Active
+EQ-P01-0054,Wave Solder Theta,Wave Solder,P01,WC-WSL-01,Seho,2016-04-11,116,Active
+EQ-P01-0055,Vision Inspector II,Inspection,P01,WC-INS-01,Koh Young,2022-03-28,236,Active
+EQ-P01-0056,Paste Printer E,Printing,P01,WC-PRT-01,ASM,2023-04-04,61,Active
+EQ-P01-0057,SMT Cell E,SMT Assembly,P01,WC-SMT-03,Assembleon,2022-01-11,160,Active
+EQ-P01-0058,Coating Station 4,Coating,P01,WC-COT-01,Speedline,2020-06-04,129,Active
+EQ-P01-0059,Coating Station E,Coating,P01,WC-COT-01,Precision Valve,2021-05-25,220,Maintenance
+EQ-P01-0060,ICT Tester Ultra,Test Station,P01,WC-TST-02,Thermotron,2016-10-06,50,Active
+EQ-P01-0061,P&P Unit III,Pick and Place,P01,WC-PPL-02,Assembleon,2021-02-25,222,Active
+EQ-P01-0062,Reflow System Plus,Reflow,P01,WC-RFL-01,Heller Industries,2018-09-01,212,Active
+EQ-P01-0063,Solder Station E,Soldering,P01,WC-SOL-02,Heller Industries,2024-06-17,56,Active
+EQ-P01-0064,Reflow System I,Reflow,P01,WC-RFL-01,Rehm,2016-03-05,211,Active
+EQ-P01-0065,Stencil Printer B,Printing,P01,WC-PRT-02,Speedline,2018-10-03,226,Active
+EQ-P01-0066,Solder Station Pro,Soldering,P01,WC-SOL-01,Ersa,2020-11-26,62,Active
+EQ-P01-0067,Wave Solder Pro,Soldering,P01,WC-SOL-01,Ersa,2019-11-05,202,Active
+EQ-P01-0068,Reflow System C,Reflow,P01,WC-RFL-02,Rehm,2017-10-09,171,Active
+EQ-P01-0069,Placement Machine H,Pick and Place,P01,WC-PPL-02,Juki,2023-01-13,162,Active
+EQ-P01-0070,SPI System 5,Inspection,P01,WC-INS-02,Nordson,2020-01-21,70,Active
+EQ-P01-0071,Placement Machine F,Pick and Place,P01,WC-PPL-01,Assembleon,2025-05-23,156,Active
+EQ-P01-0072,Wave Solder F,Wave Solder,P01,WC-WSL-01,Seho,2016-10-09,157,Active
+EQ-P01-0073,X-Ray System Alpha,X-Ray,P01,WC-XRY-01,Nikon Metrology,2022-03-03,126,Active
+EQ-P01-0074,Paste Printer G,Printing,P01,WC-PRT-01,ASM,2023-01-20,161,Active
+EQ-P01-0075,Stencil Printer IV,Printing,P01,WC-PRT-02,MPM,2024-09-06,209,Active
+EQ-P01-0076,Stencil Printer II,Printing,P01,WC-PRT-01,ASM,2024-08-04,168,Active
+EQ-P01-0077,AOI Inspector IV,Inspection,P01,WC-INS-02,Saki,2022-06-13,136,Active
+EQ-P01-0078,Paste Printer Zeta,Printing,P01,WC-PRT-02,MPM,2020-11-02,54,Active
+EQ-P01-0079,SMT Cell Epsilon,SMT Assembly,P01,WC-SMT-01,Yamaha,2017-05-09,216,Active
+EQ-P01-0080,SMT Line B,SMT Assembly,P01,WC-SMT-01,Panasonic,2023-06-09,82,Active
+EQ-P01-0081,Wave Solder 1,Soldering,P01,WC-SOL-01,Nordson,2017-07-06,144,Active
+EQ-P01-0082,X-Ray System Eta,X-Ray,P01,WC-XRY-01,Nikon Metrology,2019-08-16,56,Maintenance
+EQ-P01-0083,X-Ray Inspector Epsilon,X-Ray,P01,WC-XRY-01,Viscom,2019-06-22,226,Active
+EQ-P01-0084,Placement Machine Theta,Pick and Place,P01,WC-PPL-02,Yamaha,2017-03-08,194,Active
+EQ-P01-0085,Conformal Coater Epsilon,Coating,P01,WC-COT-01,Speedline,2020-06-09,215,Active
+EQ-P01-0086,Paste Printer 8,Printing,P01,WC-PRT-01,Speedline,2018-12-26,167,Active
+EQ-P01-0087,Paste Printer IV,Printing,P01,WC-PRT-02,Ekra,2021-03-24,237,Active
+EQ-P01-0088,Conformal Coater III,Coating,P01,WC-COT-01,Asymtek,2023-05-19,242,Active
+EQ-P01-0089,X-Ray Inspector Prime,X-Ray,P01,WC-XRY-01,Viscom,2016-07-27,133,Active
+EQ-P01-0090,P&P Unit 2,Pick and Place,P01,WC-PPL-02,Juki,2016-03-29,202,Active
+EQ-P01-0091,Vision Inspector E,Inspection,P01,WC-INS-01,Viscom,2025-02-25,111,Active
+EQ-P01-0092,Reflow System Prime,Reflow,P01,WC-RFL-01,Rehm,2021-02-01,54,Active
+EQ-P01-0093,P&P Unit 8,Pick and Place,P01,WC-PPL-01,Assembleon,2020-10-21,191,Active
+EQ-P01-0094,Paste Printer IV,Printing,P01,WC-PRT-02,ASM,2023-01-28,128,Active
+EQ-P01-0095,Solder Station Max,Soldering,P01,WC-SOL-02,Heller Industries,2017-07-26,226,Active
+EQ-P01-0096,Placement Machine Pro,Pick and Place,P01,WC-PPL-02,Assembleon,2019-06-03,122,Maintenance
+EQ-P01-0097,P&P Unit D,Pick and Place,P01,WC-PPL-01,Juki,2022-09-21,53,Active
+EQ-P01-0098,Test Bench Ultra,Test Station,P01,WC-TST-01,National Instruments,2022-11-02,228,Maintenance
+EQ-P01-0099,Reflow System V,Reflow,P01,WC-RFL-01,BTU International,2020-09-29,162,Active
+EQ-P01-0100,SMT Line Epsilon,SMT Assembly,P01,WC-SMT-02,Yamaha,2021-08-14,175,Active
+EQ-P01-0101,SMT Cell 4,SMT Assembly,P01,WC-SMT-01,Panasonic,2025-02-27,113,Active
+EQ-P01-0102,Paste Printer III,Printing,P01,WC-PRT-01,ASM,2021-02-23,126,Active
+EQ-P01-0103,Stencil Printer F,Printing,P01,WC-PRT-01,MPM,2019-02-05,104,Active
+EQ-P01-0104,Solder Station Ultra,Soldering,P01,WC-SOL-01,Heller Industries,2025-04-09,90,Active
+EQ-P01-0105,Reflow System Gamma,Reflow,P01,WC-RFL-02,Rehm,2023-07-08,123,Active
+EQ-P01-0106,Reflow System E,Reflow,P01,WC-RFL-01,BTU International,2021-05-06,79,Active
+EQ-P01-0107,Test Bench Delta,Test Station,P01,WC-TST-01,National Instruments,2024-04-02,128,Active
+EQ-P01-0108,X-Ray Inspector IV,X-Ray,P01,WC-XRY-01,Nordson,2018-05-23,127,Active
+EQ-P01-0109,SPI System Zeta,Inspection,P01,WC-INS-02,Viscom,2019-05-29,60,Active
+EQ-P01-0110,Coating Station Zeta,Coating,P01,WC-COT-01,Speedline,2023-07-19,222,Active
+EQ-P01-0111,X-Ray System Gamma,X-Ray,P01,WC-XRY-01,Creative Electron,2017-07-22,243,Active
+EQ-P01-0112,Wave Solder II,Wave Solder,P01,WC-WSL-01,Seho,2018-12-29,175,Maintenance
+EQ-P01-0113,Reflow System 5,Reflow,P01,WC-RFL-02,Vitronics Soltec,2018-08-07,76,Active
+EQ-P01-0114,Conformal Coater 10,Coating,P01,WC-COT-01,Precision Valve,2016-12-27,244,Active
+EQ-P01-0115,Reflow System 5,Reflow,P01,WC-RFL-02,BTU International,2024-10-24,247,Active
+EQ-P01-0116,Wave System Delta,Wave Solder,P01,WC-WSL-01,Heller Industries,2024-01-04,182,Active
+EQ-P01-0117,Reflow Oven 2,Reflow,P01,WC-RFL-01,Ersa,2019-12-15,83,Maintenance
+EQ-P01-0118,Reflow Oven H,Reflow,P01,WC-RFL-01,Ersa,2018-02-25,90,Active
+EQ-P01-0119,SMT Line G,SMT Assembly,P01,WC-SMT-02,Assembleon,2016-09-04,79,Active
+EQ-P01-0120,Selective Solder 3,Soldering,P01,WC-SOL-02,Heller Industries,2020-05-28,230,Active
+EQ-P01-0121,Reflow System Ultra,Reflow,P01,WC-RFL-01,Ersa,2024-06-28,148,Active
+EQ-P01-0122,X-Ray Inspector 2,X-Ray,P01,WC-XRY-01,Creative Electron,2017-06-13,156,Active
+EQ-P01-0123,Wave System 4,Wave Solder,P01,WC-WSL-01,Ersa,2016-09-20,200,Active
+EQ-P01-0124,Reflow System 7,Reflow,P01,WC-RFL-02,Heller Industries,2022-05-21,191,Active
+EQ-P01-0125,Stencil Printer H,Printing,P01,WC-PRT-02,Speedline,2019-09-13,148,Active
+EQ-P02-0126,Paste Printer 9,Printing,P02,WC-PRT-02,DEK,2021-10-13,219,Active
+EQ-P02-0127,Functional Tester Plus,Test Station,P02,WC-TST-01,Nikon Metrology,2019-06-30,134,Active
+EQ-P02-0128,Reflow Oven B,Reflow,P02,WC-RFL-02,BTU International,2021-07-07,217,Maintenance
+EQ-P02-0129,Wave Solder 10,Soldering,P02,WC-SOL-02,Ersa,2018-10-29,70,Active
+EQ-P02-0130,Wave System Max,Wave Solder,P02,WC-WSL-01,Seho,2025-09-16,208,Active
+EQ-P02-0131,SPI System Eta,Inspection,P02,WC-INS-01,Nordson,2017-08-02,212,Active
+EQ-P02-0132,Selective Solder 4,Soldering,P02,WC-SOL-01,Ersa,2025-10-15,61,Active
+EQ-P02-0133,Assembly Station II,SMT Assembly,P02,WC-SMT-02,Yamaha,2024-06-24,112,Active
+EQ-P02-0134,X-Ray Inspector Zeta,X-Ray,P02,WC-XRY-01,Dage,2019-04-12,147,Active
+EQ-P02-0135,Pick and Place IV,Pick and Place,P02,WC-PPL-01,Assembleon,2018-12-17,115,Active
+EQ-P02-0136,SMT Cell Max,SMT Assembly,P02,WC-SMT-02,Juki,2024-05-04,68,Active
+EQ-P02-0137,Conformal Coater 1,Coating,P02,WC-COT-01,Speedline,2020-12-27,127,Active
+EQ-P02-0138,Stencil Printer 9,Printing,P02,WC-PRT-01,Speedline,2019-09-13,141,Active
+EQ-P02-0139,SPI System Alpha,Inspection,P02,WC-INS-02,Koh Young,2019-10-07,225,Active
+EQ-P02-0140,Assembly Station 3,SMT Assembly,P02,WC-SMT-03,Assembleon,2017-05-31,108,Active
+EQ-P02-0141,Conformal Coater A,Coating,P02,WC-COT-01,Asymtek,2019-01-25,74,Maintenance
+EQ-P02-0142,SMT Line 8,SMT Assembly,P02,WC-SMT-02,Yamaha,2017-11-25,83,Active
+EQ-P02-0143,AOI Inspector E,Inspection,P02,WC-INS-02,Omron,2024-08-18,188,Active
+EQ-P02-0144,Coating Station 1,Coating,P02,WC-COT-01,Speedline,2016-11-12,173,Maintenance
+EQ-P02-0145,SPI System Epsilon,Inspection,P02,WC-INS-01,Omron,2024-07-14,243,Maintenance
+EQ-P02-0146,Stencil Printer 10,Printing,P02,WC-PRT-02,ASM,2025-12-15,117,Active
+EQ-P02-0147,Reflow System 8,Reflow,P02,WC-RFL-02,Vitronics Soltec,2024-11-24,222,Active
+EQ-P02-0148,Assembly Station G,SMT Assembly,P02,WC-SMT-03,Assembleon,2018-11-07,66,Active
+EQ-P02-0149,Reflow Oven A,Reflow,P02,WC-RFL-02,Vitronics Soltec,2025-08-09,59,Active
+EQ-P02-0150,Reflow Oven Max,Reflow,P02,WC-RFL-01,BTU International,2024-08-04,149,Active
+EQ-P02-0151,Wave System Eta,Wave Solder,P02,WC-WSL-01,Seho,2016-10-06,175,Active
+EQ-P02-0152,AOI Inspector III,Inspection,P02,WC-INS-02,Koh Young,2021-02-15,110,Active
+EQ-P02-0153,Solder Station 10,Soldering,P02,WC-SOL-02,Pillarhouse,2023-01-07,98,Maintenance
+EQ-P02-0154,Reflow Oven Delta,Reflow,P02,WC-RFL-01,BTU International,2017-04-16,135,Active
+EQ-P02-0155,Test Bench Ultra,Test Station,P02,WC-TST-01,Thermotron,2023-10-16,200,Active
+EQ-P02-0156,Placement Machine Alpha,Pick and Place,P02,WC-PPL-01,Juki,2023-01-02,87,Maintenance
+EQ-P02-0157,Wave Solder Beta,Wave Solder,P02,WC-WSL-01,Ersa,2024-08-20,53,Active
+EQ-P02-0158,Pick and Place D,Pick and Place,P02,WC-PPL-02,Samsung,2023-02-20,63,Active
+EQ-P02-0159,Stencil Printer V,Printing,P02,WC-PRT-01,ASM,2021-01-31,249,Active
+EQ-P02-0160,X-Ray Inspector Gamma,X-Ray,P02,WC-XRY-01,Nikon Metrology,2017-12-16,250,Maintenance
+EQ-P02-0161,Wave Solder Delta,Wave Solder,P02,WC-WSL-01,Ersa,2020-09-28,152,Active
+EQ-P02-0162,Solder Station Zeta,Soldering,P02,WC-SOL-02,Ersa,2022-07-02,205,Active
+EQ-P02-0163,ICT Tester Pro,Test Station,P02,WC-TST-02,National Instruments,2022-10-22,166,Active
+EQ-P02-0164,Stencil Printer II,Printing,P02,WC-PRT-01,DEK,2021-01-18,108,Active
+EQ-P02-0165,Reflow Oven 5,Reflow,P02,WC-RFL-02,Ersa,2021-04-29,130,Active
+EQ-P02-0166,Coating Station Zeta,Coating,P02,WC-COT-01,Asymtek,2016-10-14,71,Active
+EQ-P02-0167,Selective Solder Delta,Soldering,P02,WC-SOL-01,Pillarhouse,2019-07-15,193,Active
+EQ-P02-0168,Selective Solder II,Soldering,P02,WC-SOL-02,Ersa,2016-05-18,234,Active
+EQ-P02-0169,SPI System Eta,Inspection,P02,WC-INS-02,Viscom,2019-08-19,179,Active
+EQ-P02-0170,Reflow System Ultra,Reflow,P02,WC-RFL-01,Heller Industries,2021-12-28,79,Active
+EQ-P02-0171,X-Ray Inspector 2,X-Ray,P02,WC-XRY-01,Dage,2025-10-15,96,Active
+EQ-P02-0172,AOI Inspector D,Inspection,P02,WC-INS-02,Omron,2016-05-11,86,Active
+EQ-P02-0173,Stencil Printer Zeta,Printing,P02,WC-PRT-01,DEK,2017-09-29,185,Active
+EQ-P02-0174,Stencil Printer 8,Printing,P02,WC-PRT-02,Speedline,2022-08-14,234,Active
+EQ-P02-0175,X-Ray Inspector B,X-Ray,P02,WC-XRY-01,Creative Electron,2024-05-07,243,Active
+EQ-P02-0176,Selective Solder II,Soldering,P02,WC-SOL-02,Pillarhouse,2020-08-31,205,Active
+EQ-P02-0177,SPI System II,Inspection,P02,WC-INS-01,Nordson,2024-11-13,122,Active
+EQ-P02-0178,X-Ray Inspector G,X-Ray,P02,WC-XRY-01,Viscom,2021-09-06,203,Active
+EQ-P02-0179,Pick and Place 1,Pick and Place,P02,WC-PPL-01,Juki,2022-11-13,133,Active
+EQ-P02-0180,Reflow Oven 9,Reflow,P02,WC-RFL-01,Ersa,2020-02-21,230,Active
+EQ-P02-0181,Wave System Gamma,Wave Solder,P02,WC-WSL-01,Ersa,2021-03-22,54,Active
+EQ-P02-0182,Selective Solder 10,Soldering,P02,WC-SOL-02,Pillarhouse,2018-02-26,213,Active
+EQ-P02-0183,Wave Solder C,Soldering,P02,WC-SOL-01,Ersa,2017-02-15,208,Active
+EQ-P02-0184,Coating Station H,Coating,P02,WC-COT-01,Nordson,2021-03-24,200,Active
+EQ-P02-0185,Selective Solder 6,Soldering,P02,WC-SOL-02,Ersa,2023-08-18,135,Active
+EQ-P02-0186,Selective Solder Plus,Soldering,P02,WC-SOL-01,Nordson,2023-12-09,248,Active
+EQ-P02-0187,Functional Tester 1,Test Station,P02,WC-TST-01,Koh Young,2023-11-25,94,Active
+EQ-P02-0188,Wave Solder III,Soldering,P02,WC-SOL-02,Heller Industries,2018-06-23,194,Active
+EQ-P02-0189,X-Ray Inspector III,X-Ray,P02,WC-XRY-01,Nordson,2025-05-07,170,Active
+EQ-P02-0190,SPI System Plus,Inspection,P02,WC-INS-01,Omron,2025-04-13,129,Active
+EQ-P02-0191,Assembly Station Epsilon,SMT Assembly,P02,WC-SMT-02,Fuji Corporation,2018-11-19,73,Active
+EQ-P02-0192,Wave Solder III,Wave Solder,P02,WC-WSL-01,Seho,2017-01-11,196,Active
+EQ-P02-0193,Coating Station Delta,Coating,P02,WC-COT-01,Speedline,2021-01-22,76,Active
+EQ-P02-0194,Coating Station H,Coating,P02,WC-COT-01,Nordson,2018-03-06,162,Maintenance
+EQ-P02-0195,Wave System 8,Wave Solder,P02,WC-WSL-01,Nordson,2022-12-10,149,Active
+EQ-P02-0196,Conformal Coater Epsilon,Coating,P02,WC-COT-01,Speedline,2022-06-01,74,Active
+EQ-P02-0197,Stencil Printer 6,Printing,P02,WC-PRT-02,MPM,2025-03-14,199,Active
+EQ-P02-0198,Coating Station Zeta,Coating,P02,WC-COT-01,GPD Global,2022-08-22,193,Active
+EQ-P02-0199,Conformal Coater Plus,Coating,P02,WC-COT-01,Asymtek,2022-01-20,54,Active
+EQ-P02-0200,ICT Tester E,Test Station,P02,WC-TST-02,Koh Young,2023-07-29,85,Active
+EQ-P02-0201,Vision Inspector 6,Inspection,P02,WC-INS-01,Koh Young,2016-04-14,246,Active
+EQ-P02-0202,X-Ray Inspector D,X-Ray,P02,WC-XRY-01,Viscom,2016-10-15,227,Active
+EQ-P02-0203,ICT Tester 8,Test Station,P02,WC-TST-01,Nikon Metrology,2018-07-12,234,Active
+EQ-P02-0204,Reflow System G,Reflow,P02,WC-RFL-02,Rehm,2020-02-15,111,Active
+EQ-P02-0205,Reflow System IV,Reflow,P02,WC-RFL-02,Heller Industries,2017-06-26,122,Active
+EQ-P02-0206,Wave Solder E,Wave Solder,P02,WC-WSL-01,Nordson,2017-02-16,204,Active
+EQ-P02-0207,SPI System Ultra,Inspection,P02,WC-INS-02,Koh Young,2024-12-17,232,Active
+EQ-P02-0208,Solder Station 2,Soldering,P02,WC-SOL-01,Pillarhouse,2021-01-27,181,Active
+EQ-P02-0209,Paste Printer 7,Printing,P02,WC-PRT-01,DEK,2025-10-24,156,Active
+EQ-P02-0210,Wave System Zeta,Wave Solder,P02,WC-WSL-01,Ersa,2021-11-28,107,Active
+EQ-P02-0211,Solder Station Gamma,Soldering,P02,WC-SOL-01,Pillarhouse,2022-11-23,170,Active
+EQ-P02-0212,Test Bench Zeta,Test Station,P02,WC-TST-02,Nikon Metrology,2025-11-25,115,Active
+EQ-P02-0213,Test Bench 3,Test Station,P02,WC-TST-02,Thermotron,2023-06-13,127,Active
+EQ-P02-0214,Pick and Place Theta,Pick and Place,P02,WC-PPL-02,Assembleon,2016-09-23,177,Active
+EQ-P02-0215,SMT Line B,SMT Assembly,P02,WC-SMT-03,Assembleon,2022-11-05,159,Active
+EQ-P02-0216,Coating Station Zeta,Coating,P02,WC-COT-01,Asymtek,2020-03-29,142,Active
+EQ-P02-0217,Wave System V,Wave Solder,P02,WC-WSL-01,Nordson,2025-08-16,212,Active
+EQ-P02-0218,Conformal Coater Epsilon,Coating,P02,WC-COT-01,GPD Global,2022-03-31,111,Active
+EQ-P02-0219,Solder Station Gamma,Soldering,P02,WC-SOL-02,Nordson,2022-02-28,189,Active
+EQ-P02-0220,Functional Tester A,Test Station,P02,WC-TST-02,Nikon Metrology,2025-05-28,233,Active
+EQ-P02-0221,Reflow Oven Gamma,Reflow,P02,WC-RFL-02,BTU International,2017-03-29,101,Active
+EQ-P02-0222,Conformal Coater 1,Coating,P02,WC-COT-01,GPD Global,2025-09-14,242,Active
+EQ-P02-0223,Vision Inspector 6,Inspection,P02,WC-INS-01,Omron,2023-01-18,81,Active
+EQ-P02-0224,Paste Printer 6,Printing,P02,WC-PRT-02,Speedline,2024-01-07,177,Active
+EQ-P02-0225,Coating Station II,Coating,P02,WC-COT-01,Speedline,2025-03-24,160,Active
+EQ-P02-0226,AOI Inspector Eta,Test Station,P02,WC-TST-02,Thermotron,2025-03-20,133,Active
+EQ-P02-0227,AOI Inspector III,Inspection,P02,WC-INS-02,Saki,2022-03-04,164,Active
+EQ-P02-0228,Conformal Coater Delta,Coating,P02,WC-COT-01,Speedline,2025-04-09,221,Active
+EQ-P02-0229,Coating Station B,Coating,P02,WC-COT-01,Speedline,2016-08-05,205,Active
+EQ-P02-0230,Reflow Oven H,Reflow,P02,WC-RFL-01,BTU International,2017-05-20,215,Active
+EQ-P02-0231,Stencil Printer III,Printing,P02,WC-PRT-01,ASM,2021-12-14,145,Active
+EQ-P02-0232,Selective Solder 8,Soldering,P02,WC-SOL-01,Nordson,2021-08-25,130,Active
+EQ-P02-0233,Placement Machine D,Pick and Place,P02,WC-PPL-01,Yamaha,2020-07-07,182,Active
+EQ-P02-0234,Wave System III,Wave Solder,P02,WC-WSL-01,Heller Industries,2023-09-16,206,Active
+EQ-P02-0235,Reflow Oven Epsilon,Reflow,P02,WC-RFL-01,Heller Industries,2021-01-16,94,Active
+EQ-P02-0236,Reflow System Epsilon,Reflow,P02,WC-RFL-02,BTU International,2019-12-12,188,Active
+EQ-P02-0237,SPI System Plus,Inspection,P02,WC-INS-01,Nordson,2023-08-07,81,Maintenance
+EQ-P02-0238,Test Bench 8,Test Station,P02,WC-TST-02,Koh Young,2019-11-25,196,Active
+EQ-P02-0239,Wave Solder 4,Wave Solder,P02,WC-WSL-01,Pillarhouse,2021-08-25,233,Active
+EQ-P02-0240,Wave Solder A,Wave Solder,P02,WC-WSL-01,Seho,2022-07-23,214,Active
+EQ-P02-0241,Reflow Oven Ultra,Reflow,P02,WC-RFL-02,Rehm,2018-12-09,200,Active
+EQ-P02-0242,Test Bench Pro,Test Station,P02,WC-TST-01,Nikon Metrology,2024-05-25,127,Active
+EQ-P02-0243,Conformal Coater Zeta,Coating,P02,WC-COT-01,Asymtek,2023-04-21,100,Active
+EQ-P02-0244,Wave System Max,Wave Solder,P02,WC-WSL-01,Ersa,2025-01-24,178,Active
+EQ-P02-0245,X-Ray Inspector 6,X-Ray,P02,WC-XRY-01,Creative Electron,2016-08-30,194,Active
+EQ-P02-0246,SMT Cell 1,SMT Assembly,P02,WC-SMT-01,Fuji Corporation,2018-10-23,103,Active
+EQ-P02-0247,Paste Printer Max,Printing,P02,WC-PRT-01,ASM,2022-11-12,214,Maintenance
+EQ-P02-0248,Reflow System IV,Reflow,P02,WC-RFL-02,Heller Industries,2025-04-18,226,Active
+EQ-P02-0249,Reflow System F,Reflow,P02,WC-RFL-02,Ersa,2022-04-19,205,Active
+EQ-P02-0250,Coating Station 8,Coating,P02,WC-COT-01,GPD Global,2020-05-03,193,Active
+EQ-P03-0251,P&P Unit III,Pick and Place,P03,WC-PPL-01,Assembleon,2023-05-02,86,Active
+EQ-P03-0252,AOI Inspector C,Inspection,P03,WC-INS-02,Saki,2016-12-27,133,Maintenance
+EQ-P03-0253,Conformal Coater Plus,Coating,P03,WC-COT-01,Asymtek,2020-11-16,177,Active
+EQ-P03-0254,Reflow System Plus,Reflow,P03,WC-RFL-01,BTU International,2020-12-26,111,Active
+EQ-P03-0255,Conformal Coater Prime,Coating,P03,WC-COT-01,Nordson,2019-05-31,217,Active
+EQ-P03-0256,AOI Inspector II,Inspection,P03,WC-INS-01,Viscom,2024-08-11,117,Active
+EQ-P03-0257,Paste Printer Delta,Printing,P03,WC-PRT-01,MPM,2019-09-20,193,Active
+EQ-P03-0258,Wave System Plus,Wave Solder,P03,WC-WSL-01,Ersa,2021-01-23,245,Active
+EQ-P03-0259,X-Ray Inspector Eta,X-Ray,P03,WC-XRY-01,Creative Electron,2021-09-11,145,Active
+EQ-P03-0260,Coating Station E,Coating,P03,WC-COT-01,Speedline,2019-05-11,180,Active
+EQ-P03-0261,SMT Line 6,SMT Assembly,P03,WC-SMT-01,Fuji Corporation,2017-02-04,171,Active
+EQ-P03-0262,AOI Inspector 5,Test Station,P03,WC-TST-01,Thermotron,2024-04-16,150,Maintenance
+EQ-P03-0263,Vision Inspector Plus,Inspection,P03,WC-INS-02,Viscom,2020-02-22,175,Active
+EQ-P03-0264,SPI System 6,Inspection,P03,WC-INS-01,Saki,2018-07-23,78,Maintenance
+EQ-P03-0265,X-Ray System 1,X-Ray,P03,WC-XRY-01,Nordson,2018-10-05,250,Maintenance
+EQ-P03-0266,X-Ray Inspector V,X-Ray,P03,WC-XRY-01,Creative Electron,2024-03-14,184,Active
+EQ-P03-0267,X-Ray Inspector Gamma,X-Ray,P03,WC-XRY-01,Viscom,2019-09-10,229,Active
+EQ-P03-0268,Assembly Station B,SMT Assembly,P03,WC-SMT-02,Juki,2021-06-25,226,Active
+EQ-P03-0269,Wave Solder A,Wave Solder,P03,WC-WSL-01,Nordson,2020-04-18,103,Active
+EQ-P03-0270,Reflow System D,Reflow,P03,WC-RFL-02,Rehm,2020-12-16,186,Active
+EQ-P03-0271,Coating Station H,Coating,P03,WC-COT-01,GPD Global,2022-12-26,192,Active
+EQ-P03-0272,Vision Inspector Prime,Inspection,P03,WC-INS-01,Omron,2022-07-23,172,Active
+EQ-P03-0273,Vision Inspector Max,Inspection,P03,WC-INS-01,Omron,2021-11-08,151,Active
+EQ-P03-0274,AOI Inspector Zeta,Test Station,P03,WC-TST-01,National Instruments,2022-03-25,163,Active
+EQ-P03-0275,Reflow System Ultra,Reflow,P03,WC-RFL-01,Heller Industries,2018-04-22,119,Active
+EQ-P03-0276,X-Ray Inspector Delta,X-Ray,P03,WC-XRY-01,Creative Electron,2018-08-08,185,Active
+EQ-P03-0277,P&P Unit 6,Pick and Place,P03,WC-PPL-01,Yamaha,2018-01-25,170,Active
+EQ-P03-0278,ICT Tester V,Test Station,P03,WC-TST-01,Keysight,2020-10-04,216,Active
+EQ-P03-0279,Vision Inspector Delta,Inspection,P03,WC-INS-02,Omron,2017-06-29,72,Active
+EQ-P03-0280,Pick and Place I,Pick and Place,P03,WC-PPL-01,Samsung,2016-03-21,95,Maintenance
+EQ-P03-0281,SMT Line 3,SMT Assembly,P03,WC-SMT-02,Juki,2016-04-12,59,Active
+EQ-P03-0282,X-Ray System 3,X-Ray,P03,WC-XRY-01,Creative Electron,2021-01-06,214,Active
+EQ-P03-0283,Reflow System E,Reflow,P03,WC-RFL-02,Heller Industries,2017-01-16,78,Active
+EQ-P03-0284,Reflow Oven 6,Reflow,P03,WC-RFL-01,Vitronics Soltec,2017-03-31,125,Active
+EQ-P03-0285,P&P Unit Plus,Pick and Place,P03,WC-PPL-02,Fuji Corporation,2022-06-08,72,Active
+EQ-P03-0286,Wave Solder 5,Soldering,P03,WC-SOL-01,Heller Industries,2023-05-01,51,Active
+EQ-P03-0287,P&P Unit 4,Pick and Place,P03,WC-PPL-02,Assembleon,2019-08-01,235,Active
+EQ-P03-0288,AOI Inspector Theta,Inspection,P03,WC-INS-01,Omron,2020-11-22,128,Active
+EQ-P03-0289,Wave System 8,Wave Solder,P03,WC-WSL-01,Ersa,2019-03-22,106,Active
+EQ-P03-0290,ICT Tester 8,Test Station,P03,WC-TST-01,Nikon Metrology,2021-06-13,229,Active
+EQ-P03-0291,Reflow Oven Zeta,Reflow,P03,WC-RFL-01,Rehm,2020-03-21,164,Active
+EQ-P03-0292,Coating Station Ultra,Coating,P03,WC-COT-01,Nordson,2020-06-11,101,Active
+EQ-P03-0293,ICT Tester Theta,Test Station,P03,WC-TST-02,Koh Young,2018-06-26,102,Active
+EQ-P03-0294,Reflow Oven IV,Reflow,P03,WC-RFL-02,BTU International,2024-08-19,181,Active
+EQ-P03-0295,X-Ray System Beta,X-Ray,P03,WC-XRY-01,Nikon Metrology,2021-09-03,115,Active
+EQ-P03-0296,Pick and Place II,Pick and Place,P03,WC-PPL-01,Samsung,2022-04-01,229,Active
+EQ-P03-0297,SMT Line 3,SMT Assembly,P03,WC-SMT-02,Fuji Corporation,2021-07-12,96,Active
+EQ-P03-0298,Paste Printer 9,Printing,P03,WC-PRT-02,MPM,2021-11-25,70,Active
+EQ-P03-0299,Wave Solder D,Wave Solder,P03,WC-WSL-01,Pillarhouse,2020-02-02,150,Active
+EQ-P03-0300,P&P Unit IV,Pick and Place,P03,WC-PPL-01,Yamaha,2018-07-24,234,Active
+EQ-P03-0301,Wave Solder IV,Wave Solder,P03,WC-WSL-01,Seho,2022-03-26,89,Active
+EQ-P03-0302,Selective Solder Beta,Soldering,P03,WC-SOL-02,BTU International,2023-06-01,102,Active
+EQ-P03-0303,X-Ray Inspector H,X-Ray,P03,WC-XRY-01,Nikon Metrology,2017-10-22,61,Active
+EQ-P03-0304,Pick and Place A,Pick and Place,P03,WC-PPL-01,Samsung,2020-06-18,124,Active
+EQ-P03-0305,X-Ray Inspector 4,X-Ray,P03,WC-XRY-01,Nordson,2016-04-14,86,Maintenance
+EQ-P03-0306,Wave System 2,Wave Solder,P03,WC-WSL-01,Pillarhouse,2025-06-06,192,Maintenance
+EQ-P03-0307,Test Bench 7,Test Station,P03,WC-TST-02,Nikon Metrology,2018-11-24,221,Active
+EQ-P03-0308,Wave System B,Wave Solder,P03,WC-WSL-01,Ersa,2022-10-01,146,Active
+EQ-P03-0309,Wave Solder 4,Wave Solder,P03,WC-WSL-01,Seho,2016-06-30,231,Active
+EQ-P03-0310,Reflow System Ultra,Reflow,P03,WC-RFL-02,BTU International,2020-03-03,84,Active
+EQ-P03-0311,Vision Inspector Zeta,Inspection,P03,WC-INS-02,Nordson,2021-01-25,144,Active
+EQ-P03-0312,P&P Unit Gamma,Pick and Place,P03,WC-PPL-02,Yamaha,2016-04-25,68,Active
+EQ-P03-0313,X-Ray System F,X-Ray,P03,WC-XRY-01,Creative Electron,2016-05-12,135,Active
+EQ-P03-0314,SMT Cell Theta,SMT Assembly,P03,WC-SMT-01,Panasonic,2017-09-26,243,Active
+EQ-P03-0315,P&P Unit H,Pick and Place,P03,WC-PPL-01,Samsung,2019-12-03,132,Active
+EQ-P03-0316,Paste Printer 1,Printing,P03,WC-PRT-02,Speedline,2022-01-29,181,Active
+EQ-P03-0317,Reflow System F,Reflow,P03,WC-RFL-02,BTU International,2021-12-15,130,Active
+EQ-P03-0318,X-Ray Inspector 1,X-Ray,P03,WC-XRY-01,Dage,2019-11-28,199,Active
+EQ-P03-0319,Stencil Printer 6,Printing,P03,WC-PRT-01,MPM,2023-07-14,147,Active
+EQ-P03-0320,P&P Unit Prime,Pick and Place,P03,WC-PPL-02,Assembleon,2017-12-31,214,Active
+EQ-P03-0321,Reflow Oven A,Reflow,P03,WC-RFL-02,Heller Industries,2018-01-13,189,Active
+EQ-P03-0322,Wave Solder Delta,Wave Solder,P03,WC-WSL-01,Heller Industries,2017-07-17,51,Active
+EQ-P03-0323,Pick and Place F,Pick and Place,P03,WC-PPL-01,Yamaha,2020-06-10,166,Active
+EQ-P03-0324,X-Ray System Beta,X-Ray,P03,WC-XRY-01,Creative Electron,2026-01-14,186,Active
+EQ-P03-0325,SMT Cell 2,SMT Assembly,P03,WC-SMT-03,Fuji Corporation,2020-02-08,123,Active
+EQ-P03-0326,Stencil Printer Pro,Printing,P03,WC-PRT-01,Ekra,2024-06-11,111,Active
+EQ-P03-0327,Wave System 10,Wave Solder,P03,WC-WSL-01,Ersa,2025-03-24,145,Maintenance
+EQ-P03-0328,Reflow Oven 4,Reflow,P03,WC-RFL-01,Rehm,2018-06-11,70,Active
+EQ-P03-0329,Assembly Station 9,SMT Assembly,P03,WC-SMT-02,Fuji Corporation,2019-12-01,171,Active
+EQ-P03-0330,Assembly Station II,SMT Assembly,P03,WC-SMT-01,Panasonic,2018-11-18,250,Active
+EQ-P03-0331,Solder Station F,Soldering,P03,WC-SOL-01,Nordson,2016-05-18,227,Active
+EQ-P03-0332,Reflow Oven 2,Reflow,P03,WC-RFL-01,Vitronics Soltec,2020-01-09,194,Active
+EQ-P03-0333,Functional Tester B,Test Station,P03,WC-TST-01,National Instruments,2017-09-04,232,Active
+EQ-P03-0334,Selective Solder H,Soldering,P03,WC-SOL-01,Pillarhouse,2019-10-04,149,Active
+EQ-P03-0335,Wave Solder Zeta,Wave Solder,P03,WC-WSL-01,Ersa,2020-06-30,240,Maintenance
+EQ-P03-0336,SMT Line Epsilon,SMT Assembly,P03,WC-SMT-02,Fuji Corporation,2022-04-17,204,Active
+EQ-P03-0337,X-Ray Inspector 2,X-Ray,P03,WC-XRY-01,Viscom,2017-04-29,165,Active
+EQ-P03-0338,Conformal Coater D,Coating,P03,WC-COT-01,Speedline,2018-06-28,199,Active
+EQ-P03-0339,Solder Station Epsilon,Soldering,P03,WC-SOL-02,Nordson,2025-03-11,118,Active
+EQ-P03-0340,AOI Inspector Eta,Test Station,P03,WC-TST-02,Nikon Metrology,2025-02-01,51,Maintenance
+EQ-P03-0341,Reflow Oven A,Reflow,P03,WC-RFL-02,Vitronics Soltec,2025-02-18,97,Active
+EQ-P03-0342,Wave Solder Beta,Wave Solder,P03,WC-WSL-01,Nordson,2025-02-08,140,Active
+EQ-P03-0343,X-Ray System Alpha,X-Ray,P03,WC-XRY-01,Creative Electron,2022-11-03,155,Active
+EQ-P03-0344,Selective Solder Pro,Soldering,P03,WC-SOL-01,Nordson,2024-03-18,225,Active
+EQ-P03-0345,AOI Inspector Prime,Test Station,P03,WC-TST-02,National Instruments,2024-06-23,66,Active
+EQ-P03-0346,SPI System Epsilon,Inspection,P03,WC-INS-02,Saki,2022-01-23,114,Maintenance
+EQ-P03-0347,Reflow System Eta,Reflow,P03,WC-RFL-01,Rehm,2024-08-05,127,Active
+EQ-P03-0348,Paste Printer III,Printing,P03,WC-PRT-02,MPM,2022-05-11,160,Active
+EQ-P03-0349,X-Ray System E,X-Ray,P03,WC-XRY-01,Dage,2020-09-27,130,Active
+EQ-P03-0350,Paste Printer H,Printing,P03,WC-PRT-02,MPM,2022-06-17,146,Active
+EQ-P03-0351,Stencil Printer Max,Printing,P03,WC-PRT-01,MPM,2024-02-05,224,Active
+EQ-P03-0352,SMT Line III,SMT Assembly,P03,WC-SMT-03,Juki,2017-03-02,124,Active
+EQ-P03-0353,Solder Station 4,Soldering,P03,WC-SOL-02,Ersa,2023-05-26,114,Active
+EQ-P03-0354,Paste Printer V,Printing,P03,WC-PRT-01,Speedline,2019-08-02,152,Active
+EQ-P03-0355,Paste Printer Max,Printing,P03,WC-PRT-01,ASM,2019-06-15,213,Maintenance
+EQ-P03-0356,Solder Station Gamma,Soldering,P03,WC-SOL-02,Heller Industries,2019-10-19,215,Active
+EQ-P03-0357,Stencil Printer Alpha,Printing,P03,WC-PRT-02,MPM,2025-01-03,116,Active
+EQ-P03-0358,Wave System 8,Wave Solder,P03,WC-WSL-01,Nordson,2021-09-22,168,Active
+EQ-P03-0359,X-Ray System Beta,X-Ray,P03,WC-XRY-01,Creative Electron,2020-09-12,76,Active
+EQ-P03-0360,Wave Solder 4,Soldering,P03,WC-SOL-01,BTU International,2022-04-07,166,Active
+EQ-P03-0361,Wave System Eta,Wave Solder,P03,WC-WSL-01,Seho,2021-03-14,234,Active
+EQ-P03-0362,Coating Station Theta,Coating,P03,WC-COT-01,Nordson,2025-11-10,137,Active
+EQ-P03-0363,Functional Tester 6,Test Station,P03,WC-TST-01,Koh Young,2019-11-01,159,Maintenance
+EQ-P03-0364,Pick and Place II,Pick and Place,P03,WC-PPL-01,Assembleon,2021-09-04,57,Active
+EQ-P03-0365,P&P Unit Alpha,Pick and Place,P03,WC-PPL-02,Assembleon,2018-03-18,104,Active
+EQ-P03-0366,Selective Solder D,Soldering,P03,WC-SOL-01,Nordson,2022-01-04,133,Active
+EQ-P03-0367,Selective Solder 5,Soldering,P03,WC-SOL-02,Pillarhouse,2019-06-02,149,Active
+EQ-P03-0368,X-Ray System IV,X-Ray,P03,WC-XRY-01,Nikon Metrology,2019-03-11,94,Active
+EQ-P03-0369,Vision Inspector A,Inspection,P03,WC-INS-01,Viscom,2022-08-08,80,Active
+EQ-P03-0370,Selective Solder B,Soldering,P03,WC-SOL-02,Heller Industries,2020-05-20,149,Active
+EQ-P03-0371,ICT Tester D,Test Station,P03,WC-TST-02,Thermotron,2020-08-27,212,Active
+EQ-P03-0372,ICT Tester 3,Test Station,P03,WC-TST-01,Thermotron,2024-07-16,97,Active
+EQ-P03-0373,Reflow System Alpha,Reflow,P03,WC-RFL-01,Rehm,2020-09-05,84,Active
+EQ-P03-0374,Paste Printer Prime,Printing,P03,WC-PRT-02,ASM,2021-06-14,231,Active
+EQ-P03-0375,Reflow Oven G,Reflow,P03,WC-RFL-01,Heller Industries,2022-11-02,58,Active
+EQ-P04-0376,Wave System Prime,Wave Solder,P04,WC-WSL-01,Ersa,2019-12-13,180,Active
+EQ-P04-0377,Selective Solder Gamma,Soldering,P04,WC-SOL-02,Pillarhouse,2017-08-04,234,Active
+EQ-P04-0378,Placement Machine H,Pick and Place,P04,WC-PPL-01,Assembleon,2022-10-10,58,Active
+EQ-P04-0379,Coating Station H,Coating,P04,WC-COT-01,Nordson,2023-10-05,238,Active
+EQ-P04-0380,Coating Station A,Coating,P04,WC-COT-01,Speedline,2017-04-24,102,Active
+EQ-P04-0381,SMT Cell 2,SMT Assembly,P04,WC-SMT-02,Assembleon,2019-06-03,187,Active
+EQ-P04-0382,Vision Inspector Eta,Inspection,P04,WC-INS-02,Omron,2024-08-04,242,Active
+EQ-P04-0383,SMT Line A,SMT Assembly,P04,WC-SMT-03,Yamaha,2023-04-25,87,Active
+EQ-P04-0384,Pick and Place 2,Pick and Place,P04,WC-PPL-02,Assembleon,2019-01-27,156,Active
+EQ-P04-0385,Selective Solder 2,Soldering,P04,WC-SOL-02,BTU International,2018-04-28,144,Active
+EQ-P04-0386,Reflow Oven IV,Reflow,P04,WC-RFL-01,Vitronics Soltec,2018-12-29,220,Active
+EQ-P04-0387,Solder Station II,Soldering,P04,WC-SOL-02,Nordson,2016-11-11,104,Active
+EQ-P04-0388,Coating Station Prime,Coating,P04,WC-COT-01,GPD Global,2017-04-10,137,Active
+EQ-P04-0389,SMT Cell IV,SMT Assembly,P04,WC-SMT-01,Fuji Corporation,2025-12-06,81,Maintenance
+EQ-P04-0390,Test Bench II,Test Station,P04,WC-TST-02,Nikon Metrology,2023-11-05,226,Maintenance
+EQ-P04-0391,AOI Inspector 8,Inspection,P04,WC-INS-02,Nordson,2023-04-22,71,Active
+EQ-P04-0392,AOI Inspector G,Test Station,P04,WC-TST-02,Keysight,2021-04-19,217,Active
+EQ-P04-0393,Wave Solder Epsilon,Soldering,P04,WC-SOL-01,BTU International,2024-08-16,201,Active
+EQ-P04-0394,Reflow System Theta,Reflow,P04,WC-RFL-01,BTU International,2016-06-19,158,Active
+EQ-P04-0395,Reflow System Zeta,Reflow,P04,WC-RFL-01,BTU International,2017-12-01,76,Active
+EQ-P04-0396,Conformal Coater A,Coating,P04,WC-COT-01,GPD Global,2018-12-02,223,Active
+EQ-P04-0397,Wave Solder III,Wave Solder,P04,WC-WSL-01,Nordson,2022-03-05,234,Active
+EQ-P04-0398,Functional Tester Zeta,Test Station,P04,WC-TST-02,Nikon Metrology,2024-12-26,85,Active
+EQ-P04-0399,X-Ray System 5,X-Ray,P04,WC-XRY-01,Viscom,2017-03-29,85,Active
+EQ-P04-0400,Selective Solder Beta,Soldering,P04,WC-SOL-02,Heller Industries,2016-08-09,218,Active
+EQ-P04-0401,Placement Machine 10,Pick and Place,P04,WC-PPL-01,Samsung,2022-10-19,215,Active
+EQ-P04-0402,Pick and Place H,Pick and Place,P04,WC-PPL-02,Assembleon,2020-07-05,213,Active
+EQ-P04-0403,Wave System A,Wave Solder,P04,WC-WSL-01,Heller Industries,2021-10-10,195,Active
+EQ-P04-0404,Wave Solder Beta,Wave Solder,P04,WC-WSL-01,Pillarhouse,2019-07-12,67,Active
+EQ-P04-0405,P&P Unit Plus,Pick and Place,P04,WC-PPL-01,Yamaha,2022-11-25,210,Active
+EQ-P04-0406,Stencil Printer Max,Printing,P04,WC-PRT-02,Speedline,2020-01-31,207,Active
+EQ-P04-0407,Selective Solder F,Soldering,P04,WC-SOL-01,Pillarhouse,2017-01-19,89,Active
+EQ-P04-0408,Paste Printer II,Printing,P04,WC-PRT-01,ASM,2017-12-05,111,Active
+EQ-P04-0409,Wave Solder Delta,Soldering,P04,WC-SOL-01,Ersa,2022-08-24,220,Active
+EQ-P04-0410,Functional Tester Alpha,Test Station,P04,WC-TST-01,Keysight,2024-04-10,177,Maintenance
+EQ-P04-0411,Wave Solder 8,Wave Solder,P04,WC-WSL-01,Nordson,2024-09-09,241,Active
+EQ-P04-0412,SPI System II,Inspection,P04,WC-INS-01,Koh Young,2023-01-23,184,Active
+EQ-P04-0413,X-Ray System Plus,X-Ray,P04,WC-XRY-01,Nikon Metrology,2022-01-27,64,Active
+EQ-P04-0414,X-Ray Inspector 1,X-Ray,P04,WC-XRY-01,Dage,2017-06-10,76,Active
+EQ-P04-0415,Solder Station Alpha,Soldering,P04,WC-SOL-01,Heller Industries,2023-05-16,61,Active
+EQ-P04-0416,Stencil Printer Ultra,Printing,P04,WC-PRT-01,Ekra,2017-02-08,232,Active
+EQ-P04-0417,Stencil Printer I,Printing,P04,WC-PRT-02,Ekra,2018-01-13,131,Active
+EQ-P04-0418,Solder Station Plus,Soldering,P04,WC-SOL-02,Nordson,2018-07-25,63,Active
+EQ-P04-0419,Wave Solder IV,Wave Solder,P04,WC-WSL-01,Heller Industries,2016-05-26,122,Active
+EQ-P04-0420,Vision Inspector IV,Inspection,P04,WC-INS-01,Omron,2026-01-09,144,Active
+EQ-P04-0421,X-Ray System 8,X-Ray,P04,WC-XRY-01,Nordson,2019-06-24,176,Maintenance
+EQ-P04-0422,Pick and Place Alpha,Pick and Place,P04,WC-PPL-01,Samsung,2021-07-07,56,Active
+EQ-P04-0423,Coating Station 9,Coating,P04,WC-COT-01,Nordson,2016-08-04,238,Active
+EQ-P04-0424,Wave Solder Prime,Soldering,P04,WC-SOL-01,Heller Industries,2025-06-10,86,Active
+EQ-P04-0425,Selective Solder I,Soldering,P04,WC-SOL-01,BTU International,2018-04-03,145,Active
+EQ-P04-0426,Selective Solder A,Soldering,P04,WC-SOL-01,Nordson,2018-12-19,150,Active
+EQ-P04-0427,X-Ray Inspector H,X-Ray,P04,WC-XRY-01,Nikon Metrology,2022-11-04,116,Active
+EQ-P04-0428,Paste Printer 2,Printing,P04,WC-PRT-02,MPM,2023-06-30,69,Maintenance
+EQ-P04-0429,Functional Tester Eta,Test Station,P04,WC-TST-01,Thermotron,2024-04-08,165,Active
+EQ-P04-0430,Stencil Printer III,Printing,P04,WC-PRT-02,DEK,2022-08-28,168,Active
+EQ-P04-0431,Selective Solder 4,Soldering,P04,WC-SOL-01,BTU International,2016-11-05,230,Active
+EQ-P04-0432,SMT Line Zeta,SMT Assembly,P04,WC-SMT-02,Panasonic,2018-02-20,113,Maintenance
+EQ-P04-0433,Paste Printer 1,Printing,P04,WC-PRT-01,ASM,2016-11-30,94,Active
+EQ-P04-0434,Stencil Printer IV,Printing,P04,WC-PRT-01,Speedline,2024-12-20,85,Active
+EQ-P04-0435,SMT Line 10,SMT Assembly,P04,WC-SMT-01,Panasonic,2021-12-09,225,Active
+EQ-P04-0436,Solder Station Beta,Soldering,P04,WC-SOL-02,Nordson,2025-05-22,100,Maintenance
+EQ-P04-0437,Reflow System Theta,Reflow,P04,WC-RFL-01,Heller Industries,2025-08-20,168,Active
+EQ-P04-0438,X-Ray System Beta,X-Ray,P04,WC-XRY-01,Viscom,2021-10-27,224,Active
+EQ-P04-0439,Conformal Coater 2,Coating,P04,WC-COT-01,Asymtek,2021-02-10,88,Active
+EQ-P04-0440,X-Ray System Prime,X-Ray,P04,WC-XRY-01,Creative Electron,2021-06-29,190,Active
+EQ-P04-0441,Solder Station I,Soldering,P04,WC-SOL-02,Pillarhouse,2023-11-17,214,Active
+EQ-P04-0442,Wave System 7,Wave Solder,P04,WC-WSL-01,Pillarhouse,2020-09-25,189,Active
+EQ-P04-0443,Conformal Coater 2,Coating,P04,WC-COT-01,Speedline,2024-02-05,56,Active
+EQ-P04-0444,Pick and Place V,Pick and Place,P04,WC-PPL-02,Yamaha,2020-03-05,141,Active
+EQ-P04-0445,Pick and Place H,Pick and Place,P04,WC-PPL-01,Fuji Corporation,2023-02-15,186,Active
+EQ-P04-0446,Assembly Station 7,SMT Assembly,P04,WC-SMT-03,Panasonic,2016-09-13,94,Active
+EQ-P04-0447,X-Ray Inspector 7,X-Ray,P04,WC-XRY-01,Nordson,2019-09-30,194,Active
+EQ-P04-0448,Pick and Place Prime,Pick and Place,P04,WC-PPL-02,Assembleon,2025-09-08,73,Active
+EQ-P04-0449,X-Ray System Alpha,X-Ray,P04,WC-XRY-01,Dage,2022-05-24,207,Active
+EQ-P04-0450,AOI Inspector Delta,Test Station,P04,WC-TST-01,National Instruments,2025-11-13,87,Active
+EQ-P04-0451,Test Bench 8,Test Station,P04,WC-TST-02,Keysight,2018-03-19,219,Active
+EQ-P04-0452,Wave Solder A,Soldering,P04,WC-SOL-02,Pillarhouse,2024-05-06,237,Maintenance
+EQ-P04-0453,Reflow System G,Reflow,P04,WC-RFL-01,Vitronics Soltec,2018-08-25,200,Active
+EQ-P04-0454,Stencil Printer D,Printing,P04,WC-PRT-02,MPM,2017-12-09,50,Maintenance
+EQ-P04-0455,X-Ray Inspector 5,X-Ray,P04,WC-XRY-01,Viscom,2017-01-16,206,Active
+EQ-P04-0456,X-Ray Inspector 6,X-Ray,P04,WC-XRY-01,Nikon Metrology,2017-10-03,69,Active
+EQ-P04-0457,Conformal Coater III,Coating,P04,WC-COT-01,Asymtek,2025-12-26,117,Active
+EQ-P04-0458,Solder Station Alpha,Soldering,P04,WC-SOL-02,Pillarhouse,2025-07-28,148,Active
+EQ-P04-0459,Paste Printer 9,Printing,P04,WC-PRT-02,Ekra,2022-03-05,189,Active
+EQ-P04-0460,Reflow Oven III,Reflow,P04,WC-RFL-01,Rehm,2025-04-15,58,Active
+EQ-P04-0461,Coating Station 6,Coating,P04,WC-COT-01,GPD Global,2024-03-16,146,Active
+EQ-P04-0462,Wave Solder V,Soldering,P04,WC-SOL-01,Nordson,2018-03-19,57,Active
+EQ-P04-0463,Functional Tester Delta,Test Station,P04,WC-TST-02,Thermotron,2024-12-23,134,Active
+EQ-P04-0464,Placement Machine 3,Pick and Place,P04,WC-PPL-02,Assembleon,2022-10-11,110,Active
+EQ-P04-0465,Stencil Printer Delta,Printing,P04,WC-PRT-02,ASM,2022-01-25,50,Active
+EQ-P04-0466,AOI Inspector Eta,Inspection,P04,WC-INS-02,Viscom,2025-10-28,102,Active
+EQ-P04-0467,AOI Inspector 4,Inspection,P04,WC-INS-02,Koh Young,2017-04-24,151,Active
+EQ-P04-0468,AOI Inspector 8,Inspection,P04,WC-INS-02,Koh Young,2016-03-08,147,Active
+EQ-P04-0469,Reflow System IV,Reflow,P04,WC-RFL-02,BTU International,2023-02-28,107,Active
+EQ-P04-0470,X-Ray Inspector Zeta,X-Ray,P04,WC-XRY-01,Nikon Metrology,2018-08-15,138,Active
+EQ-P04-0471,Stencil Printer 9,Printing,P04,WC-PRT-01,ASM,2016-12-07,183,Active
+EQ-P04-0472,Wave System 4,Wave Solder,P04,WC-WSL-01,Seho,2025-03-24,151,Maintenance
+EQ-P04-0473,SMT Cell B,SMT Assembly,P04,WC-SMT-03,Assembleon,2024-10-06,243,Active
+EQ-P04-0474,Functional Tester Gamma,Test Station,P04,WC-TST-01,Koh Young,2021-05-13,70,Maintenance
+EQ-P04-0475,Paste Printer 5,Printing,P04,WC-PRT-01,Ekra,2017-12-16,67,Active
+EQ-P04-0476,Wave System Pro,Wave Solder,P04,WC-WSL-01,Seho,2020-12-22,53,Active
+EQ-P04-0477,X-Ray Inspector I,X-Ray,P04,WC-XRY-01,Creative Electron,2024-06-08,87,Active
+EQ-P04-0478,X-Ray Inspector 3,X-Ray,P04,WC-XRY-01,Nikon Metrology,2016-05-20,187,Active
+EQ-P04-0479,Paste Printer V,Printing,P04,WC-PRT-02,MPM,2025-09-10,94,Active
+EQ-P04-0480,Test Bench 10,Test Station,P04,WC-TST-02,Thermotron,2016-02-20,134,Active
+EQ-P04-0481,Assembly Station Beta,SMT Assembly,P04,WC-SMT-02,Juki,2022-04-29,127,Active
+EQ-P04-0482,Reflow Oven 4,Reflow,P04,WC-RFL-01,BTU International,2017-10-09,163,Active
+EQ-P04-0483,Coating Station E,Coating,P04,WC-COT-01,GPD Global,2021-02-27,104,Maintenance
+EQ-P04-0484,Stencil Printer Plus,Printing,P04,WC-PRT-02,Speedline,2017-03-28,90,Active
+EQ-P04-0485,Wave Solder D,Wave Solder,P04,WC-WSL-01,Seho,2023-12-14,101,Active
+EQ-P04-0486,Pick and Place 8,Pick and Place,P04,WC-PPL-02,Yamaha,2018-03-18,100,Active
+EQ-P04-0487,Reflow Oven Beta,Reflow,P04,WC-RFL-02,Rehm,2023-05-27,145,Active
+EQ-P04-0488,Reflow System 7,Reflow,P04,WC-RFL-02,Heller Industries,2024-04-12,116,Active
+EQ-P04-0489,Wave Solder Delta,Soldering,P04,WC-SOL-01,Pillarhouse,2024-04-14,196,Active
+EQ-P04-0490,Placement Machine F,Pick and Place,P04,WC-PPL-01,Fuji Corporation,2023-02-04,216,Active
+EQ-P04-0491,SMT Line D,SMT Assembly,P04,WC-SMT-02,Fuji Corporation,2019-05-16,52,Active
+EQ-P04-0492,X-Ray System 9,X-Ray,P04,WC-XRY-01,Nordson,2016-07-24,139,Active
+EQ-P04-0493,Placement Machine Pro,Pick and Place,P04,WC-PPL-02,Assembleon,2016-11-13,209,Active
+EQ-P04-0494,Selective Solder 3,Soldering,P04,WC-SOL-02,BTU International,2022-10-07,225,Active
+EQ-P04-0495,Selective Solder 5,Soldering,P04,WC-SOL-02,Pillarhouse,2016-06-14,120,Active
+EQ-P04-0496,Vision Inspector H,Inspection,P04,WC-INS-01,Nordson,2025-06-23,203,Active
+EQ-P04-0497,Conformal Coater 3,Coating,P04,WC-COT-01,Asymtek,2023-03-16,157,Active
+EQ-P04-0498,SMT Cell E,SMT Assembly,P04,WC-SMT-03,Assembleon,2022-04-07,235,Active
+EQ-P04-0499,Wave System C,Wave Solder,P04,WC-WSL-01,Seho,2016-09-07,218,Active
+EQ-P04-0500,ICT Tester A,Test Station,P04,WC-TST-01,National Instruments,2017-10-21,116,Active
+EQ-P05-0501,Wave Solder G,Wave Solder,P05,WC-WSL-01,Pillarhouse,2022-02-16,107,Active
+EQ-P05-0502,SPI System 1,Inspection,P05,WC-INS-02,Saki,2019-07-19,125,Active
+EQ-P05-0503,Selective Solder Epsilon,Soldering,P05,WC-SOL-01,Ersa,2020-10-25,99,Active
+EQ-P05-0504,Paste Printer Delta,Printing,P05,WC-PRT-02,ASM,2016-05-07,88,Active
+EQ-P05-0505,Placement Machine IV,Pick and Place,P05,WC-PPL-02,Juki,2024-07-04,130,Active
+EQ-P05-0506,AOI Inspector D,Test Station,P05,WC-TST-02,Keysight,2022-08-07,212,Active
+EQ-P05-0507,Reflow Oven C,Reflow,P05,WC-RFL-01,Vitronics Soltec,2020-08-15,245,Active
+EQ-P05-0508,ICT Tester 10,Test Station,P05,WC-TST-02,Thermotron,2021-04-20,172,Active
+EQ-P05-0509,SMT Cell 8,SMT Assembly,P05,WC-SMT-01,Assembleon,2025-12-15,132,Active
+EQ-P05-0510,Wave Solder H,Wave Solder,P05,WC-WSL-01,Pillarhouse,2023-07-30,227,Active
+EQ-P05-0511,SPI System Plus,Inspection,P05,WC-INS-01,Nordson,2019-07-06,128,Active
+EQ-P05-0512,Assembly Station Pro,SMT Assembly,P05,WC-SMT-02,Yamaha,2019-06-05,184,Active
+EQ-P05-0513,AOI Inspector E,Test Station,P05,WC-TST-02,National Instruments,2024-04-06,153,Active
+EQ-P05-0514,Placement Machine Beta,Pick and Place,P05,WC-PPL-01,Fuji Corporation,2019-07-02,179,Active
+EQ-P05-0515,Conformal Coater Max,Coating,P05,WC-COT-01,Nordson,2019-02-15,62,Active
+EQ-P05-0516,SMT Line Delta,SMT Assembly,P05,WC-SMT-03,Fuji Corporation,2018-05-18,79,Active
+EQ-P05-0517,Paste Printer B,Printing,P05,WC-PRT-02,DEK,2023-10-23,227,Active
+EQ-P05-0518,SMT Cell Eta,SMT Assembly,P05,WC-SMT-02,Yamaha,2018-09-07,183,Active
+EQ-P05-0519,X-Ray Inspector Plus,X-Ray,P05,WC-XRY-01,Dage,2018-01-19,208,Active
+EQ-P05-0520,Solder Station E,Soldering,P05,WC-SOL-02,BTU International,2017-05-22,117,Active
+EQ-P05-0521,P&P Unit C,Pick and Place,P05,WC-PPL-02,Juki,2025-09-02,190,Active
+EQ-P05-0522,Pick and Place Alpha,Pick and Place,P05,WC-PPL-02,Assembleon,2025-12-20,221,Active
+EQ-P05-0523,Solder Station Zeta,Soldering,P05,WC-SOL-02,Nordson,2017-05-16,180,Active
+EQ-P05-0524,Wave Solder 3,Soldering,P05,WC-SOL-01,Pillarhouse,2023-02-25,168,Active
+EQ-P05-0525,AOI Inspector 5,Test Station,P05,WC-TST-02,Keysight,2021-05-03,239,Active
+EQ-P05-0526,SMT Cell C,SMT Assembly,P05,WC-SMT-01,Fuji Corporation,2022-06-05,141,Active
+EQ-P05-0527,X-Ray System 6,X-Ray,P05,WC-XRY-01,Nordson,2024-01-23,79,Active
+EQ-P05-0528,Reflow System I,Reflow,P05,WC-RFL-02,Vitronics Soltec,2018-11-02,92,Active
+EQ-P05-0529,Assembly Station V,SMT Assembly,P05,WC-SMT-01,Panasonic,2017-02-11,195,Active
+EQ-P05-0530,AOI Inspector Beta,Test Station,P05,WC-TST-02,Thermotron,2016-06-09,225,Active
+EQ-P05-0531,Test Bench I,Test Station,P05,WC-TST-02,Nikon Metrology,2021-03-03,61,Active
+EQ-P05-0532,Conformal Coater Pro,Coating,P05,WC-COT-01,Nordson,2020-03-31,226,Active
+EQ-P05-0533,Wave Solder 7,Soldering,P05,WC-SOL-01,Ersa,2018-09-02,223,Active
+EQ-P05-0534,Test Bench C,Test Station,P05,WC-TST-01,Thermotron,2020-06-11,170,Active
+EQ-P05-0535,AOI Inspector H,Test Station,P05,WC-TST-02,Keysight,2022-05-27,121,Active
+EQ-P05-0536,P&P Unit H,Pick and Place,P05,WC-PPL-02,Samsung,2025-03-25,167,Active
+EQ-P05-0537,X-Ray System III,X-Ray,P05,WC-XRY-01,Viscom,2022-07-27,80,Maintenance
+EQ-P05-0538,Assembly Station Gamma,SMT Assembly,P05,WC-SMT-02,Fuji Corporation,2019-11-12,190,Active
+EQ-P05-0539,Selective Solder Ultra,Soldering,P05,WC-SOL-02,Nordson,2023-10-17,217,Active
+EQ-P05-0540,Coating Station IV,Coating,P05,WC-COT-01,GPD Global,2022-05-23,193,Active
+EQ-P05-0541,X-Ray System Theta,X-Ray,P05,WC-XRY-01,Viscom,2025-01-07,244,Active
+EQ-P05-0542,SMT Cell 3,SMT Assembly,P05,WC-SMT-02,Yamaha,2019-12-21,183,Active
+EQ-P05-0543,Wave Solder A,Soldering,P05,WC-SOL-01,BTU International,2016-11-23,233,Active
+EQ-P05-0544,Stencil Printer E,Printing,P05,WC-PRT-02,DEK,2024-10-04,150,Active
+EQ-P05-0545,P&P Unit Gamma,Pick and Place,P05,WC-PPL-01,Juki,2019-01-05,222,Active
+EQ-P05-0546,Reflow System Alpha,Reflow,P05,WC-RFL-01,Ersa,2020-03-01,238,Active
+EQ-P05-0547,Stencil Printer D,Printing,P05,WC-PRT-02,ASM,2017-12-02,82,Active
+EQ-P05-0548,X-Ray System I,X-Ray,P05,WC-XRY-01,Creative Electron,2019-04-14,227,Active
+EQ-P05-0549,SPI System III,Inspection,P05,WC-INS-02,Saki,2017-02-01,84,Active
+EQ-P05-0550,X-Ray System Ultra,X-Ray,P05,WC-XRY-01,Creative Electron,2019-01-07,105,Active
+EQ-P05-0551,X-Ray Inspector D,X-Ray,P05,WC-XRY-01,Nordson,2020-06-18,188,Active
+EQ-P05-0552,Conformal Coater I,Coating,P05,WC-COT-01,Nordson,2018-07-21,241,Active
+EQ-P05-0553,Wave Solder Pro,Wave Solder,P05,WC-WSL-01,Ersa,2024-12-01,56,Active
+EQ-P05-0554,Assembly Station C,SMT Assembly,P05,WC-SMT-01,Fuji Corporation,2022-11-25,224,Active
+EQ-P05-0555,SMT Cell Gamma,SMT Assembly,P05,WC-SMT-01,Yamaha,2022-02-02,165,Active
+EQ-P05-0556,Wave Solder Plus,Wave Solder,P05,WC-WSL-01,Pillarhouse,2017-04-26,228,Active
+EQ-P05-0557,Assembly Station 5,SMT Assembly,P05,WC-SMT-02,Juki,2019-12-03,63,Active
+EQ-P05-0558,AOI Inspector 8,Inspection,P05,WC-INS-02,Nordson,2017-08-24,200,Active
+EQ-P05-0559,X-Ray System III,X-Ray,P05,WC-XRY-01,Dage,2024-02-15,224,Active
+EQ-P05-0560,ICT Tester Gamma,Test Station,P05,WC-TST-01,Thermotron,2021-04-22,121,Active
+EQ-P05-0561,Test Bench 6,Test Station,P05,WC-TST-02,Koh Young,2020-11-18,231,Maintenance
+EQ-P05-0562,SMT Cell Delta,SMT Assembly,P05,WC-SMT-02,Panasonic,2017-06-09,210,Active
+EQ-P05-0563,AOI Inspector 5,Inspection,P05,WC-INS-02,Saki,2020-03-21,106,Maintenance
+EQ-P05-0564,Wave System Max,Wave Solder,P05,WC-WSL-01,Heller Industries,2020-02-03,153,Active
+EQ-P05-0565,P&P Unit 8,Pick and Place,P05,WC-PPL-02,Fuji Corporation,2022-10-27,105,Maintenance
+EQ-P05-0566,X-Ray Inspector Theta,X-Ray,P05,WC-XRY-01,Creative Electron,2018-08-12,138,Active
+EQ-P05-0567,X-Ray Inspector 5,X-Ray,P05,WC-XRY-01,Creative Electron,2021-11-01,79,Active
+EQ-P05-0568,Wave System Plus,Wave Solder,P05,WC-WSL-01,Ersa,2017-02-09,180,Active
+EQ-P05-0569,SMT Line 5,SMT Assembly,P05,WC-SMT-03,Yamaha,2020-05-08,71,Maintenance
+EQ-P05-0570,Test Bench F,Test Station,P05,WC-TST-01,Thermotron,2018-08-06,211,Active
+EQ-P05-0571,Paste Printer Epsilon,Printing,P05,WC-PRT-01,DEK,2017-09-26,225,Active
+EQ-P05-0572,Reflow Oven Epsilon,Reflow,P05,WC-RFL-01,Vitronics Soltec,2025-07-03,95,Active
+EQ-P05-0573,Wave System I,Wave Solder,P05,WC-WSL-01,Heller Industries,2021-10-05,165,Active
+EQ-P05-0574,Paste Printer Theta,Printing,P05,WC-PRT-01,MPM,2020-02-12,51,Active
+EQ-P05-0575,X-Ray Inspector 7,X-Ray,P05,WC-XRY-01,Nikon Metrology,2020-06-22,77,Active
+EQ-P05-0576,SPI System III,Inspection,P05,WC-INS-01,Viscom,2021-11-01,151,Active
+EQ-P05-0577,SMT Cell G,SMT Assembly,P05,WC-SMT-01,Juki,2024-08-01,241,Active
+EQ-P05-0578,Wave System 8,Wave Solder,P05,WC-WSL-01,Ersa,2025-12-27,191,Active
+EQ-P05-0579,Test Bench 10,Test Station,P05,WC-TST-01,Keysight,2020-02-02,190,Maintenance
+EQ-P05-0580,AOI Inspector I,Inspection,P05,WC-INS-02,Nordson,2018-11-14,181,Active
+EQ-P05-0581,Functional Tester Theta,Test Station,P05,WC-TST-02,Koh Young,2024-01-30,221,Active
+EQ-P05-0582,SMT Cell Ultra,SMT Assembly,P05,WC-SMT-02,Assembleon,2025-04-17,124,Active
+EQ-P05-0583,Vision Inspector Prime,Inspection,P05,WC-INS-01,Koh Young,2022-05-27,141,Active
+EQ-P05-0584,Placement Machine Epsilon,Pick and Place,P05,WC-PPL-02,Yamaha,2023-12-11,131,Active
+EQ-P05-0585,Coating Station 8,Coating,P05,WC-COT-01,Speedline,2017-01-20,130,Maintenance
+EQ-P05-0586,Functional Tester G,Test Station,P05,WC-TST-02,Keysight,2018-02-15,239,Active
+EQ-P05-0587,Vision Inspector 6,Inspection,P05,WC-INS-01,Omron,2016-04-08,172,Active
+EQ-P05-0588,Coating Station D,Coating,P05,WC-COT-01,GPD Global,2018-11-15,205,Active
+EQ-P05-0589,SPI System Epsilon,Inspection,P05,WC-INS-01,Nordson,2017-12-15,69,Active
+EQ-P05-0590,Wave Solder Gamma,Wave Solder,P05,WC-WSL-01,Heller Industries,2019-12-05,116,Active
+EQ-P05-0591,Wave System 10,Wave Solder,P05,WC-WSL-01,Seho,2023-08-11,247,Active
+EQ-P05-0592,Vision Inspector Plus,Inspection,P05,WC-INS-02,Nordson,2025-02-05,151,Active
+EQ-P05-0593,SMT Cell C,SMT Assembly,P05,WC-SMT-03,Panasonic,2017-08-15,181,Active
+EQ-P05-0594,ICT Tester 7,Test Station,P05,WC-TST-01,Koh Young,2025-08-29,106,Active
+EQ-P05-0595,P&P Unit G,Pick and Place,P05,WC-PPL-02,Yamaha,2025-08-19,221,Active
+EQ-P05-0596,Conformal Coater Gamma,Coating,P05,WC-COT-01,Precision Valve,2025-08-31,216,Active
+EQ-P05-0597,Wave Solder 9,Wave Solder,P05,WC-WSL-01,Ersa,2018-10-13,146,Active
+EQ-P05-0598,Wave Solder G,Soldering,P05,WC-SOL-02,Nordson,2020-04-27,153,Active
+EQ-P05-0599,Coating Station Plus,Coating,P05,WC-COT-01,Precision Valve,2016-03-22,85,Active
+EQ-P05-0600,Pick and Place B,Pick and Place,P05,WC-PPL-02,Yamaha,2024-01-07,90,Active
+EQ-P05-0601,Wave Solder Theta,Soldering,P05,WC-SOL-02,Heller Industries,2020-09-17,222,Active
+EQ-P05-0602,Placement Machine I,Pick and Place,P05,WC-PPL-01,Samsung,2025-11-11,112,Active
+EQ-P05-0603,X-Ray Inspector Plus,X-Ray,P05,WC-XRY-01,Creative Electron,2025-09-03,196,Active
+EQ-P05-0604,ICT Tester Beta,Test Station,P05,WC-TST-01,National Instruments,2016-04-05,234,Active
+EQ-P05-0605,SPI System V,Inspection,P05,WC-INS-01,Koh Young,2016-05-21,173,Active
+EQ-P05-0606,Stencil Printer Plus,Printing,P05,WC-PRT-01,ASM,2023-02-23,92,Active
+EQ-P05-0607,Coating Station 9,Coating,P05,WC-COT-01,Precision Valve,2021-10-16,83,Active
+EQ-P05-0608,Pick and Place Eta,Pick and Place,P05,WC-PPL-02,Samsung,2024-02-15,171,Maintenance
+EQ-P05-0609,X-Ray Inspector V,X-Ray,P05,WC-XRY-01,Nikon Metrology,2018-09-20,83,Maintenance
+EQ-P05-0610,Wave System 8,Wave Solder,P05,WC-WSL-01,Heller Industries,2016-04-20,61,Active
+EQ-P05-0611,Paste Printer 7,Printing,P05,WC-PRT-02,Ekra,2019-07-05,239,Maintenance
+EQ-P05-0612,X-Ray Inspector 1,X-Ray,P05,WC-XRY-01,Nikon Metrology,2020-10-05,246,Active
+EQ-P05-0613,Wave Solder E,Soldering,P05,WC-SOL-02,Pillarhouse,2026-01-19,231,Active
+EQ-P05-0614,SMT Line Pro,SMT Assembly,P05,WC-SMT-03,Assembleon,2026-01-12,146,Active
+EQ-P05-0615,Coating Station B,Coating,P05,WC-COT-01,Precision Valve,2021-05-02,216,Active
+EQ-P05-0616,Vision Inspector 8,Inspection,P05,WC-INS-02,Viscom,2019-04-02,120,Maintenance
+EQ-P05-0617,Paste Printer D,Printing,P05,WC-PRT-02,Ekra,2021-12-17,193,Active
+EQ-P05-0618,Vision Inspector 10,Inspection,P05,WC-INS-02,Omron,2017-11-11,85,Active
+EQ-P05-0619,Selective Solder C,Soldering,P05,WC-SOL-02,Heller Industries,2024-12-27,104,Active
+EQ-P05-0620,Coating Station 9,Coating,P05,WC-COT-01,Speedline,2018-12-25,51,Active
+EQ-P05-0621,Test Bench Epsilon,Test Station,P05,WC-TST-02,Nikon Metrology,2023-03-01,106,Active
+EQ-P05-0622,X-Ray System Pro,X-Ray,P05,WC-XRY-01,Nikon Metrology,2022-11-25,232,Maintenance
+EQ-P05-0623,Assembly Station III,SMT Assembly,P05,WC-SMT-03,Panasonic,2025-12-29,101,Active
+EQ-P05-0624,Wave Solder Plus,Wave Solder,P05,WC-WSL-01,Ersa,2020-04-30,228,Active
+EQ-P05-0625,Functional Tester Alpha,Test Station,P05,WC-TST-02,Keysight,2024-05-07,72,Maintenance
+EQ-P06-0626,Paste Printer E,Printing,P06,WC-PRT-02,MPM,2020-04-22,53,Active
+EQ-P06-0627,Selective Solder Ultra,Soldering,P06,WC-SOL-02,BTU International,2019-07-30,139,Active
+EQ-P06-0628,SPI System 10,Inspection,P06,WC-INS-01,Nordson,2019-09-01,51,Active
+EQ-P06-0629,Stencil Printer Plus,Printing,P06,WC-PRT-01,ASM,2022-10-24,137,Maintenance
+EQ-P06-0630,Wave System 9,Wave Solder,P06,WC-WSL-01,Ersa,2019-10-19,173,Active
+EQ-P06-0631,Coating Station V,Coating,P06,WC-COT-01,Precision Valve,2024-10-22,116,Active
+EQ-P06-0632,P&P Unit 7,Pick and Place,P06,WC-PPL-02,Fuji Corporation,2020-04-27,187,Active
+EQ-P06-0633,AOI Inspector 10,Inspection,P06,WC-INS-02,Nordson,2018-07-23,241,Active
+EQ-P06-0634,Wave Solder 5,Soldering,P06,WC-SOL-01,Nordson,2022-02-23,105,Active
+EQ-P06-0635,SPI System E,Inspection,P06,WC-INS-01,Nordson,2023-06-25,238,Active
+EQ-P06-0636,AOI Inspector H,Inspection,P06,WC-INS-01,Nordson,2016-09-25,208,Active
+EQ-P06-0637,Selective Solder Prime,Soldering,P06,WC-SOL-01,BTU International,2019-03-25,51,Active
+EQ-P06-0638,Wave System 5,Wave Solder,P06,WC-WSL-01,Heller Industries,2020-08-04,197,Active
+EQ-P06-0639,Reflow System G,Reflow,P06,WC-RFL-02,Heller Industries,2017-09-13,197,Active
+EQ-P06-0640,Wave Solder Plus,Wave Solder,P06,WC-WSL-01,Seho,2022-03-21,150,Active
+EQ-P06-0641,ICT Tester 5,Test Station,P06,WC-TST-01,Nikon Metrology,2018-05-20,52,Active
+EQ-P06-0642,P&P Unit 8,Pick and Place,P06,WC-PPL-01,Assembleon,2019-03-30,116,Active
+EQ-P06-0643,SPI System 6,Inspection,P06,WC-INS-02,Nordson,2022-01-04,97,Active
+EQ-P06-0644,P&P Unit 10,Pick and Place,P06,WC-PPL-02,Assembleon,2022-12-23,165,Active
+EQ-P06-0645,Test Bench 2,Test Station,P06,WC-TST-01,Thermotron,2017-02-04,110,Active
+EQ-P06-0646,Stencil Printer V,Printing,P06,WC-PRT-01,Ekra,2017-01-28,52,Active
+EQ-P06-0647,Reflow System 4,Reflow,P06,WC-RFL-02,Heller Industries,2023-04-20,193,Active
+EQ-P06-0648,SMT Cell C,SMT Assembly,P06,WC-SMT-01,Juki,2025-06-10,105,Active
+EQ-P06-0649,Reflow System 1,Reflow,P06,WC-RFL-02,BTU International,2022-01-24,142,Active
+EQ-P06-0650,SPI System Theta,Inspection,P06,WC-INS-01,Omron,2022-03-05,223,Maintenance
+EQ-P06-0651,P&P Unit 7,Pick and Place,P06,WC-PPL-01,Samsung,2022-06-20,222,Active
+EQ-P06-0652,Reflow System IV,Reflow,P06,WC-RFL-02,BTU International,2019-01-11,87,Active
+EQ-P06-0653,Coating Station Zeta,Coating,P06,WC-COT-01,Precision Valve,2024-04-18,137,Active
+EQ-P06-0654,Conformal Coater 2,Coating,P06,WC-COT-01,GPD Global,2016-02-28,163,Active
+EQ-P06-0655,Conformal Coater C,Coating,P06,WC-COT-01,Speedline,2024-01-19,55,Active
+EQ-P06-0656,Pick and Place C,Pick and Place,P06,WC-PPL-01,Juki,2021-08-29,76,Active
+EQ-P06-0657,Reflow Oven 10,Reflow,P06,WC-RFL-01,Rehm,2020-03-27,245,Maintenance
+EQ-P06-0658,Solder Station 9,Soldering,P06,WC-SOL-01,Pillarhouse,2022-08-23,108,Active
+EQ-P06-0659,AOI Inspector Pro,Inspection,P06,WC-INS-01,Saki,2016-09-16,93,Active
+EQ-P06-0660,Conformal Coater Max,Coating,P06,WC-COT-01,GPD Global,2023-01-22,190,Active
+EQ-P06-0661,Wave System Pro,Wave Solder,P06,WC-WSL-01,Pillarhouse,2018-12-09,213,Active
+EQ-P06-0662,Coating Station III,Coating,P06,WC-COT-01,Precision Valve,2022-08-29,143,Active
+EQ-P06-0663,Test Bench Pro,Test Station,P06,WC-TST-01,National Instruments,2016-12-20,244,Active
+EQ-P06-0664,Coating Station Prime,Coating,P06,WC-COT-01,GPD Global,2017-08-22,172,Active
+EQ-P06-0665,Stencil Printer Ultra,Printing,P06,WC-PRT-01,MPM,2021-12-03,98,Active
+EQ-P06-0666,Wave Solder C,Wave Solder,P06,WC-WSL-01,Seho,2018-02-04,238,Active
+EQ-P06-0667,Stencil Printer II,Printing,P06,WC-PRT-02,Ekra,2019-02-06,111,Active
+EQ-P06-0668,X-Ray System I,X-Ray,P06,WC-XRY-01,Nordson,2024-01-02,67,Active
+EQ-P06-0669,Vision Inspector III,Inspection,P06,WC-INS-02,Koh Young,2023-01-23,229,Active
+EQ-P06-0670,Pick and Place Delta,Pick and Place,P06,WC-PPL-01,Juki,2020-02-11,55,Active
+EQ-P06-0671,Solder Station III,Soldering,P06,WC-SOL-02,Pillarhouse,2017-12-16,52,Active
+EQ-P06-0672,Functional Tester 6,Test Station,P06,WC-TST-02,Keysight,2021-05-26,129,Active
+EQ-P06-0673,Reflow Oven 6,Reflow,P06,WC-RFL-02,Vitronics Soltec,2025-03-19,242,Maintenance
+EQ-P06-0674,SMT Line Max,SMT Assembly,P06,WC-SMT-02,Yamaha,2020-11-03,96,Active
+EQ-P06-0675,AOI Inspector H,Inspection,P06,WC-INS-01,Saki,2021-10-18,247,Maintenance
+EQ-P06-0676,P&P Unit Eta,Pick and Place,P06,WC-PPL-01,Yamaha,2020-04-08,220,Maintenance
+EQ-P06-0677,Reflow System C,Reflow,P06,WC-RFL-02,Ersa,2019-01-21,236,Active
+EQ-P06-0678,Wave System V,Wave Solder,P06,WC-WSL-01,Nordson,2018-12-14,126,Active
+EQ-P06-0679,SMT Line II,SMT Assembly,P06,WC-SMT-01,Panasonic,2022-06-22,53,Active
+EQ-P06-0680,SPI System H,Inspection,P06,WC-INS-01,Viscom,2026-01-05,60,Active
+EQ-P06-0681,Reflow System Zeta,Reflow,P06,WC-RFL-01,Rehm,2023-04-29,90,Active
+EQ-P06-0682,X-Ray Inspector 7,X-Ray,P06,WC-XRY-01,Nordson,2018-11-19,89,Active
+EQ-P06-0683,Solder Station 5,Soldering,P06,WC-SOL-02,Heller Industries,2019-11-07,215,Active
+EQ-P06-0684,Reflow System 7,Reflow,P06,WC-RFL-01,Heller Industries,2017-12-27,84,Active
+EQ-P06-0685,Assembly Station Ultra,SMT Assembly,P06,WC-SMT-03,Juki,2022-10-22,188,Active
+EQ-P06-0686,Placement Machine 7,Pick and Place,P06,WC-PPL-01,Samsung,2022-06-26,237,Active
+EQ-P06-0687,X-Ray Inspector Pro,X-Ray,P06,WC-XRY-01,Creative Electron,2024-05-17,165,Active
+EQ-P06-0688,SPI System Alpha,Inspection,P06,WC-INS-02,Viscom,2017-05-30,213,Active
+EQ-P06-0689,Functional Tester 5,Test Station,P06,WC-TST-02,Keysight,2018-01-10,66,Active
+EQ-P06-0690,Wave System Ultra,Wave Solder,P06,WC-WSL-01,Seho,2024-05-20,206,Active
+EQ-P06-0691,Stencil Printer Pro,Printing,P06,WC-PRT-01,MPM,2018-09-22,67,Active
+EQ-P06-0692,Functional Tester Eta,Test Station,P06,WC-TST-01,Koh Young,2020-09-01,99,Active
+EQ-P06-0693,X-Ray System Delta,X-Ray,P06,WC-XRY-01,Viscom,2022-01-02,106,Active
+EQ-P06-0694,Selective Solder Prime,Soldering,P06,WC-SOL-01,BTU International,2016-02-19,70,Active
+EQ-P06-0695,SMT Cell I,SMT Assembly,P06,WC-SMT-03,Yamaha,2016-11-22,144,Active
+EQ-P06-0696,SMT Cell Gamma,SMT Assembly,P06,WC-SMT-02,Assembleon,2017-11-17,68,Active
+EQ-P06-0697,Solder Station G,Soldering,P06,WC-SOL-01,Heller Industries,2020-02-25,148,Active
+EQ-P06-0698,Wave System Eta,Wave Solder,P06,WC-WSL-01,Pillarhouse,2017-07-09,213,Active
+EQ-P06-0699,Reflow Oven D,Reflow,P06,WC-RFL-01,Ersa,2019-12-12,152,Active
+EQ-P06-0700,AOI Inspector 5,Test Station,P06,WC-TST-02,Thermotron,2019-12-11,133,Active
+EQ-P06-0701,Stencil Printer Max,Printing,P06,WC-PRT-02,Speedline,2023-09-18,146,Active
+EQ-P06-0702,SPI System 10,Inspection,P06,WC-INS-02,Omron,2026-02-10,235,Active
+EQ-P06-0703,Vision Inspector A,Inspection,P06,WC-INS-01,Viscom,2016-02-17,127,Active
+EQ-P06-0704,Pick and Place 2,Pick and Place,P06,WC-PPL-02,Fuji Corporation,2019-11-27,180,Active
+EQ-P06-0705,X-Ray Inspector IV,X-Ray,P06,WC-XRY-01,Dage,2022-02-15,89,Active
+EQ-P06-0706,Coating Station 1,Coating,P06,WC-COT-01,Speedline,2017-01-06,126,Active
+EQ-P06-0707,Stencil Printer 5,Printing,P06,WC-PRT-01,ASM,2017-03-22,173,Active
+EQ-P06-0708,X-Ray Inspector 9,X-Ray,P06,WC-XRY-01,Nikon Metrology,2025-03-26,249,Active
+EQ-P06-0709,Conformal Coater Theta,Coating,P06,WC-COT-01,GPD Global,2016-05-11,247,Active
+EQ-P06-0710,X-Ray Inspector 4,X-Ray,P06,WC-XRY-01,Nikon Metrology,2020-03-26,60,Active
+EQ-P06-0711,X-Ray Inspector B,X-Ray,P06,WC-XRY-01,Dage,2025-07-19,222,Active
+EQ-P06-0712,Stencil Printer II,Printing,P06,WC-PRT-01,Speedline,2022-11-12,150,Active
+EQ-P06-0713,Coating Station Ultra,Coating,P06,WC-COT-01,Nordson,2021-08-20,117,Active
+EQ-P06-0714,Wave Solder V,Wave Solder,P06,WC-WSL-01,Seho,2019-11-04,100,Active
+EQ-P06-0715,X-Ray Inspector Epsilon,X-Ray,P06,WC-XRY-01,Dage,2023-02-16,248,Active
+EQ-P06-0716,X-Ray System II,X-Ray,P06,WC-XRY-01,Nikon Metrology,2022-01-06,139,Active
+EQ-P06-0717,Conformal Coater C,Coating,P06,WC-COT-01,Speedline,2022-03-11,207,Active
+EQ-P06-0718,Reflow System Gamma,Reflow,P06,WC-RFL-01,Rehm,2016-12-08,109,Active
+EQ-P06-0719,Coating Station Delta,Coating,P06,WC-COT-01,Asymtek,2023-05-22,208,Maintenance
+EQ-P06-0720,Vision Inspector Theta,Inspection,P06,WC-INS-02,Koh Young,2022-09-10,165,Active
+EQ-P06-0721,Coating Station Max,Coating,P06,WC-COT-01,Asymtek,2020-03-30,242,Active
+EQ-P06-0722,Reflow Oven 9,Reflow,P06,WC-RFL-01,Rehm,2019-07-30,219,Active
+EQ-P06-0723,SPI System E,Inspection,P06,WC-INS-01,Nordson,2017-04-06,228,Active
+EQ-P06-0724,SMT Line Epsilon,SMT Assembly,P06,WC-SMT-03,Juki,2021-10-03,219,Active
+EQ-P06-0725,Conformal Coater 9,Coating,P06,WC-COT-01,Nordson,2023-07-10,147,Active
+EQ-P06-0726,Selective Solder Max,Soldering,P06,WC-SOL-02,Pillarhouse,2025-02-15,97,Active
+EQ-P06-0727,Reflow Oven H,Reflow,P06,WC-RFL-01,Rehm,2020-03-05,128,Active
+EQ-P06-0728,Paste Printer 7,Printing,P06,WC-PRT-01,Ekra,2022-02-16,210,Active
+EQ-P06-0729,Wave System 9,Wave Solder,P06,WC-WSL-01,Ersa,2016-02-16,57,Maintenance
+EQ-P06-0730,SPI System 10,Inspection,P06,WC-INS-01,Nordson,2018-09-30,85,Active
+EQ-P06-0731,Paste Printer H,Printing,P06,WC-PRT-01,ASM,2019-09-09,89,Active
+EQ-P06-0732,SPI System Max,Inspection,P06,WC-INS-02,Viscom,2024-08-20,102,Active
+EQ-P06-0733,X-Ray Inspector 4,X-Ray,P06,WC-XRY-01,Creative Electron,2018-05-23,230,Active
+EQ-P06-0734,Functional Tester 5,Test Station,P06,WC-TST-01,Nikon Metrology,2025-05-09,192,Active
+EQ-P06-0735,Solder Station Beta,Soldering,P06,WC-SOL-02,Heller Industries,2017-07-12,131,Active
+EQ-P06-0736,Paste Printer 2,Printing,P06,WC-PRT-02,Speedline,2024-05-29,249,Active
+EQ-P06-0737,AOI Inspector G,Test Station,P06,WC-TST-01,Koh Young,2019-06-05,109,Active
+EQ-P06-0738,SMT Cell V,SMT Assembly,P06,WC-SMT-01,Yamaha,2024-08-10,178,Active
+EQ-P06-0739,Reflow System Prime,Reflow,P06,WC-RFL-01,Vitronics Soltec,2020-10-19,85,Active
+EQ-P06-0740,Pick and Place 2,Pick and Place,P06,WC-PPL-02,Yamaha,2021-06-25,106,Active
+EQ-P06-0741,Pick and Place III,Pick and Place,P06,WC-PPL-01,Fuji Corporation,2016-05-22,207,Active
+EQ-P06-0742,Conformal Coater 10,Coating,P06,WC-COT-01,Precision Valve,2017-05-29,60,Active
+EQ-P06-0743,Stencil Printer Pro,Printing,P06,WC-PRT-02,MPM,2024-11-20,165,Active
+EQ-P06-0744,SMT Cell 10,SMT Assembly,P06,WC-SMT-03,Panasonic,2017-11-13,60,Active
+EQ-P06-0745,Wave System III,Wave Solder,P06,WC-WSL-01,Heller Industries,2021-08-25,127,Active
+EQ-P06-0746,SPI System 3,Inspection,P06,WC-INS-01,Saki,2019-03-28,63,Active
+EQ-P06-0747,Test Bench Plus,Test Station,P06,WC-TST-02,Nikon Metrology,2024-11-04,96,Active
+EQ-P06-0748,Wave System 5,Wave Solder,P06,WC-WSL-01,Pillarhouse,2021-01-21,56,Active
+EQ-P06-0749,X-Ray Inspector 1,X-Ray,P06,WC-XRY-01,Dage,2022-06-24,227,Active
+EQ-P06-0750,Test Bench III,Test Station,P06,WC-TST-01,Keysight,2019-01-01,142,Active
+EQ-P07-0751,Paste Printer Ultra,Printing,P07,WC-PRT-01,ASM,2021-11-05,61,Active
+EQ-P07-0752,Coating Station B,Coating,P07,WC-COT-01,Speedline,2024-02-09,246,Active
+EQ-P07-0753,Paste Printer 3,Printing,P07,WC-PRT-02,MPM,2019-02-02,96,Active
+EQ-P07-0754,AOI Inspector Alpha,Test Station,P07,WC-TST-01,Koh Young,2020-12-20,177,Active
+EQ-P07-0755,Wave Solder F,Wave Solder,P07,WC-WSL-01,Heller Industries,2019-07-06,218,Active
+EQ-P07-0756,Stencil Printer H,Printing,P07,WC-PRT-01,Speedline,2016-03-21,190,Active
+EQ-P07-0757,Wave Solder B,Wave Solder,P07,WC-WSL-01,Pillarhouse,2025-06-30,217,Active
+EQ-P07-0758,AOI Inspector Zeta,Test Station,P07,WC-TST-02,Keysight,2025-07-25,77,Active
+EQ-P07-0759,Functional Tester IV,Test Station,P07,WC-TST-02,Koh Young,2017-09-16,198,Active
+EQ-P07-0760,Assembly Station 8,SMT Assembly,P07,WC-SMT-02,Fuji Corporation,2021-11-11,67,Active
+EQ-P07-0761,Wave System A,Wave Solder,P07,WC-WSL-01,Heller Industries,2024-09-29,227,Active
+EQ-P07-0762,Coating Station F,Coating,P07,WC-COT-01,Speedline,2019-04-02,64,Active
+EQ-P07-0763,Wave System II,Wave Solder,P07,WC-WSL-01,Heller Industries,2019-04-15,131,Active
+EQ-P07-0764,X-Ray Inspector Prime,X-Ray,P07,WC-XRY-01,Creative Electron,2020-04-14,236,Active
+EQ-P07-0765,Reflow System E,Reflow,P07,WC-RFL-01,Heller Industries,2026-02-04,80,Active
+EQ-P07-0766,Wave Solder Gamma,Soldering,P07,WC-SOL-02,Heller Industries,2022-05-15,139,Active
+EQ-P07-0767,Placement Machine 3,Pick and Place,P07,WC-PPL-01,Yamaha,2023-04-05,67,Active
+EQ-P07-0768,Wave Solder Theta,Wave Solder,P07,WC-WSL-01,Nordson,2018-06-03,135,Active
+EQ-P07-0769,X-Ray Inspector E,X-Ray,P07,WC-XRY-01,Creative Electron,2022-05-29,136,Maintenance
+EQ-P07-0770,Reflow Oven V,Reflow,P07,WC-RFL-01,Ersa,2024-05-15,210,Active
+EQ-P07-0771,Wave System Delta,Wave Solder,P07,WC-WSL-01,Ersa,2016-09-30,183,Active
+EQ-P07-0772,Coating Station 6,Coating,P07,WC-COT-01,Speedline,2017-02-23,140,Active
+EQ-P07-0773,AOI Inspector 9,Test Station,P07,WC-TST-01,National Instruments,2019-02-01,186,Active
+EQ-P07-0774,X-Ray Inspector Theta,X-Ray,P07,WC-XRY-01,Creative Electron,2016-06-01,250,Active
+EQ-P07-0775,Conformal Coater Zeta,Coating,P07,WC-COT-01,Nordson,2020-07-16,110,Active
+EQ-P07-0776,AOI Inspector Theta,Inspection,P07,WC-INS-02,Nordson,2021-12-01,250,Active
+EQ-P07-0777,Placement Machine Beta,Pick and Place,P07,WC-PPL-02,Yamaha,2017-02-25,173,Maintenance
+EQ-P07-0778,ICT Tester Pro,Test Station,P07,WC-TST-02,Koh Young,2022-08-19,248,Active
+EQ-P07-0779,Solder Station Gamma,Soldering,P07,WC-SOL-01,Nordson,2020-12-17,149,Active
+EQ-P07-0780,Wave System Gamma,Wave Solder,P07,WC-WSL-01,Heller Industries,2018-05-29,202,Active
+EQ-P07-0781,Coating Station Pro,Coating,P07,WC-COT-01,Precision Valve,2017-07-09,218,Active
+EQ-P07-0782,SMT Cell F,SMT Assembly,P07,WC-SMT-02,Assembleon,2022-07-07,101,Active
+EQ-P07-0783,SPI System Theta,Inspection,P07,WC-INS-02,Viscom,2023-01-21,88,Active
+EQ-P07-0784,Solder Station Max,Soldering,P07,WC-SOL-01,BTU International,2022-03-09,190,Active
+EQ-P07-0785,Functional Tester Epsilon,Test Station,P07,WC-TST-01,National Instruments,2022-08-15,206,Active
+EQ-P07-0786,Wave Solder Beta,Wave Solder,P07,WC-WSL-01,Seho,2020-10-31,222,Active
+EQ-P07-0787,Paste Printer 10,Printing,P07,WC-PRT-01,DEK,2024-02-08,230,Active
+EQ-P07-0788,X-Ray System 6,X-Ray,P07,WC-XRY-01,Viscom,2016-12-11,100,Active
+EQ-P07-0789,Wave Solder Zeta,Wave Solder,P07,WC-WSL-01,Heller Industries,2016-12-30,228,Active
+EQ-P07-0790,Reflow System G,Reflow,P07,WC-RFL-02,Vitronics Soltec,2023-08-09,86,Active
+EQ-P07-0791,X-Ray System D,X-Ray,P07,WC-XRY-01,Nordson,2018-04-08,220,Active
+EQ-P07-0792,Coating Station Epsilon,Coating,P07,WC-COT-01,Precision Valve,2020-10-13,78,Active
+EQ-P07-0793,Reflow System A,Reflow,P07,WC-RFL-02,Heller Industries,2020-06-01,76,Active
+EQ-P07-0794,Wave Solder Max,Soldering,P07,WC-SOL-01,Pillarhouse,2020-12-10,152,Active
+EQ-P07-0795,Placement Machine C,Pick and Place,P07,WC-PPL-01,Samsung,2020-09-14,148,Active
+EQ-P07-0796,P&P Unit 6,Pick and Place,P07,WC-PPL-02,Samsung,2020-01-03,227,Active
+EQ-P07-0797,Solder Station IV,Soldering,P07,WC-SOL-02,Nordson,2022-06-19,192,Active
+EQ-P07-0798,Reflow System Epsilon,Reflow,P07,WC-RFL-02,Heller Industries,2019-05-28,77,Active
+EQ-P07-0799,X-Ray System Delta,X-Ray,P07,WC-XRY-01,Viscom,2025-02-05,105,Active
+EQ-P07-0800,X-Ray Inspector III,X-Ray,P07,WC-XRY-01,Nikon Metrology,2020-02-26,124,Active
+EQ-P07-0801,X-Ray Inspector 5,X-Ray,P07,WC-XRY-01,Viscom,2022-10-02,195,Active
+EQ-P07-0802,AOI Inspector Alpha,Inspection,P07,WC-INS-02,Saki,2019-04-04,180,Active
+EQ-P07-0803,AOI Inspector Ultra,Test Station,P07,WC-TST-01,National Instruments,2025-07-08,50,Active
+EQ-P07-0804,Coating Station H,Coating,P07,WC-COT-01,Nordson,2021-04-09,229,Active
+EQ-P07-0805,Conformal Coater II,Coating,P07,WC-COT-01,Precision Valve,2020-01-01,104,Active
+EQ-P07-0806,Reflow System 8,Reflow,P07,WC-RFL-01,Heller Industries,2016-09-10,156,Active
+EQ-P07-0807,Test Bench Beta,Test Station,P07,WC-TST-01,Koh Young,2024-07-01,234,Active
+EQ-P07-0808,Stencil Printer I,Printing,P07,WC-PRT-01,Ekra,2016-06-19,166,Active
+EQ-P07-0809,X-Ray System Plus,X-Ray,P07,WC-XRY-01,Viscom,2021-05-10,191,Active
+EQ-P07-0810,Stencil Printer II,Printing,P07,WC-PRT-01,MPM,2019-05-02,51,Active
+EQ-P07-0811,P&P Unit Max,Pick and Place,P07,WC-PPL-02,Samsung,2019-08-26,143,Active
+EQ-P07-0812,SMT Cell 8,SMT Assembly,P07,WC-SMT-02,Assembleon,2024-11-04,198,Active
+EQ-P07-0813,Wave Solder Pro,Soldering,P07,WC-SOL-02,Heller Industries,2025-03-27,183,Active
+EQ-P07-0814,Selective Solder Epsilon,Soldering,P07,WC-SOL-02,Heller Industries,2018-06-11,212,Active
+EQ-P07-0815,X-Ray System Max,X-Ray,P07,WC-XRY-01,Nordson,2017-05-20,52,Active
+EQ-P07-0816,Wave System 7,Wave Solder,P07,WC-WSL-01,Seho,2017-02-28,125,Active
+EQ-P07-0817,Assembly Station 1,SMT Assembly,P07,WC-SMT-03,Assembleon,2025-06-04,211,Active
+EQ-P07-0818,AOI Inspector Beta,Test Station,P07,WC-TST-01,Thermotron,2022-11-24,174,Active
+EQ-P07-0819,Wave System A,Wave Solder,P07,WC-WSL-01,Heller Industries,2019-03-17,121,Active
+EQ-P07-0820,Vision Inspector D,Inspection,P07,WC-INS-01,Koh Young,2019-06-24,239,Active
+EQ-P07-0821,Reflow System H,Reflow,P07,WC-RFL-01,Vitronics Soltec,2020-09-03,96,Active
+EQ-P07-0822,SMT Line B,SMT Assembly,P07,WC-SMT-01,Yamaha,2016-09-20,176,Active
+EQ-P07-0823,Paste Printer C,Printing,P07,WC-PRT-01,Speedline,2023-10-01,197,Active
+EQ-P07-0824,Coating Station Delta,Coating,P07,WC-COT-01,Nordson,2024-03-26,168,Active
+EQ-P07-0825,SPI System 9,Inspection,P07,WC-INS-01,Saki,2020-10-16,117,Active
+EQ-P07-0826,Paste Printer 9,Printing,P07,WC-PRT-02,DEK,2018-07-03,130,Maintenance
+EQ-P07-0827,SMT Cell 7,SMT Assembly,P07,WC-SMT-03,Fuji Corporation,2016-08-23,160,Active
+EQ-P07-0828,SPI System Eta,Inspection,P07,WC-INS-02,Omron,2023-04-02,217,Active
+EQ-P07-0829,Reflow System D,Reflow,P07,WC-RFL-01,Heller Industries,2022-08-07,190,Active
+EQ-P07-0830,Assembly Station Eta,SMT Assembly,P07,WC-SMT-01,Fuji Corporation,2020-03-22,76,Active
+EQ-P07-0831,Conformal Coater E,Coating,P07,WC-COT-01,Asymtek,2025-09-24,56,Active
+EQ-P07-0832,SMT Line Theta,SMT Assembly,P07,WC-SMT-03,Assembleon,2018-03-04,80,Active
+EQ-P07-0833,X-Ray Inspector Theta,X-Ray,P07,WC-XRY-01,Dage,2018-04-24,97,Active
+EQ-P07-0834,Reflow System II,Reflow,P07,WC-RFL-02,BTU International,2018-05-08,220,Active
+EQ-P07-0835,Coating Station 2,Coating,P07,WC-COT-01,GPD Global,2017-05-25,65,Active
+EQ-P07-0836,Conformal Coater D,Coating,P07,WC-COT-01,Nordson,2021-03-04,67,Active
+EQ-P07-0837,Pick and Place Prime,Pick and Place,P07,WC-PPL-02,Samsung,2024-11-23,86,Active
+EQ-P07-0838,Paste Printer 1,Printing,P07,WC-PRT-01,Ekra,2024-12-14,58,Active
+EQ-P07-0839,X-Ray Inspector Prime,X-Ray,P07,WC-XRY-01,Nordson,2024-06-11,217,Active
+EQ-P07-0840,SMT Line 6,SMT Assembly,P07,WC-SMT-02,Juki,2021-09-22,197,Active
+EQ-P07-0841,Reflow System Epsilon,Reflow,P07,WC-RFL-02,Ersa,2020-01-21,107,Active
+EQ-P07-0842,Reflow System 4,Reflow,P07,WC-RFL-02,BTU International,2021-08-15,64,Active
+EQ-P07-0843,Solder Station IV,Soldering,P07,WC-SOL-02,Pillarhouse,2017-08-02,246,Active
+EQ-P07-0844,P&P Unit E,Pick and Place,P07,WC-PPL-01,Fuji Corporation,2022-10-05,228,Active
+EQ-P07-0845,Solder Station III,Soldering,P07,WC-SOL-02,Pillarhouse,2017-11-13,98,Active
+EQ-P07-0846,P&P Unit 9,Pick and Place,P07,WC-PPL-01,Yamaha,2025-05-28,188,Active
+EQ-P07-0847,Reflow Oven Gamma,Reflow,P07,WC-RFL-02,Rehm,2022-04-23,64,Active
+EQ-P07-0848,SMT Line Pro,SMT Assembly,P07,WC-SMT-01,Juki,2020-12-21,223,Active
+EQ-P07-0849,Wave Solder Gamma,Wave Solder,P07,WC-WSL-01,Pillarhouse,2017-11-12,86,Active
+EQ-P07-0850,SMT Line H,SMT Assembly,P07,WC-SMT-03,Juki,2018-04-01,216,Active
+EQ-P07-0851,Test Bench IV,Test Station,P07,WC-TST-02,Keysight,2019-04-05,93,Active
+EQ-P07-0852,Wave Solder G,Soldering,P07,WC-SOL-01,BTU International,2025-05-28,101,Active
+EQ-P07-0853,Stencil Printer 5,Printing,P07,WC-PRT-01,MPM,2016-09-24,104,Active
+EQ-P07-0854,X-Ray Inspector Theta,X-Ray,P07,WC-XRY-01,Dage,2023-01-16,86,Active
+EQ-P07-0855,ICT Tester H,Test Station,P07,WC-TST-01,National Instruments,2019-08-03,60,Active
+EQ-P07-0856,X-Ray Inspector Prime,X-Ray,P07,WC-XRY-01,Viscom,2025-03-17,51,Active
+EQ-P07-0857,Wave Solder V,Soldering,P07,WC-SOL-02,Nordson,2018-05-08,82,Active
+EQ-P07-0858,SPI System H,Inspection,P07,WC-INS-02,Viscom,2024-02-27,206,Active
+EQ-P07-0859,X-Ray Inspector 4,X-Ray,P07,WC-XRY-01,Dage,2022-03-19,157,Active
+EQ-P07-0860,Placement Machine Eta,Pick and Place,P07,WC-PPL-01,Fuji Corporation,2019-03-04,142,Active
+EQ-P07-0861,Wave System F,Wave Solder,P07,WC-WSL-01,Nordson,2023-01-05,63,Active
+EQ-P07-0862,Functional Tester C,Test Station,P07,WC-TST-02,Nikon Metrology,2018-08-07,61,Active
+EQ-P07-0863,Conformal Coater 1,Coating,P07,WC-COT-01,GPD Global,2022-05-13,207,Active
+EQ-P07-0864,Reflow Oven Max,Reflow,P07,WC-RFL-01,BTU International,2024-02-21,90,Active
+EQ-P07-0865,Reflow Oven H,Reflow,P07,WC-RFL-01,Rehm,2018-01-09,163,Active
+EQ-P07-0866,Conformal Coater G,Coating,P07,WC-COT-01,Precision Valve,2017-05-18,78,Active
+EQ-P07-0867,Solder Station 9,Soldering,P07,WC-SOL-02,Heller Industries,2023-08-22,68,Active
+EQ-P07-0868,Reflow Oven F,Reflow,P07,WC-RFL-02,BTU International,2019-04-12,166,Active
+EQ-P07-0869,Coating Station 7,Coating,P07,WC-COT-01,Asymtek,2023-02-02,101,Active
+EQ-P07-0870,Assembly Station A,SMT Assembly,P07,WC-SMT-01,Assembleon,2024-11-12,169,Active
+EQ-P07-0871,AOI Inspector C,Test Station,P07,WC-TST-01,National Instruments,2017-04-05,213,Maintenance
+EQ-P07-0872,Test Bench I,Test Station,P07,WC-TST-01,Thermotron,2016-07-02,183,Active
+EQ-P07-0873,P&P Unit 2,Pick and Place,P07,WC-PPL-02,Samsung,2025-12-13,236,Active
+EQ-P07-0874,P&P Unit G,Pick and Place,P07,WC-PPL-02,Fuji Corporation,2019-06-24,88,Maintenance
+EQ-P07-0875,SMT Line V,SMT Assembly,P07,WC-SMT-01,Juki,2017-11-20,246,Active
+EQ-P08-0876,Paste Printer Eta,Printing,P08,WC-PRT-02,ASM,2021-01-14,176,Active
+EQ-P08-0877,Wave Solder A,Wave Solder,P08,WC-WSL-01,Heller Industries,2022-02-03,125,Active
+EQ-P08-0878,Selective Solder 4,Soldering,P08,WC-SOL-02,BTU International,2024-04-19,230,Active
+EQ-P08-0879,X-Ray System IV,X-Ray,P08,WC-XRY-01,Creative Electron,2017-06-16,85,Active
+EQ-P08-0880,Paste Printer Alpha,Printing,P08,WC-PRT-02,Ekra,2016-06-18,210,Active
+EQ-P08-0881,Conformal Coater II,Coating,P08,WC-COT-01,Speedline,2017-09-02,119,Active
+EQ-P08-0882,X-Ray Inspector 6,X-Ray,P08,WC-XRY-01,Creative Electron,2017-11-11,64,Active
+EQ-P08-0883,Conformal Coater 8,Coating,P08,WC-COT-01,Nordson,2020-11-22,208,Active
+EQ-P08-0884,Coating Station A,Coating,P08,WC-COT-01,Asymtek,2022-05-11,111,Active
+EQ-P08-0885,Reflow Oven 5,Reflow,P08,WC-RFL-01,Rehm,2022-02-27,118,Active
+EQ-P08-0886,Stencil Printer 8,Printing,P08,WC-PRT-01,MPM,2022-03-29,165,Active
+EQ-P08-0887,Wave System III,Wave Solder,P08,WC-WSL-01,Heller Industries,2019-02-24,144,Active
+EQ-P08-0888,Solder Station Zeta,Soldering,P08,WC-SOL-02,Heller Industries,2021-09-24,95,Active
+EQ-P08-0889,Wave Solder Theta,Soldering,P08,WC-SOL-01,BTU International,2018-04-18,87,Active
+EQ-P08-0890,P&P Unit I,Pick and Place,P08,WC-PPL-01,Samsung,2018-06-17,188,Maintenance
+EQ-P08-0891,Reflow System Beta,Reflow,P08,WC-RFL-02,Vitronics Soltec,2022-11-04,98,Active
+EQ-P08-0892,P&P Unit 6,Pick and Place,P08,WC-PPL-02,Samsung,2018-10-05,215,Active
+EQ-P08-0893,Reflow System 4,Reflow,P08,WC-RFL-02,Rehm,2019-10-02,83,Active
+EQ-P08-0894,AOI Inspector V,Inspection,P08,WC-INS-02,Nordson,2021-12-10,123,Active
+EQ-P08-0895,Assembly Station IV,SMT Assembly,P08,WC-SMT-02,Panasonic,2024-03-31,208,Maintenance
+EQ-P08-0896,Wave Solder B,Wave Solder,P08,WC-WSL-01,Ersa,2024-04-21,110,Active
+EQ-P08-0897,Conformal Coater 1,Coating,P08,WC-COT-01,Speedline,2021-12-19,97,Active
+EQ-P08-0898,SMT Line 8,SMT Assembly,P08,WC-SMT-02,Yamaha,2021-01-31,188,Maintenance
+EQ-P08-0899,Wave Solder 10,Wave Solder,P08,WC-WSL-01,Ersa,2020-07-06,246,Active
+EQ-P08-0900,Reflow Oven Max,Reflow,P08,WC-RFL-01,Vitronics Soltec,2020-06-03,134,Active
+EQ-P08-0901,Vision Inspector B,Inspection,P08,WC-INS-02,Saki,2017-02-22,194,Active
+EQ-P08-0902,Reflow System Gamma,Reflow,P08,WC-RFL-01,Vitronics Soltec,2024-07-19,223,Active
+EQ-P08-0903,Vision Inspector G,Inspection,P08,WC-INS-02,Koh Young,2021-02-10,141,Active
+EQ-P08-0904,SMT Line Pro,SMT Assembly,P08,WC-SMT-03,Assembleon,2023-08-16,250,Maintenance
+EQ-P08-0905,AOI Inspector Max,Inspection,P08,WC-INS-01,Nordson,2016-08-02,164,Active
+EQ-P08-0906,Solder Station Prime,Soldering,P08,WC-SOL-02,Nordson,2022-07-20,204,Active
+EQ-P08-0907,SMT Line II,SMT Assembly,P08,WC-SMT-02,Yamaha,2021-12-19,148,Active
+EQ-P08-0908,SPI System III,Inspection,P08,WC-INS-02,Omron,2016-04-22,193,Active
+EQ-P08-0909,Reflow System C,Reflow,P08,WC-RFL-02,Ersa,2017-01-28,236,Maintenance
+EQ-P08-0910,Stencil Printer B,Printing,P08,WC-PRT-01,Speedline,2023-10-13,127,Active
+EQ-P08-0911,Wave System Zeta,Wave Solder,P08,WC-WSL-01,Ersa,2026-01-14,154,Active
+EQ-P08-0912,Vision Inspector IV,Inspection,P08,WC-INS-01,Saki,2018-02-23,195,Active
+EQ-P08-0913,ICT Tester 3,Test Station,P08,WC-TST-01,Koh Young,2019-11-26,175,Active
+EQ-P08-0914,SPI System Ultra,Inspection,P08,WC-INS-02,Viscom,2017-10-25,168,Active
+EQ-P08-0915,Assembly Station V,SMT Assembly,P08,WC-SMT-02,Panasonic,2024-09-20,217,Active
+EQ-P08-0916,SPI System H,Inspection,P08,WC-INS-01,Saki,2025-10-17,80,Active
+EQ-P08-0917,Reflow System II,Reflow,P08,WC-RFL-02,BTU International,2016-05-17,116,Active
+EQ-P08-0918,Reflow Oven 1,Reflow,P08,WC-RFL-02,BTU International,2024-04-14,198,Active
+EQ-P08-0919,Conformal Coater C,Coating,P08,WC-COT-01,Precision Valve,2025-07-09,119,Active
+EQ-P08-0920,Conformal Coater Pro,Coating,P08,WC-COT-01,Nordson,2018-12-12,69,Active
+EQ-P08-0921,AOI Inspector 5,Test Station,P08,WC-TST-01,Keysight,2016-11-03,225,Active
+EQ-P08-0922,Vision Inspector 7,Inspection,P08,WC-INS-01,Omron,2016-11-17,86,Active
+EQ-P08-0923,Wave System I,Wave Solder,P08,WC-WSL-01,Ersa,2022-04-19,91,Active
+EQ-P08-0924,Functional Tester Ultra,Test Station,P08,WC-TST-01,Thermotron,2019-03-27,226,Active
+EQ-P08-0925,Wave System IV,Wave Solder,P08,WC-WSL-01,Nordson,2025-04-04,79,Active
+EQ-P08-0926,Assembly Station 8,SMT Assembly,P08,WC-SMT-02,Juki,2024-07-21,163,Active
+EQ-P08-0927,X-Ray Inspector 4,X-Ray,P08,WC-XRY-01,Creative Electron,2025-10-16,240,Active
+EQ-P08-0928,Placement Machine G,Pick and Place,P08,WC-PPL-01,Fuji Corporation,2022-08-31,82,Active
+EQ-P08-0929,Solder Station Beta,Soldering,P08,WC-SOL-01,Ersa,2017-06-04,173,Active
+EQ-P08-0930,SMT Line Plus,SMT Assembly,P08,WC-SMT-01,Panasonic,2019-06-18,65,Active
+EQ-P08-0931,SPI System Alpha,Inspection,P08,WC-INS-01,Koh Young,2017-08-26,74,Active
+EQ-P08-0932,X-Ray Inspector 7,X-Ray,P08,WC-XRY-01,Dage,2025-10-14,73,Active
+EQ-P08-0933,SPI System C,Inspection,P08,WC-INS-02,Viscom,2016-07-10,178,Active
+EQ-P08-0934,X-Ray Inspector Alpha,X-Ray,P08,WC-XRY-01,Dage,2020-03-07,105,Active
+EQ-P08-0935,Vision Inspector Eta,Inspection,P08,WC-INS-01,Nordson,2023-09-18,179,Active
+EQ-P08-0936,Reflow System Eta,Reflow,P08,WC-RFL-01,Vitronics Soltec,2024-02-01,140,Maintenance
+EQ-P08-0937,Paste Printer Theta,Printing,P08,WC-PRT-01,Ekra,2017-07-29,130,Active
+EQ-P08-0938,Wave Solder 8,Soldering,P08,WC-SOL-01,Nordson,2018-03-18,123,Active
+EQ-P08-0939,Assembly Station Theta,SMT Assembly,P08,WC-SMT-02,Fuji Corporation,2021-10-18,122,Active
+EQ-P08-0940,Vision Inspector I,Inspection,P08,WC-INS-01,Saki,2022-11-08,159,Active
+EQ-P08-0941,Solder Station Alpha,Soldering,P08,WC-SOL-02,Ersa,2018-07-21,175,Active
+EQ-P08-0942,Stencil Printer B,Printing,P08,WC-PRT-01,Speedline,2021-09-07,152,Active
+EQ-P08-0943,Wave Solder E,Soldering,P08,WC-SOL-01,Heller Industries,2022-04-25,101,Active
+EQ-P08-0944,Paste Printer Prime,Printing,P08,WC-PRT-01,DEK,2022-12-28,245,Active
+EQ-P08-0945,X-Ray System 7,X-Ray,P08,WC-XRY-01,Creative Electron,2020-10-11,220,Active
+EQ-P08-0946,Stencil Printer IV,Printing,P08,WC-PRT-02,Speedline,2024-11-25,81,Active
+EQ-P08-0947,Reflow Oven Eta,Reflow,P08,WC-RFL-01,Heller Industries,2017-11-02,63,Active
+EQ-P08-0948,Reflow System 5,Reflow,P08,WC-RFL-01,BTU International,2024-05-26,127,Active
+EQ-P08-0949,Wave Solder E,Soldering,P08,WC-SOL-02,BTU International,2022-10-27,219,Active
+EQ-P08-0950,Wave Solder Gamma,Wave Solder,P08,WC-WSL-01,Ersa,2021-04-15,80,Active
+EQ-P08-0951,Conformal Coater Gamma,Coating,P08,WC-COT-01,Precision Valve,2025-09-29,95,Active
+EQ-P08-0952,SPI System A,Inspection,P08,WC-INS-02,Nordson,2022-08-11,233,Active
+EQ-P08-0953,Selective Solder Ultra,Soldering,P08,WC-SOL-02,Nordson,2018-06-05,188,Active
+EQ-P08-0954,Reflow Oven 10,Reflow,P08,WC-RFL-01,Rehm,2023-02-28,176,Active
+EQ-P08-0955,Paste Printer 5,Printing,P08,WC-PRT-02,ASM,2025-06-04,57,Active
+EQ-P08-0956,Test Bench 6,Test Station,P08,WC-TST-02,National Instruments,2021-11-05,74,Active
+EQ-P08-0957,Coating Station H,Coating,P08,WC-COT-01,Precision Valve,2023-05-03,110,Active
+EQ-P08-0958,X-Ray System Theta,X-Ray,P08,WC-XRY-01,Nikon Metrology,2022-04-30,93,Active
+EQ-P08-0959,Conformal Coater Plus,Coating,P08,WC-COT-01,Nordson,2021-05-22,118,Active
+EQ-P08-0960,Reflow System 9,Reflow,P08,WC-RFL-01,Rehm,2019-09-19,149,Active
+EQ-P08-0961,Selective Solder F,Soldering,P08,WC-SOL-01,Ersa,2022-05-06,177,Active
+EQ-P08-0962,Conformal Coater II,Coating,P08,WC-COT-01,Asymtek,2023-11-07,177,Active
+EQ-P08-0963,Wave Solder 1,Soldering,P08,WC-SOL-01,Nordson,2025-07-31,126,Maintenance
+EQ-P08-0964,Stencil Printer 6,Printing,P08,WC-PRT-01,Ekra,2023-01-18,67,Active
+EQ-P08-0965,Wave Solder 7,Wave Solder,P08,WC-WSL-01,Seho,2017-03-11,69,Active
+EQ-P08-0966,SPI System Max,Inspection,P08,WC-INS-02,Viscom,2022-08-07,101,Active
+EQ-P08-0967,Vision Inspector Ultra,Inspection,P08,WC-INS-02,Viscom,2024-02-02,54,Active
+EQ-P08-0968,Wave Solder IV,Wave Solder,P08,WC-WSL-01,Pillarhouse,2023-02-09,213,Active
+EQ-P08-0969,X-Ray Inspector 8,X-Ray,P08,WC-XRY-01,Viscom,2020-12-04,87,Active
+EQ-P08-0970,SPI System Epsilon,Inspection,P08,WC-INS-02,Saki,2019-01-02,102,Active
+EQ-P08-0971,SPI System H,Inspection,P08,WC-INS-01,Omron,2021-07-24,111,Active
+EQ-P08-0972,P&P Unit IV,Pick and Place,P08,WC-PPL-01,Yamaha,2020-09-01,193,Maintenance
+EQ-P08-0973,Stencil Printer 2,Printing,P08,WC-PRT-01,DEK,2024-08-01,57,Active
+EQ-P08-0974,Vision Inspector Gamma,Inspection,P08,WC-INS-01,Viscom,2018-01-04,174,Active
+EQ-P08-0975,SMT Cell 4,SMT Assembly,P08,WC-SMT-02,Fuji Corporation,2016-05-22,66,Maintenance
+EQ-P08-0976,Paste Printer A,Printing,P08,WC-PRT-01,MPM,2023-06-20,78,Active
+EQ-P08-0977,Wave System Zeta,Wave Solder,P08,WC-WSL-01,Heller Industries,2023-06-11,203,Active
+EQ-P08-0978,Coating Station II,Coating,P08,WC-COT-01,GPD Global,2023-09-02,86,Active
+EQ-P08-0979,P&P Unit 1,Pick and Place,P08,WC-PPL-02,Juki,2016-06-08,200,Active
+EQ-P08-0980,Wave System Max,Wave Solder,P08,WC-WSL-01,Ersa,2021-05-12,171,Active
+EQ-P08-0981,SPI System 8,Inspection,P08,WC-INS-02,Nordson,2016-11-25,128,Active
+EQ-P08-0982,X-Ray Inspector 1,X-Ray,P08,WC-XRY-01,Nikon Metrology,2019-12-01,148,Active
+EQ-P08-0983,Conformal Coater 9,Coating,P08,WC-COT-01,Nordson,2026-01-09,150,Maintenance
+EQ-P08-0984,AOI Inspector 4,Inspection,P08,WC-INS-01,Omron,2023-10-03,91,Maintenance
+EQ-P08-0985,Conformal Coater Zeta,Coating,P08,WC-COT-01,Precision Valve,2016-11-18,249,Maintenance
+EQ-P08-0986,Reflow System Eta,Reflow,P08,WC-RFL-02,Ersa,2016-11-13,91,Active
+EQ-P08-0987,Wave System Ultra,Wave Solder,P08,WC-WSL-01,Heller Industries,2017-11-03,133,Active
+EQ-P08-0988,SMT Cell D,SMT Assembly,P08,WC-SMT-03,Fuji Corporation,2019-01-17,163,Active
+EQ-P08-0989,Functional Tester 4,Test Station,P08,WC-TST-02,Keysight,2022-08-05,197,Active
+EQ-P08-0990,ICT Tester 5,Test Station,P08,WC-TST-01,Koh Young,2021-01-18,172,Active
+EQ-P08-0991,AOI Inspector 3,Test Station,P08,WC-TST-01,National Instruments,2023-11-20,71,Active
+EQ-P08-0992,Functional Tester Beta,Test Station,P08,WC-TST-02,Nikon Metrology,2025-11-08,192,Active
+EQ-P08-0993,Pick and Place 1,Pick and Place,P08,WC-PPL-02,Yamaha,2018-04-01,93,Active
+EQ-P08-0994,X-Ray Inspector Zeta,X-Ray,P08,WC-XRY-01,Viscom,2021-12-26,93,Maintenance
+EQ-P08-0995,Wave Solder Prime,Soldering,P08,WC-SOL-02,BTU International,2024-10-13,107,Active
+EQ-P08-0996,Placement Machine Prime,Pick and Place,P08,WC-PPL-02,Juki,2021-10-30,83,Active
+EQ-P08-0997,P&P Unit E,Pick and Place,P08,WC-PPL-01,Samsung,2021-06-03,96,Active
+EQ-P08-0998,AOI Inspector H,Test Station,P08,WC-TST-02,Keysight,2019-03-09,165,Maintenance
+EQ-P08-0999,Coating Station Alpha,Coating,P08,WC-COT-01,Speedline,2020-11-08,84,Active
+EQ-P08-1000,Paste Printer 1,Printing,P08,WC-PRT-02,Ekra,2025-04-17,74,Active
+EQ-P09-1001,Assembly Station 7,SMT Assembly,P09,WC-SMT-01,Yamaha,2019-04-25,221,Maintenance
+EQ-P09-1002,X-Ray System Plus,X-Ray,P09,WC-XRY-01,Nikon Metrology,2019-03-01,147,Active
+EQ-P09-1003,Stencil Printer D,Printing,P09,WC-PRT-01,MPM,2023-03-12,93,Active
+EQ-P09-1004,Coating Station 5,Coating,P09,WC-COT-01,Precision Valve,2018-02-23,185,Active
+EQ-P09-1005,AOI Inspector A,Inspection,P09,WC-INS-02,Koh Young,2020-07-07,121,Active
+EQ-P09-1006,Paste Printer Pro,Printing,P09,WC-PRT-02,MPM,2022-08-08,161,Active
+EQ-P09-1007,Conformal Coater Delta,Coating,P09,WC-COT-01,Precision Valve,2023-12-30,88,Active
+EQ-P09-1008,AOI Inspector C,Test Station,P09,WC-TST-02,Keysight,2018-03-13,169,Active
+EQ-P09-1009,Reflow System Ultra,Reflow,P09,WC-RFL-02,BTU International,2020-09-02,167,Active
+EQ-P09-1010,Test Bench F,Test Station,P09,WC-TST-02,Keysight,2016-05-17,122,Active
+EQ-P09-1011,Functional Tester Alpha,Test Station,P09,WC-TST-02,Thermotron,2020-03-19,246,Active
+EQ-P09-1012,Paste Printer Eta,Printing,P09,WC-PRT-01,DEK,2016-02-29,134,Active
+EQ-P09-1013,Selective Solder Eta,Soldering,P09,WC-SOL-02,Ersa,2016-09-22,132,Active
+EQ-P09-1014,Wave Solder 2,Soldering,P09,WC-SOL-02,Ersa,2019-06-14,218,Active
+EQ-P09-1015,Assembly Station A,SMT Assembly,P09,WC-SMT-02,Assembleon,2023-09-29,62,Active
+EQ-P09-1016,Vision Inspector Epsilon,Inspection,P09,WC-INS-01,Omron,2019-12-23,204,Active
+EQ-P09-1017,Stencil Printer 10,Printing,P09,WC-PRT-01,MPM,2025-02-10,55,Active
+EQ-P09-1018,AOI Inspector B,Test Station,P09,WC-TST-02,Nikon Metrology,2024-10-05,126,Active
+EQ-P09-1019,Paste Printer Eta,Printing,P09,WC-PRT-01,MPM,2016-10-12,144,Active
+EQ-P09-1020,Reflow System 2,Reflow,P09,WC-RFL-02,Ersa,2019-10-19,203,Active
+EQ-P09-1021,Paste Printer II,Printing,P09,WC-PRT-01,MPM,2025-01-26,60,Active
+EQ-P09-1022,Reflow System Pro,Reflow,P09,WC-RFL-01,Heller Industries,2019-01-20,215,Active
+EQ-P09-1023,AOI Inspector V,Inspection,P09,WC-INS-02,Saki,2022-09-29,88,Maintenance
+EQ-P09-1024,SPI System Delta,Inspection,P09,WC-INS-02,Nordson,2019-12-08,69,Maintenance
+EQ-P09-1025,Wave System Eta,Wave Solder,P09,WC-WSL-01,Heller Industries,2020-11-25,219,Active
+EQ-P09-1026,Vision Inspector Zeta,Inspection,P09,WC-INS-02,Omron,2017-06-29,178,Active
+EQ-P09-1027,Reflow System Gamma,Reflow,P09,WC-RFL-01,Heller Industries,2025-03-06,156,Active
+EQ-P09-1028,Vision Inspector III,Inspection,P09,WC-INS-02,Omron,2019-02-12,117,Active
+EQ-P09-1029,Test Bench 1,Test Station,P09,WC-TST-01,Koh Young,2016-05-03,222,Active
+EQ-P09-1030,Wave System Theta,Wave Solder,P09,WC-WSL-01,Heller Industries,2025-12-18,93,Active
+EQ-P09-1031,Reflow System 8,Reflow,P09,WC-RFL-02,Ersa,2018-05-15,222,Maintenance
+EQ-P09-1032,Stencil Printer A,Printing,P09,WC-PRT-01,MPM,2025-12-16,98,Active
+EQ-P09-1033,SMT Line V,SMT Assembly,P09,WC-SMT-01,Panasonic,2018-11-03,87,Active
+EQ-P09-1034,Stencil Printer 4,Printing,P09,WC-PRT-01,ASM,2017-06-25,168,Active
+EQ-P09-1035,Stencil Printer B,Printing,P09,WC-PRT-01,DEK,2017-10-29,229,Active
+EQ-P09-1036,Reflow System H,Reflow,P09,WC-RFL-01,Ersa,2023-11-09,125,Active
+EQ-P09-1037,Stencil Printer Eta,Printing,P09,WC-PRT-02,DEK,2019-01-16,232,Active
+EQ-P09-1038,Stencil Printer Prime,Printing,P09,WC-PRT-02,Speedline,2021-08-18,174,Active
+EQ-P09-1039,X-Ray Inspector Pro,X-Ray,P09,WC-XRY-01,Viscom,2025-11-25,158,Active
+EQ-P09-1040,Wave System V,Wave Solder,P09,WC-WSL-01,Heller Industries,2024-10-20,176,Active
+EQ-P09-1041,Coating Station C,Coating,P09,WC-COT-01,Precision Valve,2022-11-19,235,Active
+EQ-P09-1042,Coating Station 6,Coating,P09,WC-COT-01,Precision Valve,2019-05-12,233,Active
+EQ-P09-1043,ICT Tester 8,Test Station,P09,WC-TST-02,National Instruments,2017-03-09,170,Active
+EQ-P09-1044,AOI Inspector Zeta,Test Station,P09,WC-TST-01,Thermotron,2018-08-19,173,Active
+EQ-P09-1045,Pick and Place I,Pick and Place,P09,WC-PPL-02,Fuji Corporation,2020-07-29,127,Active
+EQ-P09-1046,Wave System 1,Wave Solder,P09,WC-WSL-01,Heller Industries,2022-02-09,223,Active
+EQ-P09-1047,Wave System II,Wave Solder,P09,WC-WSL-01,Heller Industries,2024-11-01,208,Active
+EQ-P09-1048,Wave System 6,Wave Solder,P09,WC-WSL-01,Pillarhouse,2017-04-24,140,Active
+EQ-P09-1049,Wave Solder Delta,Wave Solder,P09,WC-WSL-01,Ersa,2021-03-15,167,Maintenance
+EQ-P09-1050,Selective Solder Gamma,Soldering,P09,WC-SOL-01,BTU International,2020-06-04,76,Active
+EQ-P09-1051,Solder Station 3,Soldering,P09,WC-SOL-02,Heller Industries,2018-03-04,163,Active
+EQ-P09-1052,Reflow System 6,Reflow,P09,WC-RFL-01,BTU International,2016-12-04,85,Active
+EQ-P09-1053,Pick and Place H,Pick and Place,P09,WC-PPL-02,Assembleon,2016-10-01,171,Active
+EQ-P09-1054,Wave System 8,Wave Solder,P09,WC-WSL-01,Pillarhouse,2018-02-03,243,Active
+EQ-P09-1055,Pick and Place A,Pick and Place,P09,WC-PPL-02,Fuji Corporation,2017-02-13,159,Active
+EQ-P09-1056,Stencil Printer III,Printing,P09,WC-PRT-02,Speedline,2024-06-24,247,Active
+EQ-P09-1057,Wave System 5,Wave Solder,P09,WC-WSL-01,Heller Industries,2021-08-10,247,Active
+EQ-P09-1058,SMT Cell B,SMT Assembly,P09,WC-SMT-01,Juki,2019-09-02,64,Maintenance
+EQ-P09-1059,Wave System Ultra,Wave Solder,P09,WC-WSL-01,Ersa,2016-04-25,127,Active
+EQ-P09-1060,Conformal Coater Pro,Coating,P09,WC-COT-01,GPD Global,2019-04-08,87,Active
+EQ-P09-1061,Reflow System 10,Reflow,P09,WC-RFL-02,Heller Industries,2017-06-01,100,Active
+EQ-P09-1062,Wave Solder A,Soldering,P09,WC-SOL-02,BTU International,2020-04-11,188,Active
+EQ-P09-1063,Selective Solder 6,Soldering,P09,WC-SOL-02,Nordson,2017-08-16,212,Active
+EQ-P09-1064,Assembly Station H,SMT Assembly,P09,WC-SMT-03,Assembleon,2016-10-12,248,Active
+EQ-P09-1065,Stencil Printer 8,Printing,P09,WC-PRT-01,ASM,2023-03-15,210,Active
+EQ-P09-1066,Wave Solder 4,Soldering,P09,WC-SOL-01,BTU International,2019-09-11,238,Active
+EQ-P09-1067,Conformal Coater 4,Coating,P09,WC-COT-01,Asymtek,2022-12-03,220,Active
+EQ-P09-1068,X-Ray Inspector Eta,X-Ray,P09,WC-XRY-01,Dage,2022-06-09,182,Active
+EQ-P09-1069,Coating Station II,Coating,P09,WC-COT-01,Precision Valve,2016-10-27,155,Active
+EQ-P09-1070,Assembly Station F,SMT Assembly,P09,WC-SMT-01,Juki,2021-02-09,69,Active
+EQ-P09-1071,Wave System Prime,Wave Solder,P09,WC-WSL-01,Seho,2018-12-23,158,Maintenance
+EQ-P09-1072,Reflow Oven Plus,Reflow,P09,WC-RFL-01,Ersa,2024-09-08,174,Active
+EQ-P09-1073,Functional Tester IV,Test Station,P09,WC-TST-01,Thermotron,2020-10-21,58,Active
+EQ-P09-1074,Wave System Theta,Wave Solder,P09,WC-WSL-01,Ersa,2024-10-03,144,Active
+EQ-P09-1075,SMT Line 8,SMT Assembly,P09,WC-SMT-01,Assembleon,2022-09-11,145,Active
+EQ-P09-1076,Reflow Oven I,Reflow,P09,WC-RFL-01,BTU International,2025-07-26,128,Active
+EQ-P09-1077,Pick and Place Theta,Pick and Place,P09,WC-PPL-02,Fuji Corporation,2019-12-22,139,Active
+EQ-P09-1078,SMT Cell 4,SMT Assembly,P09,WC-SMT-02,Juki,2019-10-08,165,Maintenance
+EQ-P09-1079,Stencil Printer Plus,Printing,P09,WC-PRT-01,Speedline,2018-12-23,167,Active
+EQ-P09-1080,Reflow Oven I,Reflow,P09,WC-RFL-02,Heller Industries,2021-10-08,109,Maintenance
+EQ-P09-1081,Conformal Coater 2,Coating,P09,WC-COT-01,Speedline,2018-11-14,72,Active
+EQ-P09-1082,SMT Cell 4,SMT Assembly,P09,WC-SMT-03,Assembleon,2019-10-27,215,Active
+EQ-P09-1083,Wave Solder Pro,Wave Solder,P09,WC-WSL-01,Heller Industries,2023-12-28,242,Active
+EQ-P09-1084,SMT Cell D,SMT Assembly,P09,WC-SMT-03,Fuji Corporation,2025-11-25,120,Active
+EQ-P09-1085,Pick and Place Max,Pick and Place,P09,WC-PPL-02,Samsung,2019-04-23,132,Active
+EQ-P09-1086,Assembly Station II,SMT Assembly,P09,WC-SMT-01,Juki,2024-02-02,156,Active
+EQ-P09-1087,Wave System Zeta,Wave Solder,P09,WC-WSL-01,Ersa,2024-10-29,75,Active
+EQ-P09-1088,SPI System Zeta,Inspection,P09,WC-INS-01,Nordson,2024-05-20,128,Maintenance
+EQ-P09-1089,Functional Tester Beta,Test Station,P09,WC-TST-02,Keysight,2018-02-11,64,Active
+EQ-P09-1090,Wave Solder 5,Soldering,P09,WC-SOL-01,Pillarhouse,2023-03-22,146,Maintenance
+EQ-P09-1091,Solder Station H,Soldering,P09,WC-SOL-01,BTU International,2020-08-01,180,Active
+EQ-P09-1092,Stencil Printer 5,Printing,P09,WC-PRT-02,DEK,2020-11-25,191,Active
+EQ-P09-1093,Reflow Oven Beta,Reflow,P09,WC-RFL-02,BTU International,2023-02-04,191,Maintenance
+EQ-P09-1094,Wave Solder I,Soldering,P09,WC-SOL-01,Heller Industries,2021-02-10,71,Active
+EQ-P09-1095,Wave System Max,Wave Solder,P09,WC-WSL-01,Pillarhouse,2024-03-24,250,Active
+EQ-P09-1096,Stencil Printer Alpha,Printing,P09,WC-PRT-02,ASM,2016-12-31,168,Maintenance
+EQ-P09-1097,X-Ray Inspector Delta,X-Ray,P09,WC-XRY-01,Nordson,2020-09-14,119,Active
+EQ-P09-1098,Paste Printer Gamma,Printing,P09,WC-PRT-01,MPM,2024-04-20,239,Active
+EQ-P09-1099,Wave Solder Theta,Soldering,P09,WC-SOL-01,Pillarhouse,2016-10-19,85,Active
+EQ-P09-1100,Vision Inspector Plus,Inspection,P09,WC-INS-01,Saki,2017-02-12,131,Active
+EQ-P09-1101,Conformal Coater H,Coating,P09,WC-COT-01,GPD Global,2018-09-08,132,Active
+EQ-P09-1102,Reflow Oven A,Reflow,P09,WC-RFL-02,Rehm,2018-11-12,50,Active
+EQ-P09-1103,SMT Line I,SMT Assembly,P09,WC-SMT-03,Fuji Corporation,2019-11-18,228,Active
+EQ-P09-1104,Stencil Printer Max,Printing,P09,WC-PRT-01,ASM,2025-10-07,221,Active
+EQ-P09-1105,Selective Solder 7,Soldering,P09,WC-SOL-02,Pillarhouse,2021-10-10,95,Active
+EQ-P09-1106,Assembly Station E,SMT Assembly,P09,WC-SMT-02,Fuji Corporation,2021-02-16,52,Active
+EQ-P09-1107,SMT Cell 7,SMT Assembly,P09,WC-SMT-03,Yamaha,2023-12-19,73,Active
+EQ-P09-1108,SPI System 8,Inspection,P09,WC-INS-01,Nordson,2025-09-13,121,Active
+EQ-P09-1109,X-Ray Inspector 10,X-Ray,P09,WC-XRY-01,Dage,2024-11-13,121,Active
+EQ-P09-1110,Reflow Oven Epsilon,Reflow,P09,WC-RFL-01,Heller Industries,2019-07-08,82,Active
+EQ-P09-1111,AOI Inspector E,Test Station,P09,WC-TST-01,National Instruments,2016-08-09,223,Active
+EQ-P09-1112,Wave System Alpha,Wave Solder,P09,WC-WSL-01,Nordson,2021-04-28,214,Active
+EQ-P09-1113,Assembly Station 2,SMT Assembly,P09,WC-SMT-02,Yamaha,2024-09-30,224,Active
+EQ-P09-1114,Reflow Oven Delta,Reflow,P09,WC-RFL-01,Vitronics Soltec,2022-12-30,157,Active
+EQ-P09-1115,Coating Station 6,Coating,P09,WC-COT-01,Nordson,2025-03-12,196,Active
+EQ-P09-1116,Pick and Place E,Pick and Place,P09,WC-PPL-01,Assembleon,2024-04-08,134,Active
+EQ-P09-1117,Wave Solder Beta,Soldering,P09,WC-SOL-02,BTU International,2019-06-20,210,Maintenance
+EQ-P09-1118,SPI System H,Inspection,P09,WC-INS-01,Nordson,2022-04-17,63,Active
+EQ-P09-1119,Wave System Eta,Wave Solder,P09,WC-WSL-01,Pillarhouse,2019-02-06,164,Active
+EQ-P09-1120,Wave Solder 5,Soldering,P09,WC-SOL-01,BTU International,2016-02-18,227,Active
+EQ-P09-1121,Test Bench 4,Test Station,P09,WC-TST-02,Keysight,2019-04-07,210,Active
+EQ-P09-1122,Wave Solder 9,Soldering,P09,WC-SOL-01,BTU International,2021-08-10,74,Active
+EQ-P09-1123,Paste Printer 9,Printing,P09,WC-PRT-01,Ekra,2020-11-27,159,Active
+EQ-P09-1124,X-Ray Inspector IV,X-Ray,P09,WC-XRY-01,Nikon Metrology,2020-04-24,134,Active
+EQ-P09-1125,Selective Solder Epsilon,Soldering,P09,WC-SOL-01,BTU International,2019-06-19,99,Maintenance
+EQ-P10-1126,AOI Inspector I,Test Station,P10,WC-TST-02,Thermotron,2020-09-18,235,Active
+EQ-P10-1127,Test Bench Delta,Test Station,P10,WC-TST-01,Koh Young,2024-09-06,129,Active
+EQ-P10-1128,Wave Solder B,Wave Solder,P10,WC-WSL-01,Ersa,2020-11-05,129,Active
+EQ-P10-1129,Vision Inspector B,Inspection,P10,WC-INS-01,Omron,2025-06-21,110,Active
+EQ-P10-1130,Wave System E,Wave Solder,P10,WC-WSL-01,Heller Industries,2023-11-13,213,Maintenance
+EQ-P10-1131,Selective Solder V,Soldering,P10,WC-SOL-01,Pillarhouse,2018-04-28,227,Maintenance
+EQ-P10-1132,X-Ray System I,X-Ray,P10,WC-XRY-01,Nordson,2022-06-05,91,Active
+EQ-P10-1133,SMT Line G,SMT Assembly,P10,WC-SMT-01,Juki,2018-05-04,108,Active
+EQ-P10-1134,Placement Machine 6,Pick and Place,P10,WC-PPL-02,Fuji Corporation,2017-01-22,239,Active
+EQ-P10-1135,Paste Printer Alpha,Printing,P10,WC-PRT-01,Ekra,2025-04-14,141,Active
+EQ-P10-1136,Wave Solder E,Soldering,P10,WC-SOL-02,Heller Industries,2019-01-13,199,Maintenance
+EQ-P10-1137,Coating Station E,Coating,P10,WC-COT-01,Nordson,2022-12-05,94,Active
+EQ-P10-1138,Vision Inspector H,Inspection,P10,WC-INS-02,Nordson,2024-02-10,100,Active
+EQ-P10-1139,Vision Inspector A,Inspection,P10,WC-INS-01,Koh Young,2021-11-11,217,Active
+EQ-P10-1140,Wave Solder IV,Soldering,P10,WC-SOL-01,Pillarhouse,2023-06-03,144,Active
+EQ-P10-1141,Test Bench Theta,Test Station,P10,WC-TST-02,Thermotron,2024-06-29,83,Active
+EQ-P10-1142,Placement Machine 8,Pick and Place,P10,WC-PPL-02,Samsung,2022-07-19,203,Active
+EQ-P10-1143,Placement Machine 3,Pick and Place,P10,WC-PPL-01,Yamaha,2017-04-04,88,Active
+EQ-P10-1144,SMT Cell Prime,SMT Assembly,P10,WC-SMT-01,Yamaha,2023-10-07,236,Active
+EQ-P10-1145,Reflow Oven Plus,Reflow,P10,WC-RFL-01,Rehm,2021-10-05,242,Active
+EQ-P10-1146,Wave System D,Wave Solder,P10,WC-WSL-01,Ersa,2022-07-03,232,Active
+EQ-P10-1147,Reflow System 10,Reflow,P10,WC-RFL-02,Ersa,2018-12-16,199,Active
+EQ-P10-1148,P&P Unit H,Pick and Place,P10,WC-PPL-01,Fuji Corporation,2021-09-03,105,Active
+EQ-P10-1149,Paste Printer 1,Printing,P10,WC-PRT-01,ASM,2019-12-09,71,Active
+EQ-P10-1150,Selective Solder 7,Soldering,P10,WC-SOL-02,Pillarhouse,2023-07-14,199,Active
+EQ-P10-1151,Wave System III,Wave Solder,P10,WC-WSL-01,Nordson,2020-11-13,160,Active
+EQ-P10-1152,Reflow System Beta,Reflow,P10,WC-RFL-02,Vitronics Soltec,2024-02-06,163,Active
+EQ-P10-1153,Wave Solder Plus,Soldering,P10,WC-SOL-01,Pillarhouse,2020-05-12,189,Active
+EQ-P10-1154,AOI Inspector Epsilon,Inspection,P10,WC-INS-01,Nordson,2022-01-27,59,Active
+EQ-P10-1155,Conformal Coater 4,Coating,P10,WC-COT-01,Asymtek,2017-10-03,246,Active
+EQ-P10-1156,Vision Inspector Max,Inspection,P10,WC-INS-01,Nordson,2023-03-09,52,Active
+EQ-P10-1157,SPI System Alpha,Inspection,P10,WC-INS-02,Omron,2020-10-26,217,Active
+EQ-P10-1158,Functional Tester F,Test Station,P10,WC-TST-01,Nikon Metrology,2020-10-16,109,Active
+EQ-P10-1159,Wave System Zeta,Wave Solder,P10,WC-WSL-01,Seho,2022-08-08,98,Active
+EQ-P10-1160,Paste Printer Ultra,Printing,P10,WC-PRT-02,Ekra,2025-10-10,145,Active
+EQ-P10-1161,ICT Tester 7,Test Station,P10,WC-TST-01,National Instruments,2022-04-21,107,Active
+EQ-P10-1162,Paste Printer Beta,Printing,P10,WC-PRT-02,ASM,2019-10-01,58,Maintenance
+EQ-P10-1163,ICT Tester F,Test Station,P10,WC-TST-02,National Instruments,2021-09-24,66,Active
+EQ-P10-1164,P&P Unit III,Pick and Place,P10,WC-PPL-01,Assembleon,2018-12-12,127,Active
+EQ-P10-1165,Solder Station Prime,Soldering,P10,WC-SOL-01,Nordson,2025-10-24,97,Active
+EQ-P10-1166,Stencil Printer 3,Printing,P10,WC-PRT-01,MPM,2018-09-19,184,Active
+EQ-P10-1167,SMT Line C,SMT Assembly,P10,WC-SMT-03,Yamaha,2022-06-13,155,Active
+EQ-P10-1168,Wave Solder Epsilon,Soldering,P10,WC-SOL-02,Heller Industries,2021-10-01,102,Active
+EQ-P10-1169,Placement Machine V,Pick and Place,P10,WC-PPL-02,Juki,2024-05-01,204,Active
+EQ-P10-1170,Vision Inspector IV,Inspection,P10,WC-INS-01,Viscom,2023-01-09,101,Active
+EQ-P10-1171,ICT Tester H,Test Station,P10,WC-TST-01,Nikon Metrology,2020-03-20,134,Maintenance
+EQ-P10-1172,Reflow Oven Zeta,Reflow,P10,WC-RFL-02,Ersa,2022-11-19,215,Active
+EQ-P10-1173,Reflow System D,Reflow,P10,WC-RFL-02,Vitronics Soltec,2021-06-16,113,Active
+EQ-P10-1174,X-Ray System D,X-Ray,P10,WC-XRY-01,Viscom,2018-04-12,195,Active
+EQ-P10-1175,Assembly Station Max,SMT Assembly,P10,WC-SMT-01,Panasonic,2022-11-03,220,Maintenance
+EQ-P10-1176,Placement Machine Theta,Pick and Place,P10,WC-PPL-02,Assembleon,2021-12-23,69,Active
+EQ-P10-1177,Wave System C,Wave Solder,P10,WC-WSL-01,Ersa,2023-04-12,103,Active
+EQ-P10-1178,Reflow System 9,Reflow,P10,WC-RFL-01,BTU International,2022-04-05,240,Active
+EQ-P10-1179,Pick and Place 1,Pick and Place,P10,WC-PPL-01,Assembleon,2024-10-29,231,Maintenance
+EQ-P10-1180,Conformal Coater Epsilon,Coating,P10,WC-COT-01,Precision Valve,2025-03-09,190,Active
+EQ-P10-1181,Reflow System C,Reflow,P10,WC-RFL-02,Heller Industries,2024-03-14,54,Active
+EQ-P10-1182,ICT Tester C,Test Station,P10,WC-TST-01,National Instruments,2025-03-30,221,Active
+EQ-P10-1183,SPI System D,Inspection,P10,WC-INS-02,Nordson,2023-09-07,232,Active
+EQ-P10-1184,Wave Solder Pro,Wave Solder,P10,WC-WSL-01,Pillarhouse,2018-12-04,219,Active
+EQ-P10-1185,Wave Solder Delta,Soldering,P10,WC-SOL-02,Ersa,2019-05-28,51,Active
+EQ-P10-1186,Paste Printer H,Printing,P10,WC-PRT-01,Ekra,2023-11-14,73,Active
+EQ-P10-1187,SMT Line Epsilon,SMT Assembly,P10,WC-SMT-02,Fuji Corporation,2023-08-22,74,Active
+EQ-P10-1188,ICT Tester Plus,Test Station,P10,WC-TST-01,Koh Young,2024-11-26,133,Active
+EQ-P10-1189,Placement Machine 10,Pick and Place,P10,WC-PPL-01,Samsung,2021-04-25,80,Active
+EQ-P10-1190,Solder Station Alpha,Soldering,P10,WC-SOL-02,Pillarhouse,2021-08-08,217,Active
+EQ-P10-1191,Stencil Printer Epsilon,Printing,P10,WC-PRT-02,Ekra,2018-09-25,121,Active
+EQ-P10-1192,Coating Station I,Coating,P10,WC-COT-01,Nordson,2022-09-24,246,Active
+EQ-P10-1193,Wave Solder Eta,Soldering,P10,WC-SOL-01,Nordson,2019-05-21,133,Maintenance
+EQ-P10-1194,Stencil Printer 5,Printing,P10,WC-PRT-02,Ekra,2016-07-25,220,Active
+EQ-P10-1195,Conformal Coater Plus,Coating,P10,WC-COT-01,Nordson,2018-12-06,239,Active
+EQ-P10-1196,X-Ray Inspector Theta,X-Ray,P10,WC-XRY-01,Nikon Metrology,2022-08-25,110,Active
+EQ-P10-1197,Pick and Place A,Pick and Place,P10,WC-PPL-01,Samsung,2021-11-29,177,Active
+EQ-P10-1198,Test Bench H,Test Station,P10,WC-TST-01,Nikon Metrology,2017-12-24,203,Maintenance
+EQ-P10-1199,Reflow System 5,Reflow,P10,WC-RFL-01,Vitronics Soltec,2018-11-23,244,Active
+EQ-P10-1200,Stencil Printer 6,Printing,P10,WC-PRT-01,MPM,2022-04-09,112,Active
+EQ-P10-1201,SMT Cell G,SMT Assembly,P10,WC-SMT-03,Panasonic,2019-04-18,147,Active
+EQ-P10-1202,Test Bench Prime,Test Station,P10,WC-TST-01,Nikon Metrology,2025-04-30,99,Active
+EQ-P10-1203,Test Bench D,Test Station,P10,WC-TST-01,Koh Young,2019-06-20,190,Active
+EQ-P10-1204,P&P Unit IV,Pick and Place,P10,WC-PPL-01,Fuji Corporation,2022-08-15,92,Active
+EQ-P10-1205,Placement Machine H,Pick and Place,P10,WC-PPL-01,Assembleon,2022-09-18,123,Active
+EQ-P10-1206,Pick and Place 8,Pick and Place,P10,WC-PPL-02,Juki,2021-08-24,146,Active
+EQ-P10-1207,Reflow Oven V,Reflow,P10,WC-RFL-02,Ersa,2025-11-21,245,Active
+EQ-P10-1208,Selective Solder D,Soldering,P10,WC-SOL-01,Pillarhouse,2023-03-25,147,Active
+EQ-P10-1209,Reflow System Epsilon,Reflow,P10,WC-RFL-02,Vitronics Soltec,2022-05-18,84,Active
+EQ-P10-1210,Pick and Place Alpha,Pick and Place,P10,WC-PPL-01,Fuji Corporation,2016-06-13,178,Active
+EQ-P10-1211,Conformal Coater 10,Coating,P10,WC-COT-01,Precision Valve,2017-10-15,145,Active
+EQ-P10-1212,SPI System Gamma,Inspection,P10,WC-INS-01,Viscom,2024-09-19,148,Maintenance
+EQ-P10-1213,AOI Inspector 7,Test Station,P10,WC-TST-02,Koh Young,2020-05-25,231,Active
+EQ-P10-1214,Conformal Coater H,Coating,P10,WC-COT-01,Nordson,2023-05-25,172,Active
+EQ-P10-1215,Conformal Coater IV,Coating,P10,WC-COT-01,Nordson,2018-06-23,87,Active
+EQ-P10-1216,X-Ray Inspector Theta,X-Ray,P10,WC-XRY-01,Creative Electron,2017-06-20,73,Active
+EQ-P10-1217,Stencil Printer II,Printing,P10,WC-PRT-01,Speedline,2024-04-02,159,Active
+EQ-P10-1218,Vision Inspector 4,Inspection,P10,WC-INS-02,Viscom,2017-11-18,155,Active
+EQ-P10-1219,Solder Station 2,Soldering,P10,WC-SOL-02,BTU International,2017-09-19,103,Maintenance
+EQ-P10-1220,Stencil Printer Prime,Printing,P10,WC-PRT-01,MPM,2026-02-04,74,Active
+EQ-P10-1221,Paste Printer II,Printing,P10,WC-PRT-02,ASM,2024-03-14,95,Active
+EQ-P10-1222,Functional Tester Plus,Test Station,P10,WC-TST-02,Koh Young,2024-11-16,165,Active
+EQ-P10-1223,Pick and Place D,Pick and Place,P10,WC-PPL-01,Fuji Corporation,2017-01-14,244,Active
+EQ-P10-1224,Stencil Printer Zeta,Printing,P10,WC-PRT-01,Speedline,2022-10-29,71,Active
+EQ-P10-1225,AOI Inspector H,Inspection,P10,WC-INS-02,Koh Young,2020-10-02,174,Active
+EQ-P10-1226,Wave Solder Alpha,Soldering,P10,WC-SOL-01,BTU International,2018-08-26,199,Active
+EQ-P10-1227,SMT Cell Alpha,SMT Assembly,P10,WC-SMT-01,Fuji Corporation,2021-11-25,204,Active
+EQ-P10-1228,SPI System II,Inspection,P10,WC-INS-02,Saki,2022-05-04,144,Active
+EQ-P10-1229,Conformal Coater 10,Coating,P10,WC-COT-01,GPD Global,2021-11-13,206,Active
+EQ-P10-1230,Coating Station IV,Coating,P10,WC-COT-01,GPD Global,2016-05-08,228,Active
+EQ-P10-1231,AOI Inspector H,Test Station,P10,WC-TST-01,Keysight,2021-12-24,165,Active
+EQ-P10-1232,Reflow Oven Alpha,Reflow,P10,WC-RFL-02,Rehm,2018-12-16,132,Active
+EQ-P10-1233,Conformal Coater G,Coating,P10,WC-COT-01,Nordson,2019-04-23,174,Active
+EQ-P10-1234,X-Ray System V,X-Ray,P10,WC-XRY-01,Nikon Metrology,2018-09-24,229,Maintenance
+EQ-P10-1235,Stencil Printer Pro,Printing,P10,WC-PRT-01,MPM,2016-04-14,196,Active
+EQ-P10-1236,Wave System Zeta,Wave Solder,P10,WC-WSL-01,Heller Industries,2022-09-25,222,Maintenance
+EQ-P10-1237,Reflow Oven V,Reflow,P10,WC-RFL-02,Heller Industries,2018-09-06,188,Active
+EQ-P10-1238,Pick and Place II,Pick and Place,P10,WC-PPL-01,Fuji Corporation,2018-02-01,57,Active
+EQ-P10-1239,Coating Station 1,Coating,P10,WC-COT-01,Precision Valve,2018-08-24,171,Maintenance
+EQ-P10-1240,Solder Station 6,Soldering,P10,WC-SOL-02,Heller Industries,2016-05-02,107,Maintenance
+EQ-P10-1241,X-Ray System 9,X-Ray,P10,WC-XRY-01,Nikon Metrology,2018-10-12,214,Active
+EQ-P10-1242,Paste Printer Theta,Printing,P10,WC-PRT-01,Ekra,2022-11-07,72,Active
+EQ-P10-1243,Coating Station 8,Coating,P10,WC-COT-01,Speedline,2024-09-07,130,Maintenance
+EQ-P10-1244,X-Ray Inspector Max,X-Ray,P10,WC-XRY-01,Nikon Metrology,2023-12-26,149,Maintenance
+EQ-P10-1245,Coating Station Eta,Coating,P10,WC-COT-01,GPD Global,2021-09-05,52,Active
+EQ-P10-1246,Reflow System G,Reflow,P10,WC-RFL-01,Vitronics Soltec,2020-07-04,224,Active
+EQ-P10-1247,X-Ray Inspector 5,X-Ray,P10,WC-XRY-01,Nordson,2022-08-25,178,Maintenance
+EQ-P10-1248,Selective Solder F,Soldering,P10,WC-SOL-02,Pillarhouse,2020-07-24,124,Active
+EQ-P10-1249,Stencil Printer F,Printing,P10,WC-PRT-02,DEK,2016-08-08,237,Maintenance
+EQ-P10-1250,P&P Unit 10,Pick and Place,P10,WC-PPL-01,Yamaha,2022-10-04,218,Maintenance

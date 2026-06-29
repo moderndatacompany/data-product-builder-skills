@@ -1,0 +1,54 @@
+# kind: dq — converted from checks/subscriptions.yml
+kind: dq
+name: subscriptions_dq
+depends_on: hello.subscriptions
+
+rules:
+- missing_count(user_id) = 0:
+    name: no_missing_user_ids
+    dimension: completeness
+    description: All subscriptions must have a user ID
+
+- missing_count(plan_id) = 0:
+    name: no_missing_plan_ids
+    dimension: completeness
+    description: All subscriptions must have a plan ID
+
+- missing_count(start_date) = 0:
+    name: no_missing_start_dates
+    dimension: completeness
+    description: All subscriptions must have a start date
+
+- row_count > 5:
+    name: sufficient_subscriptions
+    dimension: completeness
+    description: At least 5 subscriptions in the system
+
+- failed rows:
+    name: positive_mrr
+    dimension: validity
+    description: MRR must be positive for all subscriptions
+    fail query: |
+      SELECT * FROM hello.subscriptions
+      WHERE mrr <= 0
+
+- failed rows:
+    name: positive_seats
+    dimension: validity
+    description: Seats must be positive
+    fail query: |
+      SELECT * FROM hello.subscriptions
+      WHERE seats <= 0
+
+- failed rows:
+    name: valid_date_range
+    dimension: validity
+    description: End date must be after start date
+    fail query: |
+      SELECT * FROM hello.subscriptions
+      WHERE end_date IS NOT NULL AND end_date < start_date
+
+- duplicate_count(subscription_id) = 0:
+    name: unique_subscription_ids
+    dimension: uniqueness
+    description: Subscription IDs must be unique

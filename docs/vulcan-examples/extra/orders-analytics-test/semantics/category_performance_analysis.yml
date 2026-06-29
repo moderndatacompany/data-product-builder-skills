@@ -1,0 +1,313 @@
+models:
+  gold_v1.category_performance_analysis:
+    alias: category_performance
+    
+    measures:
+      total_categories:
+        type: count
+        expression: "{category_performance.category}"
+        description: "Total number of unique categories"
+        tags:
+          - category
+          - count
+          - metric
+        terms:
+          - category.total_count
+          - metric.category_base
+      
+      total_category_revenue:
+        type: sum
+        expression: "{category_performance.total_revenue}"
+        format: currency
+        description: "Total revenue across all categories"
+        tags:
+          - revenue
+          - financial
+          - category
+        terms:
+          - category.total_revenue
+          - finance.category_sales
+      
+      avg_category_revenue:
+        type: avg
+        expression: "{category_performance.total_revenue}"
+        format: currency
+        description: "Average revenue per category"
+        tags:
+          - revenue
+          - average
+          - category
+        terms:
+          - category.avg_revenue
+          - finance.avg_category_performance
+      
+      avg_category_health_score:
+        type: avg
+        expression: "{category_performance.category_health_score}"
+        description: "Average category health score (0-100)"
+        tags:
+          - category
+          - health
+          - performance
+        terms:
+          - category.avg_health
+          - performance.avg_score
+      
+      total_products_across_categories:
+        type: sum
+        expression: "{category_performance.total_products}"
+        description: "Total products across all categories"
+        tags:
+          - product
+          - inventory
+          - count
+        terms:
+          - product.total_count
+          - inventory.total_products
+      
+      total_active_products:
+        type: sum
+        expression: "{category_performance.active_products}"
+        description: "Total active products (sold in last 90 days)"
+        tags:
+          - product
+          - active
+          - count
+        terms:
+          - product.active_count
+          - inventory.active_products
+      
+      total_best_sellers:
+        type: sum
+        expression: "{category_performance.best_seller_products}"
+        description: "Total best seller products across categories"
+        tags:
+          - product
+          - best_seller
+          - performance
+        terms:
+          - product.best_sellers
+          - performance.top_products
+      
+      total_declining_products:
+        type: sum
+        expression: "{category_performance.declining_products}"
+        description: "Total declining products needing attention"
+        tags:
+          - product
+          - declining
+          - alert
+        terms:
+          - product.declining_count
+          - alert.declining_inventory
+      
+      total_stale_products:
+        type: sum
+        expression: "{category_performance.stale_products}"
+        description: "Total stale products (no sales 90+ days)"
+        tags:
+          - product
+          - stale
+          - alert
+        terms:
+          - product.stale_count
+          - alert.inactive_inventory
+      
+      star_category_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{category_performance.category_tier} = 'Star'"
+        description: "Number of star categories"
+        tags:
+          - category
+          - tier
+          - top_performer
+        terms:
+          - category.star_count
+          - performance.top_categories
+      
+      growth_category_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{category_performance.category_tier} = 'Growth'"
+        description: "Number of growth categories"
+        tags:
+          - category
+          - tier
+          - growth
+        terms:
+          - category.growth_count
+          - performance.expanding_categories
+      
+      declining_category_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{category_performance.category_tier} = 'Declining'"
+        description: "Number of declining categories"
+        tags:
+          - category
+          - tier
+          - alert
+        terms:
+          - category.declining_count
+          - alert.at_risk_categories
+      
+      avg_revenue_growth_30d:
+        type: avg
+        expression: "{category_performance.revenue_growth_30d_pct}"
+        description: "Average 30-day revenue growth percentage"
+        tags:
+          - growth
+          - revenue
+          - trend
+        terms:
+          - growth.avg_30d
+          - trend.revenue_growth
+      
+      total_category_customers:
+        type: sum
+        expression: "{category_performance.total_customers}"
+        description: "Total customers across all categories"
+        tags:
+          - customer
+          - count
+          - reach
+        terms:
+          - customer.category_reach
+          - metric.total_buyers
+    
+    segments:
+      star_categories:
+        expression: "{category_performance.category_tier} = 'Star'"
+        description: "High revenue, high growth categories"
+        tags:
+          - category
+          - tier
+          - star
+        terms:
+          - category.star
+          - tier.top_performers
+      
+      growth_categories:
+        expression: "{category_performance.category_tier} = 'Growth'"
+        description: "High growth rate categories"
+        tags:
+          - category
+          - tier
+          - growth
+        terms:
+          - category.growth
+          - tier.expanding
+      
+      mature_categories:
+        expression: "{category_performance.category_tier} = 'Mature'"
+        description: "Stable, established categories"
+        tags:
+          - category
+          - tier
+          - mature
+        terms:
+          - category.mature
+          - tier.established
+      
+      declining_categories:
+        expression: "{category_performance.category_tier} = 'Declining'"
+        description: "Categories with declining performance"
+        tags:
+          - category
+          - tier
+          - declining
+        terms:
+          - category.declining
+          - tier.at_risk
+      
+      emerging_categories:
+        expression: "{category_performance.category_tier} = 'Emerging'"
+        description: "New or small but promising categories"
+        tags:
+          - category
+          - tier
+          - emerging
+        terms:
+          - category.emerging
+          - tier.new_opportunities
+      
+      high_health_categories:
+        expression: "{category_performance.category_health_score} >= 75"
+        description: "Categories with health score 75+"
+        tags:
+          - category
+          - health
+          - high_performer
+        terms:
+          - category.healthy
+          - performance.strong
+      
+      low_health_categories:
+        expression: "{category_performance.category_health_score} < 50"
+        description: "Categories with health score below 50"
+        tags:
+          - category
+          - health
+          - alert
+        terms:
+          - category.unhealthy
+          - alert.needs_attention
+      
+      high_revenue_share_categories:
+        expression: "{category_performance.category_revenue_share} >= 0.15"
+        description: "Categories contributing 15%+ of total revenue"
+        tags:
+          - category
+          - revenue
+          - major_contributor
+        terms:
+          - category.high_contribution
+          - revenue.major_categories
+      
+      categories_with_declining_products:
+        expression: "{category_performance.declining_products} > 0"
+        description: "Categories containing declining products"
+        tags:
+          - category
+          - declining
+          - alert
+        terms:
+          - category.has_declining_products
+          - alert.category_issues
+      
+      positive_growth_categories:
+        expression: "{category_performance.revenue_growth_30d_pct} > 0"
+        description: "Categories with positive 30-day growth"
+        tags:
+          - category
+          - growth
+          - positive_trend
+        terms:
+          - category.growing
+          - trend.upward
+    
+    dimensions:
+      includes:
+        - analysis_date
+        - category
+        - region_id
+        - region_name
+        - total_products
+        - active_products
+        - best_seller_products
+        - good_performer_products
+        - slow_mover_products
+        - declining_products
+        - stale_products
+        - at_risk_products
+        - new_products
+        - category_tier
+        - category_health_score
+        - top_product_name
+        - recommended_action
+
+

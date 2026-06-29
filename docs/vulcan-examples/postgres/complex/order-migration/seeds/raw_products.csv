@@ -1,0 +1,201 @@
+product_id,product_name,category,subcategory,brand,color,size,weight,material,model_number,sku,upc,price,cost,supplier,warranty_period,release_date,rating,stock_quantity,discontinued
+P0001,FitLife Snacks Mini,Food,Snacks,FitLife,Green,XL,2.31,Plastic,FI-SN-980,SKU-0001,779319356710,27.63,13.57,Toy Factory Ltd,6 months,2024-12-28,4.0,179,false
+P0002,ZoomToys Plush Classic,Toys,Plush,ZoomToys,Blue,S,1.37,Plastic,ZO-PL-152,SKU-0002,591227929210,58.91,36.3,Tech Supplies Inc,30 days,2021-11-29,4.1,546,false
+P0003,CuddleTime Wearables Max,Electronics,Wearables,CuddleTime,Clear,S,1.43,Fabric,CU-WE-683,SKU-0003,976805047096,16.01,7.46,Kitchen Warehouse,90 days,2023-06-25,4.1,490,false
+P0004,ChefMate Lighting Classic,Home,Lighting,ChefMate,Black,L,1.37,Glass,CH-LI-201,SKU-0004,190291158925,21.13,15.3,Toy Factory Ltd,90 days,2023-07-02,4.4,693,false
+P0005,BrightHome Wearables Classic,Electronics,Wearables,BrightHome,Clear,M,2.44,Glass,BR-WE-354,SKU-0005,436516507468,236.7,118.14,Sports Wholesale,2 years,2024-02-23,4.8,454,false
+P0006,ChefMate Outdoor Pro,Sports,Outdoor,ChefMate,Blue,OneSize,1.9,Fabric,CH-OU-956,SKU-0006,752663639612,46.91,34.93,Organic Foods Co,1 year,2021-07-01,4.5,6,false
+P0007,VoltEdge Footwear Mini,Clothing,Footwear,VoltEdge,Multi,L,0.6,Food,VO-FO-573,SKU-0007,609983798360,41.84,24.44,Sports Wholesale,90 days,2021-01-06,4.4,655,false
+P0008,ZenLeaf Fitness Classic,Sports,Fitness,ZenLeaf,Brown,M,1.12,Fabric,ZE-FI-596,SKU-0008,720538961885,140.47,82.82,Home Essentials,1 year,2022-06-13,4.5,643,false
+P0009,ComfortWear Educational Mini,Toys,Educational,ComfortWear,Multi,OneSize,0.76,Glass,CO-ED-652,SKU-0009,153068548592,19.76,9.07,Tech Supplies Inc,6 months,2023-12-21,4.1,198,false
+P0010,JavaPure Lighting Plus,Home,Lighting,JavaPure,Blue,XL,0.74,Wood,JA-LI-014,SKU-0010,667523876457,105.27,61.27,Toy Factory Ltd,6 months,2023-09-21,4.1,421,false
+P0011,BrightHome Lighting Pro,Home,Lighting,BrightHome,Blue,XL,2.06,Plastic,BR-LI-428,SKU-0011,224882188492,87.33,55.1,Toy Factory Ltd,90 days,2021-02-05,3.9,371,false
+P0012,VoltEdge Footwear,Sports,Footwear,VoltEdge,Indigo,M,0.24,Metal,VO-FO-782,SKU-0012,223626466328,50.06,19.09,Organic Foods Co,30 days,2023-09-19,4.2,775,false
+P0013,TechPro Lighting Plus,Home,Lighting,TechPro,Brown,XL,0.5,Glass,TE-LI-602,SKU-0013,322913848673,43.93,31.54,Tech Supplies Inc,1 year,2022-12-21,4.4,764,false
+P0014,ComfortWear Snacks Plus,Food,Snacks,ComfortWear,Blue,XL,0.06,Food,CO-SN-924,SKU-0014,691649001660,19.92,14.66,Sports Wholesale,90 days,2021-07-22,4.2,946,false
+P0015,FitLife Pantry Classic,Food,Pantry,FitLife,Gray,OneSize,1.32,Glass,FI-PA-127,SKU-0015,222260116832,16.57,8.5,Home Essentials,1 year,2023-10-13,4.2,570,false
+P0016,FitLife Power Pro,Electronics,Power,FitLife,White,L,1.22,Wood,FI-PO-917,SKU-0016,984080613444,188.0,97.98,Fashion Direct,2 years,2024-10-22,3.6,376,false
+P0017,ZenLeaf Outdoor Plus,Toys,Outdoor,ZenLeaf,White,L,0.54,Fabric,ZE-OU-067,SKU-0017,470222256976,61.38,43.39,Sports Wholesale,N/A,2023-04-08,4.7,742,false
+P0018,JavaPure Plush Mini,Toys,Plush,JavaPure,Green,OneSize,2.36,Fabric,JA-PL-510,SKU-0018,788186139417,40.73,16.25,Kitchen Warehouse,1 year,2021-03-02,4.7,101,false
+P0019,ZenLeaf Wearables Mini,Electronics,Wearables,ZenLeaf,Black,S,1.27,Fabric,ZE-WE-207,SKU-0019,827110316195,91.83,50.22,Sports Wholesale,N/A,2023-10-31,4.2,880,false
+P0020,UrbanThread Accessories Mini,Electronics,Accessories,UrbanThread,White,L,1.0,Fabric,UR-AC-138,SKU-0020,887321019258,119.0,49.46,Kitchen Warehouse,1 year,2021-08-13,4.6,582,false
+P0021,ZenLeaf Plush Classic,Toys,Plush,ZenLeaf,Multi,XL,1.5,Fabric,ZE-PL-329,SKU-0021,130328585053,52.42,25.74,Fashion Direct,2 years,2021-09-20,4.4,759,false
+P0022,UrbanThread Outdoor Classic,Toys,Outdoor,UrbanThread,White,L,0.1,Wood,UR-OU-118,SKU-0022,286133550028,73.55,27.67,Kitchen Warehouse,1 year,2022-10-30,3.9,38,false
+P0023,ChefMate Outdoor Classic,Sports,Outdoor,ChefMate,Black,OneSize,1.92,Fabric,CH-OU-509,SKU-0023,991217604627,108.19,67.08,Sports Wholesale,30 days,2022-11-27,4.4,992,false
+P0024,BrainyKids Fitness Max,Sports,Fitness,BrainyKids,Multi,S,1.44,Wood,BR-FI-345,SKU-0024,174188537482,116.93,67.97,Kitchen Warehouse,30 days,2023-12-24,4.5,486,false
+P0025,ZenLeaf Tops Pro,Clothing,Tops,ZenLeaf,Green,XL,2.16,Wood,ZE-TO-643,SKU-0025,669956469487,54.25,22.91,Fashion Direct,N/A,2024-03-27,3.6,843,false
+P0026,CuddleTime Footwear Classic,Sports,Footwear,CuddleTime,Brown,XL,0.83,Glass,CU-FO-865,SKU-0026,552841546674,45.71,29.65,Toy Factory Ltd,1 year,2021-05-12,4.2,649,false
+P0027,BrainyKids Footwear Max,Sports,Footwear,BrainyKids,Green,OneSize,2.27,Plastic,BR-FO-447,SKU-0027,810482162180,44.24,23.7,Kitchen Warehouse,N/A,2022-02-18,4.3,264,false
+P0028,ZenLeaf Bottoms,Clothing,Bottoms,ZenLeaf,Black,OneSize,1.02,Fabric,ZE-BO-674,SKU-0028,202588383457,44.53,31.56,Toy Factory Ltd,30 days,2021-10-15,4.4,241,false
+P0029,CuddleTime Plush Classic,Toys,Plush,CuddleTime,White,XL,1.01,Food,CU-PL-853,SKU-0029,909963513637,16.8,11.3,Toy Factory Ltd,2 years,2022-04-29,4.5,109,false
+P0030,UrbanThread Footwear Plus,Clothing,Footwear,UrbanThread,Green,XL,0.95,Metal,UR-FO-372,SKU-0030,888020077163,44.81,31.45,Fashion Direct,2 years,2022-09-24,4.1,21,false
+P0031,BrainyKids Beverages Plus,Food,Beverages,BrainyKids,Indigo,OneSize,0.07,Metal,BR-BE-879,SKU-0031,527101867864,14.61,5.83,Organic Foods Co,N/A,2023-03-16,5.0,308,false
+P0032,BrightHome Decor Classic,Home,Decor,BrightHome,Blue,L,0.69,Food,BR-DE-735,SKU-0032,865192848120,12.81,6.6,Kitchen Warehouse,N/A,2021-05-16,3.8,360,false
+P0033,KidsBuild Plush Max,Toys,Plush,KidsBuild,Gray,L,0.66,Food,KI-PL-085,SKU-0033,272274695354,22.41,10.58,Tech Supplies Inc,30 days,2024-08-22,4.3,702,false
+P0034,FitLife Footwear Max,Clothing,Footwear,FitLife,Indigo,S,1.55,Wood,FI-FO-230,SKU-0034,811068471850,41.0,20.54,Home Essentials,N/A,2022-04-14,3.4,928,false
+P0035,ChefMate Accessories Mini,Sports,Accessories,ChefMate,Indigo,S,0.34,Metal,CH-AC-792,SKU-0035,644059012401,73.81,47.05,Fashion Direct,2 years,2022-02-21,4.5,800,false
+P0036,UrbanThread Outdoor Classic,Toys,Outdoor,UrbanThread,Blue,L,2.27,Plastic,UR-OU-242,SKU-0036,596574155463,18.51,8.63,Sports Wholesale,90 days,2023-01-28,4.9,596,false
+P0037,TechPro Fitness Classic,Sports,Fitness,TechPro,Clear,S,2.28,Wood,TE-FI-954,SKU-0037,616404711835,135.67,50.67,Organic Foods Co,1 year,2024-05-26,5.0,612,false
+P0038,ChefMate Accessories Classic,Electronics,Accessories,ChefMate,Multi,XL,0.27,Fabric,CH-AC-899,SKU-0038,243744329962,172.75,94.52,Kitchen Warehouse,1 year,2024-12-25,3.8,543,false
+P0039,ComfortWear Tops Classic,Clothing,Tops,ComfortWear,Black,S,0.82,Fabric,CO-TO-447,SKU-0039,284222622685,41.12,18.73,Toy Factory Ltd,6 months,2023-10-04,4.2,873,false
+P0040,TechPro Outdoor Classic,Toys,Outdoor,TechPro,Red,S,1.17,Metal,TE-OU-727,SKU-0040,634984796535,74.76,27.39,Home Essentials,90 days,2021-08-19,4.0,866,false
+P0041,ComfortWear Lighting Max,Home,Lighting,ComfortWear,White,S,1.93,Wood,CO-LI-185,SKU-0041,370912945452,124.81,43.89,Home Essentials,90 days,2024-10-18,4.5,291,false
+P0042,UrbanThread Educational Pro,Toys,Educational,UrbanThread,Gray,XL,1.66,Metal,UR-ED-338,SKU-0042,151409772899,76.77,45.12,Toy Factory Ltd,6 months,2023-07-17,4.4,332,false
+P0043,VoltEdge Plush Mini,Toys,Plush,VoltEdge,Red,XS,1.0,Food,VO-PL-092,SKU-0043,276987969004,26.37,11.76,Kitchen Warehouse,6 months,2023-04-05,4.1,669,false
+P0044,ZoomToys Footwear Max,Clothing,Footwear,ZoomToys,Silver,OneSize,1.9,Wood,ZO-FO-615,SKU-0044,200601322124,101.53,54.88,Organic Foods Co,2 years,2023-01-25,4.9,628,false
+P0045,SoundMax Outdoor Mini,Toys,Outdoor,SoundMax,Black,XL,1.22,Wood,SO-OU-082,SKU-0045,984364723104,45.78,21.35,Fashion Direct,N/A,2021-11-01,4.8,307,false
+P0046,ChefMate Snacks Max,Food,Snacks,ChefMate,Purple,XS,0.09,Glass,CH-SN-084,SKU-0046,653057126635,26.05,12.82,Tech Supplies Inc,30 days,2024-09-16,4.1,473,false
+P0047,TechPro Cleaning Plus,Home,Cleaning,TechPro,White,L,1.88,Food,TE-CL-217,SKU-0047,186694290228,72.61,50.72,Kitchen Warehouse,6 months,2024-05-22,4.2,444,false
+P0048,SoundMax Wearables Classic,Electronics,Wearables,SoundMax,Black,S,1.02,Food,SO-WE-708,SKU-0048,841699162283,177.57,131.33,Fashion Direct,1 year,2022-09-12,4.8,89,false
+P0049,SoundMax Audio Classic,Electronics,Audio,SoundMax,Black,OneSize,1.21,Plastic,SO-AU-789,SKU-0049,260904187568,64.17,27.36,Toy Factory Ltd,30 days,2021-02-14,4.8,756,false
+P0050,TechPro Outdoor Mini,Sports,Outdoor,TechPro,Clear,XL,1.84,Plastic,TE-OU-755,SKU-0050,755320360222,13.32,9.88,Home Essentials,6 months,2022-08-19,4.8,37,false
+P0051,BrightHome Outdoor,Sports,Outdoor,BrightHome,Indigo,XS,1.12,Glass,BR-OU-356,SKU-0051,866429721577,120.91,72.43,Tech Supplies Inc,1 year,2021-11-27,4.1,352,false
+P0052,JavaPure Beverages,Food,Beverages,JavaPure,Brown,M,2.01,Glass,JA-BE-369,SKU-0052,618814752066,33.71,20.87,Toy Factory Ltd,N/A,2021-11-28,4.5,636,false
+P0053,SoundMax Plush Pro,Toys,Plush,SoundMax,Brown,L,0.92,Plastic,SO-PL-368,SKU-0053,387251304451,24.9,14.26,Home Essentials,90 days,2021-11-21,4.6,515,true
+P0054,UrbanThread Power Plus,Electronics,Power,UrbanThread,White,XL,1.69,Plastic,UR-PO-874,SKU-0054,763638535805,67.66,30.92,Tech Supplies Inc,2 years,2024-12-17,4.9,51,false
+P0055,BrainyKids Outdoor Classic,Sports,Outdoor,BrainyKids,White,XS,1.29,Glass,BR-OU-726,SKU-0055,939414927695,117.83,48.64,Sports Wholesale,30 days,2021-07-23,4.4,838,false
+P0056,UrbanThread Cleaning Max,Home,Cleaning,UrbanThread,Black,S,0.39,Fabric,UR-CL-432,SKU-0056,352489169043,20.1,8.25,Kitchen Warehouse,6 months,2023-05-29,4.5,423,false
+P0057,TechPro Footwear,Sports,Footwear,TechPro,Clear,S,2.26,Metal,TE-FO-945,SKU-0057,265963831708,176.97,115.68,Organic Foods Co,2 years,2021-04-29,5.0,818,false
+P0058,UrbanThread Snacks Mini,Food,Snacks,UrbanThread,Silver,OneSize,2.22,Food,UR-SN-457,SKU-0058,326103740129,31.81,13.0,Sports Wholesale,6 months,2024-07-02,4.0,807,false
+P0059,CuddleTime Footwear Pro,Sports,Footwear,CuddleTime,Brown,L,1.33,Plastic,CU-FO-524,SKU-0059,441672318560,136.33,63.2,Kitchen Warehouse,30 days,2024-07-25,4.3,815,false
+P0060,BrainyKids Bottoms Mini,Clothing,Bottoms,BrainyKids,Green,OneSize,0.06,Fabric,BR-BO-306,SKU-0060,909912442443,38.57,28.02,Sports Wholesale,30 days,2022-11-26,4.3,241,false
+P0061,KidsBuild Pantry,Food,Pantry,KidsBuild,Brown,OneSize,1.32,Glass,KI-PA-254,SKU-0061,456934231775,21.33,10.69,Toy Factory Ltd,2 years,2022-01-30,4.4,100,false
+P0062,SoundMax Outdoor Max,Sports,Outdoor,SoundMax,White,XS,2.49,Fabric,SO-OU-511,SKU-0062,566590047777,79.66,55.67,Home Essentials,1 year,2024-11-12,3.9,953,false
+P0063,BrainyKids Outdoor,Toys,Outdoor,BrainyKids,Blue,S,0.95,Glass,BR-OU-161,SKU-0063,718235071225,23.31,12.57,Home Essentials,1 year,2021-09-01,3.9,123,false
+P0064,HydroPeak Tops Classic,Clothing,Tops,HydroPeak,Blue,XS,1.86,Wood,HY-TO-221,SKU-0064,998434475143,97.03,68.67,Kitchen Warehouse,6 months,2021-01-05,4.0,125,false
+P0065,UrbanThread Accessories Mini,Electronics,Accessories,UrbanThread,Clear,XL,1.15,Wood,UR-AC-780,SKU-0065,832076872320,226.57,125.05,Sports Wholesale,1 year,2022-10-29,4.7,638,false
+P0066,ComfortWear Cleaning,Home,Cleaning,ComfortWear,Multi,XS,0.26,Food,CO-CL-127,SKU-0066,716945913700,20.57,9.74,Fashion Direct,N/A,2024-06-21,4.5,554,false
+P0067,ZoomToys Audio Mini,Electronics,Audio,ZoomToys,Clear,XL,1.54,Metal,ZO-AU-087,SKU-0067,687581251673,235.0,165.69,Tech Supplies Inc,N/A,2023-04-03,3.8,956,true
+P0068,UrbanThread Accessories Mini,Sports,Accessories,UrbanThread,Black,XL,1.56,Wood,UR-AC-695,SKU-0068,165151179479,59.94,24.68,Fashion Direct,6 months,2022-10-29,4.0,185,true
+P0069,UrbanThread Power Max,Electronics,Power,UrbanThread,White,M,2.38,Plastic,UR-PO-771,SKU-0069,523073267793,75.61,33.62,Fashion Direct,6 months,2022-07-06,4.6,416,false
+P0070,ZenLeaf Wearables,Electronics,Wearables,ZenLeaf,Red,XS,2.42,Wood,ZE-WE-513,SKU-0070,959867299958,173.65,66.61,Sports Wholesale,2 years,2023-02-04,4.4,553,false
+P0071,CuddleTime Cleaning Classic,Home,Cleaning,CuddleTime,Multi,L,2.5,Metal,CU-CL-860,SKU-0071,519532396020,96.14,44.16,Tech Supplies Inc,1 year,2024-07-18,4.4,288,true
+P0072,JavaPure Plush Classic,Toys,Plush,JavaPure,White,M,0.69,Metal,JA-PL-906,SKU-0072,797256309162,51.95,38.08,Fashion Direct,N/A,2024-12-20,4.9,463,false
+P0073,ComfortWear Outdoor Max,Toys,Outdoor,ComfortWear,Red,L,1.25,Glass,CO-OU-917,SKU-0073,876085514805,8.69,3.64,Kitchen Warehouse,30 days,2023-03-16,3.5,664,false
+P0074,CuddleTime Beverages Pro,Food,Beverages,CuddleTime,Brown,L,0.07,Food,CU-BE-474,SKU-0074,586160193863,29.85,22.19,Tech Supplies Inc,6 months,2021-02-10,4.0,776,false
+P0075,BrightHome Outdoor Pro,Toys,Outdoor,BrightHome,White,XL,0.32,Food,BR-OU-201,SKU-0075,536533759103,58.69,34.77,Kitchen Warehouse,N/A,2022-07-23,3.8,565,false
+P0076,ZenLeaf Plush Classic,Toys,Plush,ZenLeaf,Brown,XL,0.11,Glass,ZE-PL-197,SKU-0076,846670044997,71.43,45.83,Home Essentials,30 days,2024-11-20,4.0,694,false
+P0077,TechPro Footwear Max,Clothing,Footwear,TechPro,Silver,OneSize,0.17,Food,TE-FO-778,SKU-0077,347910753399,102.88,56.4,Organic Foods Co,30 days,2023-05-11,3.9,401,false
+P0078,KidsBuild Accessories,Electronics,Accessories,KidsBuild,Red,OneSize,0.31,Fabric,KI-AC-958,SKU-0078,371658440141,61.27,22.03,Tech Supplies Inc,90 days,2022-05-04,4.1,981,false
+P0079,HydroPeak Power,Electronics,Power,HydroPeak,Red,XS,0.2,Glass,HY-PO-067,SKU-0079,240800393499,194.56,92.48,Sports Wholesale,1 year,2023-06-25,4.7,442,false
+P0080,HydroPeak Educational Mini,Toys,Educational,HydroPeak,Black,M,0.3,Fabric,HY-ED-902,SKU-0080,781268617440,40.65,21.78,Fashion Direct,30 days,2024-08-26,4.4,960,false
+P0081,HydroPeak Wearables Classic,Electronics,Wearables,HydroPeak,Gray,XL,1.57,Plastic,HY-WE-432,SKU-0081,896636544016,17.89,9.9,Tech Supplies Inc,30 days,2022-01-16,4.2,61,false
+P0082,HydroPeak Snacks,Food,Snacks,HydroPeak,Brown,M,1.29,Wood,HY-SN-149,SKU-0082,357944215184,14.8,8.65,Sports Wholesale,2 years,2024-02-20,4.9,879,true
+P0083,BrightHome Bottoms Max,Clothing,Bottoms,BrightHome,Brown,S,0.45,Metal,BR-BO-307,SKU-0083,462575535431,118.01,86.76,Kitchen Warehouse,90 days,2023-07-20,4.8,507,false
+P0084,KidsBuild Audio Pro,Electronics,Audio,KidsBuild,Red,L,0.93,Glass,KI-AU-372,SKU-0084,177351897561,127.98,87.08,Home Essentials,90 days,2024-02-11,3.6,117,false
+P0085,ZenLeaf Accessories Pro,Sports,Accessories,ZenLeaf,Purple,M,2.28,Metal,ZE-AC-181,SKU-0085,391382956983,132.76,55.95,Tech Supplies Inc,90 days,2021-02-12,4.3,670,false
+P0086,CuddleTime Power Pro,Electronics,Power,CuddleTime,Red,M,2.0,Fabric,CU-PO-122,SKU-0086,245703138281,205.23,143.94,Home Essentials,6 months,2022-01-28,4.0,545,false
+P0087,JavaPure Outerwear Plus,Clothing,Outerwear,JavaPure,Silver,OneSize,1.83,Plastic,JA-OU-872,SKU-0087,329733465502,42.36,19.57,Tech Supplies Inc,2 years,2023-08-22,4.3,171,false
+P0088,ComfortWear Plush Max,Toys,Plush,ComfortWear,Clear,XL,0.59,Fabric,CO-PL-666,SKU-0088,327790481788,49.85,30.17,Home Essentials,6 months,2022-02-20,3.7,462,false
+P0089,ChefMate Accessories Max,Sports,Accessories,ChefMate,Silver,L,1.16,Glass,CH-AC-637,SKU-0089,569596150515,61.57,22.56,Home Essentials,6 months,2023-06-05,3.6,324,false
+P0090,FitLife Audio Pro,Electronics,Audio,FitLife,Red,M,1.39,Food,FI-AU-074,SKU-0090,140201911338,226.85,100.06,Tech Supplies Inc,6 months,2022-11-15,4.6,201,false
+P0091,KidsBuild Outerwear Classic,Clothing,Outerwear,KidsBuild,Brown,M,2.37,Plastic,KI-OU-802,SKU-0091,546663036705,92.76,43.58,Organic Foods Co,2 years,2024-04-02,4.2,669,false
+P0092,BrightHome Cleaning Plus,Home,Cleaning,BrightHome,Red,OneSize,0.56,Food,BR-CL-440,SKU-0092,558264168296,91.35,35.11,Home Essentials,1 year,2023-07-11,4.1,873,false
+P0093,JavaPure Bottoms Max,Clothing,Bottoms,JavaPure,Blue,M,0.11,Food,JA-BO-307,SKU-0093,745645595257,47.38,31.34,Tech Supplies Inc,1 year,2021-03-07,4.4,975,false
+P0094,ZoomToys Pantry Mini,Food,Pantry,ZoomToys,Purple,XL,0.28,Glass,ZO-PA-655,SKU-0094,434555377125,9.03,5.22,Toy Factory Ltd,1 year,2021-08-02,4.1,691,false
+P0095,TechPro Wearables Mini,Electronics,Wearables,TechPro,Blue,S,1.36,Metal,TE-WE-401,SKU-0095,242209562422,63.38,30.47,Fashion Direct,6 months,2023-09-07,4.2,925,false
+P0096,ChefMate Kitchen Plus,Home,Kitchen,ChefMate,Silver,OneSize,2.03,Food,CH-KI-457,SKU-0096,763139673065,141.36,49.9,Fashion Direct,90 days,2023-12-13,3.8,336,false
+P0097,FitLife Outdoor Plus,Sports,Outdoor,FitLife,Purple,XS,2.25,Food,FI-OU-426,SKU-0097,294343554232,153.56,104.32,Tech Supplies Inc,6 months,2023-06-04,3.4,187,false
+P0098,KidsBuild Wearables Max,Electronics,Wearables,KidsBuild,Black,S,0.24,Plastic,KI-WE-125,SKU-0098,508001777133,141.37,72.74,Kitchen Warehouse,N/A,2021-08-04,4.4,516,false
+P0099,FitLife Footwear Mini,Clothing,Footwear,FitLife,Blue,M,0.33,Plastic,FI-FO-039,SKU-0099,374924023580,86.39,59.81,Sports Wholesale,30 days,2021-10-07,3.9,496,false
+P0100,KidsBuild Audio Pro,Electronics,Audio,KidsBuild,Clear,S,1.71,Fabric,KI-AU-688,SKU-0100,111869524603,212.77,107.73,Toy Factory Ltd,6 months,2021-11-11,4.8,451,false
+P0101,CuddleTime Lighting Mini,Home,Lighting,CuddleTime,Brown,XL,0.17,Plastic,CU-LI-054,SKU-0101,106864239738,98.14,61.45,Fashion Direct,N/A,2023-02-12,4.3,383,false
+P0102,TechPro Lighting Pro,Home,Lighting,TechPro,Silver,XS,2.05,Metal,TE-LI-426,SKU-0102,218165288182,16.97,10.85,Kitchen Warehouse,90 days,2022-10-23,3.3,575,false
+P0103,CuddleTime Beverages Pro,Food,Beverages,CuddleTime,Multi,L,1.64,Fabric,CU-BE-674,SKU-0103,408443440983,13.12,7.0,Tech Supplies Inc,90 days,2023-01-26,5.0,420,false
+P0104,SoundMax Snacks Classic,Food,Snacks,SoundMax,Indigo,XL,2.22,Glass,SO-SN-180,SKU-0104,935952477722,24.69,15.49,Home Essentials,6 months,2022-10-14,4.4,871,false
+P0105,TechPro Power Classic,Electronics,Power,TechPro,Purple,XL,1.91,Fabric,TE-PO-243,SKU-0105,571320748696,165.54,117.32,Fashion Direct,2 years,2024-06-23,4.4,510,false
+P0106,BrightHome Cleaning Mini,Home,Cleaning,BrightHome,Brown,XS,1.89,Plastic,BR-CL-664,SKU-0106,417023177807,71.01,25.98,Organic Foods Co,2 years,2022-04-15,4.3,867,false
+P0107,BrightHome Bottoms Mini,Clothing,Bottoms,BrightHome,Multi,XS,0.18,Food,BR-BO-072,SKU-0107,314549341145,106.0,39.84,Home Essentials,N/A,2021-10-17,4.4,177,false
+P0108,HydroPeak Kitchen Plus,Home,Kitchen,HydroPeak,White,L,1.23,Food,HY-KI-279,SKU-0108,962697548625,36.05,26.57,Fashion Direct,6 months,2023-01-07,4.1,407,false
+P0109,UrbanThread Outdoor Max,Sports,Outdoor,UrbanThread,Multi,XL,1.83,Food,UR-OU-551,SKU-0109,706246654193,76.08,54.67,Fashion Direct,90 days,2022-06-11,4.0,290,false
+P0110,SoundMax Snacks Mini,Food,Snacks,SoundMax,Gray,S,0.99,Food,SO-SN-994,SKU-0110,511209592011,26.21,18.88,Fashion Direct,90 days,2022-09-23,4.4,656,false
+P0111,CuddleTime Wearables,Electronics,Wearables,CuddleTime,Black,XS,1.64,Fabric,CU-WE-378,SKU-0111,163120795363,60.64,33.08,Sports Wholesale,90 days,2023-05-19,4.2,35,false
+P0112,KidsBuild Tops Pro,Clothing,Tops,KidsBuild,Brown,OneSize,1.78,Plastic,KI-TO-660,SKU-0112,535442457832,37.97,13.48,Kitchen Warehouse,2 years,2021-06-14,3.9,530,false
+P0113,BrainyKids Accessories Pro,Sports,Accessories,BrainyKids,Silver,M,1.95,Food,BR-AC-112,SKU-0113,729797598580,63.74,40.86,Kitchen Warehouse,2 years,2022-12-07,4.3,214,false
+P0114,TechPro Footwear Plus,Sports,Footwear,TechPro,Blue,L,1.28,Metal,TE-FO-203,SKU-0114,299657873789,60.44,25.66,Tech Supplies Inc,30 days,2021-08-14,3.9,461,false
+P0115,BrightHome Kitchen Classic,Home,Kitchen,BrightHome,Black,OneSize,0.73,Plastic,BR-KI-088,SKU-0115,234766317899,136.12,56.69,Toy Factory Ltd,90 days,2022-12-02,4.5,496,false
+P0116,TechPro Accessories Mini,Electronics,Accessories,TechPro,Green,XS,1.1,Food,TE-AC-776,SKU-0116,762872496265,37.76,27.29,Sports Wholesale,30 days,2023-01-30,4.3,698,false
+P0117,ComfortWear Bottoms Plus,Clothing,Bottoms,ComfortWear,Brown,L,2.18,Fabric,CO-BO-027,SKU-0117,235729166419,98.69,67.52,Sports Wholesale,30 days,2022-07-27,4.8,254,false
+P0118,ZenLeaf Pantry,Food,Pantry,ZenLeaf,Clear,XL,0.62,Fabric,ZE-PA-334,SKU-0118,588242989148,23.28,17.18,Organic Foods Co,90 days,2023-09-20,4.0,409,false
+P0119,UrbanThread Power Pro,Electronics,Power,UrbanThread,Clear,OneSize,0.26,Food,UR-PO-131,SKU-0119,974016932904,105.44,67.13,Tech Supplies Inc,N/A,2024-10-10,5.0,478,false
+P0120,FitLife Fitness Classic,Sports,Fitness,FitLife,Brown,XL,0.74,Plastic,FI-FI-925,SKU-0120,943460666223,29.72,21.45,Home Essentials,90 days,2022-06-12,4.2,681,false
+P0121,ZenLeaf Educational Mini,Toys,Educational,ZenLeaf,Blue,XL,1.85,Food,ZE-ED-933,SKU-0121,919125179318,51.25,31.14,Organic Foods Co,1 year,2023-02-21,3.8,989,false
+P0122,ChefMate Kitchen Mini,Home,Kitchen,ChefMate,White,M,0.81,Metal,CH-KI-591,SKU-0122,103165038256,92.09,43.77,Tech Supplies Inc,30 days,2024-04-23,3.6,548,false
+P0123,ComfortWear Outdoor Plus,Sports,Outdoor,ComfortWear,Gray,OneSize,0.41,Plastic,CO-OU-512,SKU-0123,601136702172,102.43,74.48,Sports Wholesale,N/A,2022-08-04,4.6,820,false
+P0124,ChefMate Power Plus,Electronics,Power,ChefMate,Multi,OneSize,2.13,Metal,CH-PO-848,SKU-0124,330711754554,149.88,101.03,Kitchen Warehouse,N/A,2022-04-06,4.7,717,false
+P0125,KidsBuild Cleaning Max,Home,Cleaning,KidsBuild,Silver,M,1.76,Food,KI-CL-745,SKU-0125,410453292310,85.81,43.46,Toy Factory Ltd,90 days,2022-02-04,4.0,99,false
+P0126,BrainyKids Beverages,Food,Beverages,BrainyKids,Indigo,M,2.15,Fabric,BR-BE-010,SKU-0126,896124697616,9.71,4.16,Organic Foods Co,90 days,2021-07-28,3.7,694,false
+P0127,UrbanThread Cleaning,Home,Cleaning,UrbanThread,Brown,S,0.13,Metal,UR-CL-740,SKU-0127,368023113375,33.51,24.73,Tech Supplies Inc,6 months,2022-05-09,3.9,610,false
+P0128,UrbanThread Plush Mini,Toys,Plush,UrbanThread,Indigo,OneSize,0.11,Food,UR-PL-657,SKU-0128,347002489010,16.64,6.37,Tech Supplies Inc,1 year,2024-03-19,4.4,586,false
+P0129,SoundMax Plush Mini,Toys,Plush,SoundMax,Purple,S,1.01,Fabric,SO-PL-833,SKU-0129,124484500082,70.08,39.6,Fashion Direct,N/A,2024-01-04,4.3,65,false
+P0130,KidsBuild Pantry Plus,Food,Pantry,KidsBuild,Brown,XS,1.43,Plastic,KI-PA-669,SKU-0130,195181673328,28.62,11.49,Organic Foods Co,30 days,2021-03-13,3.7,86,false
+P0131,ComfortWear Snacks Mini,Food,Snacks,ComfortWear,Multi,S,2.28,Fabric,CO-SN-712,SKU-0131,672574700451,12.39,5.03,Organic Foods Co,30 days,2022-12-23,3.8,704,false
+P0132,TechPro Audio Classic,Electronics,Audio,TechPro,Red,S,2.26,Wood,TE-AU-267,SKU-0132,814604313686,239.99,91.13,Toy Factory Ltd,90 days,2023-03-31,3.9,467,false
+P0133,KidsBuild Footwear Max,Clothing,Footwear,KidsBuild,Blue,XL,2.48,Plastic,KI-FO-168,SKU-0133,444256624286,86.65,58.77,Tech Supplies Inc,N/A,2023-06-08,3.5,253,false
+P0134,ZenLeaf Accessories Plus,Electronics,Accessories,ZenLeaf,Multi,L,1.97,Metal,ZE-AC-388,SKU-0134,215757025952,35.91,13.98,Kitchen Warehouse,N/A,2021-09-10,4.9,179,false
+P0135,SoundMax Footwear,Clothing,Footwear,SoundMax,Multi,M,1.35,Food,SO-FO-695,SKU-0135,967445956036,108.62,53.01,Sports Wholesale,6 months,2024-05-02,4.5,606,false
+P0136,ZenLeaf Audio Mini,Electronics,Audio,ZenLeaf,Blue,S,1.2,Fabric,ZE-AU-188,SKU-0136,977693752887,77.83,40.26,Sports Wholesale,N/A,2022-08-11,3.9,282,false
+P0137,CuddleTime Pantry Plus,Food,Pantry,CuddleTime,Red,M,1.87,Food,CU-PA-590,SKU-0137,190440893839,5.54,4.03,Toy Factory Ltd,30 days,2024-02-09,4.9,10,false
+P0138,FitLife Accessories,Sports,Accessories,FitLife,Clear,XL,2.38,Food,FI-AC-354,SKU-0138,829023381503,165.03,104.14,Organic Foods Co,2 years,2023-12-18,3.9,700,false
+P0139,VoltEdge Snacks Classic,Food,Snacks,VoltEdge,Brown,XL,2.09,Plastic,VO-SN-936,SKU-0139,373499493785,18.86,13.92,Home Essentials,30 days,2021-08-30,4.1,271,false
+P0140,JavaPure Plush Classic,Toys,Plush,JavaPure,Silver,S,0.06,Wood,JA-PL-306,SKU-0140,217484074773,33.61,20.04,Organic Foods Co,2 years,2022-01-17,4.6,411,false
+P0141,FitLife Wearables Classic,Electronics,Wearables,FitLife,Red,XS,1.36,Glass,FI-WE-439,SKU-0141,301400437047,111.52,55.73,Sports Wholesale,90 days,2022-07-06,4.5,859,false
+P0142,KidsBuild Decor Plus,Home,Decor,KidsBuild,Silver,XS,1.08,Wood,KI-DE-972,SKU-0142,229990619558,34.92,14.46,Toy Factory Ltd,N/A,2024-02-01,4.5,507,false
+P0143,ComfortWear Educational Pro,Toys,Educational,ComfortWear,Silver,XL,1.1,Food,CO-ED-695,SKU-0143,477226272210,8.98,5.6,Organic Foods Co,1 year,2024-05-07,4.2,296,false
+P0144,BrightHome Wearables,Electronics,Wearables,BrightHome,Purple,S,1.77,Food,BR-WE-802,SKU-0144,215147869070,73.62,31.61,Sports Wholesale,90 days,2023-10-26,3.8,625,false
+P0145,ZenLeaf Pantry Mini,Food,Pantry,ZenLeaf,Blue,S,1.6,Metal,ZE-PA-538,SKU-0145,870115321292,22.73,8.42,Home Essentials,1 year,2022-04-19,4.3,62,false
+P0146,ChefMate Educational Classic,Toys,Educational,ChefMate,White,M,1.11,Wood,CH-ED-484,SKU-0146,209979173820,55.55,26.59,Kitchen Warehouse,6 months,2022-06-01,4.6,971,false
+P0147,SoundMax Outerwear Plus,Clothing,Outerwear,SoundMax,White,OneSize,1.48,Metal,SO-OU-666,SKU-0147,328818449800,49.66,29.39,Organic Foods Co,2 years,2021-06-28,4.4,760,false
+P0148,BrightHome Audio Mini,Electronics,Audio,BrightHome,Indigo,L,2.23,Metal,BR-AU-564,SKU-0148,377934219106,160.47,64.37,Tech Supplies Inc,2 years,2024-02-22,4.1,998,false
+P0149,ZenLeaf Footwear Pro,Clothing,Footwear,ZenLeaf,Indigo,XS,2.0,Fabric,ZE-FO-979,SKU-0149,166856211580,65.43,26.27,Tech Supplies Inc,1 year,2024-11-21,4.5,506,false
+P0150,VoltEdge Beverages Max,Food,Beverages,VoltEdge,Clear,XL,1.82,Fabric,VO-BE-467,SKU-0150,879552961379,9.97,7.0,Sports Wholesale,1 year,2022-06-15,4.9,310,false
+P0151,HydroPeak Outerwear,Clothing,Outerwear,HydroPeak,White,S,0.33,Plastic,HY-OU-255,SKU-0151,685017376771,26.3,17.52,Tech Supplies Inc,2 years,2024-08-21,3.9,377,false
+P0152,ChefMate Plush Pro,Toys,Plush,ChefMate,Indigo,S,2.35,Fabric,CH-PL-551,SKU-0152,958426445930,77.5,32.6,Sports Wholesale,6 months,2024-04-09,4.6,108,false
+P0153,ZenLeaf Outdoor Mini,Toys,Outdoor,ZenLeaf,Green,OneSize,1.11,Food,ZE-OU-238,SKU-0153,897703468000,69.79,35.47,Sports Wholesale,2 years,2021-10-31,4.3,185,false
+P0154,JavaPure Kitchen Plus,Home,Kitchen,JavaPure,Clear,OneSize,2.43,Plastic,JA-KI-466,SKU-0154,812574291975,31.13,11.79,Organic Foods Co,6 months,2021-07-25,4.1,741,false
+P0155,JavaPure Educational,Toys,Educational,JavaPure,White,L,2.42,Fabric,JA-ED-615,SKU-0155,967641362532,14.02,5.71,Tech Supplies Inc,30 days,2021-08-06,3.5,873,false
+P0156,FitLife Kitchen Max,Home,Kitchen,FitLife,Purple,L,2.22,Plastic,FI-KI-304,SKU-0156,658786266495,42.62,15.68,Kitchen Warehouse,6 months,2023-05-01,4.0,145,true
+P0157,BrightHome Lighting Pro,Home,Lighting,BrightHome,Silver,L,0.93,Plastic,BR-LI-230,SKU-0157,413342985795,138.88,75.93,Kitchen Warehouse,N/A,2024-06-14,4.0,946,false
+P0158,VoltEdge Audio Mini,Electronics,Audio,VoltEdge,Silver,XL,2.27,Wood,VO-AU-678,SKU-0158,990198118774,174.67,68.4,Sports Wholesale,90 days,2021-06-06,4.5,807,true
+P0159,ComfortWear Kitchen Mini,Home,Kitchen,ComfortWear,Blue,L,1.09,Fabric,CO-KI-362,SKU-0159,642537330113,24.07,9.65,Organic Foods Co,1 year,2024-11-21,4.7,651,false
+P0160,UrbanThread Educational,Toys,Educational,UrbanThread,Silver,XL,0.63,Fabric,UR-ED-225,SKU-0160,197509043318,45.94,30.35,Sports Wholesale,2 years,2021-01-06,4.1,208,false
+P0161,HydroPeak Power Mini,Electronics,Power,HydroPeak,Clear,S,1.88,Metal,HY-PO-249,SKU-0161,161094136827,99.8,56.95,Tech Supplies Inc,6 months,2021-08-29,4.8,386,false
+P0162,ComfortWear Outdoor Max,Toys,Outdoor,ComfortWear,Black,OneSize,0.42,Metal,CO-OU-852,SKU-0162,558761396631,13.69,5.21,Organic Foods Co,2 years,2022-01-09,4.1,481,false
+P0163,KidsBuild Plush Plus,Toys,Plush,KidsBuild,Green,L,1.02,Fabric,KI-PL-516,SKU-0163,109278627409,54.26,32.1,Organic Foods Co,6 months,2023-05-18,3.9,567,false
+P0164,KidsBuild Outerwear,Clothing,Outerwear,KidsBuild,Red,L,1.75,Plastic,KI-OU-573,SKU-0164,997979776027,23.76,10.06,Kitchen Warehouse,30 days,2023-09-05,3.5,320,false
+P0165,VoltEdge Outdoor Pro,Sports,Outdoor,VoltEdge,Black,M,0.08,Food,VO-OU-067,SKU-0165,753745175273,142.84,59.29,Fashion Direct,90 days,2022-09-26,4.3,951,true
+P0166,JavaPure Tops Plus,Clothing,Tops,JavaPure,Purple,XS,1.83,Glass,JA-TO-323,SKU-0166,532725867582,113.79,57.95,Toy Factory Ltd,1 year,2021-09-23,4.4,719,false
+P0167,CuddleTime Footwear Pro,Clothing,Footwear,CuddleTime,Indigo,XL,2.38,Metal,CU-FO-907,SKU-0167,201472694275,62.46,38.91,Sports Wholesale,90 days,2022-04-20,4.7,669,false
+P0168,HydroPeak Educational,Toys,Educational,HydroPeak,Multi,OneSize,0.64,Glass,HY-ED-793,SKU-0168,528134681551,69.63,36.37,Organic Foods Co,2 years,2024-06-04,3.7,621,false
+P0169,SoundMax Cleaning Pro,Home,Cleaning,SoundMax,Black,S,1.18,Wood,SO-CL-184,SKU-0169,949160797416,72.58,35.66,Sports Wholesale,30 days,2023-08-28,4.9,452,false
+P0170,JavaPure Lighting Classic,Home,Lighting,JavaPure,Clear,XS,1.29,Wood,JA-LI-086,SKU-0170,553901596630,129.69,94.78,Toy Factory Ltd,6 months,2022-06-23,4.1,898,false
+P0171,JavaPure Educational Plus,Toys,Educational,JavaPure,Brown,XS,1.69,Food,JA-ED-398,SKU-0171,610560624736,49.05,33.92,Toy Factory Ltd,90 days,2022-12-16,3.6,921,false
+P0172,VoltEdge Accessories Classic,Electronics,Accessories,VoltEdge,Indigo,XS,0.43,Fabric,VO-AC-466,SKU-0172,697164875525,61.88,33.45,Toy Factory Ltd,1 year,2023-08-21,4.3,149,false
+P0173,JavaPure Tops Plus,Clothing,Tops,JavaPure,Silver,XS,0.72,Wood,JA-TO-086,SKU-0173,173623203651,33.26,14.99,Toy Factory Ltd,1 year,2021-06-17,4.0,892,false
+P0174,VoltEdge Decor Classic,Home,Decor,VoltEdge,Black,XS,1.0,Fabric,VO-DE-935,SKU-0174,730041214230,57.6,36.21,Kitchen Warehouse,6 months,2021-01-21,4.8,574,false
+P0175,SoundMax Beverages Mini,Food,Beverages,SoundMax,Indigo,OneSize,2.17,Glass,SO-BE-957,SKU-0175,646094296641,26.58,10.9,Sports Wholesale,90 days,2021-08-21,4.4,269,false
+P0176,BrainyKids Wearables Classic,Electronics,Wearables,BrainyKids,Blue,OneSize,2.43,Fabric,BR-WE-215,SKU-0176,310248857783,37.9,18.99,Organic Foods Co,2 years,2024-03-27,3.6,978,true
+P0177,ChefMate Tops Pro,Clothing,Tops,ChefMate,Green,XL,1.1,Metal,CH-TO-949,SKU-0177,603266288191,55.14,36.17,Organic Foods Co,1 year,2021-12-29,4.0,446,false
+P0178,ZenLeaf Plush Mini,Toys,Plush,ZenLeaf,Silver,OneSize,1.89,Wood,ZE-PL-107,SKU-0178,922470796467,14.45,5.15,Organic Foods Co,2 years,2024-01-21,4.1,102,false
+P0179,ZoomToys Pantry Mini,Food,Pantry,ZoomToys,Black,OneSize,1.97,Wood,ZO-PA-423,SKU-0179,875863763386,30.4,14.9,Toy Factory Ltd,1 year,2023-03-22,4.6,229,false
+P0180,ChefMate Outerwear Plus,Clothing,Outerwear,ChefMate,Silver,OneSize,1.41,Plastic,CH-OU-983,SKU-0180,363839925543,96.96,46.25,Tech Supplies Inc,1 year,2023-03-13,4.2,197,false
+P0181,ZoomToys Fitness Max,Sports,Fitness,ZoomToys,Purple,L,1.97,Plastic,ZO-FI-122,SKU-0181,734072211250,98.9,66.31,Organic Foods Co,1 year,2024-07-08,4.9,162,false
+P0182,SoundMax Lighting Mini,Home,Lighting,SoundMax,Black,L,0.93,Metal,SO-LI-650,SKU-0182,957410771440,95.77,61.64,Organic Foods Co,2 years,2022-05-06,3.8,668,false
+P0183,HydroPeak Bottoms Mini,Clothing,Bottoms,HydroPeak,Red,OneSize,0.31,Fabric,HY-BO-950,SKU-0183,235703333339,112.85,44.17,Toy Factory Ltd,6 months,2022-08-02,4.2,79,false
+P0184,UrbanThread Bottoms Plus,Clothing,Bottoms,UrbanThread,White,L,2.26,Metal,UR-BO-185,SKU-0184,109873077474,33.13,17.57,Fashion Direct,30 days,2024-09-12,4.5,580,false
+P0185,ComfortWear Accessories Plus,Electronics,Accessories,ComfortWear,Gray,L,0.33,Glass,CO-AC-222,SKU-0185,503155155108,16.18,9.02,Sports Wholesale,2 years,2022-03-21,4.4,85,false
+P0186,ChefMate Decor Plus,Home,Decor,ChefMate,Clear,S,0.74,Metal,CH-DE-203,SKU-0186,889790003615,49.79,21.27,Kitchen Warehouse,N/A,2023-03-16,4.2,105,false
+P0187,VoltEdge Snacks Classic,Food,Snacks,VoltEdge,Red,OneSize,0.46,Fabric,VO-SN-920,SKU-0187,594197260483,22.43,12.94,Fashion Direct,1 year,2021-03-11,4.5,419,false
+P0188,ComfortWear Plush Pro,Toys,Plush,ComfortWear,Silver,XS,1.81,Metal,CO-PL-327,SKU-0188,111546128003,18.44,8.77,Home Essentials,6 months,2022-03-14,4.1,476,false
+P0189,HydroPeak Bottoms,Clothing,Bottoms,HydroPeak,White,L,1.12,Wood,HY-BO-432,SKU-0189,931858422418,40.59,15.42,Sports Wholesale,90 days,2022-10-18,4.2,505,false
+P0190,SoundMax Footwear Mini,Clothing,Footwear,SoundMax,White,L,0.14,Plastic,SO-FO-292,SKU-0190,546534235894,12.34,4.34,Sports Wholesale,6 months,2023-12-29,4.3,940,false
+P0191,SoundMax Tops,Clothing,Tops,SoundMax,Clear,XS,2.12,Fabric,SO-TO-466,SKU-0191,237054432880,54.04,27.42,Organic Foods Co,6 months,2024-06-19,4.4,845,true
+P0192,BrainyKids Power Pro,Electronics,Power,BrainyKids,Indigo,OneSize,0.16,Fabric,BR-PO-266,SKU-0192,962787286902,35.68,22.31,Home Essentials,90 days,2021-04-09,4.4,969,false
+P0193,KidsBuild Outerwear Mini,Clothing,Outerwear,KidsBuild,Purple,L,0.35,Wood,KI-OU-653,SKU-0193,836358311983,23.19,16.0,Organic Foods Co,90 days,2023-12-17,4.2,501,false
+P0194,BrightHome Footwear Mini,Clothing,Footwear,BrightHome,White,M,1.69,Wood,BR-FO-062,SKU-0194,113797477114,36.66,13.93,Organic Foods Co,30 days,2023-08-17,4.7,838,false
+P0195,ComfortWear Fitness Classic,Sports,Fitness,ComfortWear,Red,XL,2.18,Glass,CO-FI-395,SKU-0195,598109109973,37.87,16.57,Sports Wholesale,6 months,2023-11-18,4.3,70,false
+P0196,BrainyKids Decor Mini,Home,Decor,BrainyKids,Purple,OneSize,2.32,Metal,BR-DE-361,SKU-0196,229989670839,113.79,69.95,Home Essentials,1 year,2021-06-22,4.6,362,false
+P0197,HydroPeak Cleaning Max,Home,Cleaning,HydroPeak,Silver,XL,1.26,Wood,HY-CL-283,SKU-0197,767994385598,21.89,11.19,Tech Supplies Inc,1 year,2023-06-07,4.3,254,false
+P0198,TechPro Lighting,Home,Lighting,TechPro,Black,XL,0.47,Wood,TE-LI-275,SKU-0198,325465045487,47.12,20.64,Home Essentials,30 days,2022-02-21,4.3,355,false
+P0199,ChefMate Plush Plus,Toys,Plush,ChefMate,Indigo,XS,2.41,Metal,CH-PL-192,SKU-0199,256573961868,20.26,12.61,Home Essentials,2 years,2024-09-26,3.8,181,false
+P0200,ZenLeaf Audio Plus,Electronics,Audio,ZenLeaf,Black,XL,1.9,Wood,ZE-AU-538,SKU-0200,282549624069,15.24,7.11,Fashion Direct,2 years,2021-07-12,4.3,102,false

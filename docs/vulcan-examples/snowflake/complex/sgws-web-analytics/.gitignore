@@ -1,0 +1,40 @@
+# Private keys and secrets
+snowflake_key.p8
+*.p8
+*.pem
+*.key
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+
+# Docker
+.docker/
+
+# Vulcan
+.vulcan/
+.cache/
+derby.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Documentation (now organized in docs/ folder)
+# Keeping .gitignore entry for any future temp docs in root
+*-FIX.md
+*-COMPLETE.md
+*-SUMMARY.md
+*-TEMP.md

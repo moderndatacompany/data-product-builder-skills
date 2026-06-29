@@ -1,0 +1,3 @@
+kind: metric
+name: total_sub_regions
+measure: geo_mapping.total_sub_regions

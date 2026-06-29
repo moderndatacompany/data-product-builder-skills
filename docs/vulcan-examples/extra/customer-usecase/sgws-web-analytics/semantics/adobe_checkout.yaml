@@ -1,0 +1,89 @@
+# ============================================================================
+# SEMANTIC MODEL: Adobe Checkout (Aligned with dp_web_heartbeat/model/tables/adobe_checkout.yaml)
+# ============================================================================
+# Table containing information about adobe analytics data on checkouts
+# completed within the same cart ID from "Add to Cart" to checkout.
+# ============================================================================
+
+models:
+  web_analytics_gold.ADOBE_CHECKOUT:
+    alias: adobe_checkout
+    # description: "Table containing information about adobe analytics data on checkouts completed within the same cart ID from Add to Cart to checkout."
+    
+    dimensions:
+      excludes: []
+    
+    measures:
+      # ==================== REVENUE MEASURES ====================
+      total_revenues:
+        type: number
+        expression: "SUM({adobe_checkout.REVENUE})"
+        description: "Total revenue generated from the product."
+      
+      total_revenues_from_list:
+        type: number
+        expression: "SUM(CASE WHEN {adobe_checkout.LIST_TYPE} IS NOT NULL THEN {adobe_checkout.REVENUE} ELSE 0 END)"
+        description: "Total revenue generated from list pages."
+      
+      # ==================== CHECKOUT COUNTS ====================
+      checkout_count:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {adobe_checkout.C_EVENT_LIST} LIKE '%1%' THEN {adobe_checkout.HITID} END)"
+        description: "Provides total checkout count happened within the same cart ID from Add to Cart to checkout."
+      
+      total_atc_events:
+        type: count_distinct
+        expression: "{adobe_checkout.HITID}"
+        description: "Total Add to Cart events"
+      
+      unique_carts:
+        type: count_distinct
+        expression: "{adobe_checkout.CART_ID}"
+        description: "Unique carts created"
+      
+      unique_orders:
+        type: count_distinct
+        expression: "{adobe_checkout.C_ORDER_NUMBER}"
+        description: "Unique orders placed"
+      
+      unique_accounts:
+        type: count_distinct
+        expression: "{adobe_checkout.ACCOUNT_UNIQUE_ID}"
+        description: "Unique accounts making purchases"
+    
+    segments:
+      is_app:
+        expression: "{adobe_checkout.DIGITAL_PLATFORM} = 'App'"
+        description: "App checkouts"
+      
+      is_web:
+        expression: "{adobe_checkout.DIGITAL_PLATFORM} = 'Web'"
+        description: "Web checkouts"
+      
+      is_favorites_list:
+        expression: "{adobe_checkout.LIST_TYPE} = 'Favorites'"
+        description: "Checkouts from Favorites list"
+      
+      is_my_list:
+        expression: "{adobe_checkout.LIST_TYPE} = 'My List'"
+        description: "Checkouts from My List"
+      
+      is_previously_purchased:
+        expression: "{adobe_checkout.LIST_TYPE} = 'Previously Purchased'"
+        description: "Checkouts from Previously Purchased"
+      
+      is_ready_to_reorder:
+        expression: "{adobe_checkout.LIST_TYPE} = 'Ready to Reorder'"
+        description: "Checkouts from Ready to Reorder"
+      
+      is_customers_like_you:
+        expression: "{adobe_checkout.LIST_TYPE} = 'Customers Like You'"
+        description: "Checkouts from Customers Like You recommendations"
+      
+      is_algorithmic:
+        expression: "{adobe_checkout.LIST_ALGORITHMIC_TYPE} = 'Algorithmic'"
+        description: "Algorithmic recommendations"
+      
+      is_non_algorithmic:
+        expression: "{adobe_checkout.LIST_ALGORITHMIC_TYPE} = 'Non-Algorithmic'"
+        description: "Non-algorithmic (manual) lists"

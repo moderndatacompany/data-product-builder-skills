@@ -1,0 +1,102 @@
+checks:
+  curated.dim_customer_profile:
+    completeness:
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All profiles must have a customer ID"
+      
+      - missing_count(customer_name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All profiles must have a customer name"
+      
+      - missing_count(email) = 0:
+          name: no_missing_emails
+          attributes:
+            description: "All profiles must have an email"
+      
+      - missing_count(customer_segment) = 0:
+          name: no_missing_segments
+          attributes:
+            description: "All profiles must have a customer segment"
+      
+      - row_count > 50:
+          name: sufficient_customer_profiles
+          attributes:
+            description: "At least 50 customer profiles"
+    
+    validity:
+      - failed rows:
+          name: valid_segments
+          fail query: |
+            SELECT customer_id, customer_name, customer_segment
+            from curated.dim_customer_profile
+            WHERE customer_segment NOT IN ('High Value', 'Medium Value', 'Low Value', 'Churned', 'New')
+          samples limit: 10
+          attributes:
+            description: "Customer segments must be from valid set"
+      
+      - failed rows:
+          name: non_negative_orders
+          fail query: |
+            SELECT customer_id, customer_name, total_orders
+            from curated.dim_customer_profile
+            WHERE total_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Total orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT customer_id, customer_name, total_revenue
+            from curated.dim_customer_profile
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Total revenue cannot be negative"
+      
+      - failed rows:
+          name: positive_avg_order_value
+          fail query: |
+            SELECT customer_id, customer_name, avg_order_value, total_orders
+            from curated.dim_customer_profile
+            WHERE total_orders > 0 AND avg_order_value <= 0
+          samples limit: 10
+          attributes:
+            description: "Average order value must be positive when orders exist"
+      
+      # This will FAIL - checking for all high-value customers
+      - failed rows:
+          name: all_high_value_check
+          fail query: |
+            SELECT customer_id, customer_name, customer_segment, total_revenue
+            from curated.dim_customer_profile
+            WHERE customer_segment != 'High Value'
+          samples limit: 10
+          attributes:
+            description: "All customers should be high value (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for minimum revenue threshold
+      - failed rows:
+          name: minimum_revenue_check
+          fail query: |
+            SELECT customer_id, customer_name, total_revenue, customer_segment
+            from curated.dim_customer_profile
+            WHERE total_revenue < 1000
+          samples limit: 10
+          attributes:
+            description: "All customers should have at least $1000 revenue (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(customer_id) = 0:
+          name: unique_customer_ids
+          attributes:
+            description: "Customer IDs must be unique"
+      
+      - duplicate_count(email) = 0:
+          name: unique_emails
+          attributes:
+            description: "Email addresses must be unique"
+

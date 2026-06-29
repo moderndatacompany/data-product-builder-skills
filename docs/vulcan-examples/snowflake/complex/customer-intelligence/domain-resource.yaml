@@ -1,0 +1,61 @@
+version: v1alpha
+type: vulcan
+name: customer-intelligence
+tags:
+  - customer-analytics
+  - rfm-segmentation
+  - customer-intelligence
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: demo-staging-compute
+  engine: snowflake
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=shreya-examples'
+      - '--submodules=off'
+    baseDir: vulcan-examples/snowflake/demo/customer-intelligence
+    secret: demo-staging:git-sync
+  depots:
+    - dataos://customerplatform?purpose=rw
+  workflow:
+    schedule:
+      crons:
+      - '0 0 * * *'  # Daily at midnight
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "1000m"
+        memory: "2Gi"
+      limit:
+        cpu: "2000m"
+        memory: "4Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 5
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "2000m"
+        memory: "4Gi"
+      limit:
+        cpu: "4000m"
+        memory: "8Gi"
+

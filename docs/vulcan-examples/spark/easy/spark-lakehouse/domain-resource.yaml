@@ -1,0 +1,58 @@
+version: v1alpha
+type: vulcan
+name: spark-lakehouse-prod
+tags:
+  - spark
+  - iceberg
+  - production
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: qa-compute
+  engine: spark
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=shreya-examples'
+      - '--submodules=off'
+    baseDir: vulcan-examples/spark/deployment-demo/spark-lakehouse
+    secret: qa:git-sync
+  depots:
+    - dataos://s3lhyddepot?purpose=rw
+  workflow:
+    schedule:
+      crons:
+        - "0 2 * * *"
+      endOn: "2027-12-31T00:00:00-00:00"
+      timezone: "UTC"
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "1000m"
+        memory: "2Gi"
+      limit:
+        cpu: "4000m"
+        memory: "8Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+  api:
+    replicas: 3
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "500m"
+        memory: "1Gi"
+      limit:
+        cpu: "2000m"
+        memory: "4Gi"

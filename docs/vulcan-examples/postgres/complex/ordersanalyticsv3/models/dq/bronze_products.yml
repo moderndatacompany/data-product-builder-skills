@@ -1,0 +1,75 @@
+# kind: dq — converted from checks/bronze_products.yml
+kind: dq
+name: products_dq
+depends_on: raw.products
+rules:
+- missing_count(product_id) = 0:
+    name: no_missing_product_ids
+    dimension: completeness
+    description: All products must have a product ID
+- missing_count(name) = 0:
+    name: no_missing_names
+    dimension: completeness
+    description: All products must have a name
+- missing_count(category) = 0:
+    name: no_missing_categories
+    dimension: completeness
+    description: All products must have a category
+- missing_count(price) = 0:
+    name: no_missing_prices
+    dimension: completeness
+    description: All products must have a price
+- row_count > 500:
+    name: high_product_count
+    dimension: completeness
+    description: Should have more than 500 products (EXPECTED TO FAIL)
+- failed rows:
+    name: positive_product_ids
+    dimension: validity
+    fail query: |
+      SELECT product_id, name, category, price
+      from raw.products
+      WHERE product_id <= 0
+    samples limit: 10
+    description: Product IDs must be positive
+- failed rows:
+    name: positive_prices
+    dimension: validity
+    fail query: |
+      SELECT product_id, name, category, price
+      from raw.products
+      WHERE price <= 0
+    samples limit: 10
+    description: Prices must be positive
+- failed rows:
+    name: valid_categories
+    dimension: validity
+    fail query: |
+      SELECT product_id, name, category
+      from raw.products
+      WHERE category NOT IN ('Widgets', 'Gadgets', 'Doohickeys', 'Thingamajigs')
+    samples limit: 10
+    description: Categories must be from valid set
+- failed rows:
+    name: valid_supplier_references
+    dimension: validity
+    fail query: |
+      SELECT p.product_id, p.name, p.supplier_id
+      from raw.products p
+      LEFT JOIN raw.suppliers s ON p.supplier_id = s.supplier_id
+      WHERE s.supplier_id IS NULL
+    samples limit: 10
+    description: All products must reference valid suppliers
+- failed rows:
+    name: minimum_price_check
+    dimension: validity
+    fail query: |
+      SELECT product_id, name, category, price
+      from raw.products
+      WHERE price < 50
+    samples limit: 10
+    description: All products should be priced at least $50 (EXPECTED TO FAIL)
+- duplicate_count(product_id) = 0:
+    name: unique_product_ids
+    dimension: uniqueness
+    description: Product IDs must be unique

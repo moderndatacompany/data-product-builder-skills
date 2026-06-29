@@ -1,0 +1,87 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_rows
+          attributes:
+            description: "At least one order line summary row exists"
+      - missing_count(o_orderkey) = 0:
+          name: no_missing_orderkey
+          attributes:
+            description: "Order key (grain) must not be null"
+      - missing_count(o_orderdate) = 0:
+          name: no_missing_orderdate
+          attributes:
+            description: "Order date must not be null"
+      - missing_count(total_quantity) = 0:
+          name: no_missing_total_quantity
+          attributes:
+            description: "Aggregated quantity must not be null"
+      - missing_count(line_count) = 0:
+          name: no_missing_line_count
+          attributes:
+            description: "Line count must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_total_quantity
+          fail query: |
+            SELECT o_orderkey, total_quantity
+            FROM lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1
+            WHERE total_quantity <= 0
+          samples limit: 5
+          attributes:
+            description: "Total quantity must be positive"
+      - failed rows:
+          name: negative_extended_price
+          fail query: |
+            SELECT o_orderkey, total_extended_price
+            FROM lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1
+            WHERE total_extended_price < 0
+          samples limit: 5
+          attributes:
+            description: "Total extended price cannot be negative"
+      - failed rows:
+          name: zero_line_count
+          fail query: |
+            SELECT o_orderkey, line_count
+            FROM lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1
+            WHERE line_count <= 0
+          samples limit: 5
+          attributes:
+            description: "Line count must be at least 1 (INNER JOIN ensures lines exist)"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(o_orderkey) = 0:
+          name: unique_orderkey
+          attributes:
+            description: "Order key must be unique after GROUP BY"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: orphan_orderkey
+          fail query: |
+            SELECT v.o_orderkey
+            FROM lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1 v
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1 o
+              ON o.o_orderkey = v.o_orderkey
+            WHERE o.o_orderkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every summary order key must exist in orders source"
+      - failed rows:
+          name: orphan_custkey
+          fail query: |
+            SELECT v.o_orderkey, v.o_custkey
+            FROM lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1 v
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1 c
+              ON c.c_custkey = v.o_custkey
+            WHERE c.c_custkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every summary custkey must exist in customer source"
+

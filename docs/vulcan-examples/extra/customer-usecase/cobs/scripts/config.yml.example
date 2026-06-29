@@ -1,0 +1,59 @@
+# COBS Python script config (main.py).
+# Copy to config.yml and set rfm_segment_file path (relative to cwd when running main.py).
+# Trino: set DATAOS_FQDN, DATAOS_PORT, DATAOS_USERNAME, DATAOS_API_TOKEN, DATAOS_CLUSTER.
+
+cobs_date: "2025-01-31"
+rfm_data_sql_file: ""   # Not used when reading from Trino (icebase.sample)
+num_months: 12
+sel_num_month: 1
+
+recency_clust_num: 5
+frequency_clust_num: 5
+monetary_clust_num: 4
+
+sales_buckets:
+  - "1. 0-25K"
+  - "2. 25-50K"
+  - "3. 50-75K"
+
+same_cutoff_month_flag: true
+same_cutoff_month: 1
+# cutoff_months:  # use when same_cutoff_month_flag: false
+#   "1. 0-25K": 1
+#   "2. 25-50K": 1
+#   "3. 50-75K": 1
+
+dropping_label: "Dropping"
+outperformers_sales_buckets:
+  - "2. 25-50K"
+  - "3. 50-75K"
+num_std_devs: 1
+
+# Path to segment mapping CSV (run main.py from scripts/ so ../seeds/rfm_segment_mapping.csv works)
+rfm_segment_file: "../seeds/rfm_segment_mapping.csv"
+
+# Segment names must match rfm_segment_mapping.csv + Newly Activated, Lapsed, Outperformers, Dropping
+segment_value_dict:
+  Champions: 8
+  Loyal: 7
+  Potential Loyalists: 6
+  Promising: 5
+  New Customers: 4
+  Need Attention: 4
+  About to Sleep: 3
+  At Risk: 3
+  Cannot Lose Them: 6
+  Hibernating: 2
+  Newly Activated: 4
+  Lapsed: 1
+  Outperformers: 8
+  Dropping: 3
+
+# Columns to drop before final output (calculated/intermediate)
+drop_columns: []  # Adjust to your pipeline columns
+
+# Final output columns (must exist after merge; add R12 Total Rev, R12 Proof Rev, etc. as in your data)
+output_columns: []  # Adjust to your schema
+
+# Rename to final names (e.g. total_rev -> R12 Total Rev)
+rename_dict: {}  # Adjust to your schema

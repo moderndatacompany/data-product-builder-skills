@@ -1,0 +1,35 @@
+ai_context:
+  instructions: >
+    Use this semantic model for questions about metrics. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "metrics"
+  examples:
+    - "Show metrics trends over time."
+    - "Break down metrics by key dimensions."
+
+metrics:
+  revenue_by_segment:
+    measure: order_revenue.total_net_revenue
+    time: order_revenue.O_ORDERDATE
+    default_granularity: month
+    slices:
+      order_status: order_revenue.O_ORDERSTATUS
+      order_priority: order_revenue.O_ORDERPRIORITY
+    tags:
+      - revenue
+      - analytics
+      - metric
+
+  customer_spend_trends:
+    measure: customer_orders.total_spend
+    time: customer_orders.LAST_ORDER_DATE
+    default_granularity: month
+    slices:
+      market_segment: customer_orders.C_MKTSEGMENT
+      nation: customer_orders.NATION_NAME
+    tags:
+      - customer
+      - spend
+      - metric

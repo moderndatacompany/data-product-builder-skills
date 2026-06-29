@@ -1,0 +1,81 @@
+_id,org_id,device_id,device_display_name,device_serial_number,device_product_name,created_at,last_modified_date,package_details,_class,groups,groups_1
+sud_000,org_123,dev_000,Device_0,SN000000,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_001,org_123,dev_001,Device_1,SN000001,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_002,org_123,dev_002,Device_2,SN000002,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_003,org_123,dev_003,Device_3,SN000003,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_004,org_123,dev_004,Device_4,SN000004,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_005,org_123,dev_005,Device_5,SN000005,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_006,org_123,dev_006,Device_6,SN000006,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_007,org_123,dev_007,Device_7,SN000007,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_008,org_123,dev_008,Device_8,SN000008,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_009,org_123,dev_009,Device_9,SN000009,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_010,org_123,dev_010,Device_10,SN000010,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_011,org_123,dev_011,Device_11,SN000011,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_012,org_123,dev_012,Device_12,SN000012,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_013,org_123,dev_013,Device_13,SN000013,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_014,org_123,dev_014,Device_14,SN000014,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_015,org_123,dev_015,Device_15,SN000015,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_016,org_123,dev_016,Device_16,SN000016,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_017,org_123,dev_017,Device_17,SN000017,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_018,org_123,dev_018,Device_18,SN000018,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ
+sud_019,org_123,dev_019,Device_19,SN000019,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,All Devices,HQ

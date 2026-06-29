@@ -1,0 +1,66 @@
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: delivery-performance
+display_name: Delivery Performance Analytics
+description: Trusted quick-commerce delivery performance analytics for city SLA monitoring, customer experience analysis, rider efficiency, and issue root-cause tracking on Spark.
+
+tags:
+  - quick-commerce
+  - delivery-operations
+  - customer-experience
+  - logistics
+  - spark
+
+terms:
+  - delivery-sla
+  - rider-performance
+  - customer-tier
+  - issue-tracking
+
+domain: delivery_operations
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+analytics:
+  enabled: false
+
+model_defaults:
+  dialect: spark2
+  start: '2026-04-14'
+  cron: '*/15 * * * *'
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://s3depot
+
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+
+users:
+  - username: shreyasikarwartmdcio
+    email: shreya.sikarwar@tmdc.io
+    type: OWNER
+
+virtual_environment_mode: dev_only

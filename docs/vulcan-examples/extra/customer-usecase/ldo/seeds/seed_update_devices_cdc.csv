@@ -1,0 +1,81 @@
+_id,org_id,device_id,device_display_name,device_serial_number,device_product_name,created_at,last_modified_date,package_details,_class,deleted,_op,_collection,_source_ts_ms,_db,_nilus_load_id,_nilus_id,groups,groups_1
+sud_000,org_123,dev_000,Device_0,SN000000,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_0,4b7b4e82-02e3-47d0-a759-0a156ca17058,All Devices,HQ
+sud_001,org_123,dev_001,Device_1,SN000001,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_1,b60e04dd-b641-4877-86b0-539d67252030,All Devices,HQ
+sud_002,org_123,dev_002,Device_2,SN000002,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_2,dfbeae63-b419-4cc5-83a3-972629989885,All Devices,HQ
+sud_003,org_123,dev_003,Device_3,SN000003,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_3,830adb1b-6c79-4041-bb3d-8fd6d2bef876,All Devices,HQ
+sud_004,org_123,dev_004,Device_4,SN000004,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_4,d030244e-f83f-48b1-9e4f-37ad245eaf63,All Devices,HQ
+sud_005,org_123,dev_005,Device_5,SN000005,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_5,fc574dcf-d79f-4431-9181-dcdc640dabd9,All Devices,HQ
+sud_006,org_123,dev_006,Device_6,SN000006,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_6,e75608f1-ca9c-454c-a7fc-a9aa6c3f4daf,All Devices,HQ
+sud_007,org_123,dev_007,Device_7,SN000007,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_7,4431d0c1-767d-413c-97f5-477e21d6ccdb,All Devices,HQ
+sud_008,org_123,dev_008,Device_8,SN000008,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_8,3fdc37eb-8baf-4ebc-897e-47bc5dc7f70d,All Devices,HQ
+sud_009,org_123,dev_009,Device_9,SN000009,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_9,fb57d282-9474-4a9e-b097-a861a20dc3b1,All Devices,HQ
+sud_010,org_123,dev_010,Device_10,SN000010,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_10,fe5f60e7-24dc-4d8a-a0f8-10bffedd724f,All Devices,HQ
+sud_011,org_123,dev_011,Device_11,SN000011,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_11,c515146a-1604-4d47-9da0-f4e8631672b0,All Devices,HQ
+sud_012,org_123,dev_012,Device_12,SN000012,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_12,67d7c813-fa8b-4d5d-9bdc-105ac61ab1e1,All Devices,HQ
+sud_013,org_123,dev_013,Device_13,SN000013,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_13,8d92d237-8b38-4d22-9738-b75bf27750d7,All Devices,HQ
+sud_014,org_123,dev_014,Device_14,SN000014,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_14,b476092e-0db7-40b5-9f5d-04bf5e944532,All Devices,HQ
+sud_015,org_123,dev_015,Device_15,SN000015,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_15,f9917d07-7e5c-488c-99cf-8a02fbb3830e,All Devices,HQ
+sud_016,org_123,dev_016,Device_16,SN000016,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_16,4e69cd2f-4eb4-494d-a069-a0126f8c135a,All Devices,HQ
+sud_017,org_123,dev_017,Device_17,SN000017,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_17,66008c94-8a0f-4049-b3c9-765f751e619b,All Devices,HQ
+sud_018,org_123,dev_018,Device_18,SN000018,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_18,1d9e7ede-90eb-4684-bda5-6c0adca1c953,All Devices,HQ
+sud_019,org_123,dev_019,Device_19,SN000019,Enterprise Laptop,1768222300785,1768222300785,"[
+  {packageId:'pkg_001',installationStatus:'installed',lastModifiedDate:'1700000000000',packageSeverity:'Critical',filteringGroupName:'All Devices'},
+  {packageId:'pkg_002',installationStatus:'pending',lastModifiedDate:'1700000500000',packageSeverity:'Moderate',filteringGroupName:'HQ'}
+]",system_update_devices,False,c,system_update_devices,1768222300785,inventory,load_19,cbf78d8a-2fd1-4fb1-9ed4-141d548ad1d8,All Devices,HQ

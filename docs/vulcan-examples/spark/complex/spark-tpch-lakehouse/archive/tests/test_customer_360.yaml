@@ -1,0 +1,83 @@
+test_customer_360_basic:
+  model: mys3lh02depot.tpch_lakehouse.customer_360
+  description: |
+    Validates customer_360 grain and non-negative metrics.
+    Uses minimal TPC-H shaped input to assert output shape.
+
+  inputs:
+    mys3lh02depot.tpch_lakehouse.int_customer_nation:
+      - c_custkey: 1
+        c_name: Customer A
+        c_mktsegment: AUTOMOBILE
+        c_acctbal: 100.50
+        c_address: 123 Main St
+        c_phone: '555-0001'
+        c_nationkey: 0
+        n_name: UNITED STATES
+        r_regionkey: 1
+        r_name: AMERICA
+      - c_custkey: 2
+        c_name: Customer B
+        c_mktsegment: BUILDING
+        c_acctbal: 200.00
+        c_address: 456 Oak Ave
+        c_phone: '555-0002'
+        c_nationkey: 1
+        n_name: CANADA
+        r_regionkey: 1
+        r_name: AMERICA
+    mys3lh02depot.tpch_lakehouse.int_order_items:
+      - l_orderkey: 10
+        l_linenumber: 1
+        o_custkey: 1
+        o_orderdate: '2025-01-01'
+        o_orderstatus: F
+        o_orderpriority: 1-URGENT
+        l_partkey: 100
+        l_suppkey: 50
+        l_quantity: 5
+        l_extendedprice: 50.00
+        l_discount: 0.1
+        l_tax: 0.05
+        net_amount: 45.00
+        l_returnflag: N
+        l_shipdate: '2025-01-05'
+        l_shipmode: AIR
+      - l_orderkey: 20
+        l_linenumber: 1
+        o_custkey: 1
+        o_orderdate: '2025-01-02'
+        o_orderstatus: O
+        o_orderpriority: 3-MEDIUM
+        l_partkey: 101
+        l_suppkey: 51
+        l_quantity: 3
+        l_extendedprice: 30.00
+        l_discount: 0.0
+        l_tax: 0.05
+        net_amount: 30.00
+        l_returnflag: N
+        l_shipdate: '2025-01-06'
+        l_shipmode: MAIL
+
+  outputs:
+    query:
+      rows:
+        - c_custkey: 1
+          c_name: Customer A
+          c_mktsegment: AUTOMOBILE
+          c_acctbal: 100.50
+          n_name: UNITED STATES
+          r_name: AMERICA
+          order_count: 2
+          total_revenue: 75.0
+          avg_order_value: 37.5
+        - c_custkey: 2
+          c_name: Customer B
+          c_mktsegment: BUILDING
+          c_acctbal: 200.00
+          n_name: CANADA
+          r_name: AMERICA
+          order_count: 0
+          total_revenue: 0
+          avg_order_value: 0

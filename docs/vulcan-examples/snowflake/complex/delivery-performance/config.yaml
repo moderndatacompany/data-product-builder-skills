@@ -1,0 +1,60 @@
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: pentest-dataproduct
+display_name: Data Product for Pen Test
+description: Trusted delivery performance analytics for city SLA monitoring, customer experience analysis, rider efficiency, and issue root-cause tracking.
+
+tags:
+  - quick-commerce
+  - delivery-operations
+  - customer-experience
+  - logistics
+
+terms:
+  - delivery-sla
+  - rider-performance
+  - customer-tier
+  - issue-tracking
+
+domain: delivery_operations
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+model_defaults:
+  dialect: snowflake
+  start: '2026-04-01'
+  cron: '*/5 * * * *'
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://snowflakedepot?purpose=rw
+
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+
+users:
+  - username: anujsohani@tmdc.io
+    email: anuj.sohani@tmdc.io
+    type: OWNER

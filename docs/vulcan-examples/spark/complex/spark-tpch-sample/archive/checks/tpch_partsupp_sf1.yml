@@ -1,0 +1,73 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_partsupp_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_partsupp
+          attributes:
+            description: "At least one part-supplier row exists"
+      - missing_count(ps_partkey) = 0:
+          name: no_missing_partkey
+          attributes:
+            description: "Composite PK part 1 must not be null"
+      - missing_count(ps_suppkey) = 0:
+          name: no_missing_suppkey
+          attributes:
+            description: "Composite PK part 2 must not be null"
+      - missing_count(ps_availqty) = 0:
+          name: no_missing_availqty
+          attributes:
+            description: "Available quantity must be populated"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_availqty
+          fail query: |
+            SELECT ps_partkey, ps_suppkey, ps_availqty
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_partsupp_sf1
+            WHERE ps_availqty < 0
+          samples limit: 5
+          attributes:
+            description: "Available quantity cannot be negative"
+      - failed rows:
+          name: negative_supplycost
+          fail query: |
+            SELECT ps_partkey, ps_suppkey, ps_supplycost
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_partsupp_sf1
+            WHERE ps_supplycost < 0
+          samples limit: 5
+          attributes:
+            description: "Supply cost cannot be negative"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(ps_partkey, ps_suppkey) = 0:
+          name: unique_partsupp
+          attributes:
+            description: "Composite key (partkey, suppkey) must be unique"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: orphan_partkey
+          fail query: |
+            SELECT ps.ps_partkey, ps.ps_suppkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_partsupp_sf1 ps
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_part_sf1 p
+              ON p.p_partkey = ps.ps_partkey
+            WHERE p.p_partkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every partsupp partkey must exist in part table"
+      - failed rows:
+          name: orphan_suppkey
+          fail query: |
+            SELECT ps.ps_partkey, ps.ps_suppkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_partsupp_sf1 ps
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_supplier_sf1 s
+              ON s.s_suppkey = ps.ps_suppkey
+            WHERE s.s_suppkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every partsupp suppkey must exist in supplier table"

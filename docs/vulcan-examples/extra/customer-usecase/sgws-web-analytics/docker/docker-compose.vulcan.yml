@@ -1,0 +1,36 @@
+x-images:
+  vulcan: &vulcan_image "tmdcio/vulcan-snowflake:0.228.1.6"
+  vulcan-transpiler: &vulcan_transpiler_image "tmdcio/vulcan-transpiler:0.228.1.1"
+
+networks:
+  vulcan:
+    external: true
+
+services:
+  # Vulcan API for this example project
+  vulcan-api:
+    image: *vulcan_image
+    working_dir: /workspace
+    command: ["vulcan", "--log-to-stdout","api", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      PROJECT_PATH: ${PROJECT_PATH:-/workspace}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/workspace
+    restart: unless-stopped
+    networks:
+      - vulcan
+    # Note: depends_on with external services (statestore, minio) won't work across compose files
+    # Ensure infra services are running before starting this service
+
+  # Transpiler service
+  vulcan-transpiler:
+    image: *vulcan_transpiler_image
+    environment:
+      VULCAN_API_URL: http://vulcan-api:8000/api/v1
+    depends_on:
+      - vulcan-api
+    restart: unless-stopped
+    networks:
+      - vulcan

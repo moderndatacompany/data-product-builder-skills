@@ -1,0 +1,124 @@
+# Converted from legacy: semantics/seeds/orders.yml
+kind: semantic
+name: orders
+depends_on: raw.raw_orders
+description: "Orders fact table tracking customer purchases with product references and revenue"
+
+ai_context:
+  instructions: >
+    Use this semantic model for questions about orders. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "orders"
+  examples:
+    - "Show orders trends over time."
+    - "Break down orders by key dimensions."
+
+dimensions:
+  - order_id
+  - order_date
+  - customer_id
+  - product_id
+  - total_amount
+
+measures:
+  - name: total_orders
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total orders. Respect its aggregation
+        type and any configured filters before comparing or segmenting results.
+      synonyms:
+        - "total orders"
+        - "total_orders"
+        - "total"
+        - "orders"
+      examples:
+        - "What is total orders by month?"
+        - "Compare total orders across key segments."
+    type: count_distinct
+    expression: "{orders.order_id}"
+    description: "Total number of orders"
+    tags:
+      - order
+      - count
+      - metric
+    terms:
+      - order.total_orders
+      - metric.order_count
+
+  - name: total_revenue
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total revenue. Respect its aggregation
+        type and any configured filters before comparing or segmenting results.
+      synonyms:
+        - "total revenue"
+        - "total_revenue"
+        - "total"
+        - "revenue"
+      examples:
+        - "What is total revenue by month?"
+        - "Compare total revenue across key segments."
+    type: sum
+    expression: "{orders.total_amount}"
+    format: currency
+    description: "Total revenue from all orders"
+    tags:
+      - revenue
+      - financial
+      - metric
+    terms:
+      - revenue.total_revenue
+      - finance.gross_sales
+
+segments:
+  - name: recent_orders
+    ai_context:
+      instructions: >
+        Apply this segment when the question asks for the recent orders subset. Combine it
+        with measures to answer filtered business questions.
+      synonyms:
+        - "recent orders"
+        - "recent_orders"
+        - "recent"
+        - "orders"
+      examples:
+        - "Show revenue for recent orders."
+        - "How many records are in recent orders?"
+    expression: "{orders.order_date} >= CURRENT_DATE - INTERVAL '7 days'"
+    description: "Orders placed in the last 7 days"
+    tags:
+      - order
+      - temporal
+      - recent
+    terms:
+      - order.recent
+      - temporal.last_7_days
+
+joins:
+  - name: customers
+    ai_context:
+      instructions: >
+        Use this join when a question needs attributes or metrics from customers. Keep the
+        configured join relationship to avoid double counting.
+      synonyms:
+        - "customers"
+      examples:
+        - "Analyze this model with customers attributes."
+        - "Break measures down by customers."
+    type: many_to_one
+    expression: "{orders.customer_id} = {customers.customer_id}"
+
+  - name: products
+    ai_context:
+      instructions: >
+        Use this join when a question needs attributes or metrics from products. Keep the
+        configured join relationship to avoid double counting.
+      synonyms:
+        - "products"
+      examples:
+        - "Analyze this model with products attributes."
+        - "Break measures down by products."
+    type: many_to_one
+    expression: "{orders.product_id} = {products.product_id}"

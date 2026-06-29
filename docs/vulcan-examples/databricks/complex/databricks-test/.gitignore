@@ -1,0 +1,10 @@
+# Secrets - never commit credentials
+*secret*.yaml
+
+# Vulcan cache and logs
+.cache/
+.logs/
+
+# macOS
+.DS_Store
+

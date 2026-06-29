@@ -1,0 +1,5 @@
+kind: metric
+name: total_sales
+measure: orders.total_sales
+ts: orders.order_date
+granularity: day

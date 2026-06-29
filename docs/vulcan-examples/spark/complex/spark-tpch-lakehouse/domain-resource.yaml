@@ -1,0 +1,52 @@
+version: v1alpha
+type: vulcan
+name: tpch-lakehouse-dp
+tags:
+  - spark
+  - iceberg
+  - lakehouse
+  - data-product
+spec:
+  runAsUser: "rohitrajtmdcio"
+  compute: neptune-compute
+  engine: spark
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - "--ref=shreya-examples"
+      - "--submodules=off"
+    baseDir: vulcan-examples/spark/spark-dr-rohit/tpch_lakehouse_dp
+    secret: engineering:git-sync
+  depots:
+    - dataos://mys3lh02depot?purpose=rw
+  workflow:
+    schedule:
+      crons:
+        - "*/30 * * * *"
+      endOn: "2027-01-01T00:00:00-00:00"
+      timezone: "UTC"
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "500m"
+        memory: "1Gi"
+      limit:
+        cpu: "1000m"
+        memory: "2Gi"

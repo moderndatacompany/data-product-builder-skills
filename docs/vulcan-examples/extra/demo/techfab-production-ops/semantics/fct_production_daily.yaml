@@ -1,0 +1,86 @@
+# ============================================================================
+# SEMANTIC MODEL: Production Operations Analytics - Daily Production Facts
+# ============================================================================
+# Model: techfab_gold.plant_performance_daily
+# Description: Daily production aggregation by plant with good, scrap quantities
+#              and yield metrics for operational performance reporting
+# ============================================================================
+
+models:
+  MES_PLATFORM.GOLD.PLANT_PERFORMANCE_DAILY:
+    alias: fct_production_daily
+    
+    dimensions:
+      includes:
+        - PLANT_CODE
+        - PLANT_NAME
+        - PLANT_REGION
+        - CONFIRMATION_DATE
+    
+    measures:
+      total_good_quantity:
+        type: number
+        expression: "SUM({fct_production_daily.TOTAL_GOOD_QUANTITY})"
+        description: "Total accepted production volume passing quality checks"
+      
+      total_scrap_quantity:
+        type: number
+        expression: "SUM({fct_production_daily.TOTAL_SCRAP_QUANTITY})"
+        description: "Total rejected production volume requiring disposal"
+      
+      total_rework_quantity:
+        type: number
+        expression: "SUM({fct_production_daily.TOTAL_REWORK_QUANTITY})"
+        description: "Total production requiring additional processing"
+      
+      total_quantity:
+        type: number
+        expression: "SUM({fct_production_daily.TOTAL_QUANTITY})"
+        description: "Total production volume including all categories"
+      
+      avg_first_pass_yield_pct:
+        type: number
+        expression: "AVG({fct_production_daily.AVG_FIRST_PASS_YIELD_PCT})"
+        description: "Average percentage of production passing inspection first time"
+      
+      total_production_hours:
+        type: number
+        expression: "SUM({fct_production_daily.TOTAL_PRODUCTION_HOURS})"
+        description: "Total time spent on production activities in hours"
+      
+      total_confirmations:
+        type: number
+        expression: "SUM({fct_production_daily.TOTAL_CONFIRMATIONS})"
+        description: "Total number of production confirmations"
+      
+      avg_scrap_rate_pct:
+        type: number
+        expression: "AVG({fct_production_daily.AVG_SCRAP_RATE_PCT})"
+        description: "Average scrap rate percentage"
+      
+      avg_efficiency_pct:
+        type: number
+        expression: "AVG({fct_production_daily.AVG_EFFICIENCY_PCT})"
+        description: "Average equipment efficiency percentage"
+      
+      avg_units_per_hour:
+        type: number
+        expression: "AVG({fct_production_daily.AVG_UNITS_PER_HOUR})"
+        description: "Average production rate (units per hour)"
+    
+    segments:
+      high_yield_production:
+        expression: "{fct_production_daily.AVG_FIRST_PASS_YIELD_PCT} >= 95"
+        description: "Production with excellent first pass yield above 95%"
+      
+      low_yield_production:
+        expression: "{fct_production_daily.AVG_FIRST_PASS_YIELD_PCT} < 85"
+        description: "Production requiring quality improvement attention"
+      
+      quality_target_met:
+        expression: "{fct_production_daily.QUALITY_TARGET_MET} = TRUE"
+        description: "Plants meeting quality target (scrap rate < 4%)"
+      
+      efficiency_target_met:
+        expression: "{fct_production_daily.EFFICIENCY_TARGET_MET} = TRUE"
+        description: "Plants meeting efficiency target (efficiency > 80%)"

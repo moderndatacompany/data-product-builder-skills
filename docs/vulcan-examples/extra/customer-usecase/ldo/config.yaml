@@ -1,0 +1,77 @@
+name: lenovo-device-op
+display_name: Lenovo Device Op
+tenant: ct-onboarding
+description: Lenovo Device Operations (LDO) is a comprehensive data product delivering device lifecycle management, operations monitoring, and license management insights. It processes device telemetry, warranty information, system updates, license consumption, and device health metrics to provide actionable insights for IT operations, device fleet management, and compliance tracking.
+
+tags:
+  - snowflake
+  - device_operations
+  - device_lifecycle
+  - license_management
+  - device_health
+  - lenovo
+  - warranty_tracking
+  - system_updates
+  - device_monitoring
+  - fleet_management
+  - cdc
+
+terms:
+  - data_product
+  - device_operations
+  - device_lifecycle
+  - license_management
+  - warranty_tracking
+  - device_health
+  - fleet_management
+  - compliance_tracking
+
+domain: it_operations
+# analytics:
+#   enabled: false
+
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'
+  cron: '@daily'
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://snowflakevulcan
+
+# openlineage:
+#   enabled: true
+#   url: https://forest-020226.dataos.cloud/hera
+#   timeout_seconds: 30
+#   api_key: cG9zaXRpdmVseV9zYWZlX2h1c2t5XzIwMjYwMjA1LjFmNzI0MTAwLWRjNWUtNDk5Yi1iNDlmLTFkYWU0NzVlNzE4MDhjN2QxZDA4YTE2MDZiNjc1NzViMTBhY2M1ZjRhZWIx
+
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+      - migration_start
+      - migration_end
+      - migration_failure
+      - plan_change
+
+users:
+  - username: shreya
+    email: shreya.sikarwar@tmdc.io
+    type: CONTRIBUTOR
+  - username: kanak
+    email: kanak.gupta@tmdc.io
+    type: OWNER
+  - username: mukul
+    email: mukul.gupta@tmdc.io
+    type: CONTRIBUTOR

@@ -1,0 +1,114 @@
+checks:
+  bronze_v2alpha.customers:
+    completeness:
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All customers must have a customer ID"
+      
+      - missing_count(name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All customers must have a name"
+      
+      - missing_count(email) = 0:
+          name: no_missing_emails
+          attributes:
+            description: "All customers must have an email"
+      
+      - row_count > 50:
+          name: sufficient_customers
+          attributes:
+            description: "At least 50 customers in the system"
+      
+      # This will FAIL - we have 100 customers, not 200
+      - row_count > 200:
+          name: high_customer_count
+          attributes:
+            description: "Should have more than 200 customers (EXPECTED TO FAIL)"
+    
+    validity:
+      - failed rows:
+          name: invalid_emails
+          fail query: |
+            SELECT customer_id, name, email
+            FROM bronze_v2alpha.customers
+            WHERE email NOT LIKE '%@%' OR email NOT LIKE '%.%'
+          samples limit: 10
+          attributes:
+            description: "Check for invalid email formats"
+      
+      - failed rows:
+          name: positive_customer_ids
+          fail query: |
+            SELECT customer_id, name, email
+            FROM bronze_v2alpha.customers
+            WHERE customer_id <= 0
+          samples limit: 10
+          attributes:
+            description: "Customer IDs must be positive"
+      
+      - failed rows:
+          name: valid_region_ids
+          fail query: |
+            SELECT customer_id, region_id, name
+            FROM bronze_v2alpha.customers
+            WHERE region_id NOT IN (1, 2, 3, 4, 5)
+          samples limit: 10
+          attributes:
+            description: "Region IDs must be valid (1-5)"
+      
+      # This will FAIL - checking for names with length < 5 (data_gen creates 8-char names)
+      - failed rows:
+          name: name_length_check
+          fail query: |
+            SELECT customer_id, name, email
+            FROM bronze_v2alpha.customers
+            WHERE LENGTH(name) < 10
+          samples limit: 10
+          attributes:
+            description: "Customer names should be at least 10 characters (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(customer_id) = 0:
+          name: unique_customer_ids
+          attributes:
+            description: "Customer IDs must be unique"
+      
+      - duplicate_count(email) = 0:
+          name: unique_emails
+          attributes:
+            description: "Email addresses must be unique"
+    
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in customer table row count using historic data"
+      
+      - anomaly detection for missing_count(customer_id):
+          name: missing_customer_id_anomaly
+          attributes:
+            description: "Detect anomalies in missing customer ID count"
+      
+      - anomaly detection for missing_count(email):
+          name: missing_email_anomaly
+          attributes:
+            description: "Detect anomalies in missing email count"
+      
+      - anomaly detection for distinct_count(region_id):
+          name: region_count_anomaly
+          attributes:
+            description: "Detect anomalies in number of distinct customer regions"
+    
+    timeliness:
+      - change for row_count >= -5%:
+          name: row_count_timeliness_check
+          attributes:
+            description: "Alert if customer count drops more than 5% from same day last week"
+      
+      - change for distinct_count(region_id) >= -10%:
+          name: region_count_timeliness_check
+          attributes:
+            description: "Alert if distinct region count drops more than 10% from same day last week"
+

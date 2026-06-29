@@ -1,0 +1,7 @@
+use_cases:
+  - Daily customer dimension refresh against a Snowflake raw source
+  - Product catalog dimension build with full refresh and explicit type casting
+  - Incremental orders fact loading by ORDER_DATE for cost-efficient daily runs
+  - Customer-orders join exposed as a curated dimensional view for downstream SQL consumers
+  - Daily sales summary aggregation (total orders, unique customers, revenue, AOV, tax, shipping) for executive dashboards
+  - Reference template for teams that prefer plain-SQL Vulcan projects without a semantic layer or seeds

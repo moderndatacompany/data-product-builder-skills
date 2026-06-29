@@ -1,0 +1,176 @@
+# Converted from legacy: semantics/customers.yml
+kind: semantic
+name: customers
+depends_on: sales.customers
+ai_context:
+  instructions: >
+    Use this semantic model for questions about customers. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "customers"
+  examples:
+    - "Show customers trends over time."
+    - "Break down customers by key dimensions."
+
+measures:
+- name: total_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total customers"
+      - "total_customers"
+      - "total"
+      - "customers"
+    examples:
+      - "What is total customers by month?"
+      - "Compare total customers across key segments."
+  type: count
+  expression: '{customers.customer_id}'
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.total_customers
+  - metric.customer_count
+- name: active_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for active customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "active customers"
+      - "active_customers"
+      - "active"
+      - "customers"
+    examples:
+      - "What is active customers by month?"
+      - "Compare active customers across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{customers.account_status} = ''Active'''
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active
+- name: platinum_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for platinum customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "platinum customers"
+      - "platinum_customers"
+      - "platinum"
+      - "customers"
+    examples:
+      - "What is platinum customers by month?"
+      - "Compare platinum customers across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{customers.customer_segment} = ''Platinum'''
+  tags:
+  - customer
+  - segment
+  - tier
+  terms:
+  - customer.tier
+  - segment.platinum_customers
+- name: average_loyalty_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average loyalty score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average loyalty score"
+      - "average_loyalty_score"
+      - "average"
+      - "loyalty"
+    examples:
+      - "What is average loyalty score by month?"
+      - "Compare average loyalty score across key segments."
+  type: avg
+  expression: '{customers.loyalty_score}'
+  tags:
+  - customer
+  - average
+  - metric
+  terms:
+  - customer.loyalty
+  - metric.loyalty
+segments:
+- name: high_value_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high value customers subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high value customers"
+      - "high_value_customers"
+      - "high"
+      - "value"
+    examples:
+      - "Show revenue for high value customers."
+      - "How many records are in high value customers?"
+  expression: '{customers.customer_segment} IN (''Platinum'', ''Gold'')'
+  tags:
+  - revenue
+  - high_value
+  - segment
+  terms:
+  - revenue.premium
+  - segment.high_value_customers
+- name: recent_signups
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recent signups subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "recent signups"
+      - "recent_signups"
+      - "recent"
+      - "signups"
+    examples:
+      - "Show revenue for recent signups."
+      - "How many records are in recent signups?"
+  expression: '{customers.signup_date} >= CURRENT_DATE - INTERVAL ''30 days'''
+  tags:
+  - acquisition
+  - temporal
+  - growth
+  terms:
+  - acquisition.recent
+  - customer.signups
+- name: at_risk_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the at risk customers subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "at risk customers"
+      - "at_risk_customers"
+      - "risk"
+      - "customers"
+    examples:
+      - "Show revenue for at risk customers."
+      - "How many records are in at risk customers?"
+  expression: '{customers.account_status} = ''Inactive'' OR {customers.account_status} = ''Suspended'''
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment

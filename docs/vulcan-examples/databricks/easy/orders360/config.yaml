@@ -1,0 +1,69 @@
+vde: false
+display_name: Orders360
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: sales
+tags:
+  - databricks
+  - sales
+  - analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: orders360
+tenant: sales
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity on Databricks.
+
+# --- Gateway Connection ---
+gateways:
+  default:
+    connection:
+      type: databricks
+      server_hostname: {{ env_var('DATABRICKS_HOST') }}
+      http_path: {{ env_var('DATABRICKS_HTTP_PATH') }}
+      access_token: {{ env_var('DATABRICKS_TOKEN') }}
+      catalog: {{ env_var('DATABRICKS_CATALOG') }}
+    state_connection:
+      type: postgres
+      host: {{ env_var('STATESTORE_HOST') }}
+      port: {{ env_var('STATESTORE_PORT') }}
+      database: {{ env_var('STATESTORE_DATABASE') }}
+      user: {{ env_var('STATESTORE_USER') }}
+      password: {{ env_var('STATESTORE_PASSWORD') }}
+    state_schema: new
+
+default_gateway: default
+
+# --- Model Defaults ---
+model_defaults:
+  dialect: databricks
+  start: 2024-01-01
+  cron: '@daily'
+
+# --- Linting Rules ---
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections
+
+
+openlineage:
+  enabled: true
+  url: http://127.0.0.1:8000
+  timeout_seconds: 10
+  # api_key: optional_api_key_here
+
+transpiler:
+  base_url: http://vulcan-transpiler:4000/transpiler  
+
+graphql:
+  base_url: http://vulcan-graphql:3000
+  timeout: 60

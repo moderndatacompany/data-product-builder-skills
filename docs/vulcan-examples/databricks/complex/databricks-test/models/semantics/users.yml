@@ -1,0 +1,161 @@
+models:
+  b2b_saas.users:
+    alias: users
+    
+    # ============================================================================
+    # MEASURES
+    # ============================================================================
+    # IMPORTANT: When using `type: count`, do NOT include COUNT() in the expression.
+    # The transpiler automatically wraps the expression in COUNT() based on the type.
+    # 
+    # ❌ WRONG (causes "aggregate function calls cannot be nested" error):
+    #    type: count
+    #    expression: COUNT(*)
+    #    → Generates: COUNT(CASE WHEN ... THEN COUNT(*) END)  -- nested aggregate!
+    #
+    # ✅ CORRECT:
+    #    type: count
+    #    expression: "*"  (or a field reference like "{users.user_id}")
+    #    → Generates: COUNT(CASE WHEN ... THEN 1 END)  -- valid SQL
+    # ============================================================================
+    measures:
+      total_users:
+        type: count
+        expression: |
+          {users.user_id}
+        tags:
+          - user
+          - count
+          - metric
+        terms:
+          - customer.total_users
+          - metric.user_count
+        
+      active_users:
+        type: count
+        expression: |
+          {users.user_id}
+        filters:
+          - |
+            {users.status} = 'active'
+        tags:
+          - user
+          - active
+          - engagement
+        terms:
+          - customer.active_users
+          - engagement.active
+        
+      new_signups:
+        type: count
+        expression: |
+          {users.user_id}
+        filters:
+          - |
+            {users.signup_date} >= CURRENT_DATE - INTERVAL 30 DAYS
+        tags:
+          - acquisition
+          - growth
+          - metric
+        terms:
+          - customer.new_signups
+          - acquisition.signups
+        
+      enterprise_users:
+        type: count
+        expression: |
+          {users.user_id}
+        filters:
+          - |
+            {users.plan_type} = 'enterprise'
+        tags:
+          - enterprise
+          - customer
+          - segment
+        terms:
+          - customer.enterprise_users
+          - segment.enterprise
+        
+      paid_users:
+        type: count
+        expression: |
+          {users.user_id}
+#        filters:
+#          - "{users.customer_tier} = 'paid'"
+        tags:
+          - revenue
+          - customer
+          - paid
+        terms:
+          - customer.paid_users
+          - revenue.paying_customers
+        
+    
+    segments:
+      high_value_accounts:
+        expression: |
+          {users.plan_type} IN ('pro', 'enterprise') AND {users.status} = 'active'
+        tags:
+          - customer
+          - segment
+          - revenue
+        terms:
+          - customer.high_value
+          - segment.premium
+        
+      recent_signups:
+        expression: |
+          {users.signup_date} >= CURRENT_DATE - INTERVAL 7 DAYS
+        tags:
+          - acquisition
+          - temporal
+          - growth
+        terms:
+          - customer.recent_signups
+          - acquisition.recent
+        
+      at_risk_users:
+        expression: |
+          {users.status} = 'active' AND {users.plan_type} = 'free'
+        tags:
+          - churn
+          - risk
+          - customer
+        terms:
+          - customer.at_risk
+          - churn.risk_segment
+        
+      revenue_generating:
+        expression: |
+          {users.revenue_status} = 'revenue_generating' AND {users.status} = 'active'
+        tags:
+          - revenue
+          - customer
+          - financial
+        terms:
+          - customer.revenue_generating
+          - revenue.active
+    
+    joins:
+      subscriptions:
+        type: one_to_many
+        expression: |
+          {users.user_id} = {subscriptions.user_id}
+      
+      usage_events:
+        type: one_to_many
+        expression: |
+          {users.user_id} = {usage_events.user_id}
+    
+    dimensions:
+      includes:
+        - signup_date
+        - plan_type
+        - status
+        - company_size
+        - signup_channel
+        - industry
+        - customer_tier
+        - revenue_status
+        - user_id
+

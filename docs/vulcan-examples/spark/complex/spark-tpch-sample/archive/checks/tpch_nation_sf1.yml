@@ -1,0 +1,66 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_nation_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count = 25:
+          name: exact_nation_count
+          attributes:
+            description: "TPC-H has exactly 25 nations"
+      - missing_count(n_nationkey) = 0:
+          name: no_missing_nationkey
+          attributes:
+            description: "Primary key must never be null"
+      - missing_count(n_name) = 0:
+          name: no_missing_nation_name
+          attributes:
+            description: "Nation name must not be null"
+      - missing_count(n_regionkey) = 0:
+          name: no_missing_regionkey
+          attributes:
+            description: "Every nation must belong to a region"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: invalid_nationkey_range
+          fail query: |
+            SELECT n_nationkey, n_name
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_nation_sf1
+            WHERE n_nationkey < 0 OR n_nationkey > 24
+          samples limit: 5
+          attributes:
+            description: "Nation keys must be 0-24"
+      - failed rows:
+          name: invalid_regionkey_fk
+          fail query: |
+            SELECT n_nationkey, n_name, n_regionkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_nation_sf1
+            WHERE n_regionkey < 0 OR n_regionkey > 4
+          samples limit: 5
+          attributes:
+            description: "Region key FK must be 0-4"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(n_nationkey) = 0:
+          name: unique_nationkey
+          attributes:
+            description: "Nation key is the primary key"
+      - duplicate_count(n_name) = 0:
+          name: unique_nation_name
+          attributes:
+            description: "Nation names must be unique"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: orphan_regionkey
+          fail query: |
+            SELECT n.n_nationkey, n.n_name, n.n_regionkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_nation_sf1 n
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_region_sf1 r
+              ON r.r_regionkey = n.n_regionkey
+            WHERE r.r_regionkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every nation regionkey must exist in region table"

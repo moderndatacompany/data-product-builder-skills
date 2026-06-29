@@ -1,0 +1,19 @@
+order_item_id,order_id,sku_id,product_name,product_category,quantity,item_amount,fulfillment_status
+OI1001,O1001,SKU-AVO-01,Avocado,Fresh Produce,2,180.00,delivered
+OI1002,O1001,SKU-YOG-01,Greek Yogurt,Dairy,3,120.00,delivered
+OI1003,O1002,SKU-CHI-01,Classic Chips,Packaged Snacks,4,90.00,delivered
+OI1004,O1003,SKU-BER-01,Blueberries,Fresh Produce,2,260.00,delivered
+OI1005,O1003,SKU-ICE-01,Ice Cream,Frozen Desserts,1,180.00,delivered
+OI1006,O1004,SKU-DET-01,Laundry Detergent,Household,1,160.00,delivered
+OI1007,O1005,SKU-MIL-01,Toned Milk,Dairy,2,140.00,delivered
+OI1008,O1005,SKU-BRD-01,Whole Wheat Bread,Bakery,3,90.00,delivered
+OI1009,O1006,SKU-SPI-01,Spinach,Fresh Produce,4,150.00,delivered
+OI1010,O1007,SKU-BIS-01,Tea Biscuits,Packaged Snacks,5,110.00,delivered
+OI1011,O1008,SKU-MAN-01,Alphonso Mango,Fresh Produce,3,210.00,delivered
+OI1012,O1008,SKU-SOD-01,Lemon Soda,Packaged Snacks,6,120.00,delivered
+OI1013,O1009,SKU-CLN-01,Floor Cleaner,Household,1,170.00,delivered
+OI1014,O1010,SKU-CHI-02,Nacho Chips,Packaged Snacks,2,80.00,delivered
+OI1015,O1011,SKU-YOG-02,Plain Yogurt,Dairy,4,160.00,delivered
+OI1016,O1011,SKU-EGG-01,Free Range Eggs,Dairy,2,130.00,delivered
+OI1017,O1012,SKU-TOM-01,Tomatoes,Fresh Produce,5,190.00,delivered
+OI1018,O1012,SKU-APP-01,Apples,Fresh Produce,4,210.00,delivered

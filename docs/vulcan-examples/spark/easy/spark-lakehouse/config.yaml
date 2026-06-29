@@ -1,0 +1,38 @@
+vde: false
+display_name: Spark Lakehouse Prod
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: spark-lakehouse-prod
+description: "Production Spark + Iceberg lakehouse pipeline. Source: s3lhyddepot.tpch_sf1.* (via Nilus ingestion). Derived models: s3lhyddepot.tpch_analytics.*."
+tags:
+  - spark
+  - iceberg
+  - analytics
+  - lakehouse
+  - production
+domain: analytics
+model_defaults:
+  dialect: spark2
+  start: '2025-01-01'
+  cron: '@daily'
+
+linter:
+  enabled: true
+
+analytics:
+  enabled: false
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://s3lhyddepot

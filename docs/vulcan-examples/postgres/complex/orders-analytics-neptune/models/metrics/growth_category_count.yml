@@ -1,0 +1,3 @@
+kind: metric
+name: growth_category_count
+measure: category_performance.growth_category_count

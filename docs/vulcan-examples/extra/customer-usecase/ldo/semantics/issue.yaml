@@ -1,0 +1,63 @@
+models:
+  lenovo.ldo.issue:
+    alias: issue
+    joins:
+      storage:
+        type: many_to_one
+        expression: "{issue.STORAGE_ID} = {storage.STORAGE_ID}"
+      
+      battery:
+        type: many_to_one
+        expression: "{issue.BATTERY_ID} = {battery.BATTERY_ID}"
+      
+      device_bios:
+        type: many_to_one
+        expression: "{issue.DEVICE_ID} = {device_bios.DEVICE_ID}"
+      
+      device_os:
+        type: many_to_one
+        expression: "{issue.DEVICE_ID} = {device_os.DEVICE_ID}"
+    
+    dimensions:
+      includes:
+        - ISSUE_UUID
+        - BUCKET_ID
+        - INCIDENT_CATEGORY
+        - ERROR_CODE
+        - DETAILS
+        - HARDWARE_ID
+        - REPORTED_AT
+        - RESOLVED_AT
+        - INCIDENT_STATUS
+        - TIMELINE
+        - UPDATED_AT
+        - VALUE
+        - BATTERY_ID
+        - DEVICE_ID
+        - INSIGHT_ID
+        - STORAGE_ID
+        - GENERATE_TICKET
+        - HAS_TICKET
+        - IS_HIDDEN
+        - INSIGHT_ITEM_ID
+        - RESOLVED_BY_USER_AT
+
+      # incident_name:
+      #   type: string
+      #   expression: |
+      #     CASE 
+      #       WHEN {issue.INSIGHT_ID} = 'app_performance_impact' THEN 'performance_issue' 
+      #       WHEN {issue.INSIGHT_ID} = 'sw_os_bsod_detected' THEN 'bsod_crash' 
+      #       WHEN {issue.INSIGHT_ID} = 'hw_battery_charge_deviation' THEN 'charging_deviation' 
+      #       WHEN {issue.INSIGHT_ID} IN ('hw_battery_condition_bad','hw_battery_condition_problematic') THEN 'poor_battery_condition' 
+      #       WHEN {issue.INSIGHT_ID} = 'hw_storage_detected_storage_capacity_high' THEN 'storage_capacity_high' 
+      #       ELSE 'others'
+      #     END
+      #   description: "Name of the incident based on the semantic classification of the issue (poor_battery_condition, charging_deviation, bsod_crash, performance_issue, storage_capacity_high, others)."
+    
+    measures:
+      number_of_issues:
+        type: count
+        expression: "{issue.ISSUE_UUID}"
+        description: "Total number of issue records."
+

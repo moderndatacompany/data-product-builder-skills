@@ -1,0 +1,39 @@
+models:
+  test_db.vulcan_test_project.partsupp:
+    alias: partsupp
+
+    measures:
+      total_partsupp:
+        type: count
+        expression: "*"
+        description: "Total number of PARTSUPP rows"
+        tags: [tpch, partsupp, count]
+
+      total_availqty:
+        type: sum
+        expression: "{partsupp.AVAILQTY}"
+        description: "Total available quantity across all part-supplier rows"
+        tags: [tpch, partsupp, inventory]
+
+      avg_supplycost:
+        type: avg
+        expression: "{partsupp.SUPPLYCOST}"
+        description: "Average supply cost"
+        tags: [tpch, partsupp, cost]
+
+    joins:
+      suppliers:
+        type: many_to_one
+        expression: "{partsupp.SUPPKEY} = {suppliers.SUPPKEY}"
+
+      parts:
+        type: many_to_one
+        expression: "{partsupp.PARTKEY} = {parts.PARTKEY}"
+
+    dimensions:
+      includes:
+        - PARTKEY
+        - SUPPKEY
+        - COMMENT
+
+

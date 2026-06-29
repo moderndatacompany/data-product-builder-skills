@@ -1,0 +1,19 @@
+version: v2alpha
+name: s3depot
+type: depot
+description: "Default s3 Iceberg Data Depot"
+depot:
+  type: lakehouse
+  spec:
+    storageType: s3
+    catalogType: REST
+    metastoreUrl: ${LH_S3_METASTORE_URL}
+    metastoreRelativePath: ${LH_S3_METASTORE_RELATIVEPATH}
+    s3:
+      bucket: ${LH_S3_BUCKET}
+      relativePath: ${LH_S3_RELATIVE_PATH}
+      format: ${LH_S3_FORMAT}
+
+  secrets:
+    - id: ${ENTITY_TENANT_ID}:${LH_S3_DEPOT_SECRET}
+      purpose: rw

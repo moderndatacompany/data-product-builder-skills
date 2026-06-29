@@ -1,0 +1,61 @@
+vde: false
+display_name: Orders360
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: sales
+tags:
+  - postgres
+  - sales
+  - analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: orders360
+tenant: sales
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity across the e-commerce platform.
+
+# --- Gateway Connection ---
+gateways:
+  default:
+    connection:
+      type: postgres
+      host: warehouse
+      port: 5432
+      user: vulcan
+      password: vulcan
+      database: warehouse
+
+    # State sync - use PostgreSQL (recommended for production)
+    state_connection:
+      type: postgres
+      host: statestore
+      port: 5432
+      user: vulcan
+      password: vulcan
+      database: statestore
+
+    # State schema name
+    state_schema: orders360
+
+default_gateway: default
+
+# --- Model Defaults ---
+model_defaults:
+  dialect: postgres
+  start: 2024-01-01
+  cron: '@daily'
+
+# --- Linting Rules ---
+
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections

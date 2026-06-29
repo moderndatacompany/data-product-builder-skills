@@ -1,0 +1,88 @@
+# kind: dq — converted from checks/consumed_licenses.yml
+kind: dq
+name: consumed_licenses_dq
+depends_on: lenovo.ldo.consumed_licenses
+rules:
+- row_count > 0:
+    name: license_records_exist
+    dimension: completeness
+    description: At least one license record should exist
+- missing_count(_ID) = 0:
+    name: no_missing_id
+    dimension: completeness
+    description: All records must have an _id
+- missing_count(ORGANIZATION_ID) = 0:
+    name: no_missing_organization_id
+    dimension: completeness
+    description: All licenses must belong to an organization
+- missing_count(STATUS) = 0:
+    name: no_missing_status
+    dimension: completeness
+    description: All licenses must have a status
+- failed rows:
+    name: invalid_status
+    dimension: validity
+    fail query: |
+      SELECT _ID, STATUS, ENTITY_TYPE
+      FROM lenovo.ldo.consumed_licenses
+      WHERE STATUS NOT IN ('EXPIRED', 'NEW', 'ASSIGNED', 'UNASSIGNED')
+        AND STATUS IS NOT NULL
+    samples limit: 10
+    description: License status must be one of EXPIRED, NEW, ASSIGNED, UNASSIGNED
+- failed rows:
+    name: invalid_entity_type
+    dimension: validity
+    fail query: |
+      SELECT _ID, ENTITY_TYPE, ENTITY_ID
+      FROM lenovo.ldo.consumed_licenses
+      WHERE ENTITY_TYPE NOT IN ('DEVICE', 'USER', 'ORGANIZATION')
+        AND ENTITY_TYPE IS NOT NULL
+    samples limit: 10
+    description: Entity type must be DEVICE, USER, or ORGANIZATION
+- failed rows:
+    name: invalid_date_range
+    dimension: validity
+    fail query: |
+      SELECT _ID, START_DATE, COMMITMENT_END_DATE, STATUS
+      FROM lenovo.ldo.consumed_licenses
+      WHERE COMMITMENT_END_DATE < START_DATE
+        AND START_DATE IS NOT NULL
+        AND COMMITMENT_END_DATE IS NOT NULL
+    samples limit: 10
+    description: Commitment end date should be after start date
+- failed rows:
+    name: future_created_date
+    dimension: validity
+    fail query: |
+      SELECT _ID, CREATED_DATE, STATUS
+      FROM lenovo.ldo.consumed_licenses
+      WHERE CREATED_DATE > CURRENT_TIMESTAMP
+    samples limit: 5
+    description: Created date cannot be in the future
+- failed rows:
+    name: deleted_without_reason
+    dimension: validity
+    fail query: |
+      SELECT _ID, __DELETED, __OP, STATUS
+      FROM lenovo.ldo.consumed_licenses
+      WHERE __DELETED = true
+        AND __OP IS NULL
+    samples limit: 5
+    description: Deleted records should have an operation type
+- failed rows:
+    name: duplicate_ids
+    dimension: consistency
+    fail query: "SELECT \n  _ID,\n  COUNT(*) as RECORD_COUNT\nFROM lenovo.ldo.consumed_licenses\nWHERE __DELETED = 'False'\nGROUP BY _ID\nHAVING COUNT(*) > 1\n"
+    samples limit: 10
+    description: Each _id should be unique among active records
+- failed rows:
+    name: assigned_license_without_entity
+    dimension: consistency
+    fail query: |
+      SELECT _ID, STATUS, ENTITY_ID
+      FROM lenovo.ldo.consumed_licenses
+      WHERE STATUS = 'ASSIGNED'
+        AND (ENTITY_ID IS NULL OR ENTITY_ID = '')
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Assigned licenses must have an entity_id

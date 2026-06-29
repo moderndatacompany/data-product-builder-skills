@@ -1,0 +1,90 @@
+# kind: dq — converted from checks/users.yml
+kind: dq
+name: users_dq
+depends_on: b2b_saas.users
+
+rules:
+- missing_count(company_name) = 0:
+    name: no_missing_company_names
+    dimension: completeness
+    description: All users must have a company name
+
+- missing_count(email) = 0:
+    name: no_missing_emails
+    dimension: completeness
+    description: All users must have an email
+
+- row_count > 20:
+    name: sufficient_users
+    dimension: completeness
+    description: At least 20 users in the system (will fail - only 15 users)
+
+- failed rows:
+    name: invalid_emails
+    dimension: validity
+    description: Check for invalid email formats
+    fail query: |
+      SELECT user_id, email, company_name, signup_date
+      FROM b2b_saas.users
+      WHERE email NOT LIKE '%@%'
+    samples limit: 10
+
+- failed rows:
+    name: invalid_status_values
+    dimension: validity
+    description: "Status must be one of: active, churned, suspended"
+    fail query: |
+      SELECT user_id, email, status, plan_type
+      FROM b2b_saas.users
+      WHERE status NOT IN ('active', 'churned', 'suspended')
+    samples limit: 10
+
+- failed rows:
+    name: missing_company_names
+    dimension: validity
+    description: All users must have a company name
+    fail query: |
+      SELECT user_id, email, company_name, plan_type
+      FROM b2b_saas.users
+      WHERE company_name IS NULL OR company_name = ''
+    samples limit: 10
+
+- duplicate_count(email) = 0:
+    name: unique_emails
+    dimension: uniqueness
+    description: Email addresses must be unique
+
+- anomaly detection for row_count:
+    name: row_count_anomaly
+    dimension: accuracy
+    description: Detect anomalies in user table row count using historic data
+
+- anomaly detection for avg(user_id):
+    name: avg_user_id_anomaly
+    dimension: accuracy
+    description: Detect anomalies in average user ID (tests historic query for aggregated metrics)
+
+- change for row_count >= -50%:
+    name: row_count_timeliness_check
+    dimension: timeliness
+    description: "Alert if row count drops more than 50% from same day last week"
+
+- change same day last week for row_count > 10:
+    name: row_count_change_same_day_last_week
+    dimension: timeliness
+
+- change avg last 7 for row_count = 1:
+    name: change_avg_last_7
+    dimension: timeliness
+
+- change for row_count between -20 and +50:
+    name: row_count_change
+    dimension: timeliness
+
+- anomaly detection for row_count:
+    name: row_count_anomaly
+    dimension: timeliness
+
+- anomaly detection for avg(user_id):
+    name: avg_user_id_anomaly
+    dimension: timeliness

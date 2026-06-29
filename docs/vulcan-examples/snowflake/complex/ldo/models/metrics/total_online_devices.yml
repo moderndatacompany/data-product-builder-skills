@@ -1,0 +1,3 @@
+kind: metric
+name: total_online_devices
+measure: devices_uptime.total_online_devices

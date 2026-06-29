@@ -1,0 +1,78 @@
+# kind: dq — converted from checks/plant_performance_daily.yml
+kind: dq
+name: PLANT_PERFORMANCE_DAILY_dq
+depends_on: MES_PLATFORM.GOLD.PLANT_PERFORMANCE_DAILY
+rules:
+- row_count >= 500:
+    name: minimum_daily_records
+    dimension: completeness
+    description: At least 500 daily plant performance records should exist
+- missing_count(plant_code) = 0:
+    name: no_missing_plant_code
+    dimension: completeness
+    description: All records must have a plant_code
+- missing_count(confirmation_date) = 0:
+    name: no_missing_confirmation_date
+    dimension: completeness
+    description: All records must have a confirmation_date
+- invalid_count(total_good_quantity) = 0:
+    name: production_quantity_non_negative
+    dimension: validity
+    description: Good quantity must be non-negative
+    valid min: 0
+- invalid_count(avg_scrap_rate_pct) = 0:
+    name: scrap_rate_percentage_valid
+    dimension: validity
+    description: Scrap rate must be between 0% and 100%
+    valid min: 0
+    valid max: 100
+- invalid_count(avg_efficiency_pct) = 0:
+    name: efficiency_percentage_valid
+    dimension: validity
+    description: Efficiency percentage must be between 0% and 100%
+    valid min: 0
+    valid max: 100
+- invalid_count(unique_equipment_used) = 0:
+    name: at_least_one_equipment_used
+    dimension: validity
+    description: Each plant-day must use at least one piece of equipment
+    valid min: 1
+- invalid_count(unique_operators) = 0:
+    name: at_least_one_operator_present
+    dimension: validity
+    description: Each plant-day must have at least one operator
+    valid min: 1
+- failed rows:
+    name: plant_code_exists_in_master
+    dimension: validity
+    fail query: |
+      SELECT ppd.plant_code, ppd.confirmation_date
+      FROM MES_PLATFORM.GOLD.PLANT_PERFORMANCE_DAILY ppd
+      LEFT JOIN techfab_seeds.plant_master pm ON ppd.plant_code = pm.plant_code
+      WHERE pm.plant_code IS NULL
+    samples limit: 10
+    description: All plant_codes must exist in plant_master
+- duplicate_count(plant_code, confirmation_date) = 0:
+    name: unique_plant_date_combination
+    dimension: uniqueness
+    description: Each plant-date combination must be unique
+- avg(total_good_quantity) > 1000:
+    name: average_daily_production_acceptable
+    dimension: accuracy
+    description: Average daily good production should exceed 1000 units
+- avg(avg_scrap_rate_pct) < 4.5:
+    name: plant_average_scrap_rate_target
+    dimension: accuracy
+    description: Average scrap rate should be below 4.5%
+- avg(avg_first_pass_yield_pct) > 93.0:
+    name: plant_average_fpy_target
+    dimension: accuracy
+    description: Average first pass yield should exceed 93%
+- avg(avg_efficiency_pct) > 75.0:
+    name: plant_average_efficiency_target
+    dimension: accuracy
+    description: Average plant efficiency should exceed 75%
+- freshness(confirmation_date) < 2d:
+    name: plant_data_freshness
+    dimension: timeliness
+    description: Plant performance data must be refreshed within the last 2 days

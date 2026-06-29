@@ -1,0 +1,74 @@
+x-images:
+  postgres: &postgres_image "postgres:15-alpine"
+  minio: &minio_image "minio/minio:latest"
+  minio-mc: &minio_mc_image "minio/mc:latest"
+
+volumes:
+  statestore:
+    driver: local
+  objectstore:
+    driver: local
+
+networks:
+  vulcan:
+    external: true
+
+services:
+  # PostgreSQL State Store (recommended; do not use Snowflake for state)
+  statestore:
+    image: *postgres_image
+    environment:
+      POSTGRES_DB: statestore
+      POSTGRES_USER: vulcan
+      POSTGRES_PASSWORD: vulcan
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5431:5432"
+    volumes:
+      - statestore:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vulcan -d statestore"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vulcan
+
+  # MinIO Object Storage (required by Query Service for result artifacts)
+  minio:
+    image: *minio_image
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - objectstore:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - vulcan
+
+  # MinIO initialization (bucket creation)
+  minio-init:
+    image: *minio_mc_image
+    depends_on:
+      minio:
+        condition: service_healthy
+    restart: "no"
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 admin password;
+      /usr/bin/mc mb myminio/warehouse --ignore-existing;
+      /usr/bin/mc anonymous set download myminio/warehouse;
+      exit 0;
+      "
+    networks:
+      - vulcan
+
+

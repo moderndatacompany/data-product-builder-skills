@@ -1,0 +1,4 @@
+limitations:
+  - Demo source data is provided as static CSV seed files loaded via SEED-kind models
+  - No external sources are required - the project is fully self-contained
+  - Full refresh models are optimized for reproducible examples

@@ -1,0 +1,56 @@
+models:
+  sales.customers:
+    alias: customers
+    description: "Customer dimension table with demographics, segmentation, and loyalty information"
+
+    dimensions:
+      includes:
+        - customer_id
+        - full_name
+        - email
+        - customer_segment
+        - account_status
+        - signup_date
+        - loyalty_score
+
+    measures:
+      total_customers:
+        type: count
+        expression: "{customers.customer_id}"
+        description: "Total number of customers"
+      
+      active_customers:
+        type: count
+        expression: "{customers.customer_id}"
+        filters:
+          - "{customers.account_status} = 'Active'"
+        description: "Number of active customers"
+      
+      platinum_customers:
+        type: count
+        expression: "{customers.customer_id}"
+        filters:
+          - "{customers.customer_segment} = 'Platinum'"
+        description: "Number of Platinum tier customers"
+      
+      average_loyalty_score:
+        type: avg
+        expression: "{customers.loyalty_score}"
+        description: "Average loyalty score across all customers"
+    
+    segments:
+      high_value_customers:
+        expression: |
+          {customers.customer_segment} IN ('Platinum', 'Gold')
+        description: "High value customers (Platinum and Gold tiers)"
+        
+      recent_signups:
+        expression: |
+          {customers.signup_date} >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+        description: "Customers who signed up in the last 30 days"
+        
+      at_risk_customers:
+        expression: |
+          {customers.account_status} = 'Inactive' OR {customers.account_status} = 'Suspended'
+        description: "Customers with inactive or suspended accounts"
+

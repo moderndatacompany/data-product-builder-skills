@@ -1,0 +1,3 @@
+kind: metric
+name: total_checkouts
+measure: web_heartbeat.total_checkouts

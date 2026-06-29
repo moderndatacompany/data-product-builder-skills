@@ -1,0 +1,33 @@
+supplier_id,supplier_name,supplier_category,country,lead_time_days,payment_terms,supplier_rating,active_status
+SUP-001,Advanced Microelectronics Corp,Electronics,United States,14,Net 30,Preferred,Active
+SUP-002,Pacific Component Solutions,Electronics,Japan,21,Net 45,Preferred,Active
+SUP-003,EuroTech Semiconductors,Electronics,Germany,18,Net 30,Approved,Active
+SUP-004,ShenZhen Circuit Works,Electronics,China,28,Net 60,Approved,Active
+SUP-005,Nordic Sensor Systems,Electronics,Sweden,16,Net 30,Preferred,Active
+SUP-006,Precision Metal Fabricators,Mechanical,United States,10,Net 30,Preferred,Active
+SUP-007,Global Steel Solutions,Mechanical,South Korea,25,Net 45,Approved,Active
+SUP-008,Alpine Machining GmbH,Mechanical,Switzerland,20,Net 30,Preferred,Active
+SUP-009,Coastal Castings Inc,Mechanical,United States,12,Net 30,Approved,Active
+SUP-010,TechAlloy Industries,Mechanical,India,30,Net 60,Probation,Active
+SUP-011,ChemPure Raw Materials,Raw Materials,United States,7,Net 30,Preferred,Active
+SUP-012,Pacific Polymers Ltd,Raw Materials,Taiwan,22,Net 45,Approved,Active
+SUP-013,EuroResin Compounds,Raw Materials,France,15,Net 30,Approved,Active
+SUP-014,Specialty Chemicals Corp,Raw Materials,United States,9,Net 30,Preferred,Active
+SUP-015,GreenChem Solutions,Raw Materials,Canada,11,Net 30,Approved,Active
+SUP-016,SecurePack Industries,Packaging,United States,5,Net 30,Preferred,Active
+SUP-017,FlexiBox Containers,Packaging,Mexico,8,Net 30,Approved,Active
+SUP-018,EcoWrap Solutions,Packaging,United States,6,Net 30,Approved,Active
+SUP-019,PremierPack Asia,Packaging,Vietnam,18,Net 45,Probation,Active
+SUP-020,SmartLabel Technologies,Packaging,United States,4,Net 30,Preferred,Active
+SUP-021,ProLogistics Services,Services,United States,3,Net 30,Preferred,Active
+SUP-022,Global Freight Partners,Services,Netherlands,5,Net 45,Approved,Active
+SUP-023,TechCal Calibration,Services,United States,2,Net 30,Preferred,Active
+SUP-024,QualityCert International,Services,United Kingdom,7,Net 30,Approved,Active
+SUP-025,FastShip Express,Services,United States,1,Net 30,Preferred,Active
+SUP-026,Wuhan Electronics Co,Electronics,China,35,Net 60,Probation,Inactive
+SUP-027,Delta Plastics Corp,Raw Materials,United States,8,Net 30,Approved,Active
+SUP-028,PrecisionCast Foundry,Mechanical,Germany,22,Net 45,Approved,Active
+SUP-029,MicroConnect Components,Electronics,Taiwan,19,Net 30,Approved,Active
+SUP-030,ReliableParts Distributors,Electronics,United States,7,Net 30,Preferred,Active
+
+

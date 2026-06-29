@@ -1,0 +1,25 @@
+# kind: dq — converted from checks/products.yml
+kind: dq
+name: products_dq
+depends_on: sales.products
+
+rules:
+  - failed rows:
+      name: invalid_price_range
+      dimension: validity
+      fail query: |
+        SELECT product_id, product_name, price
+        FROM sales.products
+        WHERE price <= 0 OR price > 100000
+      samples limit: 10
+      description: "Product price must be between $0.01 and $100,000"
+
+  - failed rows:
+      name: invalid_rating_range
+      dimension: validity
+      fail query: |
+        SELECT product_id, product_name, rating
+        FROM sales.products
+        WHERE rating < 1.0 OR rating > 5.0
+      samples limit: 10
+      description: "Product rating must be between 1.0 and 5.0"

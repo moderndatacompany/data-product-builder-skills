@@ -1,0 +1,34 @@
+# kind: dq — converted from checks/part.yml
+kind: dq
+name: part_dq
+depends_on: test_db.vulcan_test_project.part
+rules:
+- missing_count(partkey) = 0:
+    name: partkey_not_null
+    dimension: completeness
+    description: PART.PARTKEY must be non-null
+- missing_count(name) = 0:
+    name: part_name_not_null
+    dimension: completeness
+    description: PART.NAME must be non-null
+- missing_count(retailprice) = 0:
+    name: retailprice_not_null
+    dimension: completeness
+    description: PART.RETAILPRICE must be non-null
+- row_count > 0:
+    name: part_has_rows
+    dimension: completeness
+    description: PART should not be empty
+- duplicate_count(partkey) = 0:
+    name: partkey_unique
+    dimension: uniqueness
+    description: PART.PARTKEY must be unique
+- failed rows:
+    name: retailprice_non_negative
+    dimension: validity
+    fail query: |
+      SELECT partkey, name, retailprice
+      FROM test_db.vulcan_test_project.part
+      WHERE retailprice < 0
+    samples limit: 10
+    description: PART.RETAILPRICE should be non-negative

@@ -1,0 +1,118 @@
+kind: semantic
+name: orders
+depends_on: DEMODB.VDETRUE.ORDERS
+description: Orders fact exposing revenue, quantity, discount, and shipping measures for daily incremental sales analytics.
+
+
+
+dimensions:
+  - ORDER_ID
+  - ORDER_DATE
+  - CUSTOMER_ID
+  - PRODUCT_ID
+  - QUANTITY
+  - UNIT_PRICE
+  - DISCOUNT
+  - TAX
+  - SHIPPING_COST
+  - TOTAL_AMOUNT
+
+measures:
+  - name: total_orders
+    type: count_distinct
+    expression: "{orders.ORDER_ID}"
+    description: Total distinct orders
+    tags:
+      - order
+      - count
+      - metric
+    terms:
+      - order.total_orders
+      - metric.order_count
+
+  - name: total_revenue
+    type: sum
+    expression: "{orders.TOTAL_AMOUNT}"
+    description: Total revenue across all orders
+    tags:
+      - revenue
+      - financial
+      - metric
+    terms:
+      - revenue.total_revenue
+      - finance.gross_sales
+
+  - name: average_order_value
+    type: avg
+    expression: "{orders.TOTAL_AMOUNT}"
+    description: Average value per order
+    tags:
+      - metric
+      - average
+      - aggregate
+    terms:
+      - metric.average_order_value
+      - finance.aov
+
+  - name: total_quantity_sold
+    type: sum
+    expression: "{orders.QUANTITY}"
+    description: Total quantity of items sold across orders
+    tags:
+      - order
+      - inventory
+      - metric
+    terms:
+      - order.total_quantity
+      - inventory.units_sold
+
+  - name: total_discount_amount
+    type: sum
+    expression: "{orders.UNIT_PRICE} * {orders.QUANTITY} * {orders.DISCOUNT}"
+    description: Total discount amount applied across orders
+    tags:
+      - revenue
+      - discount
+      - metric
+    terms:
+      - revenue.discount
+      - finance.discounts_given
+
+segments:
+  - name: recent_orders
+    expression: "{orders.ORDER_DATE} >= CURRENT_DATE - INTERVAL '7 days'"
+    description: Orders placed in the last 7 days
+    tags:
+      - temporal
+      - recent
+      - segment
+    terms:
+      - temporal.recent_orders
+      - segment.recent
+
+  - name: high_value_orders
+    expression: "{orders.TOTAL_AMOUNT} >= 500"
+    description: Orders with total amount >= 500
+    tags:
+      - revenue
+      - high_value
+      - segment
+    terms:
+      - revenue.premium
+      - segment.high_value_orders
+
+  - name: discounted_orders
+    expression: "{orders.DISCOUNT} > 0"
+    description: Orders with any discount applied
+    tags:
+      - revenue
+      - discount
+      - segment
+    terms:
+      - revenue.discount
+      - finance.discounted_orders
+
+joins:
+  - name: customers
+    type: many_to_one
+    expression: "{orders.CUSTOMER_ID} = {customers.CUSTOMER_ID}"

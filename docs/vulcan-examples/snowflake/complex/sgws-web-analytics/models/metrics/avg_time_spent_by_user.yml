@@ -1,0 +1,3 @@
+kind: metric
+name: avg_time_spent_by_user
+measure: web_heartbeat.avg_time_spent_by_user

@@ -1,0 +1,6 @@
+kind: metric
+name: total_customers
+measure: customers.total_customers
+ts: customers.SIGNUP_DATE
+granularity: day
+description: Total number of customers materialized into DEMODB.VDETRUE.CUSTOMERS, time-grained by signup date

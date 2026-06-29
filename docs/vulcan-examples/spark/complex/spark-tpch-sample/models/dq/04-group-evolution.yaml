@@ -1,0 +1,15 @@
+# kind: dq — converted from checks/04-group-evolution.yaml
+kind: dq
+name: tpch_region_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.tpch_region_sf1
+
+rules:
+- group evolution:
+    name: region_names_required
+    dimension: conformity
+    description: Warn if the set of region names changes
+    query: |
+      SELECT r_name
+      FROM lhs3ny001depot.tpch_sparkv3.tpch_region_sf1
+      GROUP BY r_name
+    warn: {'when groups change': 'any'}

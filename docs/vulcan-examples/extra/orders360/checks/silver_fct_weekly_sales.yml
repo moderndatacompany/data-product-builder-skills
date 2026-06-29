@@ -1,0 +1,86 @@
+checks:
+  curated.fct_weekly_sales:
+    completeness:
+      - missing_count(week_start_date) = 0:
+          name: no_missing_week_start_dates
+          attributes:
+            description: "All records must have a week start date"
+      
+      - missing_count(year) = 0:
+          name: no_missing_years
+          attributes:
+            description: "All records must have a year"
+      
+      - missing_count(week_number) = 0:
+          name: no_missing_week_numbers
+          attributes:
+            description: "All records must have a week number"
+      
+      - row_count > 10:
+          name: sufficient_weekly_records
+          attributes:
+            description: "At least 10 weekly sales records"
+    
+    validity:
+      - failed rows:
+          name: valid_week_numbers
+          fail query: |
+            SELECT week_start_date, year, week_number
+            from curated.fct_weekly_sales
+            WHERE week_number < 1 OR week_number > 53
+          samples limit: 10
+          attributes:
+            description: "Week numbers must be between 1 and 53"
+      
+      - failed rows:
+          name: non_negative_orders
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_orders
+            from curated.fct_weekly_sales
+            WHERE total_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Total orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_revenue
+            from curated.fct_weekly_sales
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Total revenue cannot be negative"
+      
+      - failed rows:
+          name: week_end_after_start
+          fail query: |
+            SELECT week_start_date, week_end_date, year, week_number
+            from curated.fct_weekly_sales
+            WHERE week_end_date < week_start_date
+          samples limit: 10
+          attributes:
+            description: "Week end date must be after start date"
+      
+      # This will FAIL - checking for high weekly revenue
+      - failed rows:
+          name: weekly_revenue_threshold_check
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_revenue
+            from curated.fct_weekly_sales
+            WHERE total_revenue > 1000
+          samples limit: 10
+          attributes:
+            description: "Weekly revenue should not exceed $1000 per customer-product (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for multiple orders per week
+      - failed rows:
+          name: single_order_per_week_check
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_orders
+            from curated.fct_weekly_sales
+            WHERE total_orders > 1
+          samples limit: 10
+          attributes:
+            description: "Should have max 1 order per customer-product per week (EXPECTED TO FAIL)"
+

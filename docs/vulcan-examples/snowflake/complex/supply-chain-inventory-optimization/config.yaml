@@ -1,0 +1,122 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - Supply Chain & Inventory Optimization
+# ==============================================================================
+
+# Basic Information
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: supply-chain-inventory-optimization
+display_name: Supply Chain & Inventory Optimization
+description: End-to-end supply chain visibility enabling optimal inventory levels, supplier performance tracking, and demand-supply matching for working capital optimization.
+
+# Classification
+tags:
+  - supply-chain
+  - inventory-management
+  - procurement
+
+terms:
+  - inventory-turnover
+  - supplier-performance
+  - stockout-prevention
+
+# Domain
+domain: supply_chain
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+model_defaults:
+  dialect: snowflake
+  start: '2024-07-01'
+  cron: '@daily'
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://erpplatform
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+openlineage:
+  enabled: false
+
+# ==============================================================================
+# Transpiler Service
+# ==============================================================================
+transpiler:
+  base_url: http://vulcan-transpiler:4000/transpiler
+  timeout: 30
+
+# ==============================================================================
+# GraphQL API Configuration
+# ==============================================================================
+graphql:
+  base_url: http://localhost:3000
+  timeout: 60
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+users:
+  - username: shreyasikarwartmdcio
+    email: shreya@techfab.com
+    type: OWNER
+  - username: supply_chain_team
+    email: supplychain@techfab.com
+    type: CONTRIBUTOR
+  - username: procurement_team
+    email: procurement@techfab.com
+    type: VIEWER
+
+# ==============================================================================
+# Object Store Configuration
+# ==============================================================================
+object_store:
+  provider: minio
+  bucket: warehouse
+  base_path: queries
+  compression: snappy
+  presigned_url_expiry_mins: 60
+  credentials:
+    endpoint_url: http://minio:9000
+    access_key_id: admin
+    secret_access_key: password
+    region: us-east-1

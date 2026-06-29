@@ -1,0 +1,52 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.seed_segment_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_segments
+          attributes:
+            description: "Seed file must produce at least one row"
+      - missing_count(segment_id) = 0:
+          name: no_missing_segment_id
+          attributes:
+            description: "Segment ID must not be null"
+      - missing_count(segment_name) = 0:
+          name: no_missing_segment_name
+          attributes:
+            description: "Segment name must not be null"
+      - missing_count(min_acctbal) = 0:
+          name: no_missing_min_acctbal
+          attributes:
+            description: "Minimum account balance threshold must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_segment_id
+          fail query: |
+            SELECT segment_id, segment_name
+            FROM lhs3ny001depot.tpch_sparkv3.seed_segment_sf1
+            WHERE segment_id < 0
+          samples limit: 5
+          attributes:
+            description: "Segment ID cannot be negative"
+      - failed rows:
+          name: empty_segment_name
+          fail query: |
+            SELECT segment_id, segment_name
+            FROM lhs3ny001depot.tpch_sparkv3.seed_segment_sf1
+            WHERE segment_name IS NOT NULL AND LENGTH(TRIM(segment_name)) = 0
+          samples limit: 5
+          attributes:
+            description: "Segment name cannot be empty string"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(segment_id) = 0:
+          name: unique_segment_id
+          attributes:
+            description: "Segment ID must be unique"
+      - duplicate_count(segment_name) = 0:
+          name: unique_segment_name
+          attributes:
+            description: "Segment names must be unique"

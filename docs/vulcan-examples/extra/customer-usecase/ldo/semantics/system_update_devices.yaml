@@ -1,0 +1,26 @@
+models:
+  lenovo.ldo.system_update_devices:
+    alias: system_update_devices
+    joins:
+      devices:
+        type: many_to_one
+        expression: "{system_update_devices.DEVICE_ID} = {devices.DEVICE_ID} "
+    
+    dimensions:
+      includes:
+        - DEVICE_ID
+        - DEVICE_DISPLAY_NAME
+        - INSTALLATION_STATUS
+        - PACKAGE_SEVERITY
+        - PACKAGE_ID
+        - DEVICE_SERIAL_NUMBER
+        - LAST_MODIFIED_DATE
+        - CREATED_AT
+
+    
+    measures:
+      total_devices_with_updates:
+        type: count_distinct
+        expression: "{system_update_devices.DEVICE_ID}"
+        description: "Total number of devices with system updates. Do not use this for getting updates count."
+

@@ -1,0 +1,6 @@
+limitations:
+  - Historical data from July 2024 to December 2024 (6 months)
+  - 500 B2B customer accounts and 15,000 sales orders
+  - RFM scoring based on 12-month rolling window
+  - Daily data refresh via full reload
+  - Snowflake cloud warehouse as data platform

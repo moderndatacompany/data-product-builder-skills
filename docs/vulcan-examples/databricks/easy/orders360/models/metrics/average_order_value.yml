@@ -1,0 +1,8 @@
+kind: metric
+name: average_order_value
+measure: orders.average_order_value
+ts: orders.order_date
+granularity: day
+dimensions:
+  - orders.product_id
+description: Average value per order

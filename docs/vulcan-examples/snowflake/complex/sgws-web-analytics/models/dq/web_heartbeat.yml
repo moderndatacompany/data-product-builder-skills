@@ -1,0 +1,48 @@
+# kind: dq — converted from checks/web_heartbeat.yaml
+kind: dq
+name: WEB_HEARTBEAT_dq
+depends_on: web_analytics_gold.WEB_HEARTBEAT
+rules:
+- row_count > 0:
+    name: web_heartbeat_records_exist
+    dimension: completeness
+    description: Web analytics heartbeat must contain clickstream hit data
+- missing_count(hitid) = 0:
+    name: hitid_required
+    dimension: completeness
+    description: All web hits must have an Adobe Analytics hit identifier
+- missing_count(date_time) = 0:
+    name: datetime_required
+    dimension: completeness
+    description: All web hits must have a timestamp for temporal analysis
+- missing_percent(sessionid) < 5:
+    name: sessionid_completeness
+    dimension: completeness
+    description: At least 95% of hits should have session identifiers for journey tracking
+- failed rows:
+    name: invalid_digital_platform
+    dimension: validity
+    fail query: |
+      SELECT uuid, hitid, digitalplatform
+      FROM web_analytics_gold.WEB_HEARTBEAT
+      WHERE digitalplatform NOT IN ('App', 'Web')
+        AND digitalplatform IS NOT NULL
+    samples limit: 10
+    description: Digital platform must be either App (mobile application) or Web (browser)
+- failed rows:
+    name: invalid_page_event
+    dimension: validity
+    fail query: |
+      SELECT uuid, hitid, page_event
+      FROM web_analytics_gold.WEB_HEARTBEAT
+      WHERE page_event < 0 OR page_event > 100
+    samples limit: 10
+    description: Page event codes should be within valid Adobe Analytics range (0-100)
+- duplicate_count(uuid) = 0:
+    name: web_hit_uuid_unique
+    dimension: uniqueness
+    description: Web hit UUID must be unique for each clickstream event
+- row_count > 0:
+    name: recent_clickstream_data
+    dimension: timeliness
+    description: Clickstream data should be current for real-time analytics

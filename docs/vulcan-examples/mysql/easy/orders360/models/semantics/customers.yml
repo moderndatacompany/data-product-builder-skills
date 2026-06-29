@@ -1,0 +1,93 @@
+# Converted from legacy: semantics/customers.yml
+kind: semantic
+name: customers
+depends_on: sales.customers
+description: Customer dimension table with demographics, segmentation, and loyalty information
+dimensions:
+- customer_id
+- full_name
+- email
+- customer_segment
+- account_status
+- signup_date
+- loyalty_score
+measures:
+- name: total_customers
+  type: count
+  expression: '{customers.customer_id}'
+  description: Total number of customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.total_customers
+  - metric.customer_count
+- name: active_customers
+  type: count
+  expression: '*'
+  filters:
+  - '{customers.account_status} = ''Active'''
+  description: Number of active customers
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active
+- name: platinum_customers
+  type: count
+  expression: '*'
+  filters:
+  - '{customers.customer_segment} = ''Platinum'''
+  description: Number of Platinum tier customers
+  tags:
+  - customer
+  - segment
+  - tier
+  terms:
+  - customer.tier
+  - segment.platinum_customers
+- name: average_loyalty_score
+  type: avg
+  expression: '{customers.loyalty_score}'
+  description: Average loyalty score across all customers
+  tags:
+  - customer
+  - average
+  - metric
+  terms:
+  - customer.loyalty
+  - metric.loyalty
+segments:
+- name: high_value_customers
+  expression: '{customers.customer_segment} IN (''Platinum'', ''Gold'')'
+  description: High value customers (Platinum and Gold tiers)
+  tags:
+  - revenue
+  - high_value
+  - segment
+  terms:
+  - revenue.premium
+  - segment.high_value_customers
+- name: recent_signups
+  expression: '{customers.signup_date} >= CURRENT_DATE - INTERVAL 30 DAY'
+  description: Customers who signed up in the last 30 days
+  tags:
+  - acquisition
+  - temporal
+  - growth
+  terms:
+  - acquisition.recent
+  - customer.signups
+- name: at_risk_customers
+  expression: '{customers.account_status} = ''Inactive'' OR {customers.account_status} = ''Suspended'''
+  description: Customers with inactive or suspended accounts
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment

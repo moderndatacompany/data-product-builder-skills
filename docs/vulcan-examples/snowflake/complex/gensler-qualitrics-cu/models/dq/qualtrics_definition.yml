@@ -1,0 +1,57 @@
+# kind: dq — converted from checks/qualtrics_definition.yml
+kind: dq
+name: QUALTRICS_DEFINITION_dq
+depends_on: GENSLER.RAW.QUALTRICS_DEFINITION
+rules:
+- missing_count(SURVEY_ID) = 0:
+    name: no_missing_survey_ids
+    dimension: completeness
+    description: All survey definitions must have a survey ID
+- missing_count(DEFINITION_ID) = 0:
+    name: no_missing_definition_ids
+    dimension: completeness
+    description: All records must have a unique identifier
+- missing_count(PARSED_JSON) = 0:
+    name: no_missing_parsed_json
+    dimension: completeness
+    description: All survey definitions must have parsed JSON data
+- row_count > 0:
+    name: has_survey_definitions
+    dimension: completeness
+    description: At least one survey definition must exist
+- failed rows:
+    name: invalid_survey_ids
+    dimension: validity
+    fail query: |
+      SELECT SURVEY_ID, EXTRACTED_AT, LOAD_ID
+      FROM GENSLER.RAW.QUALTRICS_DEFINITION
+      WHERE SURVEY_ID IS NULL OR SURVEY_ID = '' OR LENGTH(SURVEY_ID) < 10
+    samples limit: 10
+    description: Survey IDs must be valid Qualtrics format (at least 10 characters)
+- failed rows:
+    name: invalid_json_structure
+    dimension: validity
+    fail query: "SELECT SURVEY_ID, DEFINITION_ID, EXTRACTED_AT\nFROM GENSLER.RAW.QUALTRICS_DEFINITION\nWHERE PARSED_JSON:result IS NULL \n   OR PARSED_JSON:result.SurveyID IS NULL\n"
+    samples limit: 10
+    description: Parsed JSON must contain valid result structure with SurveyID
+- failed rows:
+    name: future_extraction_dates
+    dimension: validity
+    fail query: |
+      SELECT SURVEY_ID, EXTRACTED_AT, LOAD_ID
+      FROM GENSLER.RAW.QUALTRICS_DEFINITION
+      WHERE EXTRACTED_AT > CURRENT_TIMESTAMP()
+    samples limit: 10
+    description: Extraction timestamp cannot be in the future
+- duplicate_count(SURVEY_ID) = 0:
+    name: unique_survey_ids
+    dimension: uniqueness
+    description: Survey IDs must be unique per load
+- duplicate_count(DEFINITION_ID) = 0:
+    name: unique_definition_ids
+    dimension: uniqueness
+    description: Definition IDs must be globally unique
+- row_count > 0:
+    name: recent_data_exists
+    dimension: timeliness
+    description: Survey definition data should exist

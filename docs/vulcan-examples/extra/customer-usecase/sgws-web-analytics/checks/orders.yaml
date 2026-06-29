@@ -1,0 +1,77 @@
+# ============================================================================
+# CHECKS: Orders Data Quality Monitoring
+# ============================================================================
+# Owner: rohitrajtmdcio
+# Description: Data quality checks for orders fact table ensuring order integrity,
+#              status validity, and fulfillment tracking accuracy
+# ============================================================================
+
+checks:
+  web_analytics_gold.ORDERS:
+    
+    # ==================== COMPLETENESS ====================
+    completeness:
+      - row_count > 0:
+          name: orders_records_exist
+          attributes:
+            description: "Orders fact table must contain order transaction records"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(order_pk) = 0:
+          name: order_pk_required
+          attributes:
+            description: "All orders must have a unique primary key identifier"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(order_no) = 0:
+          name: order_no_required
+          attributes:
+            description: "All orders must have an order number for tracking"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(customer_no) = 0:
+          name: customer_no_required
+          attributes:
+            description: "All orders must be linked to a customer"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== VALIDITY ====================
+    validity:
+      - failed rows:
+          name: invalid_order_status
+          fail query: |
+            SELECT order_pk, order_no, order_status
+            FROM web_analytics_gold.ORDERS
+            WHERE order_status NOT IN ('Approved', 'Pending', 'Rejected', 'Cancelled', 'Unknown')
+              AND order_status IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Order status must be one of the valid lifecycle states"
+            owner: "rohitrajtmdcio"
+      
+      - failed rows:
+          name: negative_order_value
+          fail query: |
+            SELECT order_pk, order_no, order_net_amt
+            FROM web_analytics_gold.ORDERS
+            WHERE order_net_amt < 0
+          samples limit: 10
+          attributes:
+            description: "Order net amount should not be negative (business rule enforces non-negative values)"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== UNIQUENESS ====================
+    uniqueness:
+      - duplicate_count(order_pk) = 0:
+          name: order_pk_unique
+          attributes:
+            description: "Order primary key must be unique for each order line"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== TIMELINESS ====================
+    timeliness:
+      - row_count > 0:
+          name: recent_order_data
+          attributes:
+            description: "Order data should be current for fulfillment operations"
+            owner: "rohitrajtmdcio"

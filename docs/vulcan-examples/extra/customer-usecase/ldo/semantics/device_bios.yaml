@@ -1,0 +1,15 @@
+models:
+  lenovo.ldo.device_bios:
+    alias: device_bios
+    joins:
+      device_os:
+        type: one_to_one
+        expression: "{device_bios.DEVICE_ID} = {device_os.DEVICE_ID}"
+  
+    
+    measures:
+      total_devices_with_recommended_bios:
+        type: sum
+        expression: "CASE WHEN {device_bios.RECOMMENDED_BIOS_ID} = {device_bios.DEVICE_BIOS_ID} THEN 1 ELSE 0 END"
+        description: "Total number of devices with recommended BIOS version."
+

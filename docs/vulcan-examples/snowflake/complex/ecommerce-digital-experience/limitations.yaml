@@ -1,0 +1,5 @@
+limitations:
+  - Historical data from July 2024 to December 2024 (6 months)
+  - Web clickstream events from B2B e-commerce platform
+  - Daily data refresh via full reload
+  - Snowflake cloud warehouse as data platform

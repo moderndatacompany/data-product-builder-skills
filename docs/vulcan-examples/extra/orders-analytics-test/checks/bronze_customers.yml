@@ -1,0 +1,82 @@
+checks:
+  bronze_v1.customers:
+    completeness:
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All customers must have a customer ID"
+      
+      - missing_count(name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All customers must have a name"
+      
+      - missing_count(email) = 0:
+          name: no_missing_emails
+          attributes:
+            description: "All customers must have an email"
+      
+      - row_count > 50:
+          name: sufficient_customers
+          attributes:
+            description: "At least 50 customers in the system"
+      
+      # This will FAIL - we have 100 customers, not 200
+      - row_count > 200:
+          name: high_customer_count
+          attributes:
+            description: "Should have more than 200 customers (EXPECTED TO FAIL)"
+    
+    validity:
+      - failed rows:
+          name: invalid_emails
+          fail query: |
+            SELECT customer_id, name, email
+            FROM bronze_v1.customers
+            WHERE email NOT LIKE '%@%' OR email NOT LIKE '%.%'
+          samples limit: 10
+          attributes:
+            description: "Check for invalid email formats"
+      
+      - failed rows:
+          name: positive_customer_ids
+          fail query: |
+            SELECT customer_id, name, email
+            FROM bronze_v1.customers
+            WHERE customer_id <= 0
+          samples limit: 10
+          attributes:
+            description: "Customer IDs must be positive"
+      
+      - failed rows:
+          name: valid_region_ids
+          fail query: |
+            SELECT customer_id, region_id, name
+            FROM bronze_v1.customers
+            WHERE region_id NOT IN (1, 2, 3, 4, 5)
+          samples limit: 10
+          attributes:
+            description: "Region IDs must be valid (1-5)"
+      
+      # This will FAIL - checking for names with length < 5 (data_gen creates 8-char names)
+      - failed rows:
+          name: name_length_check
+          fail query: |
+            SELECT customer_id, name, email
+            FROM bronze_v1.customers
+            WHERE LENGTH(name) < 10
+          samples limit: 10
+          attributes:
+            description: "Customer names should be at least 10 characters (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(customer_id) = 0:
+          name: unique_customer_ids
+          attributes:
+            description: "Customer IDs must be unique"
+      
+      - duplicate_count(email) = 0:
+          name: unique_emails
+          attributes:
+            description: "Email addresses must be unique"
+

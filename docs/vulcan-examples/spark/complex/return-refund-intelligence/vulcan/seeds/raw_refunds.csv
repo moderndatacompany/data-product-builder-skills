@@ -1,0 +1,9 @@
+refund_id,order_id,order_item_id,refund_ts,raw_refund_reason,refund_amount,refund_status,issue_owner
+R001,O1003,OI1004,2026-04-14 14:10:00,damaged_item,145.00,approved,quality_team
+R002,O1005,OI1007,2026-04-15 09:30:00,late_delivery,65.00,approved,delivery_ops
+R003,O1006,OI1009,2026-04-15 10:05:00,damaged_item,120.00,approved,warehouse_ops
+R004,O1007,OI1010,2026-04-15 11:45:00,missing_item,75.00,approved,delivery_ops
+R005,O1008,OI1011,2026-04-15 13:00:00,stale_product,210.00,approved,quality_team
+R006,O1011,OI1015,2026-04-15 17:10:00,missing_item,95.00,approved,delivery_ops
+R007,O1012,OI1017,2026-04-15 20:00:00,late_delivery,80.00,approved,delivery_ops
+R008,O1012,OI1018,2026-04-15 20:05:00,damaged_item,110.00,approved,quality_team

@@ -1,0 +1,6 @@
+tenant,device_id,os_name,os_version,udc_version,device_brand,language_code,device_bios_version,os_update_description
+ORG001,DEV001,Windows 11 Pro,22H2,3.5.2.1,Lenovo,en-US,N3HET98W,Latest cumulative update installed
+ORG001,DEV002,Windows 11 Pro,23H2,3.6.0.4,Lenovo,en-US,R22ET76W,Windows 11 23H2 feature update applied
+ORG002,DEV003,Windows 11 Home,22H2,3.4.8.2,Lenovo,en-GB,GKCN52WW,Security update KB5033375 installed
+ORG002,DEV004,Windows 11 Home,23H2,3.6.1.0,Lenovo,ja-JP,GKCN48WW,November 2024 cumulative update
+ORG003,DEV005,Windows 11 Pro,23H2,3.7.0.1,Lenovo,en-US,K1CN56WW,December 2024 quality update

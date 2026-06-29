@@ -1,0 +1,44 @@
+models:
+  GENSLER.ANALYTICS.QUALTRICS_QUESTION_RESPONSE_SUMMARY:
+    alias: question_response_summary
+
+    dimensions:
+      includes:
+        - SURVEY_ID
+        - SURVEY_NAME
+        - SURVEY_DESCRIPTION
+        - OWNER_ID
+        - ORGANIZATION_ID
+        - CREATION_DATE
+        - LAST_MODIFIED_DATE
+        - LAST_ACCESSED_DATE
+        - IS_ACTIVE
+        - EARLIEST_RESPONSE_DATE
+        - LATEST_RESPONSE_DATE
+        - TOTAL_RESPONSE_COUNT
+        - LIVE_RESPONSE_COUNT
+        - SURVEY_TYPE
+        - STATUS
+        - COUNT_PREVIEWS
+        - QUESTION_COUNT
+        - BLOCK_COUNT
+        - ACTUAL_RESPONSE_COUNT
+        - DAYS_SINCE_ACCESSED
+        - ACTIVITY_LEVEL
+
+    measures:
+      total_surveys:
+        type: count
+        expression: "*"
+        description: "Total surveys"
+
+      total_responses:
+        type: sum
+        expression: "{question_response_summary.TOTAL_RESPONSE_COUNT}"
+        description: "Total responses"
+
+    segments:
+      active_surveys:
+        expression: |
+          {question_response_summary.IS_ACTIVE} = TRUE
+        description: "Active surveys only"

@@ -1,0 +1,82 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_orders
+          attributes:
+            description: "At least one order exists"
+      - missing_count(o_orderkey) = 0:
+          name: no_missing_orderkey
+          attributes:
+            description: "Primary key must never be null"
+      - missing_count(o_custkey) = 0:
+          name: no_missing_custkey
+          attributes:
+            description: "Every order must have a customer"
+      - missing_count(o_orderdate) = 0:
+          name: no_missing_orderdate
+          attributes:
+            description: "Order date is the time column and must not be null"
+      - missing_count(o_orderstatus) = 0:
+          name: no_missing_orderstatus
+          attributes:
+            description: "Order status must always be populated"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: invalid_orderstatus
+          fail query: |
+            SELECT o_orderkey, o_orderstatus
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1
+            WHERE o_orderstatus NOT IN ('F', 'O', 'P')
+          samples limit: 5
+          attributes:
+            description: "Order status must be F (fulfilled), O (open), or P (pending)"
+      - failed rows:
+          name: negative_totalprice
+          fail query: |
+            SELECT o_orderkey, o_totalprice
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1
+            WHERE o_totalprice < 0
+          samples limit: 5
+          attributes:
+            description: "Total price cannot be negative"
+      - failed rows:
+          name: invalid_orderpriority
+          fail query: |
+            SELECT o_orderkey, o_orderpriority
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1
+            WHERE o_orderpriority NOT IN ('1-URGENT', '2-HIGH', '3-MEDIUM', '4-NOT SPECIFIED', '5-LOW')
+          samples limit: 5
+          attributes:
+            description: "Order priority must be one of the 5 TPC-H priorities"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(o_orderkey) = 0:
+          name: unique_orderkey
+          attributes:
+            description: "Order key is the primary key"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: orphan_custkey
+          fail query: |
+            SELECT o.o_orderkey, o.o_custkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1 o
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1 c
+              ON c.c_custkey = o.o_custkey
+            WHERE c.c_custkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every order custkey must exist in customer table"
+
+    # --- Timeliness ---
+    timeliness:
+      - change for row_count >= -20%:
+          name: order_count_stable
+          attributes:
+            description: "Order count should not drop more than 20% between incremental loads"

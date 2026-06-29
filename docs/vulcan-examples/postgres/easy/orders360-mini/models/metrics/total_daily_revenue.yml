@@ -1,0 +1,6 @@
+kind: metric
+name: total_daily_revenue
+measure: daily_sales.total_daily_revenue
+ts: daily_sales.order_date
+granularity: day
+description: "Sum of all revenue across selected days"

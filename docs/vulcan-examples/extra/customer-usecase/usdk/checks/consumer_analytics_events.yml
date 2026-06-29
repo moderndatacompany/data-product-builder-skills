@@ -1,0 +1,135 @@
+checks:
+  LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS:
+    
+    completeness:
+      - missing_count(CONTEXT) = 0:
+          name: no_missing_context
+          attributes:
+            description: "All events must have context information"
+      
+      - missing_count(EVENT) = 0:
+          name: no_missing_event
+          attributes:
+            description: "All records must have event data"
+      
+      - missing_count(REPORTING_TIME) = 0:
+          name: no_missing_reporting_time
+          attributes:
+            description: "All events must have a reporting timestamp"
+      
+      - row_count > 100:
+          name: sufficient_events
+          attributes:
+            description: "At least 100 events should be present in the table"
+    
+    validity:
+      - failed rows:
+          name: missing_required_fields
+          fail query: |
+            SELECT REPORTING_TIME, CONTEXT, EVENT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE CONTEXT IS NULL 
+               OR EVENT IS NULL 
+               OR REPORTING_TIME IS NULL
+          samples limit: 10
+          attributes:
+            description: "Context, event, and reporting_time are required fields and cannot be null"
+      
+      - failed rows:
+          name: invalid_context_structure
+          fail query: |
+            SELECT REPORTING_TIME, CONTEXT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE TRY_PARSE_JSON(CONTEXT::VARCHAR) IS NULL
+          samples limit: 10
+          attributes:
+            description: "Context field must contain valid JSON structure"
+      
+      - failed rows:
+          name: invalid_event_structure
+          fail query: |
+            SELECT REPORTING_TIME, EVENT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE TRY_PARSE_JSON(EVENT::VARCHAR) IS NULL
+          samples limit: 10
+          attributes:
+            description: "Event field must contain valid JSON structure"
+      
+      - failed rows:
+          name: future_reporting_time
+          fail query: |
+            SELECT REPORTING_TIME, CONTEXT, EVENT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE REPORTING_TIME > CURRENT_TIMESTAMP()
+          samples limit: 10
+          attributes:
+            description: "Reporting time cannot be in the future"
+      
+      - failed rows:
+          name: reporting_time_too_old
+          fail query: |
+            SELECT REPORTING_TIME, CONTEXT, EVENT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE REPORTING_TIME < '2020-01-01'
+          samples limit: 10
+          attributes:
+            description: "Reporting time before 2020 is likely a data quality issue"
+      
+      - failed rows:
+          name: missing_device_info
+          fail query: |
+            SELECT REPORTING_TIME, CONTEXT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE GET_PATH(CONTEXT, 'device') IS NULL
+          samples limit: 10
+          attributes:
+            description: "Context must contain device information"
+      
+      - failed rows:
+          name: missing_user_info
+          fail query: |
+            SELECT REPORTING_TIME, CONTEXT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE GET_PATH(CONTEXT, 'user') IS NULL
+          samples limit: 10
+          attributes:
+            description: "Context must contain user information"
+      
+      - failed rows:
+          name: missing_event_timestamp
+          fail query: |
+            SELECT REPORTING_TIME, EVENT
+            FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+            WHERE GET_PATH(EVENT, 'timestamp') IS NULL
+          samples limit: 10
+          attributes:
+            description: "Event must contain a timestamp"
+    
+    uniqueness:
+      - duplicate_count(REPORTING_TIME) < 100:
+          name: reasonable_duplicate_reporting_times
+          attributes:
+            description: "Some duplicate reporting times are expected, but not excessive"
+    
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in daily event count using historic data"
+    
+    timeliness:
+      - change for row_count >= -50%:
+          name: row_count_change_check
+          attributes:
+            description: "Alert if event count drops more than 50% from previous day"
+      
+      - change same day last week for row_count > -30:
+          name: row_count_weekly_comparison
+          attributes:
+            description: "Compare event count to same day last week"
+      
+      - anomaly detection for row_count:
+          name: timeliness_row_count_anomaly
+          attributes:
+            description: "Detect timing anomalies in row count patterns"
+

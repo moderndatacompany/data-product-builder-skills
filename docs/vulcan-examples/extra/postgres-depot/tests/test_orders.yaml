@@ -1,0 +1,35 @@
+test_sales_orders_single:
+  model: sales.orders
+  description: >
+    Full-output test for the Orders model using a single input record.
+  vars:
+    start: '2024-03-01'
+    end: '2024-03-31'
+
+  inputs:
+    raw.raw_orders:
+      rows:
+        - order_id: O100
+          order_date: '2024-03-15'
+          customer_id: C001
+          product_id: P001
+          quantity: 2
+          unit_price: 29.99
+          discount: 0.10
+          tax: 4.32
+          shipping_cost: 5.99
+          total_amount: 64.29
+
+  outputs:
+    query:
+      rows:
+        - order_id: "O100"
+          order_date: "2024-03-15"
+          customer_id: "C001"
+          product_id: "P001"
+          quantity: 2
+          unit_price: 29.99
+          discount: 0.1
+          tax: 4.32
+          shipping_cost: 5.99
+          total_amount: 64.29

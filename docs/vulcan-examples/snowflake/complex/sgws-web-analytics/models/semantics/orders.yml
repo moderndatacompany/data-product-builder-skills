@@ -1,0 +1,357 @@
+# Converted from legacy: semantics/orders.yaml
+kind: semantic
+name: orders
+depends_on: web_analytics_gold.ORDERS
+ai_context:
+  instructions: >
+    Use this semantic model for questions about orders. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "orders"
+  examples:
+    - "Show orders trends over time."
+    - "Break down orders by key dimensions."
+
+measures:
+- name: count_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count orders. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "count orders"
+      - "count_orders"
+      - "count"
+      - "orders"
+    examples:
+      - "What is count orders by month?"
+      - "Compare count orders across key segments."
+  type: count_distinct
+  expression: '{orders.ORDER_PK}'
+  description: Total number of orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.count_orders
+  - metric.order_count
+- name: count_approved_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count approved orders. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "count approved orders"
+      - "count_approved_orders"
+      - "count"
+      - "approved"
+    examples:
+      - "What is count approved orders by month?"
+      - "Compare count approved orders across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Approved' THEN {orders.ORDER_PK} END)
+  description: Approved orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.count_approved_orders
+  - metric.order_count
+- name: count_rejected_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count rejected orders. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "count rejected orders"
+      - "count_rejected_orders"
+      - "count"
+      - "rejected"
+    examples:
+      - "What is count rejected orders by month?"
+      - "Compare count rejected orders across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Rejected' THEN {orders.ORDER_PK} END)
+  description: Rejected orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.count_rejected_orders
+  - metric.order_count
+- name: count_pending_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count pending orders. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "count pending orders"
+      - "count_pending_orders"
+      - "count"
+      - "pending"
+    examples:
+      - "What is count pending orders by month?"
+      - "Compare count pending orders across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Pending' THEN {orders.ORDER_PK} END)
+  description: Pending orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.count_pending_orders
+  - metric.order_count
+- name: total_order_value
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total order value. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total order value"
+      - "total_order_value"
+      - "total"
+      - "order"
+    examples:
+      - "What is total order value by month?"
+      - "Compare total order value across key segments."
+  type: sum
+  expression: '{orders.ORDER_NET_AMT}'
+  description: Total order value
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_order_value
+  - metric.order_count
+- name: total_cases
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total cases. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total cases"
+      - "total_cases"
+      - "total"
+      - "cases"
+    examples:
+      - "What is total cases by month?"
+      - "Compare total cases across key segments."
+  type: sum
+  expression: '{orders.CASES}'
+  description: Total cases ordered
+  tags:
+  - metric
+  terms:
+  - metric.total_cases
+- name: total_bottles
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total bottles. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total bottles"
+      - "total_bottles"
+      - "total"
+      - "bottles"
+    examples:
+      - "What is total bottles by month?"
+      - "Compare total bottles across key segments."
+  type: sum
+  expression: '{orders.BOTTLES}'
+  description: Total bottles ordered
+  tags:
+  - metric
+  terms:
+  - metric.total_bottles
+- name: unique_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for unique customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "unique customers"
+      - "unique_customers"
+      - "unique"
+      - "customers"
+    examples:
+      - "What is unique customers by month?"
+      - "Compare unique customers across key segments."
+  type: count_distinct
+  expression: '{orders.CUSTOMER_NO}'
+  description: Unique ordering customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.unique_customers
+  - metric.customer_count
+- name: avg_order_value
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg order value. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg order value"
+      - "avg_order_value"
+      - "avg"
+      - "order"
+    examples:
+      - "What is avg order value by month?"
+      - "Compare avg order value across key segments."
+  type: number
+  expression: SUM({orders.ORDER_NET_AMT}) / NULLIF(COUNT(DISTINCT {orders.ORDER_PK}), 0)
+  description: Average order value
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_order_value
+  - metric.aggregate
+- name: approval_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for approval rate. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "approval rate"
+      - "approval_rate"
+      - "approval"
+      - "rate"
+    examples:
+      - "What is approval rate by month?"
+      - "Compare approval rate across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Approved' THEN {orders.ORDER_PK} END) * 100.0 / NULLIF(COUNT(DISTINCT {orders.ORDER_PK}), 0)
+  description: Order approval rate percentage
+  tags:
+  - metric
+  terms:
+  - metric.approval_rate
+- name: rejection_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for rejection rate. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "rejection rate"
+      - "rejection_rate"
+      - "rejection"
+      - "rate"
+    examples:
+      - "What is rejection rate by month?"
+      - "Compare rejection rate across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {orders.ORDER_STATUS} = 'Rejected' THEN {orders.ORDER_PK} END) * 100.0 / NULLIF(COUNT(DISTINCT {orders.ORDER_PK}), 0)
+  description: Order rejection rate percentage
+  tags:
+  - metric
+  terms:
+  - metric.rejection_rate
+segments:
+- name: is_approved
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is approved subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is approved"
+      - "is_approved"
+      - "approved"
+    examples:
+      - "Show revenue for is approved."
+      - "How many records are in is approved?"
+  expression: '{orders.ORDER_STATUS} = ''Approved'''
+  description: Approved orders
+  tags:
+  - metric
+  terms:
+  - metric.is_approved
+- name: is_rejected_status
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is rejected status subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is rejected status"
+      - "is_rejected_status"
+      - "rejected"
+      - "status"
+    examples:
+      - "Show revenue for is rejected status."
+      - "How many records are in is rejected status?"
+  expression: '{orders.ORDER_STATUS} = ''Rejected'''
+  description: Rejected orders
+  tags:
+  - metric
+  terms:
+  - metric.is_rejected_status
+- name: is_pending
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is pending subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is pending"
+      - "is_pending"
+      - "pending"
+    examples:
+      - "Show revenue for is pending."
+      - "How many records are in is pending?"
+  expression: '{orders.ORDER_STATUS} = ''Pending'''
+  description: Pending orders
+  tags:
+  - metric
+  terms:
+  - metric.is_pending
+- name: is_cancelled
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is cancelled subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is cancelled"
+      - "is_cancelled"
+      - "cancelled"
+    examples:
+      - "Show revenue for is cancelled."
+      - "How many records are in is cancelled?"
+  expression: '{orders.ORDER_STATUS} = ''Cancelled'''
+  description: Cancelled orders
+  tags:
+  - metric
+  terms:
+  - metric.is_cancelled
+- name: has_rejection_code
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the has rejection code subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "has rejection code"
+      - "has_rejection_code"
+      - "has"
+      - "rejection"
+    examples:
+      - "Show revenue for has rejection code."
+      - "How many records are in has rejection code?"
+  expression: '{orders.IS_REJECTED} = true'
+  description: Orders with rejection codes
+  tags:
+  - metric
+  terms:
+  - metric.has_rejection_code

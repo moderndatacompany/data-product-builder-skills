@@ -1,0 +1,3 @@
+kind: metric
+name: total_executed_app_deployments
+measure: schedules_app.total_executed_app_deployments

@@ -1,0 +1,149 @@
+checks:
+  silver_v2alpha.dim_product_profile:
+    completeness:
+      - missing_count(product_id) = 0:
+          name: no_missing_product_ids
+          attributes:
+            description: "All profiles must have a product ID"
+      
+      - missing_count(product_name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All profiles must have a product name"
+      
+      - missing_count(category) = 0:
+          name: no_missing_categories
+          attributes:
+            description: "All profiles must have a category"
+      
+      - missing_count(product_performance) = 0:
+          name: no_missing_performance
+          attributes:
+            description: "All profiles must have a performance classification"
+      
+      - row_count > 50:
+          name: sufficient_product_profiles
+          attributes:
+            description: "At least 50 product profiles"
+    
+    validity:
+      - failed rows:
+          name: valid_performance_categories
+          fail query: |
+            SELECT product_id, product_name, product_performance
+            FROM silver_v2alpha.dim_product_profile
+            WHERE product_performance NOT IN ('Best Seller', 'Good Performer', 'Slow Mover', 'New', 'Stale')
+          samples limit: 10
+          attributes:
+            description: "Product performance must be from valid set"
+      
+      - failed rows:
+          name: non_negative_orders
+          fail query: |
+            SELECT product_id, product_name, total_orders
+            FROM silver_v2alpha.dim_product_profile
+            WHERE total_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Total orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT product_id, product_name, total_revenue
+            FROM silver_v2alpha.dim_product_profile
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Total revenue cannot be negative"
+      
+      - failed rows:
+          name: positive_current_price
+          fail query: |
+            SELECT product_id, product_name, current_price
+            FROM silver_v2alpha.dim_product_profile
+            WHERE current_price <= 0
+          samples limit: 10
+          attributes:
+            description: "Current price must be positive"
+      
+      # This will FAIL - checking for all best sellers
+      - failed rows:
+          name: all_best_sellers_check
+          fail query: |
+            SELECT product_id, product_name, product_performance, total_orders
+            FROM silver_v2alpha.dim_product_profile
+            WHERE product_performance != 'Best Seller'
+          samples limit: 10
+          attributes:
+            description: "All products should be best sellers (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for minimum sales threshold
+      - failed rows:
+          name: minimum_sales_check
+          fail query: |
+            SELECT product_id, product_name, total_quantity_sold, product_performance
+            FROM silver_v2alpha.dim_product_profile
+            WHERE total_quantity_sold < 50
+          samples limit: 10
+          attributes:
+            description: "All products should have sold at least 50 units (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(product_id) = 0:
+          name: unique_product_ids
+          attributes:
+            description: "Product IDs must be unique"
+      
+      - duplicate_count(product_name) = 0:
+          name: unique_product_names
+          attributes:
+            description: "Product names should be unique"
+    
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in product profile count using historic data"
+      
+      - anomaly detection for missing_count(product_id):
+          name: missing_product_id_anomaly
+          attributes:
+            description: "Detect anomalies in missing product ID count"
+      
+      - anomaly detection for avg(total_revenue):
+          name: avg_revenue_anomaly
+          attributes:
+            description: "Detect anomalies in average product revenue"
+      
+      - anomaly detection for avg(total_quantity_sold):
+          name: avg_quantity_sold_anomaly
+          attributes:
+            description: "Detect anomalies in average quantity sold per product"
+      
+      - anomaly detection for distinct_count(product_performance):
+          name: performance_category_count_anomaly
+          attributes:
+            description: "Detect anomalies in number of distinct performance categories"
+      
+      - anomaly detection for distinct_count(category):
+          name: category_count_anomaly
+          attributes:
+            description: "Detect anomalies in number of distinct product categories"
+    
+    timeliness:
+      - change for row_count >= -5%:
+          name: row_count_timeliness_check
+          attributes:
+            description: "Alert if product profile count drops more than 5% from same day last week"
+      
+      - change for avg(total_revenue) between -20% and 20%:
+          name: avg_revenue_timeliness_check
+          attributes:
+            description: "Alert if average product revenue changes more than 20% from same day last week"
+      
+      - change for avg(current_price) between -15% and 15%:
+          name: avg_price_timeliness_check
+          attributes:
+            description: "Alert if average product price changes more than 15% from same day last week"
+

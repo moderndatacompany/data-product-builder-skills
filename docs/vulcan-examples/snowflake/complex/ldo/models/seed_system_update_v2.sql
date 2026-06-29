@@ -1,0 +1,45 @@
+MODEL (
+  name lenovo.ldo.system_update_v2_seed_model,
+  kind SEED (
+    path '../seeds/seed_system_update_v2_cdc.csv'
+  ),
+  columns (
+    _id STRING,
+    org_id STRING,
+    package_id STRING,
+    coreq_package_id STRING,
+    package_name STRING,
+    package_description STRING,
+    package_version STRING,
+    current_installed_version STRING,
+    package_release_date BIGINT,
+    package_vendor STRING,
+    package_type STRING,
+    package_severity STRING,
+    package_reboot_type STRING,
+    package_size BIGINT,
+    disk_space_required BIGINT,
+    package_tips STRING,
+    readme_url STRING,
+    license_url STRING,
+    created_at BIGINT,
+    last_modified_date BIGINT,
+    _class STRING,
+    test_state STRING,
+    deleted STRING,
+    _op STRING,
+    _collection STRING,
+    _source_ts_ms BIGINT,
+    _db STRING,
+    _nilus_load_id STRING,
+    _nilus_id STRING,
+    test_state_last_changed_by_user_at BIGINT,
+    category STRING,
+    created_at__v_text STRING,
+    last_modified_date__v_text STRING,
+    groups STRING,
+    test_ring_set_id STRING
+  ),
+  grains (_id, _nilus_id)
+)
+

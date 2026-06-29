@@ -1,0 +1,47 @@
+models:
+  lenovo.ldo.device_warranty:
+    alias: device_warranty
+    
+    measures:
+      total_devices_with_expired_warranty:
+        type: sum
+        expression: "CASE WHEN {device_warranty.WARRANTY_END} < CURRENT_TIMESTAMP THEN 1 ELSE 0 END"
+        description: "Total number of devices with expired warranties. This shouldn't be used for total number of expired warranties."
+      
+      total_devices_with_soon_expiring_warranty:
+        type: count_distinct
+        expression: "{device_warranty.DEVICE_ID}"
+        filters:
+          - "{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP"
+          - "{device_warranty.WARRANTY_END} < DATE_ADD('DAY', 60, CURRENT_TIMESTAMP)"
+        description: "Total number of devices with warranties expiring soon. This shouldn't be used for total number of expiring soon warranties."
+      
+      total_devices_with_active_warranty:
+        type: count_distinct
+        expression: "{device_warranty.DEVICE_ID}"
+        filters:
+          - "{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP"
+        description: "Total number of devices with active warranties. This shouldn't be used for total number of active warranties."
+      
+      total_expired_warranties:
+        type: count_distinct
+        expression: "{device_warranty.WARRANTY_ID}"
+        filters:
+          - "{device_warranty.WARRANTY_END} < CURRENT_TIMESTAMP"
+        description: "Total number of expired warranties. This is different from the total number of devices with expired warranties because one device can have multiple warranties."
+      
+      total_expiring_soon_warranties:
+        type: count_distinct
+        expression: "{device_warranty.WARRANTY_ID}"
+        filters:
+          - "{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP"
+          - "{device_warranty.WARRANTY_END} < DATE_ADD('DAY', 60, CURRENT_TIMESTAMP)"
+        description: "Total number of warranties expiring soon. This is different from the total number of devices with warranties expiring soon because one device can have multiple warranties."
+      
+      total_active_warranties:
+        type: count_distinct
+        expression: "{device_warranty.WARRANTY_ID}"
+        filters:
+          - "{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP"
+        description: "Total number of active warranties. This is different from the total number of devices with active warranties because one device can have multiple warranties."
+

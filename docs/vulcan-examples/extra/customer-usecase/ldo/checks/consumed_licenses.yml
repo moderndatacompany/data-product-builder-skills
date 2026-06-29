@@ -1,0 +1,124 @@
+# checks/consumed_licenses.yml
+# Quality checks for consumed licenses
+# Reference: https://tmdc-io.github.io/vulcan-book/components/checks/checks/
+
+checks:
+  lenovo.ldo.consumed_licenses:
+    # Completeness: Ensure license data exists
+    completeness:
+      - row_count > 0:
+          name: license_records_exist
+          attributes:
+            description: "At least one license record should exist"
+            #severity: error
+
+      - missing_count(_ID) = 0:
+          name: no_missing_id
+          attributes:
+            description: "All records must have an _id"
+            #severity: error
+
+      - missing_count(ORGANIZATION_ID) = 0:
+          name: no_missing_organization_id
+          attributes:
+            description: "All licenses must belong to an organization"
+            #severity: error
+
+      - missing_count(STATUS) = 0:
+          name: no_missing_status
+          attributes:
+            description: "All licenses must have a status"
+            #severity: error
+
+    # Validity: Check license data quality
+    validity:
+      - failed rows:
+          name: invalid_status
+          fail query: |
+            SELECT _ID, STATUS, ENTITY_TYPE
+            FROM lenovo.ldo.consumed_licenses
+            WHERE STATUS NOT IN ('EXPIRED', 'NEW', 'ASSIGNED', 'UNASSIGNED')
+              AND STATUS IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "License status must be one of EXPIRED, NEW, ASSIGNED, UNASSIGNED"
+            #severity: error
+
+      - failed rows:
+          name: invalid_entity_type
+          fail query: |
+            SELECT _ID, ENTITY_TYPE, ENTITY_ID
+            FROM lenovo.ldo.consumed_licenses
+            WHERE ENTITY_TYPE NOT IN ('DEVICE', 'USER', 'ORGANIZATION')
+              AND ENTITY_TYPE IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Entity type must be DEVICE, USER, or ORGANIZATION"
+            #severity: error
+
+      - failed rows:
+          name: invalid_date_range
+          fail query: |
+            SELECT _ID, START_DATE, COMMITMENT_END_DATE, STATUS
+            FROM lenovo.ldo.consumed_licenses
+            WHERE COMMITMENT_END_DATE < START_DATE
+              AND START_DATE IS NOT NULL
+              AND COMMITMENT_END_DATE IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Commitment end date should be after start date"
+            #severity: error
+
+      - failed rows:
+          name: future_created_date
+          fail query: |
+            SELECT _ID, CREATED_DATE, STATUS
+            FROM lenovo.ldo.consumed_licenses
+            WHERE CREATED_DATE > CURRENT_TIMESTAMP
+          samples limit: 5
+          attributes:
+            description: "Created date cannot be in the future"
+            #severity: error
+
+      - failed rows:
+          name: deleted_without_reason
+          fail query: |
+            SELECT _ID, __DELETED, __OP, STATUS
+            FROM lenovo.ldo.consumed_licenses
+            WHERE __DELETED = true
+              AND __OP IS NULL
+          samples limit: 5
+          attributes:
+            description: "Deleted records should have an operation type"
+            #severity: warning
+
+    # Consistency: Validate license data
+    consistency:
+      - failed rows:
+          name: duplicate_ids
+          fail query: |
+            SELECT 
+              _ID,
+              COUNT(*) as RECORD_COUNT
+            FROM lenovo.ldo.consumed_licenses
+            WHERE __DELETED = 'False'
+            GROUP BY _ID
+            HAVING COUNT(*) > 1
+          samples limit: 10
+          attributes:
+            description: "Each _id should be unique among active records"
+            #severity: error
+
+      - failed rows:
+          name: assigned_license_without_entity
+          fail query: |
+            SELECT _ID, STATUS, ENTITY_ID
+            FROM lenovo.ldo.consumed_licenses
+            WHERE STATUS = 'ASSIGNED'
+              AND (ENTITY_ID IS NULL OR ENTITY_ID = '')
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Assigned licenses must have an entity_id"
+            #severity: error
+

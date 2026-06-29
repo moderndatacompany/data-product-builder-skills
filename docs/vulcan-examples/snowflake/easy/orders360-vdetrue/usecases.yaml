@@ -1,0 +1,6 @@
+use_cases:
+  - Customer segmentation enrichment using a seed-driven lookup table
+  - Daily customer dimension refresh against a Snowflake raw source
+  - Incremental orders fact loading by ORDER_DATE
+  - Sales revenue and order volume reporting via business metrics
+  - Safe schema evolution via Vulcan VDE (Virtual Data Environments) before promoting to DEMODB

@@ -1,0 +1,42 @@
+vde: false
+display_name: Tpch Lakehouse Dp
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: tpch-lakehouse-dp
+description: >
+  TPC-H Lakehouse Data Product on Spark + Iceberg.
+  Showcases layered analytics (staging → intermediate → gold) with
+  incremental processing, quality checks, semantic layer, and Python models.
+  Source: mys3lh02depot.tpch_sf1.* → Output: mys3lh02depot.tpch_lakehouse.*
+tags:
+  - spark
+  - iceberg
+  - analytics
+  - lakehouse
+  - data-product
+domain: supply-chain-analytics
+model_defaults:
+  dialect: spark2
+  start: '2025-01-01'
+  cron: '@daily'
+
+linter:
+  enabled: false
+
+analytics:
+  enabled: false
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://mys3lh02depot

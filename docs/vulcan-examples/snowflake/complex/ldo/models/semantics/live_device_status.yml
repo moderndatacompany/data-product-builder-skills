@@ -1,0 +1,17 @@
+# Converted from legacy: semantics/live_device_status.yaml
+kind: semantic
+name: live_device_status
+depends_on: lenovo.ldo.live_device_status
+ai_context:
+  instructions: >
+    Use this semantic model for questions about live device status. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "live device status"
+    - "live_device_status"
+    - "live"
+    - "device"
+  examples:
+    - "Show live device status trends over time."
+    - "Break down live device status by key dimensions."

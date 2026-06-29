@@ -1,0 +1,356 @@
+# Converted from legacy: semantics/sales_funnel_analysis.yml
+kind: semantic
+name: sales_funnel
+depends_on: gold_v1.sales_funnel_analysis
+ai_context:
+  instructions: >
+    Use this semantic model for questions about sales funnel. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "sales funnel"
+    - "sales_funnel"
+    - "sales"
+    - "funnel"
+  examples:
+    - "Show sales funnel trends over time."
+    - "Break down sales funnel by key dimensions."
+
+dimensions:
+- funnel_date
+- region_id
+- region_name
+measures:
+- name: total_registered_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total registered customers. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total registered customers"
+      - "total_registered_customers"
+      - "total"
+      - "registered"
+    examples:
+      - "What is total registered customers by month?"
+      - "Compare total registered customers across key segments."
+  type: sum
+  expression: '{sales_funnel.stage_1_registered_customers}'
+  description: Total registered customers across all regions
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.total_registered_customers
+  - metric.customer_count
+- name: total_ordering_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total ordering customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total ordering customers"
+      - "total_ordering_customers"
+      - "total"
+      - "ordering"
+    examples:
+      - "What is total ordering customers by month?"
+      - "Compare total ordering customers across key segments."
+  type: sum
+  expression: '{sales_funnel.stage_2_customers_with_orders}'
+  description: Total customers who have placed orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_ordering_customers
+  - metric.order_count
+- name: total_orders_in_funnel
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total orders in funnel. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total orders in funnel"
+      - "total_orders_in_funnel"
+      - "total"
+      - "orders"
+    examples:
+      - "What is total orders in funnel by month?"
+      - "Compare total orders in funnel across key segments."
+  type: sum
+  expression: '{sales_funnel.stage_3_orders_placed}'
+  description: Total orders placed
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_orders_in_funnel
+  - metric.order_count
+- name: total_orders_with_items
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total orders with items. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total orders with items"
+      - "total_orders_with_items"
+      - "total"
+      - "orders"
+    examples:
+      - "What is total orders with items by month?"
+      - "Compare total orders with items across key segments."
+  type: sum
+  expression: '{sales_funnel.stage_4_orders_with_items}'
+  description: Total orders with line items
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_orders_with_items
+  - metric.order_count
+- name: total_shipped_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total shipped orders. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total shipped orders"
+      - "total_shipped_orders"
+      - "total"
+      - "shipped"
+    examples:
+      - "What is total shipped orders by month?"
+      - "Compare total shipped orders across key segments."
+  type: sum
+  expression: '{sales_funnel.stage_5_orders_shipped}'
+  description: Total orders shipped
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_shipped_orders
+  - metric.order_count
+- name: avg_registration_conversion
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg registration conversion. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg registration conversion"
+      - "avg_registration_conversion"
+      - "avg"
+      - "registration"
+    examples:
+      - "What is avg registration conversion by month?"
+      - "Compare avg registration conversion across key segments."
+  type: avg
+  expression: '{sales_funnel.conversion_rate_registration_to_order}'
+  description: Average conversion rate from registration to order
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_registration_conversion
+  - metric.aggregate
+- name: avg_order_to_shipment_conversion
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg order to shipment conversion.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "avg order to shipment conversion"
+      - "avg_order_to_shipment_conversion"
+      - "avg"
+      - "order"
+    examples:
+      - "What is avg order to shipment conversion by month?"
+      - "Compare avg order to shipment conversion across key segments."
+  type: avg
+  expression: '{sales_funnel.conversion_rate_order_to_shipment}'
+  description: Average conversion rate from order to shipment
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_order_to_shipment_conversion
+  - metric.aggregate
+- name: avg_overall_conversion
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg overall conversion. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg overall conversion"
+      - "avg_overall_conversion"
+      - "avg"
+      - "overall"
+    examples:
+      - "What is avg overall conversion by month?"
+      - "Compare avg overall conversion across key segments."
+  type: avg
+  expression: '{sales_funnel.overall_conversion_rate}'
+  description: Average end-to-end conversion rate
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_overall_conversion
+  - metric.aggregate
+- name: total_registration_dropoff
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total registration dropoff. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total registration dropoff"
+      - "total_registration_dropoff"
+      - "total"
+      - "registration"
+    examples:
+      - "What is total registration dropoff by month?"
+      - "Compare total registration dropoff across key segments."
+  type: sum
+  expression: '{sales_funnel.drop_off_after_registration}'
+  description: Total customers who registered but never ordered
+  tags:
+  - metric
+  terms:
+  - metric.total_registration_dropoff
+- name: total_unfulfilled_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total unfulfilled orders. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total unfulfilled orders"
+      - "total_unfulfilled_orders"
+      - "total"
+      - "unfulfilled"
+    examples:
+      - "What is total unfulfilled orders by month?"
+      - "Compare total unfulfilled orders across key segments."
+  type: sum
+  expression: '{sales_funnel.drop_off_orders_not_shipped}'
+  description: Total orders not shipped
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_unfulfilled_orders
+  - metric.order_count
+segments:
+- name: high_converting_regions
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high converting regions subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high converting regions"
+      - "high_converting_regions"
+      - "high"
+      - "converting"
+    examples:
+      - "Show revenue for high converting regions."
+      - "How many records are in high converting regions?"
+  expression: '{sales_funnel.overall_conversion_rate} >= 0.5'
+  description: Regions with >50% end-to-end conversion
+  tags:
+  - metric
+  terms:
+  - metric.high_converting_regions
+- name: low_converting_regions
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the low converting regions subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "low converting regions"
+      - "low_converting_regions"
+      - "low"
+      - "converting"
+    examples:
+      - "Show revenue for low converting regions."
+      - "How many records are in low converting regions?"
+  expression: '{sales_funnel.overall_conversion_rate} < 0.3'
+  description: Regions with <30% end-to-end conversion
+  tags:
+  - metric
+  terms:
+  - metric.low_converting_regions
+- name: registration_bottleneck
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the registration bottleneck subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "registration bottleneck"
+      - "registration_bottleneck"
+      - "registration"
+      - "bottleneck"
+    examples:
+      - "Show revenue for registration bottleneck."
+      - "How many records are in registration bottleneck?"
+  expression: '{sales_funnel.conversion_rate_registration_to_order} < 0.3'
+  description: Regions with registration-to-order issues
+  tags:
+  - metric
+  terms:
+  - metric.registration_bottleneck
+- name: fulfillment_bottleneck
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the fulfillment bottleneck subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "fulfillment bottleneck"
+      - "fulfillment_bottleneck"
+      - "fulfillment"
+      - "bottleneck"
+    examples:
+      - "Show revenue for fulfillment bottleneck."
+      - "How many records are in fulfillment bottleneck?"
+  expression: '{sales_funnel.conversion_rate_order_to_shipment} < 0.8'
+  description: Regions with fulfillment issues
+  tags:
+  - metric
+  terms:
+  - metric.fulfillment_bottleneck
+- name: high_dropoff_regions
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high dropoff regions subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high dropoff regions"
+      - "high_dropoff_regions"
+      - "high"
+      - "dropoff"
+    examples:
+      - "Show revenue for high dropoff regions."
+      - "How many records are in high dropoff regions?"
+  expression: '{sales_funnel.drop_off_after_registration} >= 50'
+  description: Regions with 50+ non-converting customers
+  tags:
+  - metric
+  terms:
+  - metric.high_dropoff_regions

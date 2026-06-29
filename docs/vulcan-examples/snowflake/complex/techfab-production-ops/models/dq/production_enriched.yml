@@ -1,0 +1,113 @@
+# kind: dq — converted from checks/production_enriched.yml
+kind: dq
+name: PRODUCTION_ENRICHED_dq
+depends_on: MES_PLATFORM.SILVER.PRODUCTION_ENRICHED
+rules:
+- row_count >= 50000:
+    name: minimum_production_records
+    dimension: completeness
+    description: At least 50000 enriched production records should exist
+- missing_count(confirmation_id) = 0:
+    name: no_missing_confirmation_id
+    dimension: completeness
+    description: All records must have a confirmation_id
+- missing_count(plant_code) = 0:
+    name: no_missing_plant_code
+    dimension: completeness
+    description: All records must have a plant_code
+- missing_count(equipment_id) = 0:
+    name: no_missing_equipment_id
+    dimension: completeness
+    description: All records must have an equipment_id
+- missing_count(confirmation_date) = 0:
+    name: no_missing_confirmation_date
+    dimension: completeness
+    description: All records must have a confirmation_date
+- invalid_count(good_quantity) = 0:
+    name: good_quantity_in_range
+    dimension: validity
+    description: Good quantity must be between 0 and 10000
+    valid min: 0
+    valid max: 10000
+- invalid_count(scrap_rate_pct) = 0:
+    name: scrap_rate_percentage_valid
+    dimension: validity
+    description: Scrap rate must be between 0% and 100%
+    valid min: 0
+    valid max: 100
+- invalid_count(first_pass_yield_pct) = 0:
+    name: fpy_percentage_valid
+    dimension: validity
+    description: First pass yield must be between 0% and 100%
+    valid min: 0
+    valid max: 100
+- invalid_count(efficiency_pct) = 0:
+    name: efficiency_percentage_valid
+    dimension: validity
+    description: Efficiency percentage must be between 0% and 200%
+    valid min: 0
+    valid max: 200
+- invalid_percent(plant_code) < 0.1%:
+    name: valid_plant_codes
+    dimension: validity
+    description: Plant codes must be one of the 10 valid values
+    valid values:
+    - P01
+    - P02
+    - P03
+    - P04
+    - P05
+    - P06
+    - P07
+    - P08
+    - P09
+    - P10
+- invalid_percent(shift) < 0.1%:
+    name: valid_shift_values
+    dimension: validity
+    description: Shift values must be S1, S2, or S3
+    valid values:
+    - S1
+    - S2
+    - S3
+- failed rows:
+    name: plant_code_exists_in_master
+    dimension: validity
+    fail query: |
+      SELECT pe.plant_code, pe.confirmation_id
+      FROM MES_PLATFORM.SILVER.PRODUCTION_ENRICHED pe
+      LEFT JOIN techfab_seeds.plant_master pm ON pe.plant_code = pm.plant_code
+      WHERE pm.plant_code IS NULL
+    samples limit: 10
+    description: All plant_codes must exist in plant_master
+- failed rows:
+    name: equipment_id_exists_in_master
+    dimension: validity
+    fail query: |
+      SELECT pe.equipment_id, pe.confirmation_id
+      FROM MES_PLATFORM.SILVER.PRODUCTION_ENRICHED pe
+      LEFT JOIN techfab_seeds.equipment_master em ON pe.equipment_id = em.equipment_id
+      WHERE em.equipment_id IS NULL
+    samples limit: 10
+    description: All equipment_ids must exist in equipment_master
+- duplicate_count(confirmation_id) = 0:
+    name: unique_confirmation_ids
+    dimension: uniqueness
+    description: Each confirmation_id must be unique
+- avg(scrap_rate_pct) < 5.0:
+    name: average_scrap_rate_acceptable
+    dimension: accuracy
+    description: Average scrap rate should be below 5%
+- avg(first_pass_yield_pct) > 90.0:
+    name: average_fpy_target_met
+    dimension: accuracy
+    description: Average first pass yield should exceed 90%
+- invalid_percent(total_quantity) < 1%:
+    name: total_quantity_positive
+    dimension: accuracy
+    description: Total quantity should be positive for nearly all records
+    valid min: 1
+- freshness(confirmation_date) < 2d:
+    name: data_freshness_check
+    dimension: timeliness
+    description: Production data must be refreshed within the last 2 days

@@ -1,0 +1,43 @@
+vde: false
+display_name: Tpch Mars V1
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: tpch-mars-v1
+description: "TPC-H scale factor 1 on Spark + Iceberg. Source data: lhs3ny001depot.tpch_sf1.*. Derived models written to lhs3ny001depot.tpch_sparkv3.*."
+tags:
+  - spark
+  - iceberg
+  - analytics
+  - lakehouse
+domain: analytics
+model_defaults:
+  dialect: spark2
+  start: '2025-01-01'
+  cron: '@daily'
+
+linter:
+  enabled: false
+  # warn_rules:
+  #   - preferassertions
+  #   - nomissingaudits
+
+analytics:
+  enabled: false
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://lhs3ny001depot
+
+
+virtual_environment_mode: dev_only

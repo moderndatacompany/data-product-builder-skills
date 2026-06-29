@@ -1,0 +1,501 @@
+customer_id,first_name,last_name,email,phone,address_line1,address_line2,city,state,postal_code,customer_segment,account_status,signup_date,loyalty_score
+C0001,Xiu,Brown,xiu.brown001@example.com,555-1409,4022 Oak Ave,,Seattle,WA,98101,Silver,Active,2020-07-10,57
+C0002,Ava,Patel,ava.patel002@example.com,555-4257,6883 Oak Blvd,Apt 38,Cleveland,OH,44114,Silver,Active,2020-11-14,66
+C0003,Ethan,Gomez,ethan.gomez003@example.com,555-6514,1529 Cedar St,Unit 28,Houston,TX,77001,Silver,Active,2023-01-03,71
+C0004,Mia,Patel,mia.patel004@example.com,555-5803,9469 Oak St,Unit 22,Nashville,TN,37201,Bronze,Active,2024-11-09,55
+C0005,Noah,White,noah.white005@example.com,555-5554,5987 Oak Rd,Unit 7,Newark,NJ,07102,Silver,Active,2020-05-26,50
+C0006,Camila,Moore,camila.moore006@example.com,555-3677,6226 Pine Dr,,Newark,NJ,07102,Gold,Active,2021-10-08,66
+C0007,Zane,Taylor,zane.taylor007@example.com,555-2084,9302 Market Rd,Suite 611,Boston,MA,02108,Bronze,Active,2020-10-19,39
+C0008,Omar,Patel,omar.patel008@example.com,555-5304,7029 Maple Blvd,Suite 241,Albuquerque,NM,87102,Platinum,Active,2020-08-12,92
+C0009,Emma,Rossi,emma.rossi009@example.com,555-3621,9781 Main Blvd,Unit 20,Atlanta,GA,30303,Bronze,Active,2020-01-24,37
+C0010,Bob,Patel,bob.patel010@example.com,555-5371,1837 Pine Blvd,Unit 15,Portland,OR,97205,Bronze,Active,2022-11-05,35
+C0011,Carol,Brown,carol.brown011@example.com,555-5889,9987 Oak Ave,,Minneapolis,MN,55401,Silver,Active,2020-08-17,73
+C0012,Henry,Santos,henry.santos012@example.com,555-6038,959 Oak Dr,Suite 849,Miami,FL,33101,Silver,Suspended,2022-12-26,31
+C0013,Sam,Davis,sam.davis013@example.com,555-3103,9017 Oak Rd,Suite 721,Charlotte,NC,28202,Bronze,Inactive,2024-03-26,24
+C0014,Riya,White,riya.white014@example.com,555-7118,8489 Cedar St,Unit 8,Newark,NJ,07102,Platinum,Active,2023-04-20,78
+C0015,Sophia,Johnson,sophia.johnson015@example.com,555-2163,3760 Main St,Apt 22,Los Angeles,CA,90001,Gold,Active,2023-01-09,85
+C0016,Vera,Nguyen,vera.nguyen016@example.com,555-8744,7759 River Blvd,Suite 199,Miami,FL,33101,Gold,Active,2024-11-04,87
+C0017,Camila,Smith,camila.smith017@example.com,555-2612,6606 Market Rd,Apt 7,Los Angeles,CA,90001,Silver,Active,2021-01-10,53
+C0018,Carol,Williams,carol.williams018@example.com,555-8260,1614 Main Dr,Apt 1,Cleveland,OH,44114,Platinum,Active,2021-03-13,92
+C0019,Alice,White,alice.white019@example.com,555-1960,6219 Main Blvd,Unit 30,Philadelphia,PA,19101,Gold,Inactive,2024-05-23,40
+C0020,Emma,Wilson,emma.wilson020@example.com,555-5861,968 Maple Dr,,Boston,MA,02108,Platinum,Active,2024-10-12,79
+C0021,Ana,Miller,ana.miller021@example.com,555-1931,1322 River Ave,Apt 5,Minneapolis,MN,55401,Gold,Inactive,2023-03-12,55
+C0022,Will,Williams,will.williams022@example.com,555-7868,9270 Maple Rd,Unit 7,Albuquerque,NM,87102,Gold,Active,2023-10-07,83
+C0023,Xiu,Anderson,xiu.anderson023@example.com,555-8491,1198 Main Blvd,,Portland,OR,97205,Silver,Active,2020-09-28,73
+C0024,Bob,Moore,bob.moore024@example.com,555-7054,2594 Cedar Dr,,Denver,CO,80202,Silver,Active,2023-09-20,46
+C0025,Noah,Garcia,noah.garcia025@example.com,555-3200,1901 Main Dr,Apt 10,Seattle,WA,98101,Silver,Active,2023-07-22,62
+C0026,Amir,Garcia,amir.garcia026@example.com,555-1832,6949 River Rd,Apt 3,Chicago,IL,60601,Silver,Active,2024-02-27,45
+C0027,Quinn,Patel,quinn.patel027@example.com,555-8007,168 Main St,Unit 18,Cleveland,OH,44114,Silver,Active,2020-09-18,64
+C0028,Carol,Santos,carol.santos028@example.com,555-1653,3451 Market Ave,Suite 898,Nashville,TN,37201,Bronze,Active,2021-04-29,42
+C0029,Alice,Miller,alice.miller029@example.com,555-3900,416 Oak Rd,Apt 27,Atlanta,GA,30303,Gold,Active,2020-08-09,67
+C0030,Ben,Moore,ben.moore030@example.com,555-4269,5738 Pine Ave,Apt 15,Newark,NJ,07102,Gold,Active,2020-05-22,71
+C0031,Sam,Taylor,sam.taylor031@example.com,555-6753,6558 Market Dr,Unit 1,Minneapolis,MN,55401,Platinum,Inactive,2021-06-27,83
+C0032,Ivy,Walker,ivy.walker032@example.com,555-6139,9942 Maple St,Apt 25,Atlanta,GA,30303,Gold,Active,2020-01-04,73
+C0033,Ana,Cooper,ana.cooper033@example.com,555-9821,5977 Cedar St,,Boston,MA,02108,Silver,Active,2021-09-25,50
+C0034,Deepak,Anderson,deepak.anderson034@example.com,555-3085,6898 Market Blvd,Unit 20,Boston,MA,02108,Gold,Active,2021-09-14,62
+C0035,Riya,Wilson,riya.wilson035@example.com,555-8043,9949 Market Rd,Apt 30,Albuquerque,NM,87102,Silver,Active,2024-06-18,53
+C0036,Riya,Young,riya.young036@example.com,555-6491,3858 Market Rd,Apt 15,Chicago,IL,60601,Platinum,Active,2022-08-31,70
+C0037,Will,Lee,will.lee037@example.com,555-2193,6800 Market Dr,Suite 813,Newark,NJ,07102,Gold,Active,2023-09-05,61
+C0038,Alice,Gomez,alice.gomez038@example.com,555-2746,3595 Oak Dr,Apt 30,Atlanta,GA,30303,Bronze,Active,2020-09-30,20
+C0039,Grace,Clark,grace.clark039@example.com,555-9702,9765 Pine Blvd,Suite 836,Cleveland,OH,44114,Bronze,Active,2020-11-21,39
+C0040,Amir,Gomez,amir.gomez040@example.com,555-5050,8550 Cedar Ave,Unit 15,Seattle,WA,98101,Gold,Active,2023-01-11,58
+C0041,Mia,Davis,mia.davis041@example.com,555-3471,6285 Market Ave,Suite 524,Miami,FL,33101,Gold,Active,2020-05-07,72
+C0042,Bob,Gomez,bob.gomez042@example.com,555-1320,6242 Cedar St,Suite 871,Albuquerque,NM,87102,Bronze,Inactive,2022-05-08,35
+C0043,Omar,Walker,omar.walker043@example.com,555-9947,8009 Oak Rd,Suite 129,Miami,FL,33101,Gold,Active,2022-04-08,66
+C0044,Carol,Davis,carol.davis044@example.com,555-9751,6465 Maple Dr,Suite 758,New York,NY,10001,Platinum,Active,2020-04-12,66
+C0045,Amir,White,amir.white045@example.com,555-6363,7459 Pine Rd,Suite 870,Boston,MA,02108,Gold,Active,2020-02-09,69
+C0046,Ivy,Moore,ivy.moore046@example.com,555-2124,518 Oak Ave,Apt 2,Los Angeles,CA,90001,Platinum,Active,2023-03-01,81
+C0047,Ethan,Clark,ethan.clark047@example.com,555-5198,2759 Maple Dr,Unit 25,Nashville,TN,37201,Platinum,Active,2021-09-30,65
+C0048,Zane,White,zane.white048@example.com,555-4249,9710 Market Ave,Unit 23,Chicago,IL,60601,Bronze,Active,2020-09-04,29
+C0049,Grace,Nguyen,grace.nguyen049@example.com,555-1672,8738 Cedar Rd,Unit 17,Nashville,TN,37201,Platinum,Active,2022-09-30,100
+C0050,Xiu,Garcia,xiu.garcia050@example.com,555-8532,7145 Oak Dr,Suite 651,Phoenix,AZ,85001,Gold,Active,2023-04-28,85
+C0051,Amir,Thomas,amir.thomas051@example.com,555-5022,4579 Cedar Ave,Suite 724,Chicago,IL,60601,Gold,Active,2021-10-27,72
+C0052,Grace,Taylor,grace.taylor052@example.com,555-6576,9777 Market Rd,Apt 36,Seattle,WA,98101,Platinum,Active,2022-09-27,91
+C0053,Omar,Gomez,omar.gomez053@example.com,555-4937,8051 Cedar St,Suite 326,Charlotte,NC,28202,Silver,Active,2023-04-06,46
+C0054,Ivy,Harris,ivy.harris054@example.com,555-6419,7444 Pine Rd,Apt 17,Nashville,TN,37201,Gold,Active,2024-04-09,79
+C0055,Deepak,Miller,deepak.miller055@example.com,555-4138,7943 Pine Dr,,Boston,MA,02108,Bronze,Active,2022-01-09,40
+C0056,Omar,Davis,omar.davis056@example.com,555-5494,903 Maple Rd,Suite 870,Los Angeles,CA,90001,Platinum,Active,2021-08-05,86
+C0057,Ben,Lopez,ben.lopez057@example.com,555-8216,3030 Main Rd,Suite 166,Portland,OR,97205,Gold,Active,2023-11-06,75
+C0058,Vera,Anderson,vera.anderson058@example.com,555-2395,1950 Maple Blvd,Apt 39,Miami,FL,33101,Silver,Active,2022-06-25,56
+C0059,Riya,Lee,riya.lee059@example.com,555-8025,9326 Maple St,Apt 40,Denver,CO,80202,Silver,Active,2020-06-15,58
+C0060,Mia,Miller,mia.miller060@example.com,555-1043,7391 Market Dr,Apt 31,Atlanta,GA,30303,Gold,Active,2024-10-26,75
+C0061,Quinn,Williams,quinn.williams061@example.com,555-4824,9673 Market Ave,Apt 28,Seattle,WA,98101,Silver,Inactive,2024-08-19,42
+C0062,Grace,Anderson,grace.anderson062@example.com,555-5728,2047 Cedar Rd,Suite 612,Newark,NJ,07102,Gold,Active,2024-12-26,72
+C0063,Tara,Walker,tara.walker063@example.com,555-6280,433 Main Ave,Unit 19,Seattle,WA,98101,Silver,Active,2020-12-24,40
+C0064,Carol,Taylor,carol.taylor064@example.com,555-3973,7151 Market Blvd,Suite 456,Albuquerque,NM,87102,Gold,Active,2024-10-22,72
+C0065,Olivia,Thomas,olivia.thomas065@example.com,555-7744,4732 Market Blvd,,Charlotte,NC,28202,Gold,Active,2024-05-01,60
+C0066,Ava,Martin,ava.martin066@example.com,555-9889,6780 Main Ave,Suite 737,Newark,NJ,07102,Silver,Active,2021-02-20,61
+C0067,Amir,Patel,amir.patel067@example.com,555-3146,7188 Market Blvd,Apt 8,Denver,CO,80202,Silver,Active,2020-01-29,50
+C0068,Henry,Cooper,henry.cooper068@example.com,555-2858,1934 Market Ave,Unit 30,Newark,NJ,07102,Silver,Active,2024-09-05,53
+C0069,Ben,Lopez,ben.lopez069@example.com,555-4993,9041 Oak Blvd,Apt 13,Newark,NJ,07102,Bronze,Active,2024-06-05,45
+C0070,Grace,Young,grace.young070@example.com,555-5377,4644 Market Rd,Suite 775,New York,NY,10001,Bronze,Active,2022-09-18,32
+C0071,Ivy,Thomas,ivy.thomas071@example.com,555-9903,7470 Pine Ave,Apt 16,Las Vegas,NV,89101,Bronze,Active,2021-10-13,39
+C0072,Grace,White,grace.white072@example.com,555-7325,8125 Main Ave,,Phoenix,AZ,85001,Bronze,Active,2022-12-13,24
+C0073,Carol,Clark,carol.clark073@example.com,555-1251,6727 River Ave,Unit 16,Phoenix,AZ,85001,Gold,Active,2023-08-23,77
+C0074,Yara,Lee,yara.lee074@example.com,555-9742,5198 Market Blvd,,Las Vegas,NV,89101,Gold,Active,2021-08-11,74
+C0075,Sophia,Walker,sophia.walker075@example.com,555-2480,1622 River St,Unit 6,Atlanta,GA,30303,Bronze,Active,2024-06-18,48
+C0076,Tara,Davis,tara.davis076@example.com,555-5000,6761 Maple Ave,Suite 180,Minneapolis,MN,55401,Silver,Active,2023-04-09,58
+C0077,Emma,Moore,emma.moore077@example.com,555-8555,7539 Pine St,Apt 30,Seattle,WA,98101,Platinum,Inactive,2023-04-18,62
+C0078,Deepak,Taylor,deepak.taylor078@example.com,555-8484,3273 Cedar Blvd,Unit 8,Denver,CO,80202,Silver,Suspended,2021-08-27,64
+C0079,Ava,Mehta,ava.mehta079@example.com,555-7484,142 Maple St,Unit 24,Seattle,WA,98101,Silver,Active,2024-06-30,46
+C0080,Will,Taylor,will.taylor080@example.com,555-3240,655 Pine Blvd,Apt 3,Houston,TX,77001,Platinum,Active,2024-03-10,96
+C0081,Tara,Miller,tara.miller081@example.com,555-4289,8847 Pine Dr,Apt 33,Phoenix,AZ,85001,Gold,Active,2022-09-13,78
+C0082,Alice,Thomas,alice.thomas082@example.com,555-2886,1243 Oak Ave,Unit 28,Newark,NJ,07102,Platinum,Active,2021-06-25,83
+C0083,Omar,Brown,omar.brown083@example.com,555-8451,4305 Maple Blvd,Apt 24,Nashville,TN,37201,Gold,Active,2023-02-23,63
+C0084,Xiu,Williams,xiu.williams084@example.com,555-8606,6699 Main Ave,Suite 411,Denver,CO,80202,Platinum,Active,2023-01-05,97
+C0085,Emma,White,emma.white085@example.com,555-8432,8860 Cedar Dr,,Nashville,TN,37201,Bronze,Active,2021-07-26,49
+C0086,Quinn,Clark,quinn.clark086@example.com,555-4868,1637 Market Rd,Unit 29,Nashville,TN,37201,Platinum,Active,2020-09-07,86
+C0087,Alice,Mehta,alice.mehta087@example.com,555-8450,3485 Market Dr,Apt 2,Chicago,IL,60601,Bronze,Active,2021-02-24,55
+C0088,Ethan,Nguyen,ethan.nguyen088@example.com,555-4538,5393 River Ave,Apt 39,Miami,FL,33101,Bronze,Active,2024-06-23,47
+C0089,Olivia,Brown,olivia.brown089@example.com,555-1422,253 Pine Ave,Apt 38,Phoenix,AZ,85001,Gold,Active,2022-05-12,53
+C0090,Ben,Clark,ben.clark090@example.com,555-6931,9736 Main Blvd,,Minneapolis,MN,55401,Silver,Inactive,2023-09-11,37
+C0091,Ana,Anderson,ana.anderson091@example.com,555-8504,1006 Cedar Blvd,Suite 210,New York,NY,10001,Silver,Active,2020-06-14,52
+C0092,Emma,Taylor,emma.taylor092@example.com,555-9984,6250 Maple Dr,Suite 617,Portland,OR,97205,Platinum,Active,2024-10-12,90
+C0093,Xiu,Rossi,xiu.rossi093@example.com,555-4522,7408 Oak Blvd,Suite 564,Atlanta,GA,30303,Gold,Active,2022-05-24,67
+C0094,Emma,Martin,emma.martin094@example.com,555-8770,1504 River St,Unit 14,Chicago,IL,60601,Silver,Active,2023-04-16,62
+C0095,Omar,Patel,omar.patel095@example.com,555-6400,6740 Pine Blvd,Unit 10,Houston,TX,77001,Gold,Active,2021-03-11,76
+C0096,Alice,Brown,alice.brown096@example.com,555-6736,6032 Main Rd,,Cleveland,OH,44114,Silver,Active,2023-11-21,64
+C0097,Amir,Johnson,amir.johnson097@example.com,555-3955,5072 Pine Rd,Suite 246,Seattle,WA,98101,Platinum,Active,2020-03-03,95
+C0098,Zane,Harris,zane.harris098@example.com,555-8432,2588 Pine Rd,,Portland,OR,97205,Bronze,Active,2024-03-25,46
+C0099,Will,Smith,will.smith099@example.com,555-2336,7269 Market Blvd,Suite 552,Seattle,WA,98101,Gold,Active,2020-08-21,67
+C0100,Yara,Martin,yara.martin100@example.com,555-8972,5063 Main Ave,,Minneapolis,MN,55401,Gold,Inactive,2024-04-20,59
+C0101,Emma,Gomez,emma.gomez101@example.com,555-5186,5385 Main St,Apt 32,Denver,CO,80202,Platinum,Active,2021-04-16,66
+C0102,Grace,Jackson,grace.jackson102@example.com,555-2180,703 Cedar St,Unit 30,Las Vegas,NV,89101,Silver,Active,2023-12-24,54
+C0103,Xiu,Harris,xiu.harris103@example.com,555-5743,6646 Main Rd,Suite 732,Houston,TX,77001,Bronze,Inactive,2020-06-29,20
+C0104,Tara,Nguyen,tara.nguyen104@example.com,555-7560,1298 Cedar Rd,Apt 22,Minneapolis,MN,55401,Platinum,Active,2022-12-22,86
+C0105,Ana,Wilson,ana.wilson105@example.com,555-6724,2429 Oak St,Apt 10,Nashville,TN,37201,Silver,Active,2023-09-04,76
+C0106,Xiu,Lopez,xiu.lopez106@example.com,555-8601,9504 Cedar Dr,Unit 11,Albuquerque,NM,87102,Platinum,Active,2022-06-24,96
+C0107,Xiu,Anderson,xiu.anderson107@example.com,555-5500,930 Pine Dr,Suite 572,Albuquerque,NM,87102,Platinum,Active,2021-08-10,100
+C0108,Alice,Williams,alice.williams108@example.com,555-9307,7591 Maple Dr,Apt 3,Las Vegas,NV,89101,Gold,Active,2020-11-04,79
+C0109,Liam,Clark,liam.clark109@example.com,555-2695,1391 Maple Ave,Suite 824,Portland,OR,97205,Bronze,Active,2023-06-02,45
+C0110,Riya,White,riya.white110@example.com,555-7697,9805 Main Rd,Suite 196,Portland,OR,97205,Gold,Active,2023-09-06,78
+C0111,Carol,Kim,carol.kim111@example.com,555-3463,1345 Maple Ave,Suite 771,Portland,OR,97205,Platinum,Active,2020-06-22,81
+C0112,Grace,Thomas,grace.thomas112@example.com,555-3093,1541 Market Blvd,Unit 12,Minneapolis,MN,55401,Gold,Inactive,2021-11-30,64
+C0113,Sam,Lopez,sam.lopez113@example.com,555-4145,2263 Oak St,,Miami,FL,33101,Silver,Active,2023-06-19,61
+C0114,Olivia,Miller,olivia.miller114@example.com,555-3712,725 Cedar Rd,Unit 15,Newark,NJ,07102,Silver,Active,2021-04-24,62
+C0115,Omar,Moore,omar.moore115@example.com,555-6070,3188 Pine Dr,Unit 15,Charlotte,NC,28202,Silver,Active,2022-05-07,73
+C0116,Grace,Kim,grace.kim116@example.com,555-3267,864 Market Blvd,,Seattle,WA,98101,Gold,Active,2021-07-12,66
+C0117,Quinn,Garcia,quinn.garcia117@example.com,555-9410,7177 Main Ave,,Phoenix,AZ,85001,Gold,Active,2022-02-04,72
+C0118,Ivy,Moore,ivy.moore118@example.com,555-1461,1633 River Rd,Unit 5,Portland,OR,97205,Bronze,Active,2024-08-29,72
+C0119,Emma,Gomez,emma.gomez119@example.com,555-8685,96 Main St,Suite 253,Newark,NJ,07102,Platinum,Active,2021-09-08,90
+C0120,Xiu,Santos,xiu.santos120@example.com,555-8489,1826 River Blvd,Apt 39,Chicago,IL,60601,Silver,Active,2020-01-04,60
+C0121,Will,Jackson,will.jackson121@example.com,555-4941,6835 Oak St,,Albuquerque,NM,87102,Gold,Active,2023-07-25,62
+C0122,Camila,Johnson,camila.johnson122@example.com,555-6850,5659 Oak St,Unit 24,Chicago,IL,60601,Platinum,Active,2021-11-24,91
+C0123,Henry,Rossi,henry.rossi123@example.com,555-3868,7850 Market Ave,Suite 833,Newark,NJ,07102,Platinum,Active,2024-06-08,85
+C0124,Carol,Anderson,carol.anderson124@example.com,555-9444,8907 Cedar Rd,Apt 3,Las Vegas,NV,89101,Gold,Active,2020-04-07,72
+C0125,Alice,Rossi,alice.rossi125@example.com,555-6438,2049 River Rd,Suite 509,Seattle,WA,98101,Bronze,Active,2021-01-17,28
+C0126,Carol,Santos,carol.santos126@example.com,555-9507,1363 Market Blvd,Apt 6,Seattle,WA,98101,Silver,Active,2020-06-12,55
+C0127,Leo,Martin,leo.martin127@example.com,555-5843,7315 Maple Blvd,Unit 23,Denver,CO,80202,Gold,Active,2021-12-23,61
+C0128,Xiu,Santos,xiu.santos128@example.com,555-1939,6665 Pine Dr,Suite 246,Chicago,IL,60601,Platinum,Active,2024-05-13,77
+C0129,Xiu,Jackson,xiu.jackson129@example.com,555-6933,9303 Main Dr,Unit 22,Las Vegas,NV,89101,Gold,Active,2023-03-21,76
+C0130,Leo,Rossi,leo.rossi130@example.com,555-5566,1868 Main Ave,,Miami,FL,33101,Gold,Active,2022-07-02,77
+C0131,Ethan,Kim,ethan.kim131@example.com,555-5678,3289 Main Ave,Suite 276,Charlotte,NC,28202,Bronze,Active,2024-09-27,54
+C0132,Deepak,Williams,deepak.williams132@example.com,555-9882,4924 River Ave,Apt 12,Denver,CO,80202,Platinum,Active,2020-10-11,83
+C0133,Sophia,Santos,sophia.santos133@example.com,555-9094,5922 Maple Dr,Apt 24,New York,NY,10001,Silver,Active,2021-09-25,42
+C0134,Ben,Young,ben.young134@example.com,555-7730,9429 Main Ave,Suite 175,Atlanta,GA,30303,Gold,Active,2020-09-19,79
+C0135,Bob,Mehta,bob.mehta135@example.com,555-3981,7098 Maple St,Unit 17,Phoenix,AZ,85001,Platinum,Active,2023-12-23,88
+C0136,Ana,Garcia,ana.garcia136@example.com,555-5653,4115 Oak Dr,Unit 5,Chicago,IL,60601,Silver,Active,2023-08-05,78
+C0137,Olivia,Nguyen,olivia.nguyen137@example.com,555-3526,9924 Pine Dr,,Philadelphia,PA,19101,Platinum,Active,2023-03-27,84
+C0138,Vera,Harris,vera.harris138@example.com,555-1496,8948 Pine Rd,Suite 801,Charlotte,NC,28202,Gold,Active,2020-05-02,76
+C0139,Olivia,Clark,olivia.clark139@example.com,555-7809,7619 Oak Rd,Unit 5,Charlotte,NC,28202,Silver,Active,2022-03-27,61
+C0140,Omar,Brown,omar.brown140@example.com,555-6228,7652 Main Rd,,Miami,FL,33101,Platinum,Inactive,2024-11-04,77
+C0141,Will,Harris,will.harris141@example.com,555-5067,5374 Maple Rd,Suite 263,Philadelphia,PA,19101,Bronze,Active,2024-12-05,39
+C0142,Zane,Young,zane.young142@example.com,555-8491,3534 Maple Rd,Suite 388,Miami,FL,33101,Silver,Active,2023-10-09,57
+C0143,Ben,Anderson,ben.anderson143@example.com,555-9793,1771 Cedar Ave,Suite 474,New York,NY,10001,Gold,Active,2023-03-13,61
+C0144,Riya,Williams,riya.williams144@example.com,555-7329,7388 River Dr,,Minneapolis,MN,55401,Platinum,Active,2022-02-03,81
+C0145,Grace,Thomas,grace.thomas145@example.com,555-6990,3271 Maple Dr,,Phoenix,AZ,85001,Platinum,Active,2024-07-04,74
+C0146,Will,Garcia,will.garcia146@example.com,555-9446,5383 Maple Rd,Unit 13,Phoenix,AZ,85001,Silver,Active,2022-11-09,56
+C0147,Omar,Lopez,omar.lopez147@example.com,555-5911,282 Pine Rd,Unit 14,Charlotte,NC,28202,Silver,Active,2023-11-10,45
+C0148,Amir,Rossi,amir.rossi148@example.com,555-4728,9570 Cedar Ave,Suite 838,Los Angeles,CA,90001,Platinum,Active,2020-03-05,75
+C0149,Vera,Silva,vera.silva149@example.com,555-2800,320 Cedar Rd,Apt 27,Boston,MA,02108,Gold,Active,2022-08-23,81
+C0150,Liam,Silva,liam.silva150@example.com,555-3262,3407 Maple Rd,Unit 17,Minneapolis,MN,55401,Bronze,Active,2022-12-27,28
+C0151,Leo,Patel,leo.patel151@example.com,555-6804,7942 Oak Ave,Apt 18,Seattle,WA,98101,Bronze,Suspended,2024-04-28,23
+C0152,Deepak,Lopez,deepak.lopez152@example.com,555-6194,5724 Maple Rd,Suite 687,Charlotte,NC,28202,Bronze,Active,2021-12-07,46
+C0153,Sam,Santos,sam.santos153@example.com,555-3399,699 Pine St,Unit 30,Denver,CO,80202,Silver,Active,2024-08-22,32
+C0154,Deepak,Taylor,deepak.taylor154@example.com,555-3249,9624 Oak Ave,Apt 4,Houston,TX,77001,Silver,Active,2022-04-26,49
+C0155,Leo,Silva,leo.silva155@example.com,555-8739,2262 Main Dr,Suite 768,Houston,TX,77001,Gold,Active,2021-08-11,63
+C0156,Carol,Gomez,carol.gomez156@example.com,555-2465,3814 Maple St,,Albuquerque,NM,87102,Bronze,Active,2022-10-11,52
+C0157,Olivia,Cooper,olivia.cooper157@example.com,555-5742,161 Pine Dr,Unit 4,Los Angeles,CA,90001,Gold,Active,2022-12-09,46
+C0158,Alice,Young,alice.young158@example.com,555-8668,3169 River St,Suite 848,Seattle,WA,98101,Silver,Active,2020-01-29,55
+C0159,Camila,Thomas,camila.thomas159@example.com,555-5833,3174 Oak Dr,Unit 27,Albuquerque,NM,87102,Platinum,Active,2021-01-13,96
+C0160,Carol,Moore,carol.moore160@example.com,555-1111,6294 Oak Blvd,,Seattle,WA,98101,Gold,Active,2021-04-28,68
+C0161,Liam,Martin,liam.martin161@example.com,555-2936,5036 Oak Blvd,Unit 30,Newark,NJ,07102,Silver,Active,2021-08-27,50
+C0162,Emma,Lopez,emma.lopez162@example.com,555-3509,9934 Pine Blvd,Apt 36,Newark,NJ,07102,Silver,Active,2023-05-05,60
+C0163,Alice,Santos,alice.santos163@example.com,555-2341,7329 Maple Rd,,Minneapolis,MN,55401,Platinum,Active,2022-11-01,88
+C0164,Olivia,Thomas,olivia.thomas164@example.com,555-9525,1914 Market Ave,Suite 193,Newark,NJ,07102,Silver,Active,2022-11-17,66
+C0165,Tara,Clark,tara.clark165@example.com,555-1945,7585 Market Rd,,Cleveland,OH,44114,Silver,Active,2020-04-02,41
+C0166,Omar,Smith,omar.smith166@example.com,555-2130,529 Pine Blvd,Suite 238,Charlotte,NC,28202,Gold,Active,2022-07-07,77
+C0167,Alice,Cooper,alice.cooper167@example.com,555-7184,1324 Market Dr,,Las Vegas,NV,89101,Platinum,Active,2022-12-19,100
+C0168,Henry,Johnson,henry.johnson168@example.com,555-1372,7595 Market Dr,Apt 28,Denver,CO,80202,Gold,Active,2021-07-18,89
+C0169,Ethan,Cooper,ethan.cooper169@example.com,555-2848,6878 Maple St,,Los Angeles,CA,90001,Silver,Active,2023-10-08,54
+C0170,Camila,Smith,camila.smith170@example.com,555-7590,3849 Maple Ave,Unit 5,Newark,NJ,07102,Gold,Inactive,2023-03-25,51
+C0171,Leo,Nguyen,leo.nguyen171@example.com,555-6253,4954 Oak Dr,Unit 14,Miami,FL,33101,Platinum,Inactive,2024-12-06,69
+C0172,Yara,Harris,yara.harris172@example.com,555-9120,5652 Market Blvd,Suite 813,Los Angeles,CA,90001,Gold,Active,2021-01-11,63
+C0173,Sam,Patel,sam.patel173@example.com,555-8758,3702 Pine Ave,Suite 159,Miami,FL,33101,Bronze,Active,2020-10-01,34
+C0174,Leo,Rossi,leo.rossi174@example.com,555-2295,6089 Main Dr,Suite 374,Newark,NJ,07102,Silver,Active,2024-11-24,59
+C0175,Mia,Wilson,mia.wilson175@example.com,555-4555,3432 River Rd,Apt 20,Charlotte,NC,28202,Bronze,Inactive,2020-08-28,24
+C0176,Carol,Moore,carol.moore176@example.com,555-4350,3931 Maple Rd,Unit 13,Las Vegas,NV,89101,Gold,Active,2024-12-12,53
+C0177,Ben,Clark,ben.clark177@example.com,555-2615,5256 Oak Rd,Apt 21,Charlotte,NC,28202,Silver,Active,2023-02-07,67
+C0178,Tara,Anderson,tara.anderson178@example.com,555-3497,5414 Oak Blvd,Suite 351,Boston,MA,02108,Silver,Inactive,2021-11-22,34
+C0179,Amir,Gomez,amir.gomez179@example.com,555-9005,7560 Oak Rd,Suite 837,Charlotte,NC,28202,Gold,Active,2023-08-07,81
+C0180,Henry,Lee,henry.lee180@example.com,555-2217,114 Cedar Ave,Apt 15,Los Angeles,CA,90001,Platinum,Active,2022-02-03,81
+C0181,Liam,Kim,liam.kim181@example.com,555-8916,267 Main Dr,,Charlotte,NC,28202,Silver,Active,2021-08-10,73
+C0182,Yara,Harris,yara.harris182@example.com,555-3937,1588 Maple Ave,Unit 7,Houston,TX,77001,Silver,Active,2022-03-23,56
+C0183,Mia,Jackson,mia.jackson183@example.com,555-7652,9266 Oak Ave,,Newark,NJ,07102,Platinum,Active,2023-02-05,70
+C0184,Deepak,Miller,deepak.miller184@example.com,555-2354,7119 Market Rd,,Charlotte,NC,28202,Gold,Inactive,2023-11-18,57
+C0185,Bob,Nguyen,bob.nguyen185@example.com,555-8790,772 Main Rd,,Seattle,WA,98101,Platinum,Active,2020-02-02,97
+C0186,Sam,Mehta,sam.mehta186@example.com,555-7525,4913 Oak Dr,Unit 19,Chicago,IL,60601,Gold,Active,2024-06-06,66
+C0187,Deepak,Walker,deepak.walker187@example.com,555-2284,5676 Main St,Unit 8,Minneapolis,MN,55401,Silver,Active,2023-05-04,41
+C0188,Ava,Rossi,ava.rossi188@example.com,555-5478,8048 Oak Rd,Apt 36,Newark,NJ,07102,Silver,Active,2020-06-24,65
+C0189,Sam,Kim,sam.kim189@example.com,555-5839,1214 Main Rd,Apt 10,Miami,FL,33101,Silver,Active,2020-08-06,75
+C0190,Quinn,Jackson,quinn.jackson190@example.com,555-5419,2180 Main Ave,Suite 670,Houston,TX,77001,Platinum,Active,2023-02-09,98
+C0191,Mia,Kim,mia.kim191@example.com,555-6315,212 Pine Blvd,Apt 25,Las Vegas,NV,89101,Silver,Active,2022-02-18,58
+C0192,Amir,Lopez,amir.lopez192@example.com,555-3390,2749 Cedar Rd,,Chicago,IL,60601,Gold,Inactive,2024-01-16,61
+C0193,Xiu,Lopez,xiu.lopez193@example.com,555-4203,1762 Oak Rd,Suite 440,Newark,NJ,07102,Silver,Active,2021-11-16,38
+C0194,Xiu,Kim,xiu.kim194@example.com,555-3230,5263 Maple Ave,Suite 281,Denver,CO,80202,Bronze,Active,2023-11-24,47
+C0195,Xiu,Lopez,xiu.lopez195@example.com,555-4971,6171 Pine Blvd,Apt 24,Portland,OR,97205,Silver,Active,2023-10-28,55
+C0196,Camila,Clark,camila.clark196@example.com,555-4434,4783 River St,Apt 27,Newark,NJ,07102,Silver,Active,2023-09-10,52
+C0197,Emma,Silva,emma.silva197@example.com,555-7932,1221 Cedar Dr,Suite 510,Las Vegas,NV,89101,Silver,Active,2022-01-06,49
+C0198,Will,Rossi,will.rossi198@example.com,555-2392,4077 Market Rd,,Houston,TX,77001,Silver,Active,2023-08-17,37
+C0199,Zane,Gomez,zane.gomez199@example.com,555-6432,1745 Main St,Apt 17,Atlanta,GA,30303,Gold,Active,2024-04-30,63
+C0200,Emma,Jackson,emma.jackson200@example.com,555-1402,1722 Pine Blvd,Apt 6,Charlotte,NC,28202,Gold,Active,2024-05-25,56
+C0201,Ethan,Young,ethan.young201@example.com,555-8912,7811 Main Blvd,Unit 11,Nashville,TN,37201,Platinum,Active,2020-02-16,93
+C0202,Yara,Santos,yara.santos202@example.com,555-3692,8464 Oak Dr,Suite 673,Miami,FL,33101,Bronze,Active,2022-04-09,28
+C0203,Xiu,Miller,xiu.miller203@example.com,555-4053,6491 Main Dr,Suite 706,Atlanta,GA,30303,Gold,Active,2021-02-25,67
+C0204,Grace,Williams,grace.williams204@example.com,555-2667,3073 Pine Rd,Unit 15,Cleveland,OH,44114,Silver,Active,2023-08-01,70
+C0205,Leo,Kim,leo.kim205@example.com,555-7367,9627 Main Rd,Apt 23,Las Vegas,NV,89101,Silver,Active,2021-09-01,66
+C0206,Yara,Davis,yara.davis206@example.com,555-6131,3918 Pine St,Apt 12,Houston,TX,77001,Silver,Active,2020-10-09,48
+C0207,Vera,White,vera.white207@example.com,555-7931,7983 Market Dr,Suite 270,Philadelphia,PA,19101,Gold,Active,2024-09-20,66
+C0208,Ivy,Johnson,ivy.johnson208@example.com,555-8939,3206 River Blvd,Suite 768,Phoenix,AZ,85001,Gold,Active,2023-12-25,71
+C0209,Henry,Clark,henry.clark209@example.com,555-9006,1364 Maple St,Unit 10,Philadelphia,PA,19101,Gold,Active,2024-05-17,54
+C0210,Sam,Lopez,sam.lopez210@example.com,555-9369,9393 Main Rd,,Houston,TX,77001,Silver,Active,2021-03-23,59
+C0211,Tara,Brown,tara.brown211@example.com,555-5055,538 Cedar Rd,Suite 189,Denver,CO,80202,Bronze,Active,2024-07-20,41
+C0212,Vera,Silva,vera.silva212@example.com,555-6744,2729 Maple Ave,,Atlanta,GA,30303,Silver,Active,2023-05-07,73
+C0213,Omar,Miller,omar.miller213@example.com,555-6302,4750 Maple Rd,,Denver,CO,80202,Platinum,Active,2022-04-22,100
+C0214,Alice,Rossi,alice.rossi214@example.com,555-3078,4100 Oak Rd,Suite 792,Phoenix,AZ,85001,Gold,Active,2021-07-04,54
+C0215,Xiu,Harris,xiu.harris215@example.com,555-7146,1247 Market St,Unit 17,Newark,NJ,07102,Silver,Active,2022-07-20,63
+C0216,Ava,Lee,ava.lee216@example.com,555-2526,5879 River St,Suite 323,Newark,NJ,07102,Silver,Active,2021-10-23,52
+C0217,Henry,Anderson,henry.anderson217@example.com,555-6533,9478 Oak Dr,,Cleveland,OH,44114,Platinum,Active,2024-09-09,80
+C0218,Alice,Miller,alice.miller218@example.com,555-8230,21 Cedar Ave,Unit 29,Newark,NJ,07102,Platinum,Inactive,2021-07-15,71
+C0219,Mia,Rossi,mia.rossi219@example.com,555-6905,1360 Pine Ave,Unit 13,Seattle,WA,98101,Silver,Active,2022-05-29,46
+C0220,Ava,Wilson,ava.wilson220@example.com,555-8812,2184 Maple Ave,,Chicago,IL,60601,Platinum,Active,2020-09-03,72
+C0221,Alice,Harris,alice.harris221@example.com,555-3165,1170 Oak Blvd,,Charlotte,NC,28202,Gold,Active,2020-10-07,56
+C0222,Alice,Davis,alice.davis222@example.com,555-3340,8701 Maple St,Suite 268,Chicago,IL,60601,Gold,Active,2024-03-12,82
+C0223,Emma,Cooper,emma.cooper223@example.com,555-7745,3569 Main St,Suite 226,Newark,NJ,07102,Gold,Active,2024-06-08,75
+C0224,Mia,Moore,mia.moore224@example.com,555-5668,4952 Oak Dr,Suite 293,New York,NY,10001,Gold,Active,2024-06-13,76
+C0225,Sophia,Lopez,sophia.lopez225@example.com,555-7322,3959 Cedar Dr,Unit 17,Houston,TX,77001,Bronze,Active,2024-10-28,45
+C0226,Omar,Martin,omar.martin226@example.com,555-3830,1205 Main Dr,Apt 5,Charlotte,NC,28202,Platinum,Active,2024-06-04,76
+C0227,Zane,Young,zane.young227@example.com,555-5693,6816 Cedar Blvd,Apt 6,Minneapolis,MN,55401,Gold,Active,2022-11-13,93
+C0228,Emma,Patel,emma.patel228@example.com,555-6353,9618 Market St,Apt 20,Las Vegas,NV,89101,Platinum,Active,2022-06-08,72
+C0229,Noah,Clark,noah.clark229@example.com,555-1901,2887 Main St,Apt 9,Denver,CO,80202,Gold,Active,2022-11-25,73
+C0230,Olivia,Jackson,olivia.jackson230@example.com,555-3079,1944 River St,Unit 26,Seattle,WA,98101,Silver,Active,2023-03-26,39
+C0231,Xiu,Williams,xiu.williams231@example.com,555-9128,8378 Pine St,Apt 32,Newark,NJ,07102,Gold,Active,2020-07-29,81
+C0232,Noah,Moore,noah.moore232@example.com,555-9336,731 River St,Unit 2,New York,NY,10001,Gold,Active,2024-10-22,60
+C0233,Liam,Patel,liam.patel233@example.com,555-7870,5282 Oak Blvd,Unit 9,Miami,FL,33101,Platinum,Active,2020-04-17,92
+C0234,Liam,White,liam.white234@example.com,555-2129,4635 River Rd,Suite 666,Newark,NJ,07102,Platinum,Active,2023-02-28,100
+C0235,Grace,Anderson,grace.anderson235@example.com,555-4974,6043 Maple Blvd,Apt 13,Newark,NJ,07102,Platinum,Inactive,2020-02-18,70
+C0236,Henry,Silva,henry.silva236@example.com,555-1157,33 River Blvd,Apt 20,Portland,OR,97205,Gold,Inactive,2020-10-18,64
+C0237,Deepak,Taylor,deepak.taylor237@example.com,555-2524,3802 River Dr,Suite 481,Los Angeles,CA,90001,Bronze,Active,2020-07-14,25
+C0238,Zane,Williams,zane.williams238@example.com,555-2020,2151 Oak Rd,Suite 422,Atlanta,GA,30303,Silver,Active,2021-10-13,54
+C0239,Quinn,Taylor,quinn.taylor239@example.com,555-4827,3331 Oak Dr,Apt 7,Chicago,IL,60601,Gold,Active,2020-09-04,44
+C0240,Ethan,Clark,ethan.clark240@example.com,555-6051,4351 River St,Unit 6,Newark,NJ,07102,Silver,Active,2020-03-23,49
+C0241,Ethan,Mehta,ethan.mehta241@example.com,555-6370,1504 Market Ave,,Phoenix,AZ,85001,Silver,Active,2020-12-22,64
+C0242,Quinn,Patel,quinn.patel242@example.com,555-5093,7580 Main Ave,Apt 8,Houston,TX,77001,Platinum,Active,2022-02-01,86
+C0243,Yara,Rossi,yara.rossi243@example.com,555-2376,9612 Pine St,Suite 302,Albuquerque,NM,87102,Silver,Active,2024-10-01,59
+C0244,Liam,Clark,liam.clark244@example.com,555-1829,9412 Cedar Blvd,Suite 491,Philadelphia,PA,19101,Platinum,Active,2021-01-18,77
+C0245,Amir,Taylor,amir.taylor245@example.com,555-8307,577 Maple Dr,Unit 8,Phoenix,AZ,85001,Gold,Active,2022-09-08,77
+C0246,Emma,Harris,emma.harris246@example.com,555-4267,4092 Market Dr,Unit 13,Minneapolis,MN,55401,Gold,Active,2021-12-05,73
+C0247,Carol,Nguyen,carol.nguyen247@example.com,555-9231,6373 Pine Ave,Apt 2,Portland,OR,97205,Platinum,Active,2021-07-29,100
+C0248,Ana,Jackson,ana.jackson248@example.com,555-4813,1650 Oak Ave,,Philadelphia,PA,19101,Silver,Inactive,2023-03-25,51
+C0249,Alice,Santos,alice.santos249@example.com,555-7363,2856 Oak Ave,Unit 11,Nashville,TN,37201,Bronze,Active,2023-12-05,32
+C0250,Emma,Nguyen,emma.nguyen250@example.com,555-4084,8892 Pine Ave,,Charlotte,NC,28202,Gold,Active,2022-12-14,80
+C0251,Ben,Johnson,ben.johnson251@example.com,555-6435,2147 Pine Ave,Apt 21,Boston,MA,02108,Silver,Inactive,2024-05-04,49
+C0252,Ivy,Williams,ivy.williams252@example.com,555-7120,9611 Main Rd,Apt 20,Las Vegas,NV,89101,Silver,Active,2023-08-02,62
+C0253,Ben,Rossi,ben.rossi253@example.com,555-6198,9217 Market Dr,Apt 23,Philadelphia,PA,19101,Gold,Active,2021-08-26,81
+C0254,Deepak,Nguyen,deepak.nguyen254@example.com,555-7415,540 Oak Dr,Apt 21,Albuquerque,NM,87102,Silver,Active,2022-10-13,66
+C0255,Emma,Thomas,emma.thomas255@example.com,555-2274,5692 Pine Ave,Unit 27,Miami,FL,33101,Gold,Active,2021-05-26,66
+C0256,Grace,Brown,grace.brown256@example.com,555-1020,6333 Cedar Blvd,Suite 523,Los Angeles,CA,90001,Bronze,Active,2022-02-07,31
+C0257,Noah,Mehta,noah.mehta257@example.com,555-8855,3705 Oak Blvd,Unit 26,Albuquerque,NM,87102,Platinum,Active,2020-08-02,90
+C0258,Zane,Miller,zane.miller258@example.com,555-2228,1535 Pine Dr,,Cleveland,OH,44114,Gold,Active,2023-05-28,72
+C0259,Bob,Harris,bob.harris259@example.com,555-3573,1669 Pine Ave,Unit 14,Los Angeles,CA,90001,Silver,Active,2020-07-15,67
+C0260,Henry,Lopez,henry.lopez260@example.com,555-3516,5921 Main Blvd,Suite 777,Los Angeles,CA,90001,Gold,Active,2020-12-15,73
+C0261,Xiu,Anderson,xiu.anderson261@example.com,555-2342,1902 Pine Blvd,Unit 16,Charlotte,NC,28202,Platinum,Active,2021-01-13,78
+C0262,Olivia,Clark,olivia.clark262@example.com,555-1731,7214 Cedar Rd,,Seattle,WA,98101,Platinum,Active,2020-07-17,92
+C0263,Mia,Martin,mia.martin263@example.com,555-6632,6792 River Dr,Suite 162,Cleveland,OH,44114,Silver,Active,2023-01-01,45
+C0264,Vera,Garcia,vera.garcia264@example.com,555-4860,4906 Main Blvd,Apt 3,Charlotte,NC,28202,Platinum,Active,2020-12-20,63
+C0265,Olivia,Wilson,olivia.wilson265@example.com,555-4157,709 Cedar St,Apt 28,Phoenix,AZ,85001,Bronze,Active,2024-01-29,43
+C0266,Zane,Patel,zane.patel266@example.com,555-7510,5353 River Rd,Suite 112,Cleveland,OH,44114,Platinum,Active,2023-03-06,83
+C0267,Vera,Nguyen,vera.nguyen267@example.com,555-2641,9229 River St,Unit 28,Houston,TX,77001,Bronze,Active,2023-09-03,26
+C0268,Liam,Miller,liam.miller268@example.com,555-5512,2366 Maple Dr,Unit 2,Las Vegas,NV,89101,Silver,Active,2022-08-31,56
+C0269,Carol,Taylor,carol.taylor269@example.com,555-7102,5545 River Rd,,New York,NY,10001,Bronze,Active,2021-09-07,50
+C0270,Henry,Thomas,henry.thomas270@example.com,555-5414,9921 Market St,Suite 316,Atlanta,GA,30303,Silver,Active,2024-11-11,53
+C0271,Ivy,Mehta,ivy.mehta271@example.com,555-1920,2614 Main Rd,,Minneapolis,MN,55401,Platinum,Active,2021-02-15,88
+C0272,Quinn,Smith,quinn.smith272@example.com,555-6904,4498 Pine Blvd,,Boston,MA,02108,Silver,Active,2022-09-28,48
+C0273,Will,Clark,will.clark273@example.com,555-3909,9625 Maple Rd,,Charlotte,NC,28202,Gold,Active,2020-11-29,80
+C0274,Ethan,Lee,ethan.lee274@example.com,555-4626,3397 Pine Blvd,,Miami,FL,33101,Gold,Active,2020-12-20,56
+C0275,Will,Santos,will.santos275@example.com,555-1138,4145 Maple Rd,Unit 14,Miami,FL,33101,Gold,Active,2021-09-10,61
+C0276,Zane,Nguyen,zane.nguyen276@example.com,555-2676,8390 Market Rd,Unit 21,New York,NY,10001,Gold,Active,2020-05-10,53
+C0277,Leo,Taylor,leo.taylor277@example.com,555-6327,4288 Market Rd,Apt 13,Seattle,WA,98101,Bronze,Active,2024-07-01,43
+C0278,Leo,Martin,leo.martin278@example.com,555-3292,8158 Pine Rd,,New York,NY,10001,Silver,Suspended,2024-07-29,30
+C0279,Ethan,Thomas,ethan.thomas279@example.com,555-4643,7804 Market Rd,Apt 33,Cleveland,OH,44114,Gold,Active,2024-02-26,69
+C0280,Sam,Cooper,sam.cooper280@example.com,555-3999,1473 Oak Rd,Suite 414,Portland,OR,97205,Silver,Active,2021-06-17,73
+C0281,Vera,Anderson,vera.anderson281@example.com,555-8598,7719 Main Dr,Suite 172,Houston,TX,77001,Bronze,Active,2024-11-11,34
+C0282,Tara,Smith,tara.smith282@example.com,555-3470,3291 Pine Blvd,Apt 37,Phoenix,AZ,85001,Gold,Active,2024-05-14,58
+C0283,Mia,Lopez,mia.lopez283@example.com,555-6449,5144 Market St,Apt 1,Philadelphia,PA,19101,Silver,Active,2024-04-14,64
+C0284,Sam,Williams,sam.williams284@example.com,555-3120,7045 Cedar Blvd,,Atlanta,GA,30303,Silver,Active,2020-01-29,69
+C0285,Bob,Thomas,bob.thomas285@example.com,555-9700,303 Market St,Unit 8,Boston,MA,02108,Gold,Active,2022-10-27,64
+C0286,Henry,Smith,henry.smith286@example.com,555-5885,7479 Market Dr,Suite 445,Denver,CO,80202,Bronze,Suspended,2021-12-02,21
+C0287,Bob,Lopez,bob.lopez287@example.com,555-6885,2711 River Blvd,Apt 2,Boston,MA,02108,Gold,Active,2022-10-30,74
+C0288,Xiu,Santos,xiu.santos288@example.com,555-1612,4200 River Dr,,Las Vegas,NV,89101,Silver,Active,2020-02-10,63
+C0289,Liam,Silva,liam.silva289@example.com,555-2897,7289 Cedar St,Apt 36,Atlanta,GA,30303,Gold,Active,2020-01-20,65
+C0290,Yara,Young,yara.young290@example.com,555-5423,6872 River St,,Phoenix,AZ,85001,Gold,Active,2022-10-16,83
+C0291,Ethan,Kim,ethan.kim291@example.com,555-4272,8581 Oak Rd,,Seattle,WA,98101,Silver,Inactive,2023-11-10,48
+C0292,Ava,Johnson,ava.johnson292@example.com,555-2458,9416 Market Blvd,,Houston,TX,77001,Silver,Active,2021-06-08,51
+C0293,Xiu,Moore,xiu.moore293@example.com,555-8483,4337 Cedar St,,Denver,CO,80202,Bronze,Active,2023-10-18,33
+C0294,Noah,Lee,noah.lee294@example.com,555-1751,2277 Market Ave,Unit 12,New York,NY,10001,Bronze,Active,2024-07-27,55
+C0295,Leo,Miller,leo.miller295@example.com,555-2865,6567 Cedar Rd,Suite 589,Las Vegas,NV,89101,Silver,Active,2020-08-19,65
+C0296,Alice,Miller,alice.miller296@example.com,555-2699,9688 Cedar Dr,Suite 725,Atlanta,GA,30303,Silver,Active,2024-11-01,66
+C0297,Yara,Garcia,yara.garcia297@example.com,555-3140,8007 Main Blvd,Unit 2,Charlotte,NC,28202,Silver,Active,2024-11-13,47
+C0298,Vera,Walker,vera.walker298@example.com,555-4669,8514 Maple Dr,Apt 7,Portland,OR,97205,Gold,Active,2023-08-06,54
+C0299,Zane,Davis,zane.davis299@example.com,555-1894,2581 Maple Blvd,,New York,NY,10001,Silver,Active,2021-11-08,58
+C0300,Sophia,Patel,sophia.patel300@example.com,555-7203,3860 Main Blvd,Suite 686,Las Vegas,NV,89101,Platinum,Active,2021-10-09,84
+C0301,Noah,Lopez,noah.lopez301@example.com,555-1291,6619 Cedar St,,Houston,TX,77001,Silver,Inactive,2023-07-29,35
+C0302,Ethan,Rossi,ethan.rossi302@example.com,555-8474,5963 River St,Unit 28,Portland,OR,97205,Silver,Active,2022-08-26,66
+C0303,Deepak,Martin,deepak.martin303@example.com,555-6952,1878 Main Ave,Unit 11,Newark,NJ,07102,Silver,Active,2020-08-05,60
+C0304,Emma,Mehta,emma.mehta304@example.com,555-7704,4176 Maple Ave,Apt 13,Houston,TX,77001,Gold,Active,2024-01-07,71
+C0305,Leo,Brown,leo.brown305@example.com,555-7790,9657 Main Blvd,Apt 30,Los Angeles,CA,90001,Bronze,Active,2024-02-16,62
+C0306,Henry,Nguyen,henry.nguyen306@example.com,555-8912,2913 Market Dr,,Minneapolis,MN,55401,Gold,Active,2024-12-12,77
+C0307,Leo,Young,leo.young307@example.com,555-7302,9987 Market Ave,Unit 13,Atlanta,GA,30303,Gold,Active,2022-04-25,53
+C0308,Ana,Anderson,ana.anderson308@example.com,555-9975,9079 Market Ave,Unit 7,Portland,OR,97205,Silver,Inactive,2020-09-28,27
+C0309,Deepak,Rossi,deepak.rossi309@example.com,555-3913,8898 Market Rd,Suite 460,Minneapolis,MN,55401,Silver,Inactive,2023-12-25,25
+C0310,Henry,Patel,henry.patel310@example.com,555-5684,219 Maple St,,Atlanta,GA,30303,Silver,Active,2024-03-16,63
+C0311,Grace,Miller,grace.miller311@example.com,555-5695,2409 River St,,Seattle,WA,98101,Gold,Active,2023-06-15,81
+C0312,Alice,Moore,alice.moore312@example.com,555-7371,8380 River Rd,Suite 490,Miami,FL,33101,Gold,Active,2023-11-04,57
+C0313,Leo,Patel,leo.patel313@example.com,555-1881,4127 Oak Dr,Unit 27,New York,NY,10001,Silver,Active,2023-05-20,60
+C0314,Ethan,Anderson,ethan.anderson314@example.com,555-8353,1230 Oak Ave,,Philadelphia,PA,19101,Gold,Active,2020-09-23,85
+C0315,Olivia,Nguyen,olivia.nguyen315@example.com,555-5178,5425 Cedar Ave,,New York,NY,10001,Silver,Active,2024-09-22,48
+C0316,Vera,Patel,vera.patel316@example.com,555-6866,5217 Maple Ave,Apt 12,Chicago,IL,60601,Gold,Active,2020-07-07,60
+C0317,Ivy,Moore,ivy.moore317@example.com,555-4495,5434 Pine Rd,Suite 733,Portland,OR,97205,Bronze,Active,2023-08-22,54
+C0318,Quinn,Moore,quinn.moore318@example.com,555-4994,5268 Cedar St,Unit 9,Los Angeles,CA,90001,Platinum,Active,2024-04-26,85
+C0319,Ivy,Young,ivy.young319@example.com,555-9335,7985 Main Rd,,Newark,NJ,07102,Bronze,Active,2024-05-02,38
+C0320,Mia,Wilson,mia.wilson320@example.com,555-4492,1712 Oak Dr,Apt 28,Atlanta,GA,30303,Platinum,Active,2020-03-18,84
+C0321,Mia,Williams,mia.williams321@example.com,555-1889,4137 Maple St,Unit 27,Philadelphia,PA,19101,Gold,Active,2022-04-08,68
+C0322,Yara,Brown,yara.brown322@example.com,555-9762,1046 River Dr,Unit 23,New York,NY,10001,Bronze,Active,2024-05-30,40
+C0323,Yara,Anderson,yara.anderson323@example.com,555-2417,7180 Cedar Blvd,Apt 2,Denver,CO,80202,Platinum,Active,2024-06-21,89
+C0324,Xiu,Davis,xiu.davis324@example.com,555-5883,192 Maple Dr,,Nashville,TN,37201,Silver,Active,2023-01-26,48
+C0325,Mia,Anderson,mia.anderson325@example.com,555-4441,3479 Cedar Dr,Apt 10,Nashville,TN,37201,Silver,Active,2020-08-22,62
+C0326,Alice,Smith,alice.smith326@example.com,555-9992,9015 Main Rd,Apt 5,Newark,NJ,07102,Silver,Active,2021-11-08,71
+C0327,Ivy,Davis,ivy.davis327@example.com,555-4842,4681 Maple St,Suite 597,Houston,TX,77001,Gold,Active,2023-11-21,58
+C0328,Ivy,Santos,ivy.santos328@example.com,555-6182,2772 Main Rd,Suite 326,Atlanta,GA,30303,Gold,Active,2023-10-23,63
+C0329,Camila,Thomas,camila.thomas329@example.com,555-8863,7306 Pine Rd,Apt 32,Newark,NJ,07102,Silver,Active,2021-07-28,58
+C0330,Omar,Wilson,omar.wilson330@example.com,555-5312,1245 Main Dr,Suite 695,Chicago,IL,60601,Silver,Active,2020-03-16,50
+C0331,Omar,Taylor,omar.taylor331@example.com,555-9904,7744 Market Ave,Unit 13,Cleveland,OH,44114,Platinum,Active,2020-07-04,75
+C0332,Yara,Moore,yara.moore332@example.com,555-3717,2309 Cedar Ave,Apt 12,Minneapolis,MN,55401,Silver,Active,2022-01-04,62
+C0333,Liam,Moore,liam.moore333@example.com,555-8989,1039 Pine Rd,Apt 15,Miami,FL,33101,Silver,Active,2022-03-05,44
+C0334,Liam,Smith,liam.smith334@example.com,555-6309,8552 Market Rd,Apt 17,Houston,TX,77001,Gold,Active,2023-04-18,72
+C0335,Xiu,Garcia,xiu.garcia335@example.com,555-2275,4131 Cedar Ave,Unit 13,Minneapolis,MN,55401,Gold,Active,2023-05-22,90
+C0336,Quinn,Miller,quinn.miller336@example.com,555-4768,8440 Market Rd,Apt 14,Chicago,IL,60601,Gold,Active,2020-08-30,70
+C0337,Yara,Moore,yara.moore337@example.com,555-7793,1866 Cedar Blvd,Apt 31,Portland,OR,97205,Silver,Active,2021-05-14,67
+C0338,Olivia,Davis,olivia.davis338@example.com,555-9399,9386 Oak St,Suite 284,Los Angeles,CA,90001,Silver,Active,2020-02-08,58
+C0339,Bob,Walker,bob.walker339@example.com,555-5644,3558 Cedar Dr,Apt 31,Chicago,IL,60601,Gold,Active,2020-10-19,75
+C0340,Olivia,Kim,olivia.kim340@example.com,555-9369,2757 Market Rd,,Seattle,WA,98101,Gold,Active,2020-08-10,52
+C0341,Ava,Wilson,ava.wilson341@example.com,555-9564,6887 River Ave,Suite 281,Minneapolis,MN,55401,Bronze,Active,2024-12-02,42
+C0342,Noah,Williams,noah.williams342@example.com,555-8901,9897 Maple St,Unit 17,Phoenix,AZ,85001,Bronze,Active,2022-05-28,28
+C0343,Sophia,Santos,sophia.santos343@example.com,555-8899,5752 Maple Dr,Unit 14,Las Vegas,NV,89101,Gold,Active,2024-10-25,81
+C0344,Omar,Harris,omar.harris344@example.com,555-5223,99 Market St,,Boston,MA,02108,Gold,Active,2024-07-05,76
+C0345,Leo,Harris,leo.harris345@example.com,555-6935,2545 Cedar Dr,Suite 648,Houston,TX,77001,Silver,Active,2023-10-25,49
+C0346,Omar,Santos,omar.santos346@example.com,555-8904,6075 Maple Dr,Unit 9,Philadelphia,PA,19101,Silver,Active,2020-10-09,59
+C0347,Alice,Lee,alice.lee347@example.com,555-2951,7327 River Ave,Suite 620,Miami,FL,33101,Silver,Active,2023-06-11,49
+C0348,Olivia,White,olivia.white348@example.com,555-1086,2391 Cedar Dr,Unit 3,Chicago,IL,60601,Gold,Active,2020-03-18,55
+C0349,Camila,White,camila.white349@example.com,555-7564,4703 Market Dr,Suite 279,Minneapolis,MN,55401,Gold,Active,2023-09-07,80
+C0350,Ethan,Smith,ethan.smith350@example.com,555-9364,3805 Maple Ave,,Minneapolis,MN,55401,Bronze,Active,2021-07-19,34
+C0351,Sam,White,sam.white351@example.com,555-6785,6652 Maple Ave,,Las Vegas,NV,89101,Bronze,Active,2024-01-27,50
+C0352,Ivy,Jackson,ivy.jackson352@example.com,555-5530,9944 Oak Blvd,Unit 19,Miami,FL,33101,Platinum,Active,2023-02-18,65
+C0353,Mia,Young,mia.young353@example.com,555-5821,1927 River Dr,Unit 29,Portland,OR,97205,Silver,Inactive,2023-02-27,32
+C0354,Leo,Gomez,leo.gomez354@example.com,555-8517,9624 River St,,Newark,NJ,07102,Gold,Active,2021-03-27,70
+C0355,Yara,Silva,yara.silva355@example.com,555-4767,6767 Pine Dr,Unit 1,Portland,OR,97205,Gold,Active,2023-10-11,69
+C0356,Omar,Cooper,omar.cooper356@example.com,555-3924,5152 Pine Ave,Apt 37,Charlotte,NC,28202,Gold,Active,2024-02-15,60
+C0357,Sophia,Lee,sophia.lee357@example.com,555-5348,3765 Oak Ave,,Boston,MA,02108,Platinum,Active,2023-09-20,83
+C0358,Alice,Patel,alice.patel358@example.com,555-1692,6091 Maple Rd,Unit 29,Charlotte,NC,28202,Gold,Suspended,2022-11-12,55
+C0359,Amir,White,amir.white359@example.com,555-4638,2111 Main Dr,,Albuquerque,NM,87102,Silver,Active,2023-11-06,56
+C0360,Noah,Silva,noah.silva360@example.com,555-9490,5181 Market St,Suite 315,Newark,NJ,07102,Silver,Active,2023-06-08,44
+C0361,Alice,Taylor,alice.taylor361@example.com,555-4066,4316 Oak Rd,Unit 20,Cleveland,OH,44114,Gold,Active,2022-05-08,67
+C0362,Alice,White,alice.white362@example.com,555-5581,2957 Maple Ave,,Newark,NJ,07102,Silver,Active,2023-02-11,45
+C0363,Tara,Lee,tara.lee363@example.com,555-7240,2399 River Ave,Apt 31,Boston,MA,02108,Gold,Active,2024-10-05,61
+C0364,Leo,Santos,leo.santos364@example.com,555-8972,4121 Maple Dr,Apt 4,Denver,CO,80202,Platinum,Active,2022-09-02,75
+C0365,Henry,Rossi,henry.rossi365@example.com,555-2577,5493 Pine Rd,Unit 18,Newark,NJ,07102,Gold,Active,2021-12-20,87
+C0366,Ethan,Nguyen,ethan.nguyen366@example.com,555-9821,4673 Pine Rd,Suite 893,Philadelphia,PA,19101,Bronze,Active,2021-08-09,20
+C0367,Quinn,Rossi,quinn.rossi367@example.com,555-3373,5537 Cedar Dr,,Philadelphia,PA,19101,Platinum,Active,2021-10-10,75
+C0368,Will,Rossi,will.rossi368@example.com,555-7479,7299 River Rd,Suite 561,Seattle,WA,98101,Platinum,Active,2020-09-13,72
+C0369,Camila,Moore,camila.moore369@example.com,555-5122,3460 Oak Blvd,Suite 165,Chicago,IL,60601,Silver,Active,2022-03-24,22
+C0370,Noah,Taylor,noah.taylor370@example.com,555-3544,6397 Pine Ave,Suite 390,Chicago,IL,60601,Silver,Active,2024-09-13,50
+C0371,Olivia,Johnson,olivia.johnson371@example.com,555-1575,5338 River Blvd,Unit 28,Nashville,TN,37201,Silver,Active,2023-11-29,42
+C0372,Quinn,Rossi,quinn.rossi372@example.com,555-8126,8755 Pine Rd,,Minneapolis,MN,55401,Gold,Active,2021-06-16,66
+C0373,Emma,Anderson,emma.anderson373@example.com,555-1172,8584 River Ave,,New York,NY,10001,Silver,Active,2024-03-27,53
+C0374,Tara,Santos,tara.santos374@example.com,555-5799,128 Maple Rd,Suite 674,Miami,FL,33101,Gold,Active,2024-02-18,70
+C0375,Xiu,White,xiu.white375@example.com,555-7199,4318 Main Blvd,Unit 17,Miami,FL,33101,Gold,Active,2024-07-14,69
+C0376,Mia,Miller,mia.miller376@example.com,555-3238,1818 Market Blvd,Suite 378,Denver,CO,80202,Gold,Active,2020-04-11,76
+C0377,Omar,Johnson,omar.johnson377@example.com,555-4046,4632 Pine Ave,Apt 29,Houston,TX,77001,Platinum,Active,2021-03-20,80
+C0378,Grace,Lopez,grace.lopez378@example.com,555-7084,529 Pine St,Suite 372,Newark,NJ,07102,Platinum,Active,2021-01-28,92
+C0379,Bob,Mehta,bob.mehta379@example.com,555-5097,216 Main Ave,Apt 25,Las Vegas,NV,89101,Silver,Active,2022-08-01,54
+C0380,Yara,Wilson,yara.wilson380@example.com,555-8746,5123 Pine Ave,,Las Vegas,NV,89101,Gold,Active,2021-02-10,65
+C0381,Ivy,Garcia,ivy.garcia381@example.com,555-1853,1860 Oak Blvd,Unit 1,Boston,MA,02108,Silver,Active,2021-05-12,57
+C0382,Grace,Silva,grace.silva382@example.com,555-8786,6094 River St,,Phoenix,AZ,85001,Silver,Active,2024-04-04,55
+C0383,Xiu,Smith,xiu.smith383@example.com,555-1979,2531 Market Dr,Apt 7,Nashville,TN,37201,Gold,Active,2023-08-13,70
+C0384,Quinn,Walker,quinn.walker384@example.com,555-4161,6199 Pine Ave,Suite 140,New York,NY,10001,Silver,Active,2023-01-16,36
+C0385,Deepak,Lopez,deepak.lopez385@example.com,555-4109,3067 Maple Rd,Unit 24,Albuquerque,NM,87102,Bronze,Active,2024-10-28,36
+C0386,Emma,Clark,emma.clark386@example.com,555-5844,8883 Pine Blvd,Suite 753,Seattle,WA,98101,Silver,Active,2023-06-23,53
+C0387,Alice,Jackson,alice.jackson387@example.com,555-4912,1047 Market Dr,Suite 636,Portland,OR,97205,Silver,Active,2021-08-02,48
+C0388,Noah,Brown,noah.brown388@example.com,555-9572,727 River Ave,Apt 12,Chicago,IL,60601,Platinum,Active,2020-03-06,97
+C0389,Vera,Rossi,vera.rossi389@example.com,555-7366,8625 Maple Dr,Apt 17,Charlotte,NC,28202,Silver,Active,2021-03-03,42
+C0390,Henry,Williams,henry.williams390@example.com,555-8668,5923 Maple Blvd,,Los Angeles,CA,90001,Silver,Active,2020-03-24,35
+C0391,Camila,Williams,camila.williams391@example.com,555-5979,3547 Maple St,Suite 336,Chicago,IL,60601,Gold,Active,2021-05-24,48
+C0392,Omar,Walker,omar.walker392@example.com,555-7802,9456 Pine Blvd,Apt 28,Houston,TX,77001,Silver,Active,2022-10-30,44
+C0393,Leo,Martin,leo.martin393@example.com,555-3591,9839 Cedar Rd,Unit 18,Cleveland,OH,44114,Gold,Active,2024-08-18,67
+C0394,Vera,Patel,vera.patel394@example.com,555-4504,9025 Market Rd,Suite 558,Las Vegas,NV,89101,Platinum,Active,2021-08-05,71
+C0395,Will,Johnson,will.johnson395@example.com,555-9480,4955 Main Rd,,Phoenix,AZ,85001,Silver,Inactive,2024-08-11,37
+C0396,Omar,Nguyen,omar.nguyen396@example.com,555-3534,628 Cedar Rd,Unit 5,Houston,TX,77001,Bronze,Active,2021-06-08,52
+C0397,Grace,Anderson,grace.anderson397@example.com,555-2505,6560 Maple Ave,Suite 432,Albuquerque,NM,87102,Platinum,Active,2023-11-13,79
+C0398,Noah,Kim,noah.kim398@example.com,555-5921,9451 Cedar St,Unit 30,Los Angeles,CA,90001,Gold,Active,2022-05-03,52
+C0399,Carol,Lee,carol.lee399@example.com,555-2974,9878 Main Blvd,,Miami,FL,33101,Gold,Active,2021-10-31,62
+C0400,Liam,Martin,liam.martin400@example.com,555-7436,9760 Maple Dr,Unit 8,Newark,NJ,07102,Silver,Active,2021-11-19,54
+C0401,Mia,Lopez,mia.lopez401@example.com,555-1807,6550 Pine St,Apt 26,Cleveland,OH,44114,Silver,Active,2021-02-09,40
+C0402,Ethan,Patel,ethan.patel402@example.com,555-9589,3980 Main Rd,,Miami,FL,33101,Platinum,Active,2022-01-18,86
+C0403,Ivy,Wilson,ivy.wilson403@example.com,555-6254,9740 Market St,Suite 458,Nashville,TN,37201,Silver,Active,2024-08-02,56
+C0404,Emma,Gomez,emma.gomez404@example.com,555-2405,903 Oak Dr,,Houston,TX,77001,Gold,Active,2021-09-16,85
+C0405,Quinn,Lopez,quinn.lopez405@example.com,555-1372,3434 Market Dr,Unit 7,Portland,OR,97205,Silver,Active,2020-10-16,49
+C0406,Zane,Nguyen,zane.nguyen406@example.com,555-9631,4195 Oak St,Unit 7,Los Angeles,CA,90001,Platinum,Active,2020-01-18,71
+C0407,Mia,White,mia.white407@example.com,555-5445,1777 Main Rd,,Nashville,TN,37201,Bronze,Active,2023-05-07,33
+C0408,Ana,Clark,ana.clark408@example.com,555-1352,4063 Maple Rd,Apt 22,Los Angeles,CA,90001,Platinum,Active,2021-12-28,83
+C0409,Xiu,Anderson,xiu.anderson409@example.com,555-4869,4529 River St,,Minneapolis,MN,55401,Bronze,Inactive,2021-04-06,37
+C0410,Yara,Davis,yara.davis410@example.com,555-2438,8541 Market Dr,Apt 15,Las Vegas,NV,89101,Gold,Active,2023-05-24,87
+C0411,Leo,Clark,leo.clark411@example.com,555-9883,3397 Market Ave,Apt 38,Phoenix,AZ,85001,Bronze,Active,2023-12-15,57
+C0412,Tara,Cooper,tara.cooper412@example.com,555-3378,2599 Pine St,,Albuquerque,NM,87102,Gold,Active,2020-10-25,56
+C0413,Camila,Johnson,camila.johnson413@example.com,555-6221,6747 Pine Blvd,Apt 18,Atlanta,GA,30303,Platinum,Active,2024-04-10,98
+C0414,Will,Nguyen,will.nguyen414@example.com,555-4783,3793 Market St,Suite 804,Miami,FL,33101,Platinum,Active,2022-08-18,83
+C0415,Deepak,Rossi,deepak.rossi415@example.com,555-7126,6358 Cedar Blvd,Apt 9,Philadelphia,PA,19101,Platinum,Active,2020-01-31,100
+C0416,Sophia,Walker,sophia.walker416@example.com,555-4323,1093 Oak Blvd,Unit 16,Boston,MA,02108,Bronze,Active,2022-05-25,28
+C0417,Zane,Gomez,zane.gomez417@example.com,555-1685,5136 Cedar Dr,,Las Vegas,NV,89101,Silver,Active,2024-08-20,69
+C0418,Sophia,Young,sophia.young418@example.com,555-9812,653 Maple Blvd,,Las Vegas,NV,89101,Gold,Active,2024-12-16,55
+C0419,Riya,Gomez,riya.gomez419@example.com,555-5684,2737 Cedar Rd,Apt 40,Newark,NJ,07102,Gold,Active,2020-07-04,69
+C0420,Sam,Nguyen,sam.nguyen420@example.com,555-9952,6450 Cedar Rd,Suite 283,Phoenix,AZ,85001,Silver,Active,2021-02-17,50
+C0421,Bob,Clark,bob.clark421@example.com,555-2477,5319 Market Ave,Suite 216,Seattle,WA,98101,Silver,Active,2023-12-19,41
+C0422,Ana,Kim,ana.kim422@example.com,555-3619,9026 Cedar St,Apt 11,Las Vegas,NV,89101,Platinum,Active,2024-04-24,96
+C0423,Deepak,Smith,deepak.smith423@example.com,555-7874,5081 Market Blvd,,Denver,CO,80202,Bronze,Inactive,2020-01-08,19
+C0424,Quinn,Lopez,quinn.lopez424@example.com,555-9169,104 Maple Blvd,Suite 702,Cleveland,OH,44114,Gold,Active,2023-05-16,64
+C0425,Will,Johnson,will.johnson425@example.com,555-5009,4566 Maple Dr,Apt 14,Cleveland,OH,44114,Platinum,Active,2020-10-24,94
+C0426,Henry,Kim,henry.kim426@example.com,555-5889,1446 Main St,Unit 6,Portland,OR,97205,Silver,Active,2023-05-03,43
+C0427,Vera,Santos,vera.santos427@example.com,555-3906,9495 Pine St,Unit 25,Newark,NJ,07102,Gold,Active,2020-05-18,71
+C0428,Mia,Anderson,mia.anderson428@example.com,555-8713,2009 Market Rd,Apt 22,Phoenix,AZ,85001,Silver,Active,2020-08-11,35
+C0429,Vera,Walker,vera.walker429@example.com,555-9666,7934 Market Dr,Unit 14,Chicago,IL,60601,Gold,Active,2023-06-30,66
+C0430,Vera,Lopez,vera.lopez430@example.com,555-9514,8079 River Ave,Unit 8,Charlotte,NC,28202,Bronze,Active,2020-02-19,44
+C0431,Quinn,Rossi,quinn.rossi431@example.com,555-2932,6803 Cedar St,Apt 22,Boston,MA,02108,Platinum,Active,2021-07-30,84
+C0432,Riya,Young,riya.young432@example.com,555-6307,1875 Market Rd,,New York,NY,10001,Bronze,Active,2024-09-03,43
+C0433,Leo,Cooper,leo.cooper433@example.com,555-8849,592 Market Ave,Suite 742,Charlotte,NC,28202,Bronze,Active,2021-11-17,22
+C0434,Carol,Walker,carol.walker434@example.com,555-1917,4914 Maple Rd,Apt 36,Minneapolis,MN,55401,Silver,Active,2024-12-23,59
+C0435,Grace,Jackson,grace.jackson435@example.com,555-2084,4605 River St,Apt 22,Phoenix,AZ,85001,Silver,Active,2023-05-03,67
+C0436,Riya,Silva,riya.silva436@example.com,555-6152,4458 Cedar St,Unit 29,Los Angeles,CA,90001,Gold,Inactive,2021-03-18,66
+C0437,Ana,Anderson,ana.anderson437@example.com,555-3867,6141 River St,Suite 194,Houston,TX,77001,Silver,Active,2022-10-21,60
+C0438,Ben,Walker,ben.walker438@example.com,555-9579,5373 Oak St,Apt 34,Denver,CO,80202,Silver,Active,2024-01-01,62
+C0439,Alice,Young,alice.young439@example.com,555-2897,5105 Main Dr,,New York,NY,10001,Platinum,Active,2024-03-06,79
+C0440,Riya,Rossi,riya.rossi440@example.com,555-4438,3295 Oak Rd,Suite 426,Portland,OR,97205,Silver,Active,2020-11-18,67
+C0441,Amir,Brown,amir.brown441@example.com,555-1249,8432 Main Ave,Unit 12,Cleveland,OH,44114,Gold,Inactive,2024-07-04,53
+C0442,Mia,Anderson,mia.anderson442@example.com,555-6549,7278 Main Ave,,Cleveland,OH,44114,Platinum,Active,2022-05-23,92
+C0443,Zane,Miller,zane.miller443@example.com,555-8304,5129 Pine Ave,Suite 873,Nashville,TN,37201,Silver,Active,2024-07-01,64
+C0444,Quinn,Anderson,quinn.anderson444@example.com,555-8625,3806 Oak Ave,Suite 472,Charlotte,NC,28202,Gold,Inactive,2021-11-07,49
+C0445,Grace,Lee,grace.lee445@example.com,555-6320,7997 Main St,Suite 459,Newark,NJ,07102,Gold,Active,2024-04-21,62
+C0446,Ana,Brown,ana.brown446@example.com,555-7646,5349 Maple St,Suite 572,Houston,TX,77001,Silver,Active,2021-05-14,65
+C0447,Omar,Miller,omar.miller447@example.com,555-8903,1092 Pine Ave,Unit 14,Las Vegas,NV,89101,Silver,Active,2023-09-19,47
+C0448,Deepak,Nguyen,deepak.nguyen448@example.com,555-8972,9712 Maple Blvd,Suite 199,Houston,TX,77001,Platinum,Inactive,2020-05-22,55
+C0449,Will,Brown,will.brown449@example.com,555-7208,8108 Market St,,Portland,OR,97205,Silver,Active,2022-07-16,45
+C0450,Vera,Clark,vera.clark450@example.com,555-4205,5197 Pine Dr,Unit 30,Boston,MA,02108,Bronze,Active,2023-06-06,38
+C0451,Ana,White,ana.white451@example.com,555-3089,1032 Pine Dr,Unit 1,Denver,CO,80202,Platinum,Active,2020-03-04,86
+C0452,Zane,Rossi,zane.rossi452@example.com,555-6212,6662 Cedar Blvd,Apt 35,Las Vegas,NV,89101,Gold,Active,2022-02-26,85
+C0453,Henry,Cooper,henry.cooper453@example.com,555-6902,2537 Pine Ave,,Atlanta,GA,30303,Platinum,Active,2023-09-09,56
+C0454,Mia,Davis,mia.davis454@example.com,555-7813,9912 Cedar Dr,Suite 621,Newark,NJ,07102,Silver,Active,2021-12-28,66
+C0455,Sophia,Miller,sophia.miller455@example.com,555-7959,9478 Cedar Ave,Unit 9,New York,NY,10001,Platinum,Active,2022-09-16,83
+C0456,Ben,Silva,ben.silva456@example.com,555-2311,8634 River Rd,,Phoenix,AZ,85001,Gold,Active,2023-09-21,65
+C0457,Yara,Williams,yara.williams457@example.com,555-9834,5129 Maple St,,Albuquerque,NM,87102,Gold,Active,2022-08-18,61
+C0458,Ivy,Santos,ivy.santos458@example.com,555-5827,2754 Main Dr,Unit 24,Denver,CO,80202,Platinum,Active,2020-12-12,80
+C0459,Vera,Smith,vera.smith459@example.com,555-5780,4709 Cedar St,Unit 17,New York,NY,10001,Gold,Active,2021-07-17,71
+C0460,Noah,Kim,noah.kim460@example.com,555-3860,2486 Market Blvd,Unit 26,Albuquerque,NM,87102,Silver,Active,2021-01-05,53
+C0461,Grace,Young,grace.young461@example.com,555-1542,1392 Oak Dr,Suite 607,Portland,OR,97205,Silver,Active,2022-06-20,54
+C0462,Vera,Walker,vera.walker462@example.com,555-6653,4341 River St,Suite 575,Los Angeles,CA,90001,Gold,Active,2024-03-20,64
+C0463,Carol,Patel,carol.patel463@example.com,555-4828,6400 Cedar Rd,,Las Vegas,NV,89101,Gold,Active,2022-02-21,58
+C0464,Yara,Smith,yara.smith464@example.com,555-2595,5807 River Blvd,Unit 30,Cleveland,OH,44114,Gold,Active,2020-07-20,46
+C0465,Amir,Rossi,amir.rossi465@example.com,555-7408,3971 Market Dr,Apt 13,Newark,NJ,07102,Gold,Active,2020-01-18,70
+C0466,Noah,Young,noah.young466@example.com,555-2702,5769 Oak Rd,,Newark,NJ,07102,Silver,Active,2023-05-01,53
+C0467,Yara,Garcia,yara.garcia467@example.com,555-4552,1975 Main Dr,Apt 9,Houston,TX,77001,Bronze,Active,2021-06-02,35
+C0468,Mia,Rossi,mia.rossi468@example.com,555-8429,7005 Market Rd,,Seattle,WA,98101,Gold,Active,2022-03-06,84
+C0469,Leo,Smith,leo.smith469@example.com,555-5230,2925 Cedar St,Suite 305,Seattle,WA,98101,Platinum,Active,2020-10-21,74
+C0470,Will,Rossi,will.rossi470@example.com,555-2740,4253 Main St,Unit 3,Newark,NJ,07102,Silver,Active,2022-10-16,52
+C0471,Emma,Rossi,emma.rossi471@example.com,555-1014,6407 Pine Ave,,Los Angeles,CA,90001,Silver,Inactive,2022-10-01,29
+C0472,Camila,Gomez,camila.gomez472@example.com,555-2148,3710 Main Blvd,Unit 4,Cleveland,OH,44114,Gold,Active,2020-04-23,71
+C0473,Xiu,Rossi,xiu.rossi473@example.com,555-2485,8769 River Rd,Unit 27,Nashville,TN,37201,Silver,Active,2020-03-21,69
+C0474,Riya,Silva,riya.silva474@example.com,555-7391,5896 Cedar St,Apt 29,Houston,TX,77001,Platinum,Active,2023-04-29,82
+C0475,Sophia,Lopez,sophia.lopez475@example.com,555-7369,8866 Market Rd,,Chicago,IL,60601,Platinum,Active,2024-06-01,83
+C0476,Ethan,Santos,ethan.santos476@example.com,555-9570,8801 Oak Dr,,Newark,NJ,07102,Silver,Active,2020-02-09,44
+C0477,Ben,Cooper,ben.cooper477@example.com,555-1750,2148 Main Ave,,Miami,FL,33101,Gold,Active,2023-04-25,86
+C0478,Noah,Lopez,noah.lopez478@example.com,555-4613,3330 Cedar Rd,Apt 26,Chicago,IL,60601,Gold,Inactive,2021-03-12,62
+C0479,Sam,Smith,sam.smith479@example.com,555-3841,1045 Main Rd,Apt 10,Portland,OR,97205,Silver,Active,2022-06-17,55
+C0480,Emma,Brown,emma.brown480@example.com,555-7162,266 Cedar St,,Philadelphia,PA,19101,Silver,Active,2021-08-04,68
+C0481,Tara,Silva,tara.silva481@example.com,555-8798,3387 Oak Rd,Apt 34,Phoenix,AZ,85001,Bronze,Active,2020-03-18,26
+C0482,Will,Williams,will.williams482@example.com,555-5934,6871 Main Dr,,Nashville,TN,37201,Silver,Active,2023-01-10,45
+C0483,Ana,Moore,ana.moore483@example.com,555-8605,4538 Main Ave,Suite 252,Boston,MA,02108,Gold,Active,2020-03-29,78
+C0484,Ethan,Harris,ethan.harris484@example.com,555-5118,7434 Main St,Apt 4,Portland,OR,97205,Platinum,Active,2022-11-20,88
+C0485,Noah,Williams,noah.williams485@example.com,555-4855,9720 Maple Rd,Unit 7,Newark,NJ,07102,Gold,Active,2021-04-11,83
+C0486,Alice,Wilson,alice.wilson486@example.com,555-7152,1214 Cedar Dr,Apt 32,Miami,FL,33101,Gold,Active,2020-12-30,79
+C0487,Zane,Jackson,zane.jackson487@example.com,555-3234,3191 Market Rd,Apt 18,Newark,NJ,07102,Platinum,Active,2021-07-28,97
+C0488,Quinn,Harris,quinn.harris488@example.com,555-3804,3612 Pine Dr,Apt 11,Portland,OR,97205,Silver,Active,2021-04-15,69
+C0489,Mia,Harris,mia.harris489@example.com,555-9548,3556 Maple Blvd,Suite 114,Charlotte,NC,28202,Silver,Active,2021-11-01,48
+C0490,Carol,Nguyen,carol.nguyen490@example.com,555-3440,93 Cedar St,,Albuquerque,NM,87102,Gold,Active,2024-07-16,72
+C0491,Grace,Silva,grace.silva491@example.com,555-2605,8124 Oak St,Suite 112,Newark,NJ,07102,Bronze,Active,2021-08-28,42
+C0492,Ava,Lopez,ava.lopez492@example.com,555-5994,7534 River Dr,Suite 565,Philadelphia,PA,19101,Silver,Active,2022-04-10,91
+C0493,Olivia,Santos,olivia.santos493@example.com,555-7068,32 River St,Unit 29,Newark,NJ,07102,Silver,Active,2024-03-21,52
+C0494,Omar,Nguyen,omar.nguyen494@example.com,555-4393,5510 Market St,Unit 30,Chicago,IL,60601,Bronze,Active,2022-01-18,63
+C0495,Quinn,Kim,quinn.kim495@example.com,555-1669,6013 Oak Dr,Apt 5,Nashville,TN,37201,Platinum,Active,2023-01-10,93
+C0496,Sam,Nguyen,sam.nguyen496@example.com,555-4437,5260 Pine Rd,Unit 22,Miami,FL,33101,Platinum,Active,2022-07-15,92
+C0497,Ben,Young,ben.young497@example.com,555-9629,7713 Market Dr,Suite 399,Houston,TX,77001,Silver,Active,2023-11-20,63
+C0498,Mia,Wilson,mia.wilson498@example.com,555-8501,1323 Cedar Ave,Apt 19,Chicago,IL,60601,Gold,Active,2022-10-13,47
+C0499,Emma,Lee,emma.lee499@example.com,555-4346,381 Pine Blvd,Suite 235,Minneapolis,MN,55401,Gold,Active,2023-08-13,76
+C0500,Ava,Lee,ava.lee500@example.com,555-4806,5513 Cedar Dr,Unit 21,Minneapolis,MN,55401,Gold,Active,2022-12-21,70

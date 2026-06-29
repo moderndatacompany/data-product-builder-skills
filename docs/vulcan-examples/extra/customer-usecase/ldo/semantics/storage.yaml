@@ -1,0 +1,52 @@
+models:
+  lenovo.ldo.storage:
+    alias: storage
+    
+    dimensions:
+      includes:
+        - STORAGE_ID
+        - DEVICE_ID
+        - STORAGE_CONDITION
+        - STORAGE_FIRMWARE_REVISION
+        - STORAGE_FREE_SPACE
+        - STORAGE_INTERFACE_TYPE
+        - STORAGE_MODEL
+        - STORAGE_SERIAL_NUMBER
+        - STORAGE_SIZE
+        - STORAGE_TYPE
+        - STORAGE_USED_PERCENTAGE
+        - STORAGE_CREATED_AT
+        - STORAGE_DISK_SPEC
+        - STORAGE_HEALTH_STATUS
+      
+      # storage_space_status:
+      #   type: string
+      #   expression: |
+      #     CASE 
+      #       WHEN {storage.STORAGE_USED_PERCENTAGE} > 90 THEN 'Almost Full'
+      #       WHEN {storage.STORAGE_USED_PERCENTAGE} > 80 THEN 'Low Space'
+      #       ELSE 'Normal'
+      #     END
+      #   description: "Status of the storage space based on the percentage used. The possible values are Normal, Low Space, Almost Full."
+    
+    measures:
+      total_storage_devices:
+        type: count
+        expression: "{storage.STORAGE_ID}"
+        description: "Total number of storage records across all devices."
+      
+      avg_storage_free_space:
+        type: avg
+        expression: "{storage.STORAGE_FREE_SPACE}"
+        description: "Average amount of free space available on all storage devices."
+      
+      total_storage_free_space:
+        type: sum
+        expression: "COALESCE({storage.STORAGE_FREE_SPACE}, 0)"
+        description: "Total amount of free space available on all storage devices."
+      
+      total_storage_capacity:
+        type: sum
+        expression: "COALESCE({storage.STORAGE_SIZE}, 0)"
+        description: "Total combined storage capacity of all devices."
+

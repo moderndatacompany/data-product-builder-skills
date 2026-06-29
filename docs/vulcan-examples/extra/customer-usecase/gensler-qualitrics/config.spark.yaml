@@ -1,0 +1,172 @@
+name: gensler-qualitrics
+tenant: marketing
+description: Hello there!
+
+
+model_defaults:
+  dialect: spark
+  cron: '*/5 * * * *'  # Every 5 minutes
+
+transpiler:
+  base_url: "http://vulcan-transpiler:4000/transpiler"
+  timeout: 30
+
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions  # Yellow warning, doesn't block
+    - nomissingaudits
+# virtual_environment_mode: dev_only
+gateways:
+  default:
+    connection:
+      type: spark
+      config:
+        # HOST-RUN (recommended when not using the Vulcan image):
+        # Run Spark locally in-process so all endpoints can consistently be `localhost:<published-port>`.
+        "spark.master": "local[*]"
+        #
+        # DOCKER-RUN alternative:
+        # - If Vulcan runs on your HOST but uses the Spark Standalone containers, use:
+        #   "spark.master": "spark://localhost:7077"
+        # - If Vulcan runs INSIDE the same Docker network as Spark, use:
+        #   "spark.master": "spark://spark-master:7077"
+        "spark.app.name": "spark"
+        "spark.driver.extraJavaOptions": "-Daws.region=us-east-1 -Daws.defaultRegion=us-east-1 -Djava.io.tmpdir=/tmp/iceberg"
+        "spark.executor.extraJavaOptions": "-Daws.region=us-east-1 -Daws.defaultRegion=us-east-1 -Djava.io.tmpdir=/tmp/iceberg"
+        
+        # Download Iceberg dependencies automatically (includes AWS SDK bundle) + PostgreSQL JDBC
+        "spark.jars.packages": "org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.5.2,org.apache.iceberg:iceberg-aws-bundle:1.5.2,org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262,org.postgresql:postgresql:42.7.1,org.mongodb.spark:mongo-spark-connector_2.12:10.3.0"
+
+        # Persist Ivy resolution artifacts in a stable path.
+        #
+        # IMPORTANT:
+        # - When running inside Docker, `/workspace` exists (bind-mounted project root).
+        # - When running Vulcan on the host (no Vulcan image), `/workspace` does NOT exist.
+        #
+        # Use a project-local cache on the host to avoid Ivy write failures.
+        "spark.jars.ivy": "/Users/shreyasikarwar/Desktop/DataOs-Research/Vulcan/gensler-qualitrics/.ivy2"
+        
+        # Iceberg Catalog Configuration - Warehouse (MinIO on port 9000)
+        "spark.sql.catalog.warehouse": "org.apache.iceberg.spark.SparkCatalog"
+        "spark.sql.catalog.warehouse.type": "rest"
+        # # If Vulcan runs on the HOST, Docker service DNS like `iceberg-rest-warehouse` won't resolve.
+        # # Use the published port on localhost (from `docker-compose.infra.yml`: "8181:8181").
+        # "spark.sql.catalog.warehouse.uri": "http://localhost:8181"
+        # "spark.sql.catalog.warehouse.warehouse": "s3://warehouse/"
+        # "spark.sql.catalog.warehouse.io-impl": "org.apache.iceberg.aws.s3.S3FileIO"
+        # # Host can reach MinIO Warehouse via published port (see `docker-compose.infra.yml`: "9000:9000")
+        # "spark.sql.catalog.warehouse.s3.endpoint": "http://localhost:9000"
+        # "spark.sql.catalog.warehouse.s3.path-style-access": "true"
+        # "spark.sql.catalog.warehouse.s3.access-key-id": "admin"
+        # "spark.sql.catalog.warehouse.s3.secret-access-key": "password"
+        # "spark.sql.catalog.warehouse.client.region": "us-east-1"
+
+
+        # # Secondary Iceberg catalog - Sample (MinIO on port 9002)
+        # "spark.sql.catalog.sample": "org.apache.iceberg.spark.SparkCatalog"
+        # "spark.sql.catalog.sample.type": "rest"
+        # # Published on the host as 8182 (see `docker-compose.infra.yml`: "8182:8181").
+        # "spark.sql.catalog.sample.uri": "http://localhost:8182"
+        # "spark.sql.catalog.sample.warehouse": "s3://sample/"
+        # "spark.sql.catalog.sample.io-impl": "org.apache.iceberg.aws.s3.S3FileIO"
+        # # Host can reach MinIO Sample via published port (see `docker-compose.infra.yml`: "9002:9000")
+        # "spark.sql.catalog.sample.s3.endpoint": "http://localhost:9002"
+        # "spark.sql.catalog.sample.s3.path-style-access": "true"
+        # "spark.sql.catalog.sample.s3.access-key-id": "admin"
+        # "spark.sql.catalog.sample.s3.secret-access-key": "password"
+        # "spark.sql.catalog.sample.client.region": "us-east-1"
+
+        # Nilus Iceberg catalog (MinIO on port 9004)
+        "spark.sql.catalog.nilus": "org.apache.iceberg.spark.SparkCatalog"
+        "spark.sql.catalog.nilus.type": "rest"
+        # Published on the host as 8183 (see `nilus/local-working/docker-compose.yaml`: "8183:8181").
+        "spark.sql.catalog.nilus.uri": "http://localhost:8183"
+        "spark.sql.catalog.nilus.warehouse": "s3://warehouse/"
+        "spark.sql.catalog.nilus.io-impl": "org.apache.iceberg.aws.s3.S3FileIO"
+        # Host can reach MinIO Nilus via published port (see `nilus/local-working/docker-compose.yaml`: "9004:9000")
+        "spark.sql.catalog.nilus.s3.endpoint": "http://localhost:9004"
+        "spark.sql.catalog.nilus.s3.path-style-access": "true"
+        "spark.sql.catalog.nilus.s3.access-key-id": "admin"
+        "spark.sql.catalog.nilus.s3.secret-access-key": "password"
+        "spark.sql.catalog.nilus.client.region": "us-east-1"
+
+        # PostgreSQL catalog via JDBC
+        "spark.sql.catalog.postgres": "org.apache.spark.sql.execution.datasources.v2.jdbc.JDBCTableCatalog"
+        # Host can reach the warehouse DB via published port (see `docker-compose.infra.yml`: "5433:5432")
+        "spark.sql.catalog.postgres.url": "jdbc:postgresql://localhost:5433/warehouse"
+        "spark.sql.catalog.postgres.driver": "org.postgresql.Driver"
+        "spark.sql.catalog.postgres.user": "vulcan"
+        "spark.sql.catalog.postgres.password": "vulcan"
+
+        # MongoDB Spark Connector
+        "spark.mongodb.read.connection.uri": "mongodb://admin:admin@localhost:27017/sample?authSource=admin"
+        "spark.mongodb.write.connection.uri": "mongodb://admin:admin@localhost:27017/sample?authSource=admin"
+
+
+        # S3/MinIO credentials - default to warehouse MinIO
+        "spark.hadoop.fs.s3a.access.key": "admin"
+        "spark.hadoop.fs.s3a.secret.key": "password"
+        # Default S3A endpoint (warehouse MinIO on host)
+        "spark.hadoop.fs.s3a.endpoint": "http://localhost:9000"
+        "spark.hadoop.fs.s3a.path.style.access": "true"
+        "spark.hadoop.fs.s3a.impl": "org.apache.hadoop.fs.s3a.S3AFileSystem"
+        
+        # Iceberg extensions
+        "spark.sql.extensions": "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions"
+
+        # --- Stability defaults for local Docker Spark + Iceberg ---
+        # Explicit memory settings (defaults are often too small for Iceberg/Parquet writes)
+        # Increased significantly for extremely complex window operations and large datasets
+        "spark.driver.memory": "8g"
+        "spark.executor.memory": "8g"
+        # Note: in Standalone this isn't a container limit, but still helps Spark account for overhead.
+        "spark.executor.memoryOverhead": "2g"
+
+        # Reduce per-task write pressure and improve planning
+        "spark.sql.adaptive.enabled": "true"
+        "spark.sql.shuffle.partitions": "400"
+        
+        # Additional memory management for complex queries with window functions
+        "spark.sql.windowExec.buffer.spill.threshold": "8192"
+        "spark.sql.autoBroadcastJoinThreshold": "-1"
+        "spark.memory.fraction": "0.8"
+        "spark.memory.storageFraction": "0.2"
+        
+        # Force aggressive spilling for window operations
+        "spark.sql.windowExec.buffer.in.memory.threshold": "4096"
+        "spark.shuffle.spill.compress": "true"
+        "spark.shuffle.file.buffer": "64k"
+        
+        # Limit concurrent tasks to reduce memory pressure
+        "spark.default.parallelism": "4"
+        "spark.sql.files.maxPartitionBytes": "67108864"
+
+        # Keep Parquet compression predictable / lightweight
+        "spark.sql.parquet.compression.codec": "snappy"
+
+        # Encourage smaller Iceberg data files (reduces in-memory buffering during writes)
+        "spark.sql.catalog.warehouse.write.target-file-size-bytes": "134217728"   # 128MB
+        "spark.sql.catalog.sample.write.target-file-size-bytes": "134217728"      # 128MB
+        "spark.sql.catalog.nilus.write.target-file-size-bytes": "134217728"       # 128MB
+
+        "spark.dynamicAllocation.enabled": "true"
+        "spark.dynamicAllocation.shuffleTracking.enabled": "true"
+        "spark.dynamicAllocation.initialExecutors": "1"
+        "spark.dynamicAllocation.minExecutors": "1"
+        "spark.dynamicAllocation.maxExecutors": "2"
+        "spark.sql.parquet.outputTimestampType": "TIMESTAMP_MICROS"
+        "spark.sql.parquet.int96AsTimestamp": "true"
+
+    # Use PostgreSQL for Vulcan / SQLMesh state
+    state_connection:
+      type: postgres
+      database: statestore
+      # If Vulcan runs on the HOST, use localhost to reach the published port.
+      # If Vulcan runs inside Docker, `host.docker.internal` can be used to reach the host.
+      host: localhost
+      port: 5431
+      user: vulcan
+      password: vulcan
+
+    state_schema: gensler_test

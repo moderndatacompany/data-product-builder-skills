@@ -1,0 +1,4 @@
+kind: metric
+name: average_loyalty_score
+measure: customers.average_loyalty_score
+description: "Average loyalty score across all customers"

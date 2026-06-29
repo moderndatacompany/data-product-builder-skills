@@ -1,0 +1,4 @@
+kind: metric
+name: active_products
+measure: products.active_products
+description: "Number of active (non-discontinued) products"

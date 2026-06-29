@@ -1,0 +1,11 @@
+product_id,product_name,category,price,stock_quantity
+P001,Wireless Mouse,Electronics,29.99,150
+P002,Cotton T-Shirt,Clothing,24.99,300
+P003,Yoga Mat,Sports,39.99,200
+P004,LED Desk Lamp,Home,49.99,100
+P005,Organic Coffee Beans,Food,18.99,500
+P006,Building Blocks Set,Toys,34.99,250
+P007,Bluetooth Headphones,Electronics,79.99,120
+P008,Running Shoes,Sports,89.99,80
+P009,Glass Vase,Home,29.99,60
+P010,Wool Sweater,Clothing,59.99,150

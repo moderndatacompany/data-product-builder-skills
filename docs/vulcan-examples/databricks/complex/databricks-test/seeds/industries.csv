@@ -1,0 +1,13 @@
+industry_code,industry_name,category
+tech,Technology,B2B Software
+finance,Financial Services,Financial
+healthcare,Healthcare,Healthcare
+retail,Retail & E-commerce,Commerce
+consulting,Consulting Services,Professional Services
+manufacturing,Manufacturing,Industrial
+education,Education,Education
+logistics,Logistics & Supply Chain,Operations
+media,Media & Entertainment,Creative
+insurance,Insurance,Financial
+nonprofit,Non-Profit,Social Impact
+energy,Energy & Utilities,Industrial

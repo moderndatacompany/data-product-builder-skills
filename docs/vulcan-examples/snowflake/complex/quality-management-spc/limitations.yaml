@@ -1,0 +1,5 @@
+limitations:
+  - Historical data from July 2024 to December 2024 (6 months)
+  - Inspection and SPC data from QMS platform
+  - Daily data refresh via full reload
+  - Snowflake cloud warehouse as data platform

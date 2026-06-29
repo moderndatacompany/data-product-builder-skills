@@ -1,0 +1,6 @@
+battery_id,device_id,battery_condition,condition_reason,battery_cycle_count,battery_design_capacity,battery_firstused_date,battery_fullcharge_capacity,battery_manufacture_date,battery_manufacture_name,battery_remaining_capacity,battery_serial_number,battery_warranty_date,battery_warranty_status
+BAT001,DEV001,Good,Normal wear and tear,245,57000,2023-01-01 00:00:00,54150,2022-12-30 00:00:00,LG Chem,51300,BTYSN001,2026-01-01 00:00:00,Active
+BAT002,DEV002,Healthy,Excellent condition,89,80000,2023-02-01 00:00:00,78400,2023-01-28 00:00:00,Samsung SDI,76000,BTYSN002,2026-02-01 00:00:00,Active
+BAT003,DEV003,Problematic,High cycle count,892,45000,2023-03-01 00:00:00,31500,2023-02-25 00:00:00,Sunwoda,28000,BTYSN003,2023-12-31 00:00:00,Expired
+BAT004,DEV004,Good,Normal usage,156,80000,2023-04-01 00:00:00,76800,2023-03-29 00:00:00,Celxpert,73600,BTYSN004,2026-03-01 00:00:00,Expiring Soon
+BAT005,DEV005,Healthy,Like new,34,71000,2023-05-01 00:00:00,70290,2023-04-28 00:00:00,Simplo,69580,BTYSN005,2026-04-01 00:00:00,Active

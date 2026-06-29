@@ -1,0 +1,25 @@
+source,source_category
+google,Organic
+bing,Organic
+yahoo,Organic
+duckduckgo,Organic
+baidu,Organic
+yandex,Organic
+ask,Organic
+aol,Organic
+google ads,Paid
+googleads,Paid
+facebook,Social
+instagram,Social
+twitter,Social
+linkedin,Social
+pinterest,Social
+youtube,Social
+reddit,Social
+tiktok,Social
+snapchat,Social
+(direct),Direct
+(none),Direct
+email,Email
+newsletter,Email
+

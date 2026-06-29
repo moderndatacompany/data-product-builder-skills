@@ -1,0 +1,3 @@
+kind: metric
+name: max_battery_fullcharge_capacity
+measure: battery.max_battery_fullcharge_capacity

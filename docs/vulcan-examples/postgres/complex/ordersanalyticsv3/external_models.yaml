@@ -1,0 +1,52 @@
+- name: '"vulcandb"."vulcan_demo"."customers"'
+  columns:
+    customer_id: INT
+    region_id: INT
+    name: TEXT
+    email: TEXT
+- name: '"vulcandb"."vulcan_demo"."dim_dates"'
+  columns:
+    dt: DATE
+    year: INT
+    month: INT
+    day_of_week: TEXT
+- name: '"vulcandb"."vulcan_demo"."order_items"'
+  columns:
+    order_id: INT
+    item_id: INT
+    product_id: INT
+    quantity: INT
+    unit_price: DECIMAL(10, 2)
+- name: '"vulcandb"."vulcan_demo"."orders"'
+  columns:
+    order_id: INT
+    customer_id: INT
+    order_date: DATE
+    warehouse_id: INT
+- name: '"vulcandb"."vulcan_demo"."products"'
+  columns:
+    product_id: INT
+    supplier_id: INT
+    name: TEXT
+    category: TEXT
+    price: DECIMAL(10, 2)
+- name: '"vulcandb"."vulcan_demo"."regions"'
+  columns:
+    region_id: INT
+    region_name: TEXT
+- name: '"vulcandb"."vulcan_demo"."shipments"'
+  columns:
+    shipment_id: INT
+    order_id: INT
+    shipped_date: DATE
+    carrier: TEXT
+- name: '"vulcandb"."vulcan_demo"."suppliers"'
+  columns:
+    supplier_id: INT
+    region_id: INT
+    name: TEXT
+- name: '"vulcandb"."vulcan_demo"."warehouses"'
+  columns:
+    warehouse_id: INT
+    region_id: INT
+    name: TEXT

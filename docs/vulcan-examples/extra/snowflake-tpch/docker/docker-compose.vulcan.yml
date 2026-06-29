@@ -1,0 +1,113 @@
+x-images:
+  # Unified Vulcan image (Python API + Go MySQL server)
+  # Version format: MAJOR.MINOR.PATCH.REVISION (e.g., 0.228.1.1)
+  vulcan: &vulcan_image "tmdcio/vulcan-snowflake:${VERSION:-0.228.1.7}"
+  vulcan-transpiler: &vulcan_transpiler_image "tmdcio/vulcan-transpiler:${VERSION:-0.228.1.1}"
+  vulcan-graphql: &vulcan_graphql_image "tmdcio/vulcan-graphql:${VERSION:-0.228.1.1}"
+
+networks:
+  vulcan:
+    external: true
+
+services:
+  # Vulcan API for this example project
+  vulcan-api:
+    image: *vulcan_image
+    working_dir: /workspace
+    command: ["vulcan", "--log-to-stdout", "api", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      PROJECT_PATH: ${PROJECT_PATH:-/workspace}
+      # Ensure the project can reach infra services when running inside Docker:
+      # - statestore:5432 (compose service name)
+      # - minio:9000 (compose service name)
+      STATESTORE_HOST: ${STATESTORE_HOST:-statestore}
+      STATESTORE_PORT: ${STATESTORE_PORT:-5432}
+      MINIO_ENDPOINT_URL: ${MINIO_ENDPOINT_URL:-http://minio:9000}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/workspace
+    restart: unless-stopped
+    networks:
+      - vulcan
+
+  # Transpiler service
+  vulcan-transpiler:
+    image: *vulcan_transpiler_image
+    environment:
+      VULCAN_API_URL: http://vulcan-api:8000/api/v1
+      CUBEJS_TESSERACT_SQL_PLANNER: false
+    ports:
+      - "4000:4000"
+    depends_on:
+      - vulcan-api
+    restart: unless-stopped
+    networks:
+      - vulcan
+
+  # Vulcan GraphQL service
+  vulcan-graphql:
+    image: *vulcan_graphql_image
+    environment:
+      VULCAN_API_URL: http://vulcan-api:8000
+      VULCAN_TRANSPILER_URL: http://vulcan-transpiler:4000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - vulcan-api
+      - vulcan-transpiler
+    restart: unless-stopped
+    networks:
+      - vulcan
+
+  # Vulcan MySQL service - provides MySQL wire protocol access to Vulcan
+  vulcan-mysql:
+    image: *vulcan_image
+    entrypoint: ["/usr/local/bin/vulcan-mysql"]
+    ports:
+      - "3306:3306"       # MySQL wire protocol
+      - "8081:8080"       # HTTP monitoring endpoints (/health, /livez, /metrics)
+    environment:
+      LOG_LEVEL: ${MYSQL_LOG_LEVEL:-debug}
+      MYSQL_HOST: "0.0.0.0"
+      MYSQL_PORT: "3306"
+      MYSQL_DB_NAME: "vulcan"
+      MYSQL_ALLOW_CLEARTEXT_AUTH: "true"
+
+      MYSQL_SSL_ENABLED: "${MYSQL_SSL_ENABLED:-true}"
+      MYSQL_SSL_REQUIRED: "${MYSQL_SSL_REQUIRED:-false}"
+      MYSQL_SSL_CERT_FILE: "/ssl/server.crt"
+      MYSQL_SSL_KEY_FILE: "/ssl/server.key"
+
+      HEIMDALL_URL: ${HEIMDALL_URL:-https://glacier-121525.dataos.app/heimdall}
+      HEIMDALL_AUTH_PATH: /api/v1/authorize
+      HEIMDALL_TIMEOUT: "10"
+      DATAOS_RUN_AS_USER: ${DATAOS_RUN_AS_USER:-vulcan}
+
+      HTTP_HOST: "0.0.0.0"
+      HTTP_PORT: "8080"
+
+      API_URL: http://vulcan-api:8000
+      API_POLL_INITIAL_MS: "1000"
+      API_POLL_MAX_MS: "5000"
+      API_QUERY_TIMEOUT: "300"
+
+      TRANSPILER_URL: http://vulcan-transpiler:4000
+      TRANSPILER_BASE_PATH: /transpiler
+      TRANSPILER_POLL_INTERVAL: "60"
+    volumes:
+      - ./ssl:/ssl:ro
+    depends_on:
+      - vulcan-api
+      - vulcan-transpiler
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/livez"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - vulcan
+
+

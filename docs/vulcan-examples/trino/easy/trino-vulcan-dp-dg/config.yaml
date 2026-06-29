@@ -1,0 +1,55 @@
+vde: false
+display_name: Trino Vulcan Dp Dg
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: engineering
+tags:
+  - trino
+  - analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: trino-vulcan-dp-dg
+tenant: engineering
+description: Daily sales analytics pipeline using Trino with Iceberg tables on MinIO storage.
+
+# --- Gateway Connection ---
+# TODO: Remove hardcoding; instead create the Trino connection secret via domain-definition and reuse/project that same secret here.
+gateways:
+  default:
+    connection:
+      type: trino
+      host: trino
+      port: 8080
+      user: trino
+      catalog: iceberg
+      http_scheme: http
+    state_connection:
+      type: postgres
+      host: {{ env_var('STATESTORE_HOST') }}
+      port: 5432
+      database: {{ env_var('STATESTORE_DATABASE') }}
+      user: {{ env_var('STATESTORE_USER') }}
+      password: {{ env_var('STATESTORE_PASSWORD') }}
+
+default_gateway: default
+
+# --- Model Defaults ---
+model_defaults:
+  dialect: trino
+  start: 2024-01-01
+  cron: '@daily'
+
+# --- Linting Rules ---
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections

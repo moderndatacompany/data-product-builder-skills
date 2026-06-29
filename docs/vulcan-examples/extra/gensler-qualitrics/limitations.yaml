@@ -1,0 +1,5 @@
+limitations:
+  - Synthetic/mock survey data
+  - Requires Snowflake key-pair authentication
+  - Data refreshed via external Python script
+  - JSON fields stored as strings (requires parsing in models)

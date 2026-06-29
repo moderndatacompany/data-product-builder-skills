@@ -1,0 +1,4 @@
+limitations:
+  - Demo data generated for April 2026
+  - Full refresh models optimized for reproducible examples
+  - Snowflake is the execution warehouse for all layers

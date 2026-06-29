@@ -1,0 +1,38 @@
+# kind: dq — converted from checks/product.yaml
+kind: dq
+name: PRODUCT_dq
+depends_on: web_analytics_gold.PRODUCT
+rules:
+- row_count > 0:
+    name: product_records_exist
+    dimension: completeness
+    description: Product catalog must contain at least one product
+- missing_count(site_item_pk_product) = 0:
+    name: product_pk_required
+    dimension: completeness
+    description: All products must have a unique primary key identifier
+- missing_count(itemnumber) = 0:
+    name: itemnumber_required
+    dimension: completeness
+    description: All products must have an item number from inventory system
+- missing_percent(pim_product_name) < 10:
+    name: product_name_completeness
+    dimension: completeness
+    description: At least 90% of products should have standardized PIM product names
+- missing_percent(brand_name) < 20:
+    name: brand_name_completeness
+    dimension: completeness
+    description: At least 80% of products should have brand names for merchandising
+- failed rows:
+    name: invalid_class
+    dimension: validity
+    fail query: |
+      SELECT site_item_pk_product, pim_product_name, class
+      FROM web_analytics_gold.PRODUCT
+      WHERE class IS NULL OR class = ''
+    samples limit: 10
+    description: All products must have a valid alcohol product class (Wine, Spirits, Beer)
+- duplicate_count(site_item_pk_product) = 0:
+    name: product_pk_unique
+    dimension: uniqueness
+    description: Product primary key must be unique across all records

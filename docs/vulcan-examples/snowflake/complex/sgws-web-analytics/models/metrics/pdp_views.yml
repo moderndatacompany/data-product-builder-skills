@@ -1,0 +1,3 @@
+kind: metric
+name: pdp_views
+measure: web_heartbeat.pdp_views

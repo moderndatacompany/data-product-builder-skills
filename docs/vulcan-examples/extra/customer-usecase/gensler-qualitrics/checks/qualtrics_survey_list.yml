@@ -1,0 +1,46 @@
+checks:
+  GENSLER.FINAL.QUALTRICS_SURVEY_LIST:
+    completeness:
+      - missing_count(SURVEY_ID) = 0:
+          name: no_missing_survey_ids
+          attributes:
+            description: "All survey list entries must have a survey ID"
+      
+      - missing_count(SURVEY_NAME) = 0:
+          name: no_missing_survey_names
+          attributes:
+            description: "All surveys should have a name"
+      
+      - row_count > 0:
+          name: has_surveys
+          attributes:
+            description: "At least one survey must exist in the list"
+    
+    validity:
+      - failed rows:
+          name: invalid_survey_status
+          fail query: |
+            SELECT SURVEY_ID, SURVEY_NAME, IS_ACTIVE
+            FROM GENSLER.FINAL.QUALTRICS_SURVEY_LIST
+            WHERE IS_ACTIVE IS NOT NULL 
+              AND IS_ACTIVE NOT IN (TRUE, FALSE)
+          samples limit: 10
+          attributes:
+            description: "Survey status must be Active, Inactive, or Draft"
+      
+      - failed rows:
+          name: future_last_modified
+          fail query: |
+            SELECT SURVEY_ID, SURVEY_NAME, LAST_MODIFIED_DATE
+            FROM GENSLER.FINAL.QUALTRICS_SURVEY_LIST
+            WHERE LAST_MODIFIED_DATE > CURRENT_TIMESTAMP()
+          samples limit: 10
+          attributes:
+            description: "Last modified timestamp cannot be in the future"
+    
+    uniqueness:
+      - duplicate_count(SURVEY_ID) = 0:
+          name: unique_survey_ids_in_list
+          attributes:
+            description: "Survey IDs must be unique in the survey list"
+

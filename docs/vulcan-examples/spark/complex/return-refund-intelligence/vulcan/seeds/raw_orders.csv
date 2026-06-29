@@ -1,0 +1,13 @@
+order_id,customer_id,city,order_ts,order_amount,order_status,payment_status,delivery_mode
+O1001,C001,Bengaluru,2026-04-14 09:10:00,650.00,delivered,paid,express
+O1002,C002,Mumbai,2026-04-14 10:05:00,280.00,delivered,paid,standard
+O1003,C003,Mumbai,2026-04-14 13:15:00,890.00,delivered,paid,express
+O1004,C004,Delhi,2026-04-14 18:20:00,340.00,delivered,paid,standard
+O1005,C005,Delhi,2026-04-15 08:40:00,760.00,delivered,refunded,express
+O1006,C001,Bengaluru,2026-04-15 09:25:00,520.00,delivered,refunded,express
+O1007,C002,Mumbai,2026-04-15 11:05:00,310.00,delivered,refunded,standard
+O1008,C003,Mumbai,2026-04-15 12:10:00,930.00,delivered,refunded,express
+O1009,C004,Delhi,2026-04-15 13:45:00,410.00,delivered,paid,standard
+O1010,C006,Bengaluru,2026-04-15 14:10:00,220.00,delivered,paid,standard
+O1011,C005,Delhi,2026-04-15 16:05:00,680.00,delivered,refunded,express
+O1012,C001,Bengaluru,2026-04-15 19:15:00,705.00,delivered,refunded,express

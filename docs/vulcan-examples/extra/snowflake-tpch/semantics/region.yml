@@ -1,0 +1,18 @@
+models:
+  test_db.vulcan_test_project.region:
+    alias: regions
+
+    measures:
+      total_regions:
+        type: count
+        expression: "*"
+        description: "Total number of regions"
+        tags: [tpch, region, count]
+
+    dimensions:
+      includes:
+        - REGIONKEY
+        - NAME
+        - COMMENT
+
+

@@ -1,0 +1,49 @@
+# kind: dq — converted from checks/customer_experience_kpis.yml
+kind: dq
+name: customer_experience_kpis_dq
+depends_on: s3depot.qcommerce_delivery_gold.customer_experience_kpis
+
+rules:
+- row_count >= 30:
+    name: minimum_customer_experience_rows
+    dimension: completeness
+    description: At least 30 customer experience KPI rows should exist
+
+- missing_count(customer_tier) = 0:
+    name: no_missing_customer_tier
+    dimension: completeness
+    description: All records must have a customer_tier
+
+- missing_count(experience_risk_segment) = 0:
+    name: no_missing_experience_risk_segment
+    dimension: completeness
+    description: All records must have an experience_risk_segment
+
+- invalid_count(late_orders) = 0:
+    name: late_orders_non_negative
+    dimension: validity
+    description: late_orders must be zero or positive
+    valid min: 0
+
+- invalid_count(failed_orders) = 0:
+    name: failed_orders_non_negative
+    dimension: validity
+    description: failed_orders must be zero or positive
+    valid min: 0
+
+- invalid_count(refunded_orders) = 0:
+    name: refunded_orders_non_negative
+    dimension: validity
+    description: refunded_orders must be zero or positive
+    valid min: 0
+
+- invalid_count(experience_risk_segment) = 0:
+    name: experience_risk_segment_is_valid
+    dimension: validity
+    description: experience_risk_segment must stay within the supported categorical buckets
+    valid values: [healthy, watchlist, high_risk, critical, unknown]
+
+- duplicate_count(ds, city, customer_tier) = 0:
+    name: unique_ds_city_customer_tier
+    dimension: uniqueness
+    description: Each ds, city, and customer_tier combination must be unique

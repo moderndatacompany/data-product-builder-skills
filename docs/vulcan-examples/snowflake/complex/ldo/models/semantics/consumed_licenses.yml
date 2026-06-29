@@ -1,0 +1,151 @@
+# Converted from legacy: semantics/consumed_licenses.yaml
+kind: semantic
+name: consumed_licenses
+depends_on: lenovo.ldo.consumed_licenses
+ai_context:
+  instructions: >
+    Use this semantic model for questions about consumed licenses. Prefer its measures
+    for aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "consumed licenses"
+    - "consumed_licenses"
+    - "consumed"
+    - "licenses"
+  examples:
+    - "Show consumed licenses trends over time."
+    - "Break down consumed licenses by key dimensions."
+
+dimensions:
+- _ID
+- BILLING_SUBSCRIPTION_ID
+- COMMITMENT_END_DATE
+- CREATED_DATE
+- LAST_MODIFIED_DATE
+- LICENSE_TYPE_ID
+- ORDER_DATE
+- PART_NUMBER
+- START_DATE
+- STATUS
+- SUBSCRIPTION_ID
+- ENTITY_ID
+- ENTITY_TYPE
+- IS_AUTOMATIC_ASSIGNMENT_ENABLED
+measures:
+- name: total_licenses
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total licenses. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total licenses"
+      - "total_licenses"
+      - "total"
+      - "licenses"
+    examples:
+      - "What is total licenses by month?"
+      - "Compare total licenses across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - (CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END) IS NOT NULL OR {consumed_licenses.ENTITY_TYPE} IS NULL
+  description: Total number of licenses.
+  tags:
+  - metric
+  terms:
+  - metric.total_licenses
+- name: total_assigned_licenses
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total assigned licenses. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total assigned licenses"
+      - "total_assigned_licenses"
+      - "total"
+      - "assigned"
+    examples:
+      - "What is total assigned licenses by month?"
+      - "Compare total assigned licenses across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{consumed_licenses.STATUS} = ''ASSIGNED'''
+  - (CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END) IS NOT NULL
+  description: Total number of assigned licenses.
+  tags:
+  - metric
+  terms:
+  - metric.total_assigned_licenses
+- name: total_assigned_license_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total assigned license devices.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total assigned license devices"
+      - "total_assigned_license_devices"
+      - "total"
+      - "assigned"
+    examples:
+      - "What is total assigned license devices by month?"
+      - "Compare total assigned license devices across key segments."
+  type: count_distinct
+  expression: CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END
+  filters:
+  - '{consumed_licenses.STATUS} = ''ASSIGNED'''
+  description: Total number of devices with an active or assigned license. Also known as the total number of licensed devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_assigned_license_devices
+- name: total_unassigned_licenses
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total unassigned licenses. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total unassigned licenses"
+      - "total_unassigned_licenses"
+      - "total"
+      - "unassigned"
+    examples:
+      - "What is total unassigned licenses by month?"
+      - "Compare total unassigned licenses across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{consumed_licenses.STATUS} IN (''NEW'', ''UNASSIGNED'')'
+  description: Total number of unassigned licenses.
+  tags:
+  - metric
+  terms:
+  - metric.total_unassigned_licenses
+- name: total_expired_license_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total expired license devices. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total expired license devices"
+      - "total_expired_license_devices"
+      - "total"
+      - "expired"
+    examples:
+      - "What is total expired license devices by month?"
+      - "Compare total expired license devices across key segments."
+  type: count_distinct
+  expression: CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END
+  filters:
+  - '{consumed_licenses.STATUS} = ''EXPIRED'''
+  - (CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END) IS NOT NULL
+  description: Total number of devices with expired licenses.
+  tags:
+  - metric
+  terms:
+  - metric.total_expired_license_devices

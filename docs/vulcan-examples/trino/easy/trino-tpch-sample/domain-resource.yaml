@@ -1,0 +1,71 @@
+version: v1alpha
+type: vulcan
+name: trino-analytics-prod
+tags:
+  - trino
+  - production
+  - analytics
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute:  comet-compute
+  engine: trino
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=shreya-examples'
+      - '--submodules=off'
+    baseDir: vulcan-examples/trino/trino_test
+    secret: maximus:git-sync
+  use:
+    projection:
+      secrets:
+        - id: maximus:trino-connection-secret
+          contextAlias: trn
+      projections:
+        envVars:
+          - key: TRINO_HOST
+            template: "{{ secrets['trn'].HOST | base64_decode }}"
+          - key: TRINO_USER
+            template: "{{ secrets['trn'].USER | base64_decode }}"
+          - key: TRINO_CATALOG
+            template: "{{ secrets['trn'].CATALOG | base64_decode }}"
+          - key: TRINO_PASSWORD
+            template: "{{ secrets['trn'].PASSWORD | base64_decode }}"
+  workflow:
+    schedule:
+      crons:
+        - "0 3 * * *"
+      endOn: "2027-12-31T00:00:00-00:00"
+      timezone: "UTC"
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "500m"
+        memory: "1Gi"
+      limit:
+        cpu: "2000m"
+        memory: "4Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+  api:
+    replicas: 3
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "500m"
+        memory: "1Gi"
+      limit:
+        cpu: "2000m"
+        memory: "4Gi"

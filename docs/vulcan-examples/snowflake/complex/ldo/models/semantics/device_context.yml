@@ -1,0 +1,17 @@
+# Converted from legacy: semantics/device_context.yaml
+kind: semantic
+name: device_context
+depends_on: lenovo.ldo.device_context
+ai_context:
+  instructions: >
+    Use this semantic model for questions about device context. Prefer its measures
+    for aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "device context"
+    - "device_context"
+    - "device"
+    - "context"
+  examples:
+    - "Show device context trends over time."
+    - "Break down device context by key dimensions."

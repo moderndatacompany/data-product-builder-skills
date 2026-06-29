@@ -1,0 +1,57 @@
+version: v1alpha
+type: vulcan
+name: gensler-qualitrics
+description: Gensler Qualtrics Survey Analytics processes survey responses, definitions, and schemas from Qualtrics surveys loaded into Snowflake.
+tags:
+  - qualtrics
+  - surveys
+  - analytics
+  - snowflake
+  - gensler
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: pacific
+  engine: snowflake
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/extra/gensler-qualitrics
+    secret: marketing:git-sync
+  workflow:
+    schedule:
+      crons:
+        - '*/5 * * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - run
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"

@@ -1,0 +1,3 @@
+kind: metric
+name: avg_customer_penetration
+measure: product_profile.avg_customer_penetration

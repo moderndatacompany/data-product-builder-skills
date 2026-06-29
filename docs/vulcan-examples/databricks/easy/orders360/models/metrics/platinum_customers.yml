@@ -1,0 +1,8 @@
+kind: metric
+name: platinum_customers
+measure: customers.platinum_customers
+ts: customers.signup_date
+granularity: month
+dimensions:
+  - customers.account_status
+description: Number of Platinum tier customers

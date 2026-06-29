@@ -1,0 +1,53 @@
+vde: false
+display_name: Orders360
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: sales
+tags:
+  - bigquery
+  - sales
+  - analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: orders360
+tenant: sales
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity on BigQuery.
+
+# --- Gateway Connection ---
+gateways:
+  default:
+    connection:
+      type: bigquery
+      method: service-account
+      project: tmdc-platform-engineering
+      keyfile: bigquery_key.json
+    state_connection:
+      type: postgres
+      host: localhost
+      port: 5431
+      database: statestore
+      user: vulcan
+      password: vulcan
+
+default_gateway: default
+
+# --- Model Defaults ---
+model_defaults:
+  dialect: bigquery
+  start: 2024-01-01
+  cron: '@daily'
+
+# --- Linting Rules ---
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections

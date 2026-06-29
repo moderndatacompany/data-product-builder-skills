@@ -1,0 +1,61 @@
+version: v1alpha
+type: vulcan
+name: rr-intel1
+
+tags:
+  - quick-commerce
+  - refunds
+  - spark
+  - finance
+spec:
+  compute: fipsdev-compute 
+  engine: spark
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=anushka-deployment'           # update to the branch that contains this project
+      - '--submodules=off'
+    baseDir: vulcan-examples/spark/demo/return-refund-intelligence
+    secret: engineering:git-sync
+  depots:
+    - dataos://s3depot?purpose=rw
+  workflow:
+    schedule:
+      crons:
+      - '*/30 * * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'Asia/Kolkata'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "300m"
+        memory: "768Mi"
+      limit:
+        cpu: "2000m"
+        memory: "4Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 2
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "2000m"
+        memory: "2Gi"

@@ -1,0 +1,3 @@
+kind: metric
+name: average_recency_score
+measure: rfm_segments.average_recency_score

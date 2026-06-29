@@ -1,0 +1,3 @@
+kind: metric
+name: avg_scrap_rate_pct
+measure: fct_production_daily.avg_scrap_rate_pct

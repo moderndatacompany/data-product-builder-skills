@@ -1,0 +1,5 @@
+limitations:
+  - Adobe Analytics hit data requires column mapping (1186 columns)
+  - Historical data aggregated at various levels
+  - Data refreshes daily via full refresh for dimensions
+  - Snowflake cloud warehouse as data platform

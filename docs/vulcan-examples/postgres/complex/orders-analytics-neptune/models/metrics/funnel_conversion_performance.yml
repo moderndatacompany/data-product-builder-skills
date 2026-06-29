@@ -1,0 +1,15 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: funnel_conversion_performance
+measure: sales_funnel.avg_overall_conversion
+ts: sales_funnel.funnel_date
+dimensions:
+- sales_funnel.region_name
+description: End-to-end conversion rate trends by region
+tags:
+- funnel
+- conversion
+- performance
+terms:
+- funnel.conversion_trends
+- metric.conversion_rate

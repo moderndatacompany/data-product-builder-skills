@@ -1,0 +1,99 @@
+models:
+  ECOMMERCE_PLATFORM.GOLD.FCT_SESSION_ANALYTICS:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct session analytics. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "fct session analytics"
+        - "fct_session_analytics"
+        - "fct"
+        - "session"
+      examples:
+        - "Show fct session analytics trends over time."
+        - "Break down fct session analytics by key dimensions."
+    alias: fct_session_analytics
+
+    dimensions:
+      includes:
+        - session_id
+        - user_id
+        - session_start
+        - session_date
+        - session_end
+        - session_utm_source
+        - session_utm_medium
+        - session_utm_campaign
+        - session_device
+        - has_cart_add
+        - has_checkout_start
+        - has_purchase
+        - is_bounce
+        - is_cart_abandoned
+        - created_at
+
+    measures:
+      session_duration_seconds:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for session duration seconds. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "session duration seconds"
+            - "session_duration_seconds"
+            - "session"
+            - "duration"
+          examples:
+            - "What is session duration seconds by month?"
+            - "Compare session duration seconds across key dimensions."
+        type: sum
+        expression: "{fct_session_analytics.session_duration_seconds}"
+
+      total_events:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total events. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total events"
+            - "total_events"
+            - "total"
+            - "events"
+          examples:
+            - "What is total events by month?"
+            - "Compare total events across key dimensions."
+        type: sum
+        expression: "{fct_session_analytics.total_events}"
+
+      pages_visited:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for pages visited. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "pages visited"
+            - "pages_visited"
+            - "pages"
+            - "visited"
+          examples:
+            - "What is pages visited by month?"
+            - "Compare pages visited across key dimensions."
+        type: sum
+        expression: "{fct_session_analytics.pages_visited}"
+
+      session_revenue:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for session revenue. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "session revenue"
+            - "session_revenue"
+            - "session"
+            - "revenue"
+          examples:
+            - "What is session revenue by month?"
+            - "Compare session revenue across key dimensions."
+        type: sum
+        expression: "{fct_session_analytics.session_revenue}"

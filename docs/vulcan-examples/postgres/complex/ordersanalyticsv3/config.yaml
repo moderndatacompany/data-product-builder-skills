@@ -1,0 +1,213 @@
+vde: false
+display_name: Ordersanalyticsv3
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+domain: engineering
+tags:
+  - postgres
+  - sales
+  - analytics
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: ordersanalyticsv3
+tenant: engineering
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity across the e-commerce platform.
+
+# # --- Gateway Connection ---
+# gateways:
+#   postgres:
+#     connection:
+#       type: postgres
+#       host: warehouse
+#       port: 5432
+#       user: vulcan
+#       password: vulcan
+#       database: warehouse
+#       # concurrent_tasks: 4
+#       # register_comments: True
+#       # pre_ping: True
+#       # pretty_sql: False
+#       # schema_differ_overrides: 
+#       # catalog_type_overrides: 
+#       # keepalives_idle: 
+#       # connect_timeout: 10
+#       # role: 
+#       # sslmode: 
+#       # application_name: 
+
+# default_gateway: postgres
+
+# transpiler:
+#   # Override via VULCAN_TRANSPILER_BASE_URL for host runs if needed.
+#   base_url: "{{ env_var('VULCAN_TRANSPILER_BASE_URL', 'http://vulcan-transpiler:4000/transpiler') }}"
+
+# --- Model Defaults ---
+# https://tmdc-io.github.io/vulcan-book/
+
+model_defaults:
+  dialect: postgres
+  start: '2025-01-01'  # Default start date for incremental models
+  cron: '*/45 * * * *'  # Default: Every 15 minutes (overridden per model)
+  # Note: Orders/order_items use */5 minutes, dimensions use */15-20 minutes
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+# Database connections and state management
+gateways:
+  default:
+    # Primary data connection (where models are materialized)
+    connection:
+      type: depot
+      address: dataos://vulcanpgdepot
+    #   type: postgres
+    #   host: localhost
+    #   port: 5433
+    #   user: vulcan
+    #   password: vulcan
+    #   database: warehouse
+    #   # Docs: https://sqlmesh.readthedocs.io/en/latest/integrations/engines/postgres/
+
+    # # State management connection (tracks model versions, runs, snapshots)
+    # # Recommended: Use separate database for state in production
+    # state_connection:
+    #   type: postgres
+    #   host: localhost
+    #   port: 5431
+    #   user: vulcan
+    #   password: vulcan
+    #   database: statestore
+    #   # For production, consider using dedicated state database:
+    #   # port: 5431
+    #   # database: statestore
+
+    # State schema (stores Vulcan metadata)
+    # state_schema: postgres_ecommerce_state1
+
+    # Gateway-specific variables (available in models, checks via ${variable_name})
+    variables:
+      env: development
+      region: us-west-2
+      data_retention_days: 365
+      alert_threshold: 100
+      bronze_schema: vulcan_demo
+      silver_schema: silver
+      gold_schema: gold
+      min_customer_count: 50
+      min_order_count: 500
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+# Tracks data lineage, dependencies, and transformations
+openlineage:
+  enabled: true
+  url: https://desert-011726.dataos.cloud/hera
+  timeout_seconds: 30
+  api_key: YXBpX25pbHVzX3Rva2VuX3NocmV5YS5mZDYyY2E3MS1mZTgxLTQ4ZTMtOWNmZi1lODk5MDZhMjkwMWM0ZTNmN2FlYTlhNmQwMTczYmExMDA3MTFmY2M5YWE4Mw==
+
+# ==============================================================================
+# Transpiler Service (SQL Dialect Translation)
+# ==============================================================================
+# Enables cross-dialect SQL translation if needed
+# transpiler:
+#   base_url: http://127.0.0.1:4000/transpiler
+#   timeout: 30
+
+# ==============================================================================
+# GraphQL API Configuration
+# ==============================================================================
+# Enables GraphQL API for semantic layer queries
+# graphql:
+#   base_url: http://vulcan-graphql:3000
+#   timeout: 60
+
+# ==============================================================================
+# Heimdall Authentication (Enterprise Security)
+# ==============================================================================
+# Provides authentication and authorization for production deployments
+# heimdall:
+#   enabled: false  # Set to true for production with DataOS
+#   # base_url: "https://your-dataos-instance.dataos.app/heimdall"
+#   # timeout: 10
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+# Send notifications for important events (runs, failures, migrations)
+# notification_targets:
+#   - type: console
+#     notify_on:
+#       - apply_start
+#       - apply_end
+#       - apply_failure
+#       - run_start
+#       - run_end
+#       - run_failure
+#       - audit_failure
+#       - check_start
+#       - check_end
+#       - check_failure
+#       - migration_start
+#       - migration_end
+#       - migration_failure
+#       - plan_change
+#
+#   - type: slack
+#     webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+#     notify_on:
+#       - apply_failure
+#       - run_failure
+#       - audit_failure
+#       - check_failure
+#
+#   - type: email
+#     smtp_host: smtp.gmail.com
+#     smtp_port: 587
+#     from_email: vulcan@company.com
+#     to_emails:
+#       - data-team@company.com
+#     notify_on:
+#       - apply_failure
+#       - run_failure
+
+# ==============================================================================
+# Vulcan Production Run Configuration (Optional)
+# ==============================================================================
+# Configuration for prod-run command (catch-up mode, continuous processing)
+# vulcan:
+#   endpoint: https://your-webhook-endpoint.com/vulcan
+#   api_key: ""
+#   enabled: true
+#   environment: production
+#   
+#   # Prod-run behavior
+#   no_gaps: true          # Ensure data continuity (process all intervals)
+#   ignore_cron: true      # Process all missing intervals (catch-up mode)
+#   parallel_tasks: 4      # Number of parallel model runs
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+# Define users with access to this data product
+# users:
+#   - username: shreya
+#     email: shreya@company.com
+#     type: OWNER
+#     # role: data_engineer
+#   - username: data_team
+#     email: data-team@company.com
+#     type: CONTRIBUTOR
+#     # role: analyst
+
+# ==============================================================================
+# Connection String (for reference)
+# ==============================================================================
+# psql -h localhost -p 5433 -U vulcan -d postgres

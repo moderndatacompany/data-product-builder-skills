@@ -1,0 +1,32 @@
+# kind: dq — converted from checks/nation.yml
+kind: dq
+name: nation_dq
+depends_on: test_db.vulcan_test_project.nation
+rules:
+- missing_count(nationkey) = 0:
+    name: nationkey_not_null
+    dimension: completeness
+    description: NATION.NATIONKEY must be non-null
+- missing_count(regionkey) = 0:
+    name: regionkey_not_null
+    dimension: completeness
+    description: NATION.REGIONKEY must be non-null
+- row_count > 0:
+    name: nation_has_rows
+    dimension: completeness
+    description: NATION should not be empty
+- duplicate_count(nationkey) = 0:
+    name: nationkey_unique
+    dimension: uniqueness
+    description: NATION.NATIONKEY must be unique
+- failed rows:
+    name: nation_region_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT n.*
+      FROM test_db.vulcan_test_project.nation n
+      LEFT JOIN test_db.vulcan_test_project.region r
+        ON n.regionkey = r.regionkey
+      WHERE r.regionkey IS NULL
+    samples limit: 10
+    description: Every NATION.REGIONKEY must exist in REGION.REGIONKEY

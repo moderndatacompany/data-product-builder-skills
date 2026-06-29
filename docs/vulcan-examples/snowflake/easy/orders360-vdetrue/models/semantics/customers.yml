@@ -1,0 +1,121 @@
+kind: semantic
+name: customers
+depends_on: DEMODB.VDETRUE.CUSTOMERS
+description: Customer dimension exposing identity, segment, and loyalty attributes for filtering, grouping, and cohort analysis.
+
+
+
+dimensions:
+  - CUSTOMER_ID
+  - FULL_NAME
+  - EMAIL
+  - SEGMENT_CODE
+  - SEGMENT_NAME
+  - SEGMENT_TIER
+  - SEGMENT_DISCOUNT_RATE
+  - ACCOUNT_STATUS
+  - SIGNUP_DATE
+  - LOYALTY_SCORE
+
+measures:
+  - name: total_customers
+    type: count
+    expression: "{customers.CUSTOMER_ID}"
+    description: Total number of customers
+    tags:
+      - customer
+      - count
+    terms:
+      - customer.total_customers
+      - metric.customer_count
+
+  - name: active_customers
+    type: count
+    expression: "*"
+    filters:
+      - "{customers.ACCOUNT_STATUS} = 'Active'"
+    description: Number of customers with an active account status
+    tags:
+      - customer
+      - active
+      - engagement
+    terms:
+      - customer.active_customers
+      - engagement.active
+
+  - name: platinum_customers
+    type: count
+    expression: "*"
+    filters:
+      - "{customers.SEGMENT_CODE} = 'Platinum'"
+    description: Number of Platinum-tier customers
+    tags:
+      - customer
+      - segment
+      - tier
+    terms:
+      - customer.platinum_customers
+      - segment.platinum
+
+  - name: average_loyalty_score
+    type: avg
+    expression: "{customers.LOYALTY_SCORE}"
+    description: Average loyalty score across customers
+    tags:
+      - customer
+      - average
+      - metric
+    terms:
+      - customer.average_loyalty_score
+      - metric.loyalty
+
+  - name: average_segment_discount_rate
+    type: avg
+    expression: "{customers.SEGMENT_DISCOUNT_RATE}"
+    description: Average segment-level discount rate across customers (seed-driven)
+    tags:
+      - customer
+      - financial
+      - metric
+    terms:
+      - customer.average_segment_discount
+      - pricing.customer_avg_segment_discount
+
+segments:
+  - name: high_value_customers
+    expression: "{customers.SEGMENT_TIER} >= 3"
+    description: High-value customers (Gold and Platinum tiers)
+    tags:
+      - customer
+      - segment
+      - revenue
+    terms:
+      - customer.high_value
+      - segment.premium
+
+  - name: recent_signups
+    expression: "{customers.SIGNUP_DATE} >= CURRENT_DATE - INTERVAL '30 days'"
+    description: Customers who signed up in the last 30 days
+    tags:
+      - acquisition
+      - temporal
+      - growth
+    terms:
+      - customer.recent_signups
+      - acquisition.recent
+
+  - name: at_risk_customers
+    expression: "{customers.ACCOUNT_STATUS} = 'Inactive' OR {customers.ACCOUNT_STATUS} = 'Suspended'"
+    description: Customers with inactive or suspended accounts
+    tags:
+      - churn
+      - risk
+      - customer
+    terms:
+      - customer.at_risk
+      - churn.risk_segment
+
+joins:
+  - name: customer_segments
+    type: many_to_one
+    expression: "{customers.SEGMENT_CODE} = {customer_segments.SEGMENT_CODE}"

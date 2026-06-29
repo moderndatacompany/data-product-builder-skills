@@ -1,0 +1,3 @@
+kind: metric
+name: total_product_impressions
+measure: web_heartbeat.total_product_impressions

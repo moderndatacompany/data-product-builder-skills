@@ -1,0 +1,95 @@
+checks:
+  GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE:
+    completeness:
+      - missing_count(SURVEY_ID) = 0:
+          name: no_missing_survey_ids
+          attributes:
+            description: "All responses must be associated with a survey"
+      
+      - missing_count(RESPONSE_ID) = 0:
+          name: no_missing_response_ids
+          attributes:
+            description: "All responses must have a response ID"
+      
+      - missing_count(QUESTION_ID) = 0:
+          name: no_missing_question_ids
+          attributes:
+            description: "All responses must be associated with a question"
+      
+      - missing_count(QUESTIONS_KEY) = 0:
+          name: no_missing_questions_key
+          attributes:
+            description: "All responses must have a questions_key for mapping"
+      
+      - row_count > 0:
+          name: has_responses
+          attributes:
+            description: "At least one survey response must exist"
+    
+    validity:
+      - failed rows:
+          name: invalid_response_ids
+          fail query: |
+            SELECT SURVEY_ID, RESPONSE_ID, QUESTION_ID
+            FROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE
+            WHERE RESPONSE_ID IS NULL OR RESPONSE_ID = '' OR LENGTH(RESPONSE_ID) < 10
+          samples limit: 10
+          attributes:
+            description: "Response IDs must be valid Qualtrics format"
+      
+      - failed rows:
+          name: responses_without_question_match
+          fail query: |
+            SELECT r.SURVEY_ID, r.RESPONSE_ID, r.QUESTION_ID, r.QUESTIONS_KEY
+            FROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE r
+            LEFT JOIN GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001 q 
+              ON r.SURVEY_ID = q.SURVEY_ID 
+              AND r.QUESTION_ID = q.QUESTION_ID
+              AND r.QUESTIONS_KEY = q.QUESTIONS_KEY
+            WHERE q.QUESTION_ID IS NULL
+          samples limit: 10
+          attributes:
+            description: "All responses should match to questions in definition"
+      
+      - failed rows:
+          name: invalid_response_types
+          fail query: |
+            SELECT SURVEY_ID, RESPONSE_ID, QUESTION_ID, RESPONSE_TYPE, RESPONSE_TYPE_STATUS
+            FROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE
+            WHERE RESPONSE_TYPE_STATUS IS NOT NULL 
+              AND RESPONSE_TYPE_STATUS NOT IN (0, 1, 2)
+          samples limit: 10
+          attributes:
+            description: "Response type status must be valid (0=IP Address, 1=Preview, 2=Normal)"
+    
+    uniqueness:
+      - duplicate_count(RESPONSE_ID) > 0:
+          name: expected_duplicate_responses
+          attributes:
+            description: "Response IDs will have duplicates (one per question) - this is expected"
+    
+    accuracy:
+      - failed rows:
+          name: null_responses_for_required_questions
+          fail query: |
+            SELECT r.SURVEY_ID, r.RESPONSE_ID, r.QUESTION_ID, r.QUESTION_TEXT, r.RESPONSE, r.RESPONSE_VALUE
+            FROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE r
+            WHERE r.RESPONSE IS NULL 
+              AND r.RESPONSE_VALUE IS NULL
+              AND r.QUESTION_TYPE IN ('MC', 'Matrix')
+          samples limit: 10
+          attributes:
+            description: "Multiple choice and matrix questions should have response values"
+      
+      - failed rows:
+          name: mismatched_recode_values
+          fail query: |
+            SELECT SURVEY_ID, RESPONSE_ID, QUESTION_ID, CHOICE_RECODE, SUB_QUESTIONS_RECODE
+            FROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE
+            WHERE CHOICE_RECODE IS NOT NULL 
+              AND SUB_QUESTIONS_RECODE IS NOT NULL
+              AND CHOICE_RECODE != SUB_QUESTIONS_RECODE
+          samples limit: 10
+          attributes:
+            description: "Recode values should be consistent when both are present"
+

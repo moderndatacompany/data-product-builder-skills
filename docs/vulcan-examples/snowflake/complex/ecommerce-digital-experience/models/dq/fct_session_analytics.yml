@@ -1,0 +1,75 @@
+# kind: dq — converted from checks/fct_session_analytics.yml
+kind: dq
+name: fct_session_analytics_dq
+depends_on: ECOMMERCE_PLATFORM.GOLD.FCT_SESSION_ANALYTICS
+
+rules:
+- row_count >= 1000:
+    name: minimum_session_records
+    dimension: completeness
+    description: At least 1000 session records should exist
+
+- missing_count(session_id) = 0:
+    name: no_missing_session_id
+    dimension: completeness
+    description: All records must have a session_id
+
+- missing_count(session_date) = 0:
+    name: no_missing_session_date
+    dimension: completeness
+    description: All records must have a session_date
+
+- missing_count(session_start) = 0:
+    name: no_missing_session_start
+    dimension: completeness
+    description: All records must have a session_start timestamp
+
+- invalid_count(session_duration_seconds) = 0:
+    name: session_duration_non_negative
+    dimension: validity
+    description: Session duration must be non-negative
+    valid min: 0
+
+- invalid_count(total_events) = 0:
+    name: total_events_at_least_one
+    dimension: validity
+    description: Every session must have at least one event
+    valid min: 1
+
+- invalid_count(pages_visited) = 0:
+    name: pages_visited_at_least_one
+    dimension: validity
+    description: Every session must visit at least one page
+    valid min: 1
+
+- invalid_count(session_revenue) = 0:
+    name: session_revenue_non_negative
+    dimension: validity
+    description: Session revenue must be non-negative
+    valid min: 0
+
+- duplicate_count(session_id) = 0:
+    name: unique_session_ids
+    dimension: uniqueness
+    description: Each session_id must be unique (one record per session)
+
+- avg(session_duration_seconds) > 10:
+    name: average_duration_reasonable
+    dimension: accuracy
+    description: Average session duration should exceed 10 seconds
+
+- avg(total_events) > 1:
+    name: average_events_reasonable
+    dimension: accuracy
+    description: Average events per session should exceed 1
+
+- avg(pages_visited) > 1:
+    name: average_pages_reasonable
+    dimension: accuracy
+    description: Average pages visited should exceed 1
+
+- invalid_percent(session_device) < 1%:
+    name: valid_device_types
+    dimension: accuracy
+    description: Session device types must be Desktop, Mobile, or Tablet
+    valid values: [Desktop, Mobile, Tablet]

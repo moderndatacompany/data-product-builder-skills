@@ -1,0 +1,78 @@
+MODEL (
+  name sales.products,
+  kind FULL,
+  cron '@daily',
+  grain product_id,
+  description 'Product dimension table with full refresh on each run',
+  assertions (
+    unique_values(columns := (product_id))
+  ),
+  columns (
+    product_id VARCHAR(10),
+    product_name VARCHAR(100),
+    category VARCHAR(50),
+    subcategory VARCHAR(50),
+    brand VARCHAR(50),
+    color VARCHAR(20),
+    size VARCHAR(20),
+    weight DECIMAL(10,2),
+    material VARCHAR(50),
+    model_number VARCHAR(50),
+    sku VARCHAR(50),
+    upc VARCHAR(20),
+    price DECIMAL(10,2),
+    cost DECIMAL(10,2),
+    supplier VARCHAR(100),
+    warranty_period VARCHAR(50),
+    release_date DATE,
+    rating DECIMAL(3,1),
+    stock_quantity INT,
+    discontinued TINYINT
+  ),
+  column_descriptions (
+    product_id = 'Unique identifier for each product',
+    product_name = 'Product name',
+    category = 'Product category (Electronics, Home, Clothing, Sports, Food, Toys)',
+    subcategory = 'Product subcategory',
+    brand = 'Product brand name',
+    color = 'Product color',
+    size = 'Product size (XS, S, M, L, XL, OneSize)',
+    weight = 'Product weight',
+    material = 'Product material (Metal, Plastic, Wood, Fabric, Glass)',
+    model_number = 'Product model number',
+    sku = 'Stock keeping unit code',
+    upc = 'Universal product code',
+    price = 'Product selling price',
+    cost = 'Product cost price',
+    supplier = 'Product supplier name',
+    warranty_period = 'Product warranty period',
+    release_date = 'Product release date',
+    rating = 'Product rating (1.0-5.0)',
+    stock_quantity = 'Current stock quantity available',
+    discontinued = 'Whether product is discontinued (0=active, 1=discontinued)'
+  )
+);
+
+SELECT
+  product_id,
+  product_name,
+  category,
+  subcategory,
+  brand,
+  color,
+  size,
+  weight,
+  material,
+  model_number,
+  sku,
+  upc,
+  price,
+  cost,
+  supplier,
+  warranty_period,
+  release_date,
+  rating,
+  stock_quantity,
+  discontinued
+FROM raw.raw_products
+

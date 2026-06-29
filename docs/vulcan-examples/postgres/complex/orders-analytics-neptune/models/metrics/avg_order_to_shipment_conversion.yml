@@ -1,0 +1,3 @@
+kind: metric
+name: avg_order_to_shipment_conversion
+measure: sales_funnel.avg_order_to_shipment_conversion

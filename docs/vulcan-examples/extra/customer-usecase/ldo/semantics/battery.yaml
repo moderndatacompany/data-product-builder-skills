@@ -1,0 +1,55 @@
+models:
+  lenovo.ldo.battery:
+    alias: battery
+    
+    measures:
+      number_of_batteries:
+        type: count
+        expression: "{battery.BATTERY_ID}"
+        description: "Total number of battery records."
+      
+      average_battery_cycle_count:
+        type: avg
+        expression: "{battery.BATTERY_CYCLE_COUNT}"
+        description: "Average number of charge cycles the battery has gone through."
+      
+      average_battery_design_capacity:
+        type: avg
+        expression: "{battery.BATTERY_DESIGN_CAPACITY}"
+        description: "Average design capacity of the battery."
+      
+      average_battery_fullcharge_capacity:
+        type: avg
+        expression: "{battery.BATTERY_FULLCHARGE_CAPACITY}"
+        description: "Average full charge capacity of the battery."
+      
+      average_battery_remaining_capacity:
+        type: avg
+        expression: "{battery.BATTERY_REMAINING_CAPACITY}"
+        description: "Average remaining capacity of the battery."
+      
+      average_current_battery_capacity:
+        type: avg
+        expression: "({battery.BATTERY_FULLCHARGE_CAPACITY} * 100.0) / {battery.BATTERY_DESIGN_CAPACITY}"
+        description: "Average current capacity of the battery."
+      
+      max_battery_design_capacity:
+        type: max
+        expression: "{battery.BATTERY_DESIGN_CAPACITY}"
+        description: "Maximum design capacity of the battery."
+      
+      max_battery_fullcharge_capacity:
+        type: max
+        expression: "{battery.BATTERY_FULLCHARGE_CAPACITY}"
+        description: "Maximum full charge capacity of the battery."
+      
+      min_battery_design_capacity:
+        type: min
+        expression: "{battery.BATTERY_DESIGN_CAPACITY}"
+        description: "Minimum design capacity of the battery."
+      
+      min_battery_fullcharge_capacity:
+        type: min
+        expression: "{battery.BATTERY_FULLCHARGE_CAPACITY}"
+        description: "Minimum full charge capacity of the battery."
+

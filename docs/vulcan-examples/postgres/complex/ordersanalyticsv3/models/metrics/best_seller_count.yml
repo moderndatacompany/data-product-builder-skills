@@ -1,0 +1,3 @@
+kind: metric
+name: best_seller_count
+measure: product_profile.best_seller_count

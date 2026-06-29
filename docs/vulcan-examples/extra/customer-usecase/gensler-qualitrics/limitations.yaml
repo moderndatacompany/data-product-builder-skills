@@ -1,0 +1,6 @@
+limitations:
+  - Qualtrics JSON data requires complex flattening transformations
+  - Historical data aggregated at survey and response levels
+  - Data refreshes via external Python script (synthetic data)
+  - Snowflake cloud warehouse as data platform
+  - Requires Snowflake key-pair authentication

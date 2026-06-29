@@ -1,0 +1,24 @@
+checks:
+  sales.returns:
+
+    validity:
+      - failed rows:
+          name: negative_refunds
+          fail query: |
+            SELECT return_id, order_id, order_item_id, refund_amount
+            FROM sales.returns
+            WHERE refund_amount < 0
+          samples limit: 10
+          attributes:
+            description: "Refund amounts must not be negative"
+
+      - failed rows:
+          name: invalid_return_status
+          fail query: |
+            SELECT return_id, return_status
+            FROM sales.returns
+            WHERE return_status NOT IN ('Approved', 'Rejected', 'Pending')
+          samples limit: 10
+          attributes:
+            description: "Return status must be one of the allowed values"
+

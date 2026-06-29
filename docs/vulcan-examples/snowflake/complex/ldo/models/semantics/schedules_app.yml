@@ -1,0 +1,61 @@
+# Converted from legacy: semantics/schedules_app.yaml
+kind: semantic
+name: schedules_app
+depends_on: lenovo.ldo.schedules_app
+ai_context:
+  instructions: >
+    Use this semantic model for questions about schedules app. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "schedules app"
+    - "schedules_app"
+    - "schedules"
+    - "app"
+  examples:
+    - "Show schedules app trends over time."
+    - "Break down schedules app by key dimensions."
+
+measures:
+- name: total_scheduled_app_deployments
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total scheduled app deployments.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total scheduled app deployments"
+      - "total_scheduled_app_deployments"
+      - "total"
+      - "scheduled"
+    examples:
+      - "What is total scheduled app deployments by month?"
+      - "Compare total scheduled app deployments across key segments."
+  type: sum
+  expression: CASE WHEN {schedules_app.STATUS} = 'SCHEDULED' THEN 1 ELSE 0 END
+  description: Total number of app deployments that are in SCHEDULED status.
+  tags:
+  - metric
+  terms:
+  - metric.total_scheduled_app_deployments
+- name: total_executed_app_deployments
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total executed app deployments.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total executed app deployments"
+      - "total_executed_app_deployments"
+      - "total"
+      - "executed"
+    examples:
+      - "What is total executed app deployments by month?"
+      - "Compare total executed app deployments across key segments."
+  type: sum
+  expression: CASE WHEN {schedules_app.STATUS} = 'EXECUTED' THEN 1 ELSE 0 END
+  description: Total number of app deployments that are in EXECUTED status.
+  tags:
+  - metric
+  terms:
+  - metric.total_executed_app_deployments

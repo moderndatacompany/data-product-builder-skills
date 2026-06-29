@@ -1,0 +1,69 @@
+version: v1alpha
+type: vulcan
+name: cobs-analytics-forest
+tags:
+  - SGWS
+  - snowflake
+  - rfm-analytics
+  - customer-segmentation
+  - ml-clustering
+spec:
+  runAsUser: "rohitrajtmdcio"
+  compute: ct-compute
+  engine: snowflake
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/customer-usecase/cobs
+    secret: ct-onboarding:git-sync
+  depots:
+    - dataos://snowflakevulcan?purpose=rw
+  workflow:
+    type: schedule
+    schedule:
+      crons:
+      - '*/15 * * * *'  # Every 15 minutes
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+
+    migrate:
+      command:
+        - vulcan
+      arguments:
+        - migrate
+    plan:
+      command:
+        - vulcan 
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 5
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "4000m"
+        memory: "3Gi"

@@ -1,0 +1,174 @@
+models:
+  silver_v2alpha.dim_product_profile:
+    alias: product_profile
+    
+    measures:
+      total_products:
+        type: count
+        expression: "{product_profile.product_id}"
+        description: "Total number of products"
+        tags:
+          - product
+          - count
+          - metric
+        terms:
+          - product.total_count
+          - inventory.product_count
+      
+      total_product_revenue:
+        type: sum
+        expression: "{product_profile.total_revenue}"
+        format: currency
+        description: "Total revenue across all products"
+        tags:
+          - revenue
+          - product
+          - financial
+        terms:
+          - product.total_revenue
+          - sales.product_revenue
+      
+      avg_product_revenue:
+        type: avg
+        expression: "{product_profile.total_revenue}"
+        format: currency
+        description: "Average revenue per product"
+        tags:
+          - revenue
+          - average
+          - product
+        terms:
+          - product.avg_revenue
+          - sales.avg_product_value
+      
+      total_quantity_sold_agg:
+        type: sum
+        expression: "{product_profile.total_quantity_sold}"
+        description: "Total units sold across all products"
+        tags:
+          - inventory
+          - sales
+          - quantity
+        terms:
+          - inventory.units_sold
+          - sales.total_quantity
+      
+      avg_quantity_per_product:
+        type: avg
+        expression: "{product_profile.total_quantity_sold}"
+        description: "Average quantity sold per product"
+        tags:
+          - inventory
+          - average
+          - sales
+        terms:
+          - inventory.avg_quantity
+          - sales.avg_units
+      
+      best_seller_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{product_profile.product_performance} = 'Best Seller'"
+        description: "Number of best-selling products"
+        tags:
+          - product
+          - performance
+          - top_performers
+        terms:
+          - product.best_sellers
+          - performance.top_products
+      
+      stale_product_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{product_profile.product_performance} = 'Stale'"
+        description: "Number of stale products (no sales 90+ days)"
+        tags:
+          - product
+          - inventory
+          - alert
+        terms:
+          - product.stale_inventory
+          - alert.slow_movers
+    
+    segments:
+      best_sellers:
+        expression: "{product_profile.product_performance} = 'Best Seller'"
+        description: "Products with revenue >= $10,000"
+        tags:
+          - product
+          - performance
+          - top_performers
+        terms:
+          - product.best_sellers
+          - performance.top_products
+      
+      good_performers:
+        expression: "{product_profile.product_performance} = 'Good Performer'"
+        description: "Products with revenue $2,000-$10,000"
+        tags:
+          - product
+          - performance
+          - mid_performers
+        terms:
+          - product.good_performers
+          - performance.mid_tier
+      
+      slow_movers:
+        expression: "{product_profile.product_performance} = 'Slow Mover'"
+        description: "Products with revenue < $2,000"
+        tags:
+          - product
+          - performance
+          - underperformers
+        terms:
+          - product.slow_movers
+          - performance.low_sellers
+      
+      stale_inventory:
+        expression: "{product_profile.product_performance} = 'Stale'"
+        description: "Products with no sales in 90+ days"
+        tags:
+          - product
+          - inventory
+          - alert
+        terms:
+          - product.stale
+          - alert.inactive_products
+      
+      high_demand_products:
+        expression: "{product_profile.total_orders} >= 50"
+        description: "Products with 50+ orders"
+        tags:
+          - product
+          - demand
+          - popular
+        terms:
+          - product.high_demand
+          - inventory.popular_items
+      
+      widgets_category:
+        expression: "{product_profile.category} = 'Widgets'"
+        description: "Products in Widgets category"
+        tags:
+          - product
+          - category
+          - classification
+        terms:
+          - product.widgets
+          - category.widgets
+    
+    dimensions:
+      includes:
+        - product_id
+        - product_name
+        - category
+        - supplier_id
+        - supplier_name
+        - current_price
+        - product_performance
+        - first_sale_date
+        - last_sale_date
+

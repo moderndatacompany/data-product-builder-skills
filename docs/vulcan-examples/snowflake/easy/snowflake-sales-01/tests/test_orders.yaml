@@ -1,0 +1,36 @@
+test_sales_orders_single:
+  model: SALES.ORDERS
+  description: >
+    Full-output test for the Orders model using a single input record.
+  vars:
+    start: '2024-03-01'
+    end: '2024-03-31'
+
+  inputs:
+    VULCAN.RAW.ORDERS:
+      rows:
+        - ORDER_ID: O100
+          ORDER_DATE: '2024-03-15'
+          CUSTOMER_ID: C001
+          PRODUCT_ID: P001
+          QUANTITY: 2
+          UNIT_PRICE: 29.99
+          DISCOUNT: 0.10
+          TAX: 4.32
+          SHIPPING_COST: 5.99
+          TOTAL_AMOUNT: 64.29
+
+  outputs:
+    query:
+      rows:
+        - ORDER_ID: "O100"
+          ORDER_DATE: "2024-03-15"
+          CUSTOMER_ID: "C001"
+          PRODUCT_ID: "P001"
+          QUANTITY: 2
+          UNIT_PRICE: 29.99
+          DISCOUNT: 0.1
+          TAX: 4.32
+          SHIPPING_COST: 5.99
+          TOTAL_AMOUNT: 64.29
+

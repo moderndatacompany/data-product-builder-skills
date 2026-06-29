@@ -1,0 +1,25 @@
+# COBS scripts – Snowflake ingestion + Trino/ML pipeline
+# Install: pip install -r requirements.txt
+
+# Snowflake (insert_to_snowflake_sales.py, fast_create_insert_customer.py)
+snowflake-connector-python>=3.0.0
+
+# Trino / DataOS (main.py)
+trino>=0.320.0
+
+# Data & config (main.py, bq_utils.py)
+pandas>=1.5.0
+numpy>=1.21.0
+PyYAML>=6.0
+
+# COBS clustering (main.py, clustering_utils.py)
+scikit-learn>=1.0.0
+
+# Date handling (main.py)
+python-dateutil>=2.8.0
+
+# Optional: S3 upload at end of main.py
+boto3>=1.26.0
+
+# Optional: load .env for SNOWFLAKE_PRIVATE_KEY_PASSPHRASE (fast_create_insert_customer.py)
+python-dotenv>=1.0.0

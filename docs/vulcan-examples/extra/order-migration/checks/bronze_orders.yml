@@ -1,0 +1,78 @@
+checks:
+  raw.orders:
+    completeness:
+      - missing_count(order_id) = 0:
+          name: no_missing_order_ids
+          attributes:
+            description: "All orders must have an order ID"
+      
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All orders must have a customer ID"
+      
+      - missing_count(order_date) = 0:
+          name: no_missing_order_dates
+          attributes:
+            description: "All orders must have an order date"
+      
+      - row_count > 500:
+          name: sufficient_orders
+          attributes:
+            description: "At least 500 orders in the system"
+      
+      # This will FAIL - we have 1000 orders, not 5000
+      - row_count > 5000:
+          name: high_order_volume
+          attributes:
+            description: "Should have more than 5000 orders (EXPECTED TO FAIL)"
+    
+    validity:
+      - failed rows:
+          name: positive_order_ids
+          fail query: |
+            SELECT order_id, customer_id, order_date
+            from raw.orders
+            WHERE order_id <= 0
+          samples limit: 10
+          attributes:
+            description: "Order IDs must be positive"
+      
+      - failed rows:
+          name: valid_customer_references
+          fail query: |
+            SELECT o.order_id, o.customer_id, o.order_date
+            from raw.orders o
+            LEFT JOIN raw.customers c ON o.customer_id = c.customer_id
+            WHERE c.customer_id IS NULL
+          samples limit: 10
+          attributes:
+            description: "All orders must reference valid customers"
+      
+      - failed rows:
+          name: future_order_dates
+          fail query: |
+            SELECT order_id, customer_id, order_date
+            from raw.orders
+            WHERE order_date > CURRENT_TIMESTAMP
+          samples limit: 10
+          attributes:
+            description: "Order dates cannot be in the future"
+      
+      # This will FAIL - checking orders older than 2024
+      - failed rows:
+          name: recent_orders_only
+          fail query: |
+            SELECT order_id, customer_id, order_date
+            from raw.orders
+            WHERE order_date < '2025-01-01'
+          samples limit: 10
+          attributes:
+            description: "All orders should be from 2025 or later (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(order_id) = 0:
+          name: unique_order_ids
+          attributes:
+            description: "Order IDs must be unique"
+

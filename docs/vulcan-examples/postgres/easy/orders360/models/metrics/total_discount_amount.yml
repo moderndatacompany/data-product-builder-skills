@@ -1,0 +1,6 @@
+kind: metric
+name: total_discount_amount
+measure: orders.total_discount_amount
+ts: orders.order_date
+granularity: day
+description: "Total discount amount applied"

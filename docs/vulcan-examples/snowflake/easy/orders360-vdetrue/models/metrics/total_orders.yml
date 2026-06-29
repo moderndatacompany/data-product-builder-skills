@@ -1,0 +1,6 @@
+kind: metric
+name: total_orders
+measure: orders.total_orders
+ts: orders.ORDER_DATE
+granularity: day
+description: Total distinct orders per day

@@ -1,0 +1,6 @@
+priority_id,priority_name,priority_description,sla_days
+1,1-URGENT,Urgent priority - ship immediately,1
+2,2-HIGH,High priority - ship within 3 days,3
+3,3-MEDIUM,Medium priority - ship within 7 days,7
+4,4-NOT SPECIFIED,No priority specified,14
+5,5-LOW,Low priority - ship when convenient,30

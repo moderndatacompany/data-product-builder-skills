@@ -1,0 +1,14 @@
+checks:
+  sales.orders:
+    
+    validity:
+      - failed rows:
+          name: invalid_order_amounts
+          fail query: |
+            SELECT order_id, total_amount, quantity, unit_price
+            FROM sales.orders
+            WHERE total_amount <= 0 OR quantity <= 0 OR unit_price <= 0
+          samples limit: 10
+          attributes:
+            description: "Order amounts must be positive"
+

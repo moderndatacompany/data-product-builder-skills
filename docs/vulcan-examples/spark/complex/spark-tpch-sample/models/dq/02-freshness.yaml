@@ -1,0 +1,10 @@
+# kind: dq — converted from checks/02-freshness.yaml
+kind: dq
+name: view_order_line_summary_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1
+
+rules:
+- freshness(o_orderdate) < 14d:
+    name: order_summary_fresh_14d
+    dimension: timeliness
+    description: Order line summary should be updated within 14 days

@@ -1,0 +1,38 @@
+name: orders360
+tenant: sales
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity across the e-commerce platform.
+
+# --- Gateway Connection ---
+gateways:
+  default:
+    connection:
+      type: postgres
+      host: {{ env_var('POSTGRES_HOST') }}
+      port: {{ env_var('POSTGRES_PORT') }}
+      database: {{ env_var('POSTGRES_DATABASE') }}
+      user: {{ env_var('POSTGRES_USER') }}
+      password: {{ env_var('POSTGRES_PASSWORD') }}
+    state_connection:
+      type: postgres
+      host: {{ env_var('STATESTORE_HOST') }}
+      port: {{ env_var('STATESTORE_PORT') }}
+      database: {{ env_var('STATESTORE_DATABASE') }}
+      user: {{ env_var('STATESTORE_USER') }}
+      password: {{ env_var('STATESTORE_PASSWORD') }}
+
+default_gateway: default
+
+# --- Model Defaults ---
+model_defaults:
+  dialect: postgres
+  start: 2024-01-01
+  cron: '@daily'
+
+# --- Linting Rules ---
+
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections

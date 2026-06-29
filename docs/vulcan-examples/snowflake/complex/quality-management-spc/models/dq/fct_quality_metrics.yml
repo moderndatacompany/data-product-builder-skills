@@ -1,0 +1,86 @@
+# kind: dq — converted from checks/fct_quality_metrics.yml
+kind: dq
+name: fct_quality_metrics_dq
+depends_on: QMS_PLATFORM.GOLD.FCT_QUALITY_METRICS
+
+rules:
+- row_count >= 10000:
+    name: minimum_inspection_records
+    dimension: completeness
+    description: At least 10,000 inspection records should exist
+
+- missing_count(inspection_id) = 0:
+    name: no_missing_inspection_id
+    dimension: completeness
+    description: All records must have an inspection_id
+
+- missing_count(inspection_date) = 0:
+    name: no_missing_inspection_date
+    dimension: completeness
+    description: All records must have an inspection_date
+
+- missing_count(material_number) = 0:
+    name: no_missing_material_number
+    dimension: completeness
+    description: All records must have a material_number
+
+- missing_count(pass_fail_status) = 0:
+    name: no_missing_pass_fail_status
+    dimension: completeness
+    description: All records must have a pass_fail_status
+
+- invalid_count(sample_size) = 0:
+    name: sample_size_positive
+    dimension: validity
+    description: Sample size must be positive
+    valid min: 1
+
+- invalid_count(defects_found) = 0:
+    name: defects_found_non_negative
+    dimension: validity
+    description: Defects found must be non-negative
+    valid min: 0
+
+- invalid_count(scrap_cost_usd) = 0:
+    name: scrap_cost_non_negative
+    dimension: validity
+    description: Scrap cost must be non-negative
+    valid min: 0
+
+- invalid_percent(pass_fail_status) < 1%:
+    name: valid_pass_fail_status
+    dimension: validity
+    description: Pass/fail status must be Pass, Fail, or Conditional
+    valid values: [Pass, Fail, Conditional]
+
+- invalid_percent(inspection_type) < 1%:
+    name: valid_inspection_type
+    dimension: validity
+    description: Inspection type must be Incoming, In-Process, or Final
+    valid values: [Incoming, In-Process, Final]
+
+- duplicate_count(inspection_id) = 0:
+    name: unique_inspection_ids
+    dimension: uniqueness
+    description: Each inspection_id must be unique
+
+- failed rows:
+    name: defect_code_exists_in_seed
+    dimension: accuracy
+    description: All non-null defect_codes must exist in defect_codes seed
+    fail query: |
+      SELECT fqm.inspection_id, fqm.defect_code
+      FROM QMS_PLATFORM.GOLD.FCT_QUALITY_METRICS fqm
+      LEFT JOIN QMS_PLATFORM.SEED.DEFECT_CODES dc ON fqm.defect_code = dc.DEFECT_CODE
+      WHERE fqm.defect_code IS NOT NULL AND dc.DEFECT_CODE IS NULL
+    samples limit: 10
+
+- failed rows:
+    name: defects_within_sample
+    dimension: accuracy
+    description: Defects found should not exceed sample size
+    fail query: |
+      SELECT inspection_id, sample_size, defects_found
+      FROM QMS_PLATFORM.GOLD.FCT_QUALITY_METRICS
+      WHERE defects_found > sample_size
+    samples limit: 10

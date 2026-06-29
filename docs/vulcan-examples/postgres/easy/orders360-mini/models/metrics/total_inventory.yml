@@ -1,0 +1,4 @@
+kind: metric
+name: total_inventory
+measure: products.total_inventory
+description: "Total inventory across all products"

@@ -1,0 +1,10 @@
+models:
+  lenovo.ldo.device_os:
+    alias: device_os
+    
+    measures:
+      number_of_os:
+        type: count
+        expression: "{device_os.CURRENT_OS_ID}"
+        description: "Total number of operating systems available."
+

@@ -1,0 +1,54 @@
+# Converted from legacy: semantics/nation.yml
+kind: semantic
+name: nations
+depends_on: test_db.vulcan_test_project.nation
+ai_context:
+  instructions: >
+    Use this semantic model for questions about nations. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "nations"
+  examples:
+    - "Show nations trends over time."
+    - "Break down nations by key dimensions."
+
+dimensions:
+- NATIONKEY
+- NAME
+- REGIONKEY
+- COMMENT
+measures:
+- name: total_nations
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total nations. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total nations"
+      - "total_nations"
+      - "total"
+      - "nations"
+    examples:
+      - "What is total nations by month?"
+      - "Compare total nations across key segments."
+  type: count
+  expression: '*'
+  description: Total number of nations
+  tags:
+  - metric
+  terms:
+  - metric.total_nations
+joins:
+- name: regions
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from regions. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "regions"
+    examples:
+      - "Analyze this model with regions attributes."
+      - "Break measures down by regions."
+  type: many_to_one
+  expression: '{nations.REGIONKEY} = {regions.REGIONKEY}'

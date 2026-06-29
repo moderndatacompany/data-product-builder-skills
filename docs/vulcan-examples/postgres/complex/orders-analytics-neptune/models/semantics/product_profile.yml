@@ -1,0 +1,373 @@
+# Converted from legacy: semantics/dim_product_profile.yml
+kind: semantic
+name: product_profile
+depends_on: silver_v1.dim_product_profile
+ai_context:
+  instructions: >
+    Use this semantic model for questions about product profile. Prefer its measures
+    for aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "product profile"
+    - "product_profile"
+    - "product"
+    - "profile"
+  examples:
+    - "Show product profile trends over time."
+    - "Break down product profile by key dimensions."
+
+dimensions:
+- product_id
+- product_name
+- category
+- supplier_id
+- supplier_name
+- current_price
+- customer_penetration_pct
+- revenue_rank_in_category
+- product_performance
+- first_sale_date
+- last_sale_date
+measures:
+- name: total_products
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total products. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total products"
+      - "total_products"
+      - "total"
+      - "products"
+    examples:
+      - "What is total products by month?"
+      - "Compare total products across key segments."
+  type: count
+  expression: '{product_profile.product_id}'
+  description: Total number of products
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_products
+  - metric.product_count
+- name: total_product_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total product revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total product revenue"
+      - "total_product_revenue"
+      - "total"
+      - "product"
+    examples:
+      - "What is total product revenue by month?"
+      - "Compare total product revenue across key segments."
+  type: sum
+  expression: '{product_profile.total_revenue}'
+  format: currency
+  description: Total revenue across all products
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_product_revenue
+  - finance.gross_sales
+- name: avg_product_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg product revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg product revenue"
+      - "avg_product_revenue"
+      - "avg"
+      - "product"
+    examples:
+      - "What is avg product revenue by month?"
+      - "Compare avg product revenue across key segments."
+  type: avg
+  expression: '{product_profile.total_revenue}'
+  format: currency
+  description: Average revenue per product
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_product_revenue
+  - metric.aggregate
+- name: total_quantity_sold_agg
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total quantity sold agg. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total quantity sold agg"
+      - "total_quantity_sold_agg"
+      - "total"
+      - "quantity"
+    examples:
+      - "What is total quantity sold agg by month?"
+      - "Compare total quantity sold agg across key segments."
+  type: sum
+  expression: '{product_profile.total_quantity_sold}'
+  description: Total units sold across all products
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: avg_quantity_per_product
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg quantity per product. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg quantity per product"
+      - "avg_quantity_per_product"
+      - "avg"
+      - "quantity"
+    examples:
+      - "What is avg quantity per product by month?"
+      - "Compare avg quantity per product across key segments."
+  type: avg
+  expression: '{product_profile.total_quantity_sold}'
+  description: Average quantity sold per product
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: best_seller_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for best seller count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "best seller count"
+      - "best_seller_count"
+      - "best"
+      - "seller"
+    examples:
+      - "What is best seller count by month?"
+      - "Compare best seller count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{product_profile.product_performance} = ''Best Seller'''
+  description: Number of best-selling products
+  tags:
+  - metric
+  terms:
+  - metric.best_seller_count
+- name: stale_product_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for stale product count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "stale product count"
+      - "stale_product_count"
+      - "stale"
+      - "product"
+    examples:
+      - "What is stale product count by month?"
+      - "Compare stale product count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{product_profile.product_performance} = ''Stale'''
+  description: Number of stale products (no sales 90+ days)
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.stale_product_count
+  - metric.product_count
+- name: avg_customer_penetration
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg customer penetration. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg customer penetration"
+      - "avg_customer_penetration"
+      - "avg"
+      - "customer"
+    examples:
+      - "What is avg customer penetration by month?"
+      - "Compare avg customer penetration across key segments."
+  type: avg
+  expression: '{product_profile.customer_penetration_pct}'
+  description: Average customer penetration percentage across products
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_customer_penetration
+  - metric.aggregate
+- name: high_penetration_product_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for high penetration product count.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "high penetration product count"
+      - "high_penetration_product_count"
+      - "high"
+      - "penetration"
+    examples:
+      - "What is high penetration product count by month?"
+      - "Compare high penetration product count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{product_profile.customer_penetration_pct} >= 20'
+  description: Number of products with 20%+ customer penetration
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.high_penetration_product_count
+  - metric.product_count
+segments:
+- name: best_sellers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the best sellers subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "best sellers"
+      - "best_sellers"
+      - "best"
+      - "sellers"
+    examples:
+      - "Show revenue for best sellers."
+      - "How many records are in best sellers?"
+  expression: '{product_profile.product_performance} = ''Best Seller'''
+  description: Products with revenue >= $10,000
+  tags:
+  - metric
+  terms:
+  - metric.best_sellers
+- name: good_performers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the good performers subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "good performers"
+      - "good_performers"
+      - "good"
+      - "performers"
+    examples:
+      - "Show revenue for good performers."
+      - "How many records are in good performers?"
+  expression: '{product_profile.product_performance} = ''Good Performer'''
+  description: Products with revenue $2,000-$10,000
+  tags:
+  - metric
+  terms:
+  - metric.good_performers
+- name: slow_movers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the slow movers subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "slow movers"
+      - "slow_movers"
+      - "slow"
+      - "movers"
+    examples:
+      - "Show revenue for slow movers."
+      - "How many records are in slow movers?"
+  expression: '{product_profile.product_performance} = ''Slow Mover'''
+  description: Products with revenue < $2,000
+  tags:
+  - metric
+  terms:
+  - metric.slow_movers
+- name: stale_inventory
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the stale inventory subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "stale inventory"
+      - "stale_inventory"
+      - "stale"
+      - "inventory"
+    examples:
+      - "Show revenue for stale inventory."
+      - "How many records are in stale inventory?"
+  expression: '{product_profile.product_performance} = ''Stale'''
+  description: Products with no sales in 90+ days
+  tags:
+  - product
+  - inventory
+  - metric
+  terms:
+  - inventory.stale_inventory
+  - metric.stock_total
+- name: high_demand_products
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high demand products subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high demand products"
+      - "high_demand_products"
+      - "high"
+      - "demand"
+    examples:
+      - "Show revenue for high demand products."
+      - "How many records are in high demand products?"
+  expression: '{product_profile.total_orders} >= 50'
+  description: Products with 50+ orders
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.high_demand_products
+  - metric.product_count
+- name: widgets_category
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the widgets category subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "widgets category"
+      - "widgets_category"
+      - "widgets"
+      - "category"
+    examples:
+      - "Show revenue for widgets category."
+      - "How many records are in widgets category?"
+  expression: '{product_profile.category} = ''Widgets'''
+  description: Products in Widgets category
+  tags:
+  - metric
+  terms:
+  - metric.widgets_category

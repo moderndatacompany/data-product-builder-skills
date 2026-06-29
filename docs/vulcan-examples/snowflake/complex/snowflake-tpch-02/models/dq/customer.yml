@@ -1,0 +1,36 @@
+# kind: dq — converted from checks/customer.yml
+kind: dq
+name: customer_dq
+depends_on: test_db.vulcan_test_project.customer
+rules:
+- missing_count(custkey) = 0:
+    name: custkey_not_null
+    dimension: completeness
+    description: CUSTOMER.CUSTKEY must be non-null
+- missing_count(nationkey) = 0:
+    name: nationkey_not_null
+    dimension: completeness
+    description: CUSTOMER.NATIONKEY must be non-null
+- missing_count(name) = 0:
+    name: customer_name_not_null
+    dimension: completeness
+    description: CUSTOMER.NAME must be non-null
+- row_count > 0:
+    name: customer_has_rows
+    dimension: completeness
+    description: CUSTOMER should not be empty
+- duplicate_count(custkey) = 0:
+    name: custkey_unique
+    dimension: uniqueness
+    description: CUSTOMER.CUSTKEY must be unique
+- failed rows:
+    name: customer_nation_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT c.*
+      FROM test_db.vulcan_test_project.customer c
+      LEFT JOIN test_db.vulcan_test_project.nation n
+        ON c.nationkey = n.nationkey
+      WHERE n.nationkey IS NULL
+    samples limit: 10
+    description: Every CUSTOMER.NATIONKEY must exist in NATION.NATIONKEY

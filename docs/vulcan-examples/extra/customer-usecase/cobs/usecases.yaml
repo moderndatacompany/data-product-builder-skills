@@ -1,0 +1,6 @@
+use_cases:
+  - Customer behavioral segmentation using RFM (Recency, Frequency, Monetary) methodology
+  - Churn prediction and at-risk customer identification through "Dropping" flag detection
+  - Proof product adoption and wallet-share analytics
+  - Sales engagement optimization and marketing campaign targeting
+  - Customer lifecycle and retention analytics

@@ -1,0 +1,122 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - TechFab Quality Management & SPC Analytics
+# ==============================================================================
+
+# Basic Information
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: quality-management-spc
+display_name: Quality Management & SPC Analytics
+description: Quality analytics tracking defect rates, inspection results, and statistical process control for continuous improvement initiatives and scrap reduction programs.
+
+# Classification
+tags:
+  - quality-assurance
+  - spc
+  - defect-management
+
+terms:
+  - statistical-process-control
+  - defect-tracking
+  - first-pass-yield
+
+# Domain
+domain: quality_management
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+model_defaults:
+  dialect: snowflake
+  start: '2024-07-01'
+  cron: '@daily'
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://snowflakewarehouse?purpose=rw
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+openlineage:
+  enabled: false
+
+# ==============================================================================
+# Transpiler Service
+# ==============================================================================
+transpiler:
+  base_url: http://vulcan-transpiler:4000/transpiler
+  timeout: 30
+
+# ==============================================================================
+# GraphQL API Configuration
+# ==============================================================================
+graphql:
+  base_url: http://localhost:3000
+  timeout: 60
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+users:
+  - username: anujsohanitmdcio
+    email: anuj.sohani@tmdc.io
+    type: OWNER
+  - username: quality_team
+    email: quality@techfab.com
+    type: CONTRIBUTOR
+  - username: compliance_team
+    email: compliance@techfab.com
+    type: VIEWER
+
+# ==============================================================================
+# Object Store Configuration
+# ==============================================================================
+object_store:
+  provider: minio
+  bucket: warehouse
+  base_path: queries
+  compression: snappy
+  presigned_url_expiry_mins: 60
+  credentials:
+    endpoint_url: http://minio:9000
+    access_key_id: admin
+    secret_access_key: password
+    region: us-east-1

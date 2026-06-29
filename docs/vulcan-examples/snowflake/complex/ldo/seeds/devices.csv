@@ -1,0 +1,6 @@
+device_id,tenant,device_org_id,device_name,device_serial_number,device_model,device_family,category,os_platform,manufacturer_name,device_assigned_date
+DEV001,ORG001,DEV-ORG-001,Lenovo ThinkPad X1 Carbon,SN123456,21HMCTO1WW,ThinkPad X1 Carbon,PC,Windows,Lenovo,2023-01-01 00:00:00
+DEV002,ORG001,DEV-ORG-002,Lenovo ThinkPad T14 Gen 4,SN123457,21FMCTO1WW,ThinkPad T14,PC,Windows,Lenovo,2023-02-01 00:00:00
+DEV003,ORG002,DEV-ORG-003,Lenovo IdeaPad 5 Pro,SN123458,82FG00BKUS,IdeaPad 5,PC,Windows,Lenovo,2023-03-01 00:00:00
+DEV004,ORG002,DEV-ORG-004,Lenovo Legion 5 Pro,SN123459,82JD00AKUS,Legion 5,PC,Windows,Lenovo,2023-04-01 00:00:00
+DEV005,ORG003,DEV-ORG-005,Lenovo Yoga 9i Gen 9,SN123460,82BG00ADUS,Yoga 9i,PC,Windows,Lenovo,2023-05-01 00:00:00

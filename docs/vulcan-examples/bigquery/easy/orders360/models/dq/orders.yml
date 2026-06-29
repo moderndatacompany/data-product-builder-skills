@@ -1,0 +1,14 @@
+kind: dq
+name: orders_dq
+depends_on: sales.orders
+
+rules:
+  - failed rows:
+      name: invalid_order_amounts
+      dimension: validity
+      fail query: |
+        SELECT order_id, total_amount, quantity, unit_price
+        FROM sales.orders
+        WHERE total_amount <= 0 OR quantity <= 0 OR unit_price <= 0
+      samples limit: 10
+      description: "Order amounts must be positive"

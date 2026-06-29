@@ -1,0 +1,7 @@
+customer_id,customer_name,customer_tier,signup_city,segment_label,is_active
+C001,Asha Mehta,PREMIUM,Bengaluru,young_professionals,true
+C002,Rohan Shah,STANDARD,Mumbai,value_seekers,true
+C003,Neha Jain,PREMIUM,Mumbai,young_professionals,true
+C004,Imran Khan,STANDARD,Delhi,family_shoppers,true
+C005,Kavya Rao,PREMIUM,Delhi,urban_families,true
+C006,Arjun Nair,STANDARD,Bengaluru,students,true

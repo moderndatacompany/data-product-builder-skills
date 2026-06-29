@@ -1,0 +1,96 @@
+# kind: dq — converted from checks/equipment_oee_metrics.yml
+kind: dq
+name: EQUIPMENT_OEE_METRICS_dq
+depends_on: MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS
+rules:
+- row_count >= 1000:
+    name: minimum_oee_records
+    dimension: completeness
+    description: At least 1000 OEE records should exist
+- missing_count(equipment_id) = 0:
+    name: no_missing_equipment_id
+    dimension: completeness
+    description: All records must have an equipment_id
+- missing_count(metric_date) = 0:
+    name: no_missing_metric_date
+    dimension: completeness
+    description: All records must have a metric_date
+- missing_count(oee_pct) = 0:
+    name: no_missing_oee_calculation
+    dimension: completeness
+    description: All records must have a calculated OEE value
+- invalid_count(availability_pct) = 0:
+    name: availability_percentage_valid
+    dimension: validity
+    description: Availability percentage must be between 0 and 100
+    valid min: 0
+    valid max: 100
+- invalid_count(performance_pct) = 0:
+    name: performance_percentage_valid
+    dimension: validity
+    description: Performance percentage must be between 0 and 100
+    valid min: 0
+    valid max: 100
+- invalid_count(quality_pct) = 0:
+    name: quality_percentage_valid
+    dimension: validity
+    description: Quality percentage must be between 0 and 100
+    valid min: 0
+    valid max: 100
+- invalid_count(oee_pct) = 0:
+    name: oee_percentage_valid
+    dimension: validity
+    description: OEE percentage must be between 0 and 100
+    valid min: 0
+    valid max: 100
+- invalid_count(total_downtime_hours) = 0:
+    name: downtime_hours_non_negative
+    dimension: validity
+    description: Downtime hours must be non-negative
+    valid min: 0
+- invalid_count(mttr_hours) = 0:
+    name: mttr_reasonable_range
+    dimension: validity
+    description: Mean Time To Repair must be between 0 and 24 hours
+    valid min: 0
+    valid max: 24
+- failed rows:
+    name: equipment_id_exists_in_master
+    dimension: validity
+    fail query: |
+      SELECT o.equipment_id, o.metric_date
+      FROM MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS o
+      LEFT JOIN techfab_seeds.equipment_master e ON o.equipment_id = e.equipment_id
+      WHERE e.equipment_id IS NULL
+    samples limit: 10
+    description: All equipment_ids must exist in equipment_master
+- failed rows:
+    name: plant_code_exists_in_master
+    dimension: validity
+    fail query: |
+      SELECT o.plant_code, o.equipment_id
+      FROM MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS o
+      LEFT JOIN techfab_seeds.plant_master p ON o.plant_code = p.plant_code
+      WHERE p.plant_code IS NULL
+    samples limit: 10
+    description: All plant_codes must exist in plant_master
+- duplicate_count(equipment_id, metric_date) = 0:
+    name: unique_equipment_date_combination
+    dimension: uniqueness
+    description: Each equipment-date combination must be unique
+- avg(oee_pct) > 65.0:
+    name: average_oee_acceptable
+    dimension: accuracy
+    description: Average OEE should be above 65% across all equipment
+- avg(availability_pct) > 85.0:
+    name: average_availability_target
+    dimension: accuracy
+    description: Average availability should exceed 85%
+- avg(total_unplanned_downtime_hours) < 4.0:
+    name: average_unplanned_downtime_acceptable
+    dimension: accuracy
+    description: Average unplanned downtime should be under 4 hours
+- freshness(metric_date) < 2d:
+    name: oee_data_freshness
+    dimension: timeliness
+    description: OEE data must be refreshed within the last 2 days

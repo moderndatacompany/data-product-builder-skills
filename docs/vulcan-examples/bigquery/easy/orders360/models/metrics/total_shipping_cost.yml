@@ -1,0 +1,8 @@
+kind: metric
+name: total_shipping_cost
+measure: orders.total_shipping_cost
+ts: orders.order_date
+granularity: month
+dimensions:
+  - orders.customer_id
+description: Total shipping costs

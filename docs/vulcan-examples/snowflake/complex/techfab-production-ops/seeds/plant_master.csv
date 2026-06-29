@@ -1,0 +1,11 @@
+plant_code,plant_name,location,region,plant_manager,production_capacity_annual,operating_shifts,established_date
+P01,Phoenix Manufacturing Center,"Phoenix, AZ",West,David Richardson,850000,3,2008-03-15
+P02,Austin Assembly Plant,"Austin, TX",South,Sarah Mitchell,620000,2,2012-07-22
+P03,Charlotte Electronics Facility,"Charlotte, NC",East,James Wilson,540000,2,2016-11-01
+P04,Denver Advanced Manufacturing,"Denver, CO",West,Michael Chen,720000,3,2010-05-20
+P05,Atlanta Production Hub,"Atlanta, GA",South,Jennifer Davis,680000,2,2013-09-12
+P06,Seattle Tech Assembly,"Seattle, WA",West,Robert Kim,590000,2,2015-02-28
+P07,Chicago Industrial Complex,"Chicago, IL",Midwest,Lisa Anderson,780000,3,2009-08-14
+P08,Boston Manufacturing Center,"Boston, MA",East,Thomas Wright,640000,2,2014-11-05
+P09,San Diego Electronics Plant,"San Diego, CA",West,Maria Rodriguez,710000,3,2011-04-18
+P10,Dallas Assembly Facility,"Dallas, TX",South,Kevin Brown,660000,2,2017-01-22

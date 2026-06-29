@@ -1,0 +1,199 @@
+checks:
+  gold_v2alpha.rfm_customer_segmentation:
+    completeness:
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All RFM records must have a customer ID"
+      
+      - missing_count(customer_name) = 0:
+          name: no_missing_names
+          attributes:
+            description: "All RFM records must have a customer name"
+      
+      - missing_count(rfm_segment) = 0:
+          name: no_missing_segments
+          attributes:
+            description: "All RFM records must have a segment"
+      
+      - missing_count(recency_score) = 0:
+          name: no_missing_recency_scores
+          attributes:
+            description: "All RFM records must have a recency score"
+      
+      - missing_count(frequency_score) = 0:
+          name: no_missing_frequency_scores
+          attributes:
+            description: "All RFM records must have a frequency score"
+      
+      - missing_count(monetary_score) = 0:
+          name: no_missing_monetary_scores
+          attributes:
+            description: "All RFM records must have a monetary score"
+    
+    validity:
+      - failed rows:
+          name: valid_recency_scores
+          fail query: |
+            SELECT customer_id, customer_name, recency_score
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE recency_score < 1 OR recency_score > 5
+          samples limit: 10
+          attributes:
+            description: "Recency scores must be between 1 and 5"
+      
+      - failed rows:
+          name: valid_frequency_scores
+          fail query: |
+            SELECT customer_id, customer_name, frequency_score
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE frequency_score < 1 OR frequency_score > 5
+          samples limit: 10
+          attributes:
+            description: "Frequency scores must be between 1 and 5"
+      
+      - failed rows:
+          name: valid_monetary_scores
+          fail query: |
+            SELECT customer_id, customer_name, monetary_score
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE monetary_score < 1 OR monetary_score > 5
+          samples limit: 10
+          attributes:
+            description: "Monetary scores must be between 1 and 5"
+      
+      - failed rows:
+          name: valid_rfm_segments
+          fail query: |
+            SELECT customer_id, customer_name, rfm_segment
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE rfm_segment NOT IN (
+              'Champions', 'Loyal Customers', 'Potential Loyalists', 
+              'Recent Customers', 'Promising', 'Customers Needing Attention',
+              'About to Sleep', 'At Risk', 'Cannot Lose Them', 
+              'Hibernating', 'Lost'
+            )
+          samples limit: 10
+          attributes:
+            description: "RFM segments must be from valid set"
+      
+      - failed rows:
+          name: non_negative_frequency
+          fail query: |
+            SELECT customer_id, customer_name, frequency_orders
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE frequency_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Frequency orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_monetary
+          fail query: |
+            SELECT customer_id, customer_name, monetary_value
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE monetary_value < 0
+          samples limit: 10
+          attributes:
+            description: "Monetary value cannot be negative"
+      
+      # This will FAIL - checking for all champions
+      - failed rows:
+          name: all_champions_check
+          fail query: |
+            SELECT customer_id, customer_name, rfm_segment, rfm_score
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE rfm_segment != 'Champions'
+          samples limit: 10
+          attributes:
+            description: "All customers should be Champions (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for high RFM scores only
+      - failed rows:
+          name: high_rfm_score_check
+          fail query: |
+            SELECT customer_id, customer_name, rfm_score, rfm_segment
+            FROM gold_v2alpha.rfm_customer_segmentation
+            WHERE rfm_score < 12
+          samples limit: 10
+          attributes:
+            description: "All customers should have RFM score >= 12 (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(customer_id) = 0:
+          name: unique_customer_ids
+          attributes:
+            description: "Customer IDs must be unique"
+      
+      - duplicate_count(customer_name) = 0:
+          name: unique_customer_names
+          attributes:
+            description: "Customer names should be unique"
+    
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in RFM customer segmentation record count using historic data"
+      
+      - anomaly detection for missing_count(customer_id):
+          name: missing_customer_id_anomaly
+          attributes:
+            description: "Detect anomalies in missing customer ID count"
+      
+      - anomaly detection for avg(rfm_score):
+          name: avg_rfm_score_anomaly
+          attributes:
+            description: "Detect anomalies in average RFM score"
+      
+      - anomaly detection for avg(recency_score):
+          name: avg_recency_score_anomaly
+          attributes:
+            description: "Detect anomalies in average recency score"
+      
+      - anomaly detection for avg(frequency_score):
+          name: avg_frequency_score_anomaly
+          attributes:
+            description: "Detect anomalies in average frequency score"
+      
+      - anomaly detection for avg(monetary_score):
+          name: avg_monetary_score_anomaly
+          attributes:
+            description: "Detect anomalies in average monetary score"
+      
+      - anomaly detection for distinct_count(rfm_segment):
+          name: segment_count_anomaly
+          attributes:
+            description: "Detect anomalies in number of distinct RFM segments"
+      
+      - anomaly detection for avg(monetary_value):
+          name: avg_monetary_value_anomaly
+          attributes:
+            description: "Detect anomalies in average customer monetary value"
+    
+    timeliness:
+      - change for row_count >= -5%:
+          name: row_count_timeliness_check
+          attributes:
+            description: "Alert if RFM segmentation record count drops more than 5% from same day last week"
+      
+      - change for avg(rfm_score) between -15% and 15%:
+          name: avg_rfm_score_timeliness_check
+          attributes:
+            description: "Alert if average RFM score changes more than 15% from same day last week"
+      
+      - change for avg(monetary_value) between -20% and 20%:
+          name: avg_monetary_value_timeliness_check
+          attributes:
+            description: "Alert if average monetary value changes more than 20% from same day last week"
+      
+      - change for distinct_count(rfm_segment) >= -10%:
+          name: segment_count_timeliness_check
+          attributes:
+            description: "Alert if distinct segment count drops more than 10% from same day last week"
+      
+      - change for avg(frequency_orders) between -15% and 15%:
+          name: avg_frequency_timeliness_check
+          attributes:
+            description: "Alert if average order frequency changes more than 15% from same day last week"
+

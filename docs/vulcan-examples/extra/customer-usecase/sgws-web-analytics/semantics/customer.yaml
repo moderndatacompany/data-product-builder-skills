@@ -1,0 +1,50 @@
+# ============================================================================
+# SEMANTIC MODEL: Customer (Aligned with dp_web_heartbeat/model/tables/customer.yaml)
+# ============================================================================
+
+models:
+  web_analytics_gold.CUSTOMER:
+    alias: customer
+    # description: "Table containing information about customer"  
+    
+    dimensions:
+      excludes: []
+    
+    measures:
+      count_customers:
+        type: number
+        expression: "COUNT(DISTINCT {customer.CUSTOMER_ID})"
+        description: "count of total customers"
+    
+    segments:
+      is_active:
+        expression: "{customer.STATUS} = 'A'"
+        description: "Active customers"
+      
+      is_proof_eligible:
+        expression: "{customer.PROOF_OF_ELIGIBLE_ACCT} = 'Y'"
+        description: "Proof eligible accounts"
+      
+      is_on_premise:
+        expression: "{customer.CUSTOMER_PREMISE} = 'On Premise'"
+        description: "On Premise customers"
+      
+      is_off_premise:
+        expression: "{customer.CUSTOMER_PREMISE} = 'Off Premise'"
+        description: "Off Premise customers"
+      
+      has_mobile_app:
+        expression: "{customer.HASMOBILEAPP} = true"
+        description: "Customers using mobile app"
+      
+      has_web:
+        expression: "{customer.HASWEB} = true"
+        description: "Customers using web"
+      
+      is_west_region:
+        expression: "{customer.SITE_REGION} = 'West'"
+        description: "West region customers"
+      
+      is_east_region:
+        expression: "{customer.SITE_REGION} = 'East'"
+        description: "East region customers"

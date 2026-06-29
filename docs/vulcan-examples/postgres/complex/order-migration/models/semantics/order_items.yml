@@ -1,0 +1,230 @@
+# Converted from legacy: semantics/order_items.yml
+kind: semantic
+name: order_items
+depends_on: sales.order_items
+ai_context:
+  instructions: >
+    Use this semantic model for questions about order items. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "order items"
+    - "order_items"
+    - "order"
+    - "items"
+  examples:
+    - "Show order items trends over time."
+    - "Break down order items by key dimensions."
+
+dimensions:
+- order_item_id
+- order_id
+- order_date
+- customer_id
+- product_id
+- quantity
+- unit_price
+- discount_rate
+- tax_rate
+- line_subtotal
+- line_discount
+- line_tax
+- line_total
+measures:
+- name: total_line_items
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total line items. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total line items"
+      - "total_line_items"
+      - "total"
+      - "line"
+    examples:
+      - "What is total line items by month?"
+      - "Compare total line items across key segments."
+  type: count_distinct
+  expression: '{order_items.order_item_id}'
+  tags:
+  - metric
+  terms:
+  - metric.total_line_items
+- name: units_sold
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for units sold. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "units sold"
+      - "units_sold"
+      - "units"
+      - "sold"
+    examples:
+      - "What is units sold by month?"
+      - "Compare units sold across key segments."
+  type: sum
+  expression: '{order_items.quantity}'
+  tags:
+  - metric
+  terms:
+  - metric.units_sold
+- name: gross_sales
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for gross sales. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "gross sales"
+      - "gross_sales"
+      - "gross"
+      - "sales"
+    examples:
+      - "What is gross sales by month?"
+      - "Compare gross sales across key segments."
+  type: sum
+  expression: '{order_items.line_subtotal}'
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.gross_sales
+  - finance.gross_sales
+- name: total_line_discounts
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total line discounts. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total line discounts"
+      - "total_line_discounts"
+      - "total"
+      - "line"
+    examples:
+      - "What is total line discounts by month?"
+      - "Compare total line discounts across key segments."
+  type: sum
+  expression: '{order_items.line_discount}'
+  tags:
+  - revenue
+  - discount
+  - metric
+  terms:
+  - revenue.discount
+  - finance.discounts_given
+- name: net_sales
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for net sales. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "net sales"
+      - "net_sales"
+      - "net"
+      - "sales"
+    examples:
+      - "What is net sales by month?"
+      - "Compare net sales across key segments."
+  type: sum
+  expression: '{order_items.line_total}'
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.net_sales
+  - finance.gross_sales
+- name: avg_unit_price
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg unit price. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg unit price"
+      - "avg_unit_price"
+      - "avg"
+      - "unit"
+    examples:
+      - "What is avg unit price by month?"
+      - "Compare avg unit price across key segments."
+  type: avg
+  expression: '{order_items.unit_price}'
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_unit_price
+  - metric.aggregate
+segments:
+- name: discounted_lines
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the discounted lines subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "discounted lines"
+      - "discounted_lines"
+      - "discounted"
+      - "lines"
+    examples:
+      - "Show revenue for discounted lines."
+      - "How many records are in discounted lines?"
+  expression: '{order_items.discount_rate} > 0'
+  tags:
+  - revenue
+  - discount
+  - metric
+  terms:
+  - revenue.discount
+  - finance.discounts_given
+- name: high_tax_lines
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high tax lines subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "high tax lines"
+      - "high_tax_lines"
+      - "high"
+      - "tax"
+    examples:
+      - "Show revenue for high tax lines."
+      - "How many records are in high tax lines?"
+  expression: '{order_items.tax_rate} >= 0.08'
+  tags:
+  - financial
+  - tax
+  - metric
+  terms:
+  - finance.tax_collected
+  - metric.tax_total
+joins:
+- name: orders
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from orders. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "orders"
+    examples:
+      - "Analyze this model with orders attributes."
+      - "Break measures down by orders."
+  type: many_to_one
+  expression: '{order_items.order_id} = {orders.order_id}'
+- name: products
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from products. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "products"
+    examples:
+      - "Analyze this model with products attributes."
+      - "Break measures down by products."
+  type: many_to_one
+  expression: '{order_items.product_id} = {products.product_id}'

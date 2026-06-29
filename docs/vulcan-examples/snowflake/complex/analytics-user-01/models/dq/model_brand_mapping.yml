@@ -1,0 +1,62 @@
+# kind: dq — converted from checks/model_brand_mapping.yml
+kind: dq
+name: MODEL_BRAND_MAPPING_dq
+depends_on: LENOVO.USDK.MODEL_BRAND_MAPPING
+rules:
+- failed rows:
+    name: missing_mtm_code
+    dimension: validity
+    fail query: |
+      SELECT MTM, PRODUCT_NAME, BRAND
+      FROM LENOVO.USDK.MODEL_BRAND_MAPPING
+      WHERE MTM IS NULL OR TRIM(MTM) = ''
+    samples limit: 10
+    description: MTM (Machine Type Model) code is required and cannot be null or empty
+- failed rows:
+    name: missing_critical_attributes
+    dimension: validity
+    fail query: "SELECT MTM, PRODUCT_NAME, BRAND, CATEGORY\nFROM LENOVO.USDK.MODEL_BRAND_MAPPING\nWHERE BRAND IS NULL \n   OR CATEGORY IS NULL\n"
+    samples limit: 10
+    description: Brand and category are critical attributes and should not be null
+- failed rows:
+    name: invalid_product_segment
+    dimension: validity
+    fail query: "SELECT MTM, PRODUCT_SEGMENT, PRODUCT_NAME\nFROM LENOVO.USDK.MODEL_BRAND_MAPPING\nWHERE PRODUCT_SEGMENT IS NOT NULL \n  AND PRODUCT_SEGMENT NOT IN ('Consumer', 'Commercial', 'Gaming', 'Workstation',\
+      \ 'Education', 'Enterprise')\n"
+    samples limit: 10
+    description: 'Product segment should be one of the standard values: Consumer, Commercial, Gaming, Workstation, Education, Enterprise'
+- failed rows:
+    name: invalid_form_factor
+    dimension: validity
+    fail query: "SELECT MTM, FORM_FACTOR, PRODUCT_NAME\nFROM LENOVO.USDK.MODEL_BRAND_MAPPING\nWHERE FORM_FACTOR IS NOT NULL \n  AND FORM_FACTOR NOT IN ('Laptop', 'Desktop', 'Tablet', '2-in-1', 'All-in-One',\
+      \ 'Workstation', 'Mini PC', 'Tower')\n"
+    samples limit: 10
+    description: Form factor should be one of the standard hardware types
+- failed rows:
+    name: future_processed_date
+    dimension: validity
+    fail query: |
+      SELECT MTM, PRODUCT_NAME, PROCESSED_DATE
+      FROM LENOVO.USDK.MODEL_BRAND_MAPPING
+      WHERE PROCESSED_DATE > CURRENT_DATE()
+    samples limit: 10
+    description: Processed date cannot be in the future
+- failed rows:
+    name: stale_product_data
+    dimension: validity
+    fail query: |
+      SELECT MTM, PRODUCT_NAME, PROCESSED_DATE
+      FROM LENOVO.USDK.MODEL_BRAND_MAPPING
+      WHERE PROCESSED_DATE < DATEADD(YEAR, -2, CURRENT_DATE())
+    samples limit: 10
+    description: Product data is older than 2 years and may be stale
+- failed rows:
+    name: duplicate_mtm_codes
+    dimension: uniqueness
+    fail query: |
+      SELECT MTM, COUNT(*) AS duplicate_count
+      FROM LENOVO.USDK.MODEL_BRAND_MAPPING
+      GROUP BY MTM
+      HAVING COUNT(*) > 1
+    samples limit: 10
+    description: MTM code must be unique (primary key violation)

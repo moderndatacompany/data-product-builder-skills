@@ -1,0 +1,64 @@
+test_daily_order_metrics_basic:
+  model: mys3lh02depot.tpch_lakehouse.daily_order_metrics
+  description: |
+    Validates daily_order_metrics aggregates orders correctly by date.
+
+  inputs:
+    mys3lh02depot.tpch_lakehouse.int_order_items:
+      - l_orderkey: 10
+        l_linenumber: 1
+        o_custkey: 1
+        o_orderdate: '2025-01-15'
+        o_orderstatus: F
+        o_orderpriority: 1-URGENT
+        l_partkey: 100
+        l_suppkey: 50
+        l_quantity: 5
+        l_extendedprice: 100.00
+        l_discount: 0.1
+        l_tax: 0.05
+        net_amount: 90.00
+        l_returnflag: N
+        l_shipdate: '2025-01-20'
+        l_shipmode: AIR
+      - l_orderkey: 10
+        l_linenumber: 2
+        o_custkey: 1
+        o_orderdate: '2025-01-15'
+        o_orderstatus: F
+        o_orderpriority: 1-URGENT
+        l_partkey: 101
+        l_suppkey: 51
+        l_quantity: 3
+        l_extendedprice: 60.00
+        l_discount: 0.0
+        l_tax: 0.05
+        net_amount: 60.00
+        l_returnflag: N
+        l_shipdate: '2025-01-20'
+        l_shipmode: MAIL
+      - l_orderkey: 20
+        l_linenumber: 1
+        o_custkey: 2
+        o_orderdate: '2025-01-15'
+        o_orderstatus: O
+        o_orderpriority: 3-MEDIUM
+        l_partkey: 102
+        l_suppkey: 52
+        l_quantity: 10
+        l_extendedprice: 200.00
+        l_discount: 0.05
+        l_tax: 0.05
+        net_amount: 190.00
+        l_returnflag: N
+        l_shipdate: '2025-01-22'
+        l_shipmode: TRUCK
+
+  outputs:
+    query:
+      rows:
+        - o_orderdate: '2025-01-15'
+          order_count: 2
+          total_revenue: 340.0
+          avg_order_value: 170.0
+          total_quantity: 18

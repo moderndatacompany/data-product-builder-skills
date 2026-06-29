@@ -1,0 +1,23 @@
+checks:
+  SALES.PRODUCTS:
+
+    validity:
+      - failed rows:
+          name: invalid_price_range
+          fail query: |
+            SELECT PRODUCT_ID, PRODUCT_NAME, PRICE
+            FROM SALES.PRODUCTS
+            WHERE PRICE <= 0 OR PRICE > 100000
+          samples limit: 10
+          attributes:
+            description: "Product price must be between $0.01 and $100,000"
+      
+      - failed rows:
+          name: invalid_rating_range
+          fail query: |
+            SELECT PRODUCT_ID, PRODUCT_NAME, RATING
+            FROM SALES.PRODUCTS
+            WHERE RATING < 1.0 OR RATING > 5.0
+          samples limit: 10
+          attributes:
+            description: "Product rating must be between 1.0 and 5.0"

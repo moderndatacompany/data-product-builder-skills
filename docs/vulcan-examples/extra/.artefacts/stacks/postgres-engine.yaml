@@ -1,0 +1,439 @@
+name: vulcan-postgres
+version: v2alpha
+type: stack
+description: "dataos vulcan postgres stack v2alpha version 01"
+spec:
+  name: vulcan
+  version: "2.0"
+  flavor: "postgres"
+  reconciler: stackManager
+  certificates:
+    generate: true
+  stackSpecValueSchema:
+    jsonSchema: |
+      {"$schema":"http://json-schema.org/draft-07/schema#","title":"Vulcan Config Schema","type":"object","properties":{"repo":{"type":"object","description":"Repository configuration","properties":{"url":{"type":"string","format":"uri","description":"Git repository URL"},"baseDir":{"type":"string","description":"Base directory inside the repo"},"syncFlags":{"type":"array","description":"Optional list of sync flags for clone/fetch","items":{"type":"string"}},"secret":{"type":"string","description":"Secret ID for repository authentication"}},"required":["url","baseDir"],"additionalProperties":false},"depots":{"type":"array","description":"List of depot addresses","items":{"type":"string"}},"command":{"type":"array","description":"Command to execute (overrides default)","items":{"type":"string"}},"arguments":{"type":"array","description":"Arguments to pass to command (overrides default)","items":{"type":"string"}}},"required":["repo"],"additionalProperties":false}
+  workflowJobConfig:
+    configFileTemplate: |
+      config.yaml: |
+      {{ toYaml .ApplicationSpec.StackSpec | indent 2 }}
+    containerResourceTemplate: |
+      initContainers:
+        - name:  "{{.Name}}{{.Stamp}}-ic"
+          image: docker.io/tmdcio/git-sync:latest
+          imagePullPolicy: IfNotPresent
+          command:
+          - /git-sync
+          args:
+          - --repo={{ .ApplicationSpec.StackSpec.repo.url }}
+          - --one-time=true
+          - --root=/etc/dataos/work
+          {{- if .ApplicationSpec.StackSpec.repo.syncFlags }}
+          {{- range $flag := .ApplicationSpec.StackSpec.repo.syncFlags }}
+          - {{ $flag }}
+          {{- end }}
+          {{- end }}
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          volumeMounts:
+          - mountPath: /etc/dataos/work
+            name: workdir
+          envFrom:
+          - secretRef:
+              name: "{{.EntityHash}}{{.NameHash}}-es"
+      container:
+        name: "{{.Name}}{{.Stamp}}-main"
+        image: tmdcio/vulcan-postgres:0.228.1.10
+        imagePullPolicy: IfNotPresent
+        command:
+        {{- range $value := .ApplicationSpec.StackSpec.command }}
+        - {{$value}}
+        {{- end }}
+        {{ if .ApplicationSpec.StackSpec.arguments }}
+        args:
+        {{- range $value := .ApplicationSpec.StackSpec.arguments }}
+        - {{$value}}
+        {{- end }}
+        {{- end }}
+        volumeMounts:
+        - mountPath: /etc/dataos/secret
+          name: dataos-secret-mount
+          readOnly: true
+        - name: workdir
+          mountPath: /etc/dataos/work
+        {{ if .ApplicationSpec.EnvironmentVars }}
+        env:
+          {{- range $conf, $value := .ApplicationSpec.EnvironmentVars }}
+          - name: {{$conf}}
+            value: {{ $value | quote }}
+          {{- end }}
+        {{- end}}
+        envFrom:
+        {{ if .EnvironmentVarsFromSecret }}
+        {{- range $secName := .EnvironmentVarsFromSecret }}
+        - secretRef:
+            name: "{{$secName}}"
+        {{- end }}
+        {{- end }}
+        {{- if .ApplicationSpec.Resources }}
+        resources:
+        {{toYaml .ApplicationSpec.Resources | indent 2 }}
+        {{- end }}
+
+  serviceConfig:
+    configFileTemplate: |
+      config.yaml: |
+      {{ toYaml .ApplicationSpec.StackSpec | indent 2 }}
+    containerResourceTemplate: |
+      {{- if .ApplicationSpec.StackSpec.repo }}
+      initContainers:
+        - command:
+          - /git-sync
+          args:
+          - --repo={{ .ApplicationSpec.StackSpec.repo.url }}
+          - --one-time=true
+          - --root=/etc/dataos/work
+          {{- if .ApplicationSpec.StackSpec.repo.syncFlags }}
+          {{- range $flag := .ApplicationSpec.StackSpec.repo.syncFlags }}
+          - {{ $flag }}
+          {{- end }}
+          {{- end }}
+          image: docker.io/tmdcio/git-sync:latest
+          imagePullPolicy: IfNotPresent
+          name:  "{{.Name}}{{.Stamp}}-ic"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          volumeMounts:
+          - mountPath: /etc/dataos/work
+            name: workdir
+          envFrom:
+          - secretRef:
+              name: "{{.EntityHash}}{{.NameHash}}-es"
+            {{- end }}
+      securityContext:
+        fsGroup: 1000
+      container:
+        name: "{{.Name}}{{.Stamp}}-main"
+        image: tmdcio/vulcan-postgres:0.228.1.10
+        imagePullPolicy: IfNotPresent
+        {{- $repo := .ApplicationSpec.StackSpec.repo }}
+        command:
+          - vulcan
+          - -p
+          - /etc/dataos/work/{{ $repo.baseDir }}
+          - api
+          - --host
+          - "0.0.0.0"
+          - --port
+          - "8000"
+        volumeMounts:
+          - mountPath: /etc/dataos/secret
+            name: dataos-secret-mount
+            readOnly: true
+          - name: workdir
+            mountPath: /etc/dataos/work
+        {{ if .HasConfigConfs }}
+          - name: dataos-config-mount
+            mountPath: /etc/dataos/config
+            readOnly: true
+        {{- end }}
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          {{ if .ApplicationSpec.EnvironmentVars }}
+          {{- range $conf, $value := .ApplicationSpec.EnvironmentVars }}
+          - name: {{$conf}}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+        envFrom:
+          {{ if .EnvironmentVarsFromSecret }}
+          {{- range $secName := .EnvironmentVarsFromSecret }}
+          - secretRef:
+              name: "{{$secName}}"
+          {{- end }}
+          {{- end }}
+        securityContext:
+          privileged: false
+        {{- if .ApplicationSpec.Resources }}
+        resources:
+        {{toYaml .ApplicationSpec.Resources | indent 2 }}
+        {{- end }}
+      sidecars:
+        {{- $name := .Name }}
+        {{- $stamp := .Stamp }}
+        {{- $type := .Type }}
+        # Transpiler sidecar
+        - name: "{{$name}}-sc-0"
+          image: "tmdcio/vulcan-transpiler:0.228.1.10"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "cubejs"
+          args:
+            - "server"
+          env:
+            - name: VULCAN_API_URL
+              value: "http://127.0.0.1:8000/api/v1"
+            - name: CUBEJS_DB_TYPE
+              value: "postgres"
+          envFrom:
+          {{ if .EnvironmentVarsFromSecret }}
+          {{- range $secName := .EnvironmentVarsFromSecret }}
+          - secretRef:
+              name: "{{$secName}}"
+          {{- end }}
+          {{- end }}
+          securityContext:
+            privileged: false
+          {{ if ne $type "workflow" }}
+          volumeMounts:
+            - name: workdir
+              mountPath: /etc/dataos/work
+            - name: dataos-secret-mount
+              mountPath: /etc/dataos/secret
+              readOnly: true
+          {{- end }}
+        # GraphQL sidecar
+        - name: "{{$name}}-sc-1"
+          image: "tmdcio/vulcan-graphql:0.228.1.10"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "dumb-init"
+            - "--"
+          args:
+            - "node"
+            - "dist/main.js"
+          env:
+            - name: VULCAN_API_URL
+              value: "http://127.0.0.1:8000"
+            - name: VULCAN_TRANSPILER_URL
+              value: "http://127.0.0.1:4000"
+          envFrom:
+          {{ if .EnvironmentVarsFromSecret }}
+          {{- range $secName := .EnvironmentVarsFromSecret }}
+          - secretRef:
+              name: "{{$secName}}"
+          {{- end }}
+          {{- end }}
+          securityContext:
+            privileged: false
+          {{ if ne $type "workflow" }}
+          volumeMounts:
+            - name: workdir
+              mountPath: /etc/dataos/work
+            - name: dataos-secret-mount
+              mountPath: /etc/dataos/secret
+              readOnly: true
+          {{- end }}
+        # MySQL sidecar
+        - name: "{{$name}}-sc-2"
+          image: "tmdcio/vulcan-postgres:0.228.1.10"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/usr/local/bin/vulcan-mysql"
+          env:
+            - name: MODE
+              value: "server"
+            - name: MYSQL_HOST
+              value: "0.0.0.0"
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: MYSQL_DB_NAME
+              value: "public"
+            - name: MYSQL_ALLOW_CLEARTEXT_AUTH
+              value: "true"
+            - name: MYSQL_SSL_CERT_FILE
+              value: /etc/dataos/certs/tls.crt
+            - name: MYSQL_SSL_KEY_FILE
+              value: /etc/dataos/certs/tls.key
+            - name: API_URL
+              value: "http://127.0.0.1:8000"
+            - name: API_POLL_INITIAL_MS
+              value: "10000"
+            - name: API_POLL_MAX_MS
+              value: "5000"
+            - name: API_QUERY_TIMEOUT
+              value: "300"
+            - name: TRANSPILER_URL
+              value: "http://127.0.0.1:4000"
+            - name: TRANSPILER_BASE_PATH
+              value: "/transpiler"
+            - name: TRANSPILER_POLL_INTERVAL
+              value: "10"
+            - name: HTTP_HOST
+              value: "0.0.0.0"
+            - name: HTTP_PORT
+              value: "8080"
+            - name: HEIMDALL_AUTH_PATH
+              value: "/api/v1/authorize"
+            - name: HEIMDALL_TIMEOUT
+              value: "10"
+          envFrom:
+          {{ if .EnvironmentVarsFromSecret }}
+          {{- range $secName := .EnvironmentVarsFromSecret }}
+          - secretRef:
+              name: "{{$secName}}"
+          {{- end }}
+          {{- end }}
+          securityContext:
+            privileged: false
+          {{ if ne $type "workflow" }}
+          volumeMounts:
+          - name: workdir
+            mountPath: /etc/dataos/work
+          - name: dataos-secret-mount
+            mountPath: /etc/dataos/secret
+            readOnly: true
+          - name: tls
+            mountPath: /etc/dataos/certs
+            readOnly: true
+        {{- end }}
+  dataOsAddressJqFilters:
+    - .depots[]
+  secretJqFilters:
+    - .repo.secret
+  secretProjection:
+    type: propFile
+  includeAddresses:
+    inProjection: true
+    secretsInProjection: true
+  projection:
+    templateType: liquid
+    secrets:
+      - id: "{{stackSpec.repo.secret}}"
+        contextAlias: githubSecret
+      - id: engineering:vulcan-object-store-connection
+        contextAlias: objectStoreConnection
+      - id: engineering:vulcan-state-connection
+        contextAlias: stateConnection
+    projections:
+      envVars:
+        - key: GITSYNC_USERNAME
+          template: "{{ secrets['githubSecret'].GITSYNC_USERNAME | base64_decode }}"
+        - key: GITSYNC_PASSWORD
+          template: "{{ secrets['githubSecret'].GITSYNC_PASSWORD | base64_decode }}"
+      envVarsTemplate: |
+        VULCAN__TRANSPILER__BASE_URL: http://127.0.0.1:4000/transpiler
+        VULCAN__GRAPHQL__BASE_URL: http://127.0.0.1:3000
+        DATAOS_RUN_AS_APIKEY: {{ defaultProjections.dataOsRunAsApikey }}
+        DATAOS_RUN_AS_USER: {{ defaultProjections.dataOsRunAsUser }}
+        DEPOT_SERVICE_URL: {{ defaultProjections.depotServiceUrl }}
+        HEIMDALL_URL: {{ defaultProjections.heimdallUrl }}
+        SCS_SERVICE_URL: {{ defaultProjections.ecsServiceUrl }}
+        SCS_SERVICE_USE_TLS_CERTS: {{ defaultProjections.ecsServiceCertsEnabled }}
+        SCS_SERVICE_DISABLE_HOSTNAME_VERIFICATION: {{ defaultProjections.ecsServiceHostnameVerificationDisabled }}
+        DATAOS_TENANT_ID: {{ defaultProjections.dataOsTenantId }}
+        DATAOS_RESOURCE_ID: {{ defaultProjections.dataOsResourceId }}
+        DATAOS_RUN_ID: {{ defaultProjections.dataOsRunId }}
+        DATAOS_WORK_DIR: /etc/dataos/work
+        DATAOS_SECRET_DIR: /etc/dataos/secret
+        DATAOS_CONFIG_DIR: /etc/dataos/config
+        
+        VULCAN__ANALYTICS__ENABLED: true
+        VULCAN__ANALYTICS__BASE_URL: "https://{{ defaultProjections.dataOsFqdn }}/cloudevents/api/v1"
+        VULCAN__ANALYTICS__API_KEY: {{ defaultProjections.dataOsRunAsApikey }}
+        
+        VULCAN__OPENLINEAGE__ENABLED: true
+        VULCAN__OPENLINEAGE__URL: "https://{{ defaultProjections.dataOsFqdn }}/hera"
+        VULCAN__OPENLINEAGE__API_KEY: {{ defaultProjections.dataOsRunAsApikey }}
+        
+
+        {%- for projection in projectionSecrets %}
+    
+        {%- if projection.contextAlias == "objectStoreConnection" %}
+        {%- assign secret_detail = secrets[projection.contextAlias] %}
+    
+        {%- assign storage_format = secret_detail.STORAGE_FORMAT | base64_decode | strip_newlines %}
+        {%- if storage_format == "s3" %}
+        VULCAN__OBJECT_STORE__PROVIDER: {{ storage_format }}
+        VULCAN__OBJECT_STORE__BUCKET: {{ secret_detail.BUCKET | base64_decode }}
+        VULCAN__OBJECT_STORE__BASE_PATH: {{ secret_detail.BUCKET | base64_decode }}
+        VULCAN__OBJECT_STORE__COMPRESSION: snappy
+        VULCAN__OBJECT_STORE__PRESIGNED_URL_EXPIRY_MINS: "60"
+        VULCAN__OBJECT_STORE__CREDENTIALS__ENDPOINT_URL: {{ secret_detail.AWS_ENDPOINT | base64_decode }}
+        VULCAN__OBJECT_STORE__CREDENTIALS__REGION: {{ secret_detail.AWS_REGION | base64_decode }}
+    
+        VULCAN__OBJECT_STORE__CREDENTIALS__ACCESS_KEY_ID: {{ secret_detail.AWS_ACCESS_KEY | base64_decode }}
+        VULCAN__OBJECT_STORE__CREDENTIALS__SECRET_ACCESS_KEY: {{ secret_detail.AWS_SECRET_KEY | base64_decode }}
+    
+        {%- endif %}
+        {%- endif %}
+        {%- endfor %}
+
+      filesTemplate: |
+        {%- for projection in projectionSecrets %}
+        {%- if projection.contextAlias == "stateConnection" %}
+    
+        {%- assign secret_detail = secrets[projection.contextAlias] %}
+        - name: state_connection_config.yaml
+          contents: |
+            connection:
+              type: postgres
+              host: {{ secret_detail.HOST | base64_decode }}
+              port: {{ secret_detail.PORT | base64_decode }}
+              user: {{ secret_detail.USERNAME | base64_decode }}
+              password: {{ secret_detail.PASSWORD | base64_decode }}
+              database: {{ secret_detail.DATABASE | base64_decode }}
+        {%- endif %}
+        {%- endfor %}
+
+        {%- for projection in projectionDepots %}
+        {%- assign depot_details = depots[projection.name] %}
+        
+        {%- assign last_purpose = projection.secretPurposes.last %}
+        
+        {%- assign secret_name = projection.name %}
+        {%- assign secret_name = secret_name | append: ":" %}
+        {%- assign secret_name = secret_name | append: last_purpose %}
+        {%- assign secrets = depotsPurposesSecrets[secret_name] %}
+        
+        
+        {%- comment %} Postgres stack: Only handle PostgreSQL depots {% endcomment %}
+        {%- comment %} Handle JDBC depots - map subprotocol to actual type {% endcomment %}
+        {%- if depot_details.type == "jdbc" %}
+        {%- assign actual_type = depot_details.spec.subprotocol %}
+        {%- else %}
+        {%- assign actual_type = depot_details.type %}
+        {%- endif %}
+        
+        {%- if actual_type == "postgresql" %}
+        - name: {{ projection.name }}_config.yaml
+          contents: |
+            connection:
+              type: postgres
+              host: {{ depot_details.spec.host }}
+              port: {{ depot_details.spec.port | default: 5432 }}
+              user: {{ secrets.username | strip | replace: '\n', '' | base64_decode }}
+              password: {{ secrets.password | strip | replace: '\n', '' | base64_decode }}
+              database: {{ depot_details.spec.database }}
+              {%- if depot_details.spec.keepalives_idle %}
+              keepalives_idle: {{ depot_details.spec.keepalives_idle }}
+              {%- endif %}
+              {%- if depot_details.spec.connect_timeout %}
+              connect_timeout: {{ depot_details.spec.connect_timeout }}
+              {%- endif %}
+              {%- if depot_details.spec.sslmode %}
+              sslmode: {{ depot_details.spec.sslmode }}
+              {%- endif %}
+              {%- if depot_details.spec.application_name %}
+              application_name: {{ depot_details.spec.application_name }}
+              {%- endif %}
+              {%- if depot_details.spec.role %}
+              role: {{ depot_details.spec.role }}
+              {%- endif %}
+        {%- endif %}
+        {%- endfor %}
+  executionModes:
+    default:
+      image:
+        registry: docker.io
+        repository: tmdcio/vulcan-postgres
+        tag: 0.228.1.10
+        auth:
+          imagePullSecret: dcr
+ 

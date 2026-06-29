@@ -1,0 +1,52 @@
+version: v1alpha
+type: product-shreya
+name: tpch-universe-v7
+tags:
+  - spark
+  - seed
+  - iceberg
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: universe-compute
+  engine: spark
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - "--ref=shreya-examples"
+      - "--submodules=off"
+    baseDir: vulcan-examples/spark/tpch-sample1-spark-mars
+    secret: engineering:git-sync
+  depots:
+    - dataos://lhs3ny001depot?purpose=rw
+  workflow:
+    schedule:
+      crons:
+        - "*/30 * * * *"
+      endOn: "2027-01-01T00:00:00-00:00"
+      timezone: "UTC"
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+  api:
+    replicas: 5
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "600m"
+        memory: "1Gi"
+      limit:
+        cpu: "10000m"
+        memory: "10Gi"
+

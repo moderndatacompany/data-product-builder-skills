@@ -1,0 +1,806 @@
+test_customers:
+  model: '"postgres"."bronzev1"."customers"'
+  inputs:
+    '"postgres"."vulcan_demo"."customers"':
+    - customer_id: 1
+      region_id: 1
+      name: Bolmjuev
+      email: bolmjuev@example.com
+    - customer_id: 2
+      region_id: 1
+      name: Emfdlkvx
+      email: emfdlkvx@example.com
+    - customer_id: 3
+      region_id: 3
+      name: Qapkrixr
+      email: qapkrixr@example.com
+    - customer_id: 4
+      region_id: 1
+      name: Tsrncxgv
+      email: tsrncxgv@example.com
+    - customer_id: 5
+      region_id: 1
+      name: Crgsekcl
+      email: crgsekcl@example.com
+    - customer_id: 6
+      region_id: 3
+      name: Zsttxris
+      email: zsttxris@example.com
+    - customer_id: 7
+      region_id: 3
+      name: Kjdhbmyo
+      email: kjdhbmyo@example.com
+    - customer_id: 8
+      region_id: 5
+      name: Lqncqpud
+      email: lqncqpud@example.com
+    - customer_id: 9
+      region_id: 5
+      name: Tqiuvxnm
+      email: tqiuvxnm@example.com
+    - customer_id: 10
+      region_id: 5
+      name: Cmweszhz
+      email: cmweszhz@example.com
+    - customer_id: 11
+      region_id: 1
+      name: Shijfuey
+      email: shijfuey@example.com
+    - customer_id: 12
+      region_id: 3
+      name: Ysaljbnh
+      email: ysaljbnh@example.com
+    - customer_id: 13
+      region_id: 1
+      name: Piallyna
+      email: piallyna@example.com
+    - customer_id: 14
+      region_id: 1
+      name: Tphfhnco
+      email: tphfhnco@example.com
+    - customer_id: 15
+      region_id: 5
+      name: Vfzfszpm
+      email: vfzfszpm@example.com
+    - customer_id: 16
+      region_id: 2
+      name: Txezdnng
+      email: txezdnng@example.com
+    - customer_id: 17
+      region_id: 4
+      name: Xibfywnj
+      email: xibfywnj@example.com
+    - customer_id: 18
+      region_id: 3
+      name: Uituxmdb
+      email: uituxmdb@example.com
+    - customer_id: 19
+      region_id: 5
+      name: Lldglvsd
+      email: lldglvsd@example.com
+    - customer_id: 20
+      region_id: 2
+      name: Ozcltdmy
+      email: ozcltdmy@example.com
+    - customer_id: 21
+      region_id: 4
+      name: Jfwwyljz
+      email: jfwwyljz@example.com
+    - customer_id: 22
+      region_id: 1
+      name: Dlpfjbhj
+      email: dlpfjbhj@example.com
+    - customer_id: 23
+      region_id: 4
+      name: Mwxscczr
+      email: mwxscczr@example.com
+    - customer_id: 24
+      region_id: 1
+      name: Wsizludt
+      email: wsizludt@example.com
+    - customer_id: 25
+      region_id: 4
+      name: Noxvxzcl
+      email: noxvxzcl@example.com
+    - customer_id: 26
+      region_id: 2
+      name: Jldmdqcy
+      email: jldmdqcy@example.com
+    - customer_id: 27
+      region_id: 5
+      name: Ixejejmg
+      email: ixejejmg@example.com
+    - customer_id: 28
+      region_id: 5
+      name: Megvebwk
+      email: megvebwk@example.com
+    - customer_id: 29
+      region_id: 3
+      name: Muipqndx
+      email: muipqndx@example.com
+    - customer_id: 30
+      region_id: 5
+      name: Zdlnwttt
+      email: zdlnwttt@example.com
+    - customer_id: 31
+      region_id: 2
+      name: Wcpzpbic
+      email: wcpzpbic@example.com
+    - customer_id: 32
+      region_id: 1
+      name: Wggfcofl
+      email: wggfcofl@example.com
+    - customer_id: 33
+      region_id: 2
+      name: Jsanvcgr
+      email: jsanvcgr@example.com
+    - customer_id: 34
+      region_id: 1
+      name: Aohnmcwa
+      email: aohnmcwa@example.com
+    - customer_id: 35
+      region_id: 1
+      name: Xjhbtcwc
+      email: xjhbtcwc@example.com
+    - customer_id: 36
+      region_id: 3
+      name: Upsukmfo
+      email: upsukmfo@example.com
+    - customer_id: 37
+      region_id: 4
+      name: Ymwmipjv
+      email: ymwmipjv@example.com
+    - customer_id: 38
+      region_id: 2
+      name: Mrwpsqno
+      email: mrwpsqno@example.com
+    - customer_id: 39
+      region_id: 1
+      name: Tcykvsqt
+      email: tcykvsqt@example.com
+    - customer_id: 40
+      region_id: 2
+      name: Bkrsyohu
+      email: bkrsyohu@example.com
+    - customer_id: 41
+      region_id: 5
+      name: Rbtnezbf
+      email: rbtnezbf@example.com
+    - customer_id: 42
+      region_id: 3
+      name: Lqfaudnk
+      email: lqfaudnk@example.com
+    - customer_id: 43
+      region_id: 1
+      name: Bpjwmkwx
+      email: bpjwmkwx@example.com
+    - customer_id: 44
+      region_id: 3
+      name: Giguaiqk
+      email: giguaiqk@example.com
+    - customer_id: 45
+      region_id: 5
+      name: Gvwjugpc
+      email: gvwjugpc@example.com
+    - customer_id: 46
+      region_id: 1
+      name: Pkofqwja
+      email: pkofqwja@example.com
+    - customer_id: 47
+      region_id: 2
+      name: Ioigexmq
+      email: ioigexmq@example.com
+    - customer_id: 48
+      region_id: 2
+      name: Hczfnxud
+      email: hczfnxud@example.com
+    - customer_id: 49
+      region_id: 4
+      name: Zmianofw
+      email: zmianofw@example.com
+    - customer_id: 50
+      region_id: 2
+      name: Pkycvggy
+      email: pkycvggy@example.com
+    - customer_id: 51
+      region_id: 5
+      name: Zexuflar
+      email: zexuflar@example.com
+    - customer_id: 52
+      region_id: 5
+      name: Xisxnroo
+      email: xisxnroo@example.com
+    - customer_id: 53
+      region_id: 4
+      name: Goeooqch
+      email: goeooqch@example.com
+    - customer_id: 54
+      region_id: 2
+      name: Thlvrydr
+      email: thlvrydr@example.com
+    - customer_id: 55
+      region_id: 4
+      name: Veksntas
+      email: veksntas@example.com
+    - customer_id: 56
+      region_id: 4
+      name: Sxvmcfll
+      email: sxvmcfll@example.com
+    - customer_id: 57
+      region_id: 4
+      name: Zuiplrvy
+      email: zuiplrvy@example.com
+    - customer_id: 58
+      region_id: 5
+      name: Budbhhyc
+      email: budbhhyc@example.com
+    - customer_id: 59
+      region_id: 4
+      name: Rxrtoxvr
+      email: rxrtoxvr@example.com
+    - customer_id: 60
+      region_id: 4
+      name: Bczshohn
+      email: bczshohn@example.com
+    - customer_id: 61
+      region_id: 2
+      name: Kbhgidlk
+      email: kbhgidlk@example.com
+    - customer_id: 62
+      region_id: 3
+      name: Ifmfqyfb
+      email: ifmfqyfb@example.com
+    - customer_id: 63
+      region_id: 3
+      name: Dvtwkerm
+      email: dvtwkerm@example.com
+    - customer_id: 64
+      region_id: 3
+      name: Sfgzoswt
+      email: sfgzoswt@example.com
+    - customer_id: 65
+      region_id: 5
+      name: Havzwsux
+      email: havzwsux@example.com
+    - customer_id: 66
+      region_id: 2
+      name: Wmyoqbzw
+      email: wmyoqbzw@example.com
+    - customer_id: 67
+      region_id: 5
+      name: Nsretmyf
+      email: nsretmyf@example.com
+    - customer_id: 68
+      region_id: 4
+      name: Rzqzsnof
+      email: rzqzsnof@example.com
+    - customer_id: 69
+      region_id: 3
+      name: Cajmvcmy
+      email: cajmvcmy@example.com
+    - customer_id: 70
+      region_id: 4
+      name: Xapvmitc
+      email: xapvmitc@example.com
+    - customer_id: 71
+      region_id: 3
+      name: Wmrkongk
+      email: wmrkongk@example.com
+    - customer_id: 72
+      region_id: 1
+      name: Mxjjmoen
+      email: mxjjmoen@example.com
+    - customer_id: 73
+      region_id: 5
+      name: Ofkljabo
+      email: ofkljabo@example.com
+    - customer_id: 74
+      region_id: 1
+      name: Ckgtztdy
+      email: ckgtztdy@example.com
+    - customer_id: 75
+      region_id: 4
+      name: Rynsfdze
+      email: rynsfdze@example.com
+    - customer_id: 76
+      region_id: 1
+      name: Hqxemdve
+      email: hqxemdve@example.com
+    - customer_id: 77
+      region_id: 5
+      name: Lbxxszpg
+      email: lbxxszpg@example.com
+    - customer_id: 78
+      region_id: 5
+      name: Xfngnemc
+      email: xfngnemc@example.com
+    - customer_id: 79
+      region_id: 2
+      name: Axepmkkx
+      email: axepmkkx@example.com
+    - customer_id: 80
+      region_id: 2
+      name: Wogiwwch
+      email: wogiwwch@example.com
+    - customer_id: 81
+      region_id: 3
+      name: Qdipmdpg
+      email: qdipmdpg@example.com
+    - customer_id: 82
+      region_id: 3
+      name: Kxazecwq
+      email: kxazecwq@example.com
+    - customer_id: 83
+      region_id: 3
+      name: Bljsebnq
+      email: bljsebnq@example.com
+    - customer_id: 84
+      region_id: 5
+      name: Cnyhvjeh
+      email: cnyhvjeh@example.com
+    - customer_id: 85
+      region_id: 4
+      name: Yyvqfivz
+      email: yyvqfivz@example.com
+    - customer_id: 86
+      region_id: 4
+      name: Qcxqqyva
+      email: qcxqqyva@example.com
+    - customer_id: 87
+      region_id: 1
+      name: Icvjsngn
+      email: icvjsngn@example.com
+    - customer_id: 88
+      region_id: 2
+      name: Ngotzbgp
+      email: ngotzbgp@example.com
+    - customer_id: 89
+      region_id: 2
+      name: Qavlrfxh
+      email: qavlrfxh@example.com
+    - customer_id: 90
+      region_id: 2
+      name: Zlaorymc
+      email: zlaorymc@example.com
+    - customer_id: 91
+      region_id: 4
+      name: Jfmhdosr
+      email: jfmhdosr@example.com
+    - customer_id: 92
+      region_id: 5
+      name: Nalreisx
+      email: nalreisx@example.com
+    - customer_id: 93
+      region_id: 4
+      name: Rccxqjkd
+      email: rccxqjkd@example.com
+    - customer_id: 94
+      region_id: 2
+      name: Svqyvtzp
+      email: svqyvtzp@example.com
+    - customer_id: 95
+      region_id: 2
+      name: Zbaettwb
+      email: zbaettwb@example.com
+    - customer_id: 96
+      region_id: 4
+      name: Ahtydong
+      email: ahtydong@example.com
+    - customer_id: 97
+      region_id: 4
+      name: Hssstqln
+      email: hssstqln@example.com
+    - customer_id: 98
+      region_id: 5
+      name: Bdgvzmwf
+      email: bdgvzmwf@example.com
+    - customer_id: 99
+      region_id: 1
+      name: Xkucppth
+      email: xkucppth@example.com
+    - customer_id: 100
+      region_id: 5
+      name: Vjjjftjz
+      email: vjjjftjz@example.com
+  outputs:
+    query:
+    - customer_id: 1
+      region_id: 1
+      name: Bolmjuev
+      email: bolmjuev@example.com
+    - customer_id: 2
+      region_id: 1
+      name: Emfdlkvx
+      email: emfdlkvx@example.com
+    - customer_id: 3
+      region_id: 3
+      name: Qapkrixr
+      email: qapkrixr@example.com
+    - customer_id: 4
+      region_id: 1
+      name: Tsrncxgv
+      email: tsrncxgv@example.com
+    - customer_id: 5
+      region_id: 1
+      name: Crgsekcl
+      email: crgsekcl@example.com
+    - customer_id: 6
+      region_id: 3
+      name: Zsttxris
+      email: zsttxris@example.com
+    - customer_id: 7
+      region_id: 3
+      name: Kjdhbmyo
+      email: kjdhbmyo@example.com
+    - customer_id: 8
+      region_id: 5
+      name: Lqncqpud
+      email: lqncqpud@example.com
+    - customer_id: 9
+      region_id: 5
+      name: Tqiuvxnm
+      email: tqiuvxnm@example.com
+    - customer_id: 10
+      region_id: 5
+      name: Cmweszhz
+      email: cmweszhz@example.com
+    - customer_id: 11
+      region_id: 1
+      name: Shijfuey
+      email: shijfuey@example.com
+    - customer_id: 12
+      region_id: 3
+      name: Ysaljbnh
+      email: ysaljbnh@example.com
+    - customer_id: 13
+      region_id: 1
+      name: Piallyna
+      email: piallyna@example.com
+    - customer_id: 14
+      region_id: 1
+      name: Tphfhnco
+      email: tphfhnco@example.com
+    - customer_id: 15
+      region_id: 5
+      name: Vfzfszpm
+      email: vfzfszpm@example.com
+    - customer_id: 16
+      region_id: 2
+      name: Txezdnng
+      email: txezdnng@example.com
+    - customer_id: 17
+      region_id: 4
+      name: Xibfywnj
+      email: xibfywnj@example.com
+    - customer_id: 18
+      region_id: 3
+      name: Uituxmdb
+      email: uituxmdb@example.com
+    - customer_id: 19
+      region_id: 5
+      name: Lldglvsd
+      email: lldglvsd@example.com
+    - customer_id: 20
+      region_id: 2
+      name: Ozcltdmy
+      email: ozcltdmy@example.com
+    - customer_id: 21
+      region_id: 4
+      name: Jfwwyljz
+      email: jfwwyljz@example.com
+    - customer_id: 22
+      region_id: 1
+      name: Dlpfjbhj
+      email: dlpfjbhj@example.com
+    - customer_id: 23
+      region_id: 4
+      name: Mwxscczr
+      email: mwxscczr@example.com
+    - customer_id: 24
+      region_id: 1
+      name: Wsizludt
+      email: wsizludt@example.com
+    - customer_id: 25
+      region_id: 4
+      name: Noxvxzcl
+      email: noxvxzcl@example.com
+    - customer_id: 26
+      region_id: 2
+      name: Jldmdqcy
+      email: jldmdqcy@example.com
+    - customer_id: 27
+      region_id: 5
+      name: Ixejejmg
+      email: ixejejmg@example.com
+    - customer_id: 28
+      region_id: 5
+      name: Megvebwk
+      email: megvebwk@example.com
+    - customer_id: 29
+      region_id: 3
+      name: Muipqndx
+      email: muipqndx@example.com
+    - customer_id: 30
+      region_id: 5
+      name: Zdlnwttt
+      email: zdlnwttt@example.com
+    - customer_id: 31
+      region_id: 2
+      name: Wcpzpbic
+      email: wcpzpbic@example.com
+    - customer_id: 32
+      region_id: 1
+      name: Wggfcofl
+      email: wggfcofl@example.com
+    - customer_id: 33
+      region_id: 2
+      name: Jsanvcgr
+      email: jsanvcgr@example.com
+    - customer_id: 34
+      region_id: 1
+      name: Aohnmcwa
+      email: aohnmcwa@example.com
+    - customer_id: 35
+      region_id: 1
+      name: Xjhbtcwc
+      email: xjhbtcwc@example.com
+    - customer_id: 36
+      region_id: 3
+      name: Upsukmfo
+      email: upsukmfo@example.com
+    - customer_id: 37
+      region_id: 4
+      name: Ymwmipjv
+      email: ymwmipjv@example.com
+    - customer_id: 38
+      region_id: 2
+      name: Mrwpsqno
+      email: mrwpsqno@example.com
+    - customer_id: 39
+      region_id: 1
+      name: Tcykvsqt
+      email: tcykvsqt@example.com
+    - customer_id: 40
+      region_id: 2
+      name: Bkrsyohu
+      email: bkrsyohu@example.com
+    - customer_id: 41
+      region_id: 5
+      name: Rbtnezbf
+      email: rbtnezbf@example.com
+    - customer_id: 42
+      region_id: 3
+      name: Lqfaudnk
+      email: lqfaudnk@example.com
+    - customer_id: 43
+      region_id: 1
+      name: Bpjwmkwx
+      email: bpjwmkwx@example.com
+    - customer_id: 44
+      region_id: 3
+      name: Giguaiqk
+      email: giguaiqk@example.com
+    - customer_id: 45
+      region_id: 5
+      name: Gvwjugpc
+      email: gvwjugpc@example.com
+    - customer_id: 46
+      region_id: 1
+      name: Pkofqwja
+      email: pkofqwja@example.com
+    - customer_id: 47
+      region_id: 2
+      name: Ioigexmq
+      email: ioigexmq@example.com
+    - customer_id: 48
+      region_id: 2
+      name: Hczfnxud
+      email: hczfnxud@example.com
+    - customer_id: 49
+      region_id: 4
+      name: Zmianofw
+      email: zmianofw@example.com
+    - customer_id: 50
+      region_id: 2
+      name: Pkycvggy
+      email: pkycvggy@example.com
+    - customer_id: 51
+      region_id: 5
+      name: Zexuflar
+      email: zexuflar@example.com
+    - customer_id: 52
+      region_id: 5
+      name: Xisxnroo
+      email: xisxnroo@example.com
+    - customer_id: 53
+      region_id: 4
+      name: Goeooqch
+      email: goeooqch@example.com
+    - customer_id: 54
+      region_id: 2
+      name: Thlvrydr
+      email: thlvrydr@example.com
+    - customer_id: 55
+      region_id: 4
+      name: Veksntas
+      email: veksntas@example.com
+    - customer_id: 56
+      region_id: 4
+      name: Sxvmcfll
+      email: sxvmcfll@example.com
+    - customer_id: 57
+      region_id: 4
+      name: Zuiplrvy
+      email: zuiplrvy@example.com
+    - customer_id: 58
+      region_id: 5
+      name: Budbhhyc
+      email: budbhhyc@example.com
+    - customer_id: 59
+      region_id: 4
+      name: Rxrtoxvr
+      email: rxrtoxvr@example.com
+    - customer_id: 60
+      region_id: 4
+      name: Bczshohn
+      email: bczshohn@example.com
+    - customer_id: 61
+      region_id: 2
+      name: Kbhgidlk
+      email: kbhgidlk@example.com
+    - customer_id: 62
+      region_id: 3
+      name: Ifmfqyfb
+      email: ifmfqyfb@example.com
+    - customer_id: 63
+      region_id: 3
+      name: Dvtwkerm
+      email: dvtwkerm@example.com
+    - customer_id: 64
+      region_id: 3
+      name: Sfgzoswt
+      email: sfgzoswt@example.com
+    - customer_id: 65
+      region_id: 5
+      name: Havzwsux
+      email: havzwsux@example.com
+    - customer_id: 66
+      region_id: 2
+      name: Wmyoqbzw
+      email: wmyoqbzw@example.com
+    - customer_id: 67
+      region_id: 5
+      name: Nsretmyf
+      email: nsretmyf@example.com
+    - customer_id: 68
+      region_id: 4
+      name: Rzqzsnof
+      email: rzqzsnof@example.com
+    - customer_id: 69
+      region_id: 3
+      name: Cajmvcmy
+      email: cajmvcmy@example.com
+    - customer_id: 70
+      region_id: 4
+      name: Xapvmitc
+      email: xapvmitc@example.com
+    - customer_id: 71
+      region_id: 3
+      name: Wmrkongk
+      email: wmrkongk@example.com
+    - customer_id: 72
+      region_id: 1
+      name: Mxjjmoen
+      email: mxjjmoen@example.com
+    - customer_id: 73
+      region_id: 5
+      name: Ofkljabo
+      email: ofkljabo@example.com
+    - customer_id: 74
+      region_id: 1
+      name: Ckgtztdy
+      email: ckgtztdy@example.com
+    - customer_id: 75
+      region_id: 4
+      name: Rynsfdze
+      email: rynsfdze@example.com
+    - customer_id: 76
+      region_id: 1
+      name: Hqxemdve
+      email: hqxemdve@example.com
+    - customer_id: 77
+      region_id: 5
+      name: Lbxxszpg
+      email: lbxxszpg@example.com
+    - customer_id: 78
+      region_id: 5
+      name: Xfngnemc
+      email: xfngnemc@example.com
+    - customer_id: 79
+      region_id: 2
+      name: Axepmkkx
+      email: axepmkkx@example.com
+    - customer_id: 80
+      region_id: 2
+      name: Wogiwwch
+      email: wogiwwch@example.com
+    - customer_id: 81
+      region_id: 3
+      name: Qdipmdpg
+      email: qdipmdpg@example.com
+    - customer_id: 82
+      region_id: 3
+      name: Kxazecwq
+      email: kxazecwq@example.com
+    - customer_id: 83
+      region_id: 3
+      name: Bljsebnq
+      email: bljsebnq@example.com
+    - customer_id: 84
+      region_id: 5
+      name: Cnyhvjeh
+      email: cnyhvjeh@example.com
+    - customer_id: 85
+      region_id: 4
+      name: Yyvqfivz
+      email: yyvqfivz@example.com
+    - customer_id: 86
+      region_id: 4
+      name: Qcxqqyva
+      email: qcxqqyva@example.com
+    - customer_id: 87
+      region_id: 1
+      name: Icvjsngn
+      email: icvjsngn@example.com
+    - customer_id: 88
+      region_id: 2
+      name: Ngotzbgp
+      email: ngotzbgp@example.com
+    - customer_id: 89
+      region_id: 2
+      name: Qavlrfxh
+      email: qavlrfxh@example.com
+    - customer_id: 90
+      region_id: 2
+      name: Zlaorymc
+      email: zlaorymc@example.com
+    - customer_id: 91
+      region_id: 4
+      name: Jfmhdosr
+      email: jfmhdosr@example.com
+    - customer_id: 92
+      region_id: 5
+      name: Nalreisx
+      email: nalreisx@example.com
+    - customer_id: 93
+      region_id: 4
+      name: Rccxqjkd
+      email: rccxqjkd@example.com
+    - customer_id: 94
+      region_id: 2
+      name: Svqyvtzp
+      email: svqyvtzp@example.com
+    - customer_id: 95
+      region_id: 2
+      name: Zbaettwb
+      email: zbaettwb@example.com
+    - customer_id: 96
+      region_id: 4
+      name: Ahtydong
+      email: ahtydong@example.com
+    - customer_id: 97
+      region_id: 4
+      name: Hssstqln
+      email: hssstqln@example.com
+    - customer_id: 98
+      region_id: 5
+      name: Bdgvzmwf
+      email: bdgvzmwf@example.com
+    - customer_id: 99
+      region_id: 1
+      name: Xkucppth
+      email: xkucppth@example.com
+    - customer_id: 100
+      region_id: 5
+      name: Vjjjftjz
+      email: vjjjftjz@example.com

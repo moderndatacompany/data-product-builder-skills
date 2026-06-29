@@ -1,0 +1,142 @@
+# Converted from legacy: semantics/returns.yml
+kind: semantic
+name: returns
+depends_on: sales.returns
+ai_context:
+  instructions: >
+    Use this semantic model for questions about returns. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "returns"
+  examples:
+    - "Show returns trends over time."
+    - "Break down returns by key dimensions."
+
+dimensions:
+- return_id
+- order_id
+- order_item_id
+- return_date
+- return_reason
+- return_status
+- refund_amount
+measures:
+- name: total_returns
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total returns. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total returns"
+      - "total_returns"
+      - "total"
+      - "returns"
+    examples:
+      - "What is total returns by month?"
+      - "Compare total returns across key segments."
+  type: count_distinct
+  expression: '{returns.return_id}'
+  tags:
+  - metric
+  terms:
+  - metric.total_returns
+- name: total_refund_amount
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total refund amount. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total refund amount"
+      - "total_refund_amount"
+      - "total"
+      - "refund"
+    examples:
+      - "What is total refund amount by month?"
+      - "Compare total refund amount across key segments."
+  type: sum
+  expression: '{returns.refund_amount}'
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_refund_amount
+  - finance.gross_sales
+- name: avg_refund_amount
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg refund amount. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg refund amount"
+      - "avg_refund_amount"
+      - "avg"
+      - "refund"
+    examples:
+      - "What is avg refund amount by month?"
+      - "Compare avg refund amount across key segments."
+  type: avg
+  expression: '{returns.refund_amount}'
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_refund_amount
+  - metric.aggregate
+segments:
+- name: cancelled_order_returns
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the cancelled order returns subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "cancelled order returns"
+      - "cancelled_order_returns"
+      - "cancelled"
+      - "order"
+    examples:
+      - "Show revenue for cancelled order returns."
+      - "How many records are in cancelled order returns?"
+  expression: '{returns.return_reason} = ''CancelledOrder'''
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.cancelled_order_returns
+  - metric.order_count
+- name: defective_returns
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the defective returns subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "defective returns"
+      - "defective_returns"
+      - "defective"
+      - "returns"
+    examples:
+      - "Show revenue for defective returns."
+      - "How many records are in defective returns?"
+  expression: '{returns.return_reason} = ''Defective'''
+  tags:
+  - metric
+  terms:
+  - metric.defective_returns
+joins:
+- name: orders
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from orders. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "orders"
+    examples:
+      - "Analyze this model with orders attributes."
+      - "Break measures down by orders."
+  type: many_to_one
+  expression: '{returns.order_id} = {orders.order_id}'

@@ -1,0 +1,3 @@
+kind: metric
+name: total_surveys
+measure: survey_metrics.total_surveys

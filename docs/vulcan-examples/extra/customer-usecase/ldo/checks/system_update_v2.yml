@@ -1,0 +1,141 @@
+# checks/system_update_v2.yml
+# Quality checks for system updates
+# Reference: https://tmdc-io.github.io/vulcan-book/components/checks/checks/
+
+checks:
+  lenovo.ldo.system_update_v2:
+    # Completeness: Ensure system update data exists
+    completeness:
+      - row_count > 0:
+          name: system_update_records_exist
+          attributes:
+            description: "At least one system update record should exist"
+            #severity: error
+
+      - missing_count(_ID) = 0:
+          name: no_missing_id
+          attributes:
+            description: "All records must have an _id"
+            #severity: error
+
+      - missing_count(PACKAGE_ID) = 0:
+          name: no_missing_package_id
+          attributes:
+            description: "All system updates must have a package_id"
+            #severity: error
+
+      - missing_count(ORG_ID) = 0:
+          name: no_missing_org_id
+          attributes:
+            description: "All system updates must belong to an organization"
+            #severity: error
+
+    # Validity: Check system update data quality
+    validity:
+      - failed rows:
+          name: invalid_package_severity
+          fail query: |
+            SELECT _ID, PACKAGE_ID, PACKAGE_SEVERITY, PACKAGE_NAME
+            FROM lenovo.ldo.system_update_v2
+            WHERE PACKAGE_SEVERITY NOT IN ('OPTIONAL', 'RECOMMENDED', 'CRITICAL')
+              AND PACKAGE_SEVERITY IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Package severity must be OPTIONAL, RECOMMENDED, or CRITICAL"
+            #severity: error
+
+      - failed rows:
+          name: invalid_package_type
+          fail query: |
+            SELECT _ID, PACKAGE_ID, PACKAGE_TYPE, PACKAGE_NAME
+            FROM lenovo.ldo.system_update_v2
+            WHERE PACKAGE_TYPE NOT IN ('Bios', 'Driver', 'Firmware', 'Application', 'Other')
+              AND PACKAGE_TYPE IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Package type must be Bios, Driver, Firmware, Application, or Other"
+            #severity: error
+
+      - failed rows:
+          name: invalid_reboot_type
+          fail query: |
+            SELECT _ID, PACKAGE_ID, PACKAGE_REBOOT_TYPE, PACKAGE_NAME
+            FROM lenovo.ldo.system_update_v2
+            WHERE PACKAGE_REBOOT_TYPE NOT IN ('RebootRequested', 'PowerOffForced', 'RebootDelayed', 'NoRebootRequired', 'RebootForced')
+              AND PACKAGE_REBOOT_TYPE IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Reboot type must be one of the valid values"
+            #severity: error
+
+      - failed rows:
+          name: invalid_test_state
+          fail query: |
+            SELECT _ID, PACKAGE_ID, TEST_STATE, PACKAGE_NAME
+            FROM lenovo.ldo.system_update_v2
+            WHERE TEST_STATE NOT IN ('NOT_TESTED', 'TESTED', 'DEPLOY_ALLOWED', 'DEPLOY_DENIED', 'TESTING')
+              AND TEST_STATE IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Test state must be one of the valid values"
+            #severity: warning
+
+      - failed rows:
+          name: future_release_date
+          fail query: |
+            SELECT _ID, PACKAGE_ID, PACKAGE_RELEASE_DATE, PACKAGE_NAME
+            FROM lenovo.ldo.system_update_v2
+            WHERE PACKAGE_RELEASE_DATE > CURRENT_TIMESTAMP
+              AND __DELETED = 'False'
+          samples limit: 5
+          attributes:
+            description: "Package release date cannot be in the future"
+            #severity: warning
+
+      - failed rows:
+          name: future_last_modified_date
+          fail query: |
+            SELECT _ID, PACKAGE_ID, LAST_MODIFIED_DATE, PACKAGE_NAME
+            FROM lenovo.ldo.system_update_v2
+            WHERE LAST_MODIFIED_DATE > CURRENT_TIMESTAMP
+              AND __DELETED = 'False'
+          samples limit: 5
+          attributes:
+            description: "Last modified date cannot be in the future"
+            #severity: error
+
+    # Consistency: Validate system update data
+    consistency:
+      - failed rows:
+          name: duplicate_package_ids_per_org
+          fail query: |
+            SELECT 
+              PACKAGE_ID,
+              ORG_ID,
+              COUNT(*) as RECORD_COUNT
+            FROM lenovo.ldo.system_update_v2
+            WHERE __DELETED = 'False'
+            GROUP BY PACKAGE_ID, ORG_ID
+            HAVING COUNT(*) > 1
+          samples limit: 10
+          attributes:
+            description: "Each package_id should be unique per organization among active records"
+            #severity: error
+
+      - failed rows:
+          name: critical_package_not_tested
+          fail query: |
+            SELECT _ID, PACKAGE_ID, PACKAGE_SEVERITY, TEST_STATE, PACKAGE_NAME
+            FROM lenovo.ldo.system_update_v2
+            WHERE PACKAGE_SEVERITY = 'CRITICAL'
+              AND TEST_STATE IN ('NOT_TESTED', 'TESTING')
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Critical packages should be tested before deployment"
+            #severity: warning
+

@@ -1,0 +1,50 @@
+models:
+  test_db.vulcan_test_project.orders:
+    alias: orders
+
+    measures:
+      total_orders:
+        type: count
+        expression: "{orders.ORDERKEY}"
+        description: "Total number of orders"
+        tags: [tpch, orders, count]
+
+      total_sales:
+        type: sum
+        expression: "{orders.TOTALPRICE}"
+        description: "Total order value (sum of ORDERS.totalprice)"
+        tags: [tpch, orders, revenue]
+
+      avg_order_value:
+        type: avg
+        expression: "{orders.TOTALPRICE}"
+        description: "Average order value"
+        tags: [tpch, orders, revenue]
+
+    joins:
+      customers:
+        type: many_to_one
+        expression: "{orders.CUSTKEY} = {customers.CUSTKEY}"
+
+    dimensions:
+      includes:
+        - ORDERKEY
+        - CUSTKEY
+        - ORDERSTATUS
+        - ORDERDATE
+        - ORDERPRIORITY
+        - CLERK
+        - SHIPPRIORITY
+        - COMMENT
+
+      enhancements:
+        - name: ORDERDATE
+          granularities:
+            - name: daily
+              interval: "1 day"
+              description: "Daily order date grain"
+            - name: monthly
+              interval: "1 month"
+              description: "Monthly order date grain"
+
+

@@ -1,0 +1,9 @@
+kind: metric
+name: total_products
+measure: products.total_products
+ts: products.release_date
+granularity: month
+dimensions:
+  - products.category
+  - products.brand
+description: Total number of products

@@ -1,0 +1,4 @@
+limitations:
+  - Snowflake cloud warehouse as data platform (lenovo.ldo schema)
+  - CDC event processing for real-time state reconstruction
+  - Timestamp conversions from Unix milliseconds to Snowflake timestamps

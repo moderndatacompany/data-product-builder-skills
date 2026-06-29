@@ -1,0 +1,3 @@
+kind: metric
+name: total_expired_license_devices
+measure: consumed_licenses.total_expired_license_devices

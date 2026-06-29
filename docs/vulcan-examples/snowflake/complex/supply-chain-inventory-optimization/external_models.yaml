@@ -1,0 +1,31 @@
+- name: '"ERP_PLATFORM"."BRONZE"."PURCHASE_ORDER_HISTORY"'
+  columns:
+    po_id: VARCHAR(50)
+    po_number: VARCHAR(50)
+    supplier_id: VARCHAR(20)
+    po_date: DATE
+    material_number: VARCHAR(50)
+    order_quantity: INTEGER
+    unit_price_usd: DECIMAL(10, 2)
+    po_value_usd: DECIMAL(15, 2)
+    promised_delivery_date: DATE
+    actual_delivery_date: DATE
+    po_status: VARCHAR(20)
+    plant_code: VARCHAR(10)
+
+- name: '"ERP_PLATFORM"."BRONZE"."CURRENT_INVENTORY"'
+  columns:
+    inventory_key: VARCHAR(100)
+    plant_code: VARCHAR(10)
+    storage_location: VARCHAR(20)
+    material_number: VARCHAR(50)
+    material_description: VARCHAR(200)
+    quantity_on_hand: INTEGER
+    quantity_reserved: INTEGER
+    quantity_available: INTEGER
+    unit_cost_usd: DECIMAL(10, 2)
+    inventory_value_usd: DECIMAL(15, 2)
+    last_movement_date: DATE
+    snapshot_date: DATE
+
+

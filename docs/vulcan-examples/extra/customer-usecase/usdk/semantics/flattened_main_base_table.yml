@@ -1,0 +1,56 @@
+models:
+  LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE:
+    alias: events
+
+    dimensions:
+      includes:
+        - EVENT_DATE
+        - DEVICE_TYPE
+        - MANUFACTURER
+        - MODEL
+        - GEO
+        - ACTION
+        - PRODUCT_ID
+        - COMPONENT_ID
+    joins:
+      geo_mapping:
+        type: many_to_one
+        expression: "{events.GEO} = {geo_mapping.COUNTRY_CODE}"
+      
+      model_brand_mapping:
+        type: many_to_one
+        expression: "{events.MODEL} = {model_brand_mapping.MTM}"
+      
+      os_family:
+        type: many_to_one
+        expression: "{events.OS_VERSION} = {os_family.OS_VERSION}"
+
+    measures:
+      total_devices:
+        type: count_distinct
+        expression: "{events.ANONYMOUS_DEVICE_IDV1}"
+        description: "Total number of unique devices"
+
+      engaged_devices:
+        type: count_distinct
+        expression: "{events.ANONYMOUS_DEVICE_IDV1}"
+        filters:
+          - "{events.ACTION} = 'Engaged Activity'"
+        description: "Number of unique devices with engaged activity"
+
+      avg_hardware_age:
+        type: avg
+        expression: "{events.HW_IN_USE_YEARS}"
+        description: "Average age of hardware in years"
+
+    segments:
+      last_7_days:
+        expression: |
+          {events.ROLLUP_TYPE} = 'last_7_days'
+        description: "Events from the last 7 days"
+
+      engaged_activity:
+        expression: |
+          {events.ACTION} = 'Engaged Activity'
+        description: "Filter for engaged user activity"
+

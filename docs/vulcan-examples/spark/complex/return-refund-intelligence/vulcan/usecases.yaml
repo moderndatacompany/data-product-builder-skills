@@ -1,0 +1,6 @@
+use_cases:
+  - Daily city-level refund KPI monitoring
+  - Refund reason and issue-group root-cause analysis
+  - Customer tier refund experience tracking
+  - Product category refund leakage monitoring
+  - Semantic-ready Gold layer for finance, operations, and support analytics

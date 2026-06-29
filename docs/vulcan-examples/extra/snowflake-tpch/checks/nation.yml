@@ -1,0 +1,36 @@
+checks:
+  test_db.vulcan_test_project.nation:
+    completeness:
+      - missing_count(nationkey) = 0:
+          name: nationkey_not_null
+          attributes:
+            description: "NATION.NATIONKEY must be non-null"
+      - missing_count(regionkey) = 0:
+          name: regionkey_not_null
+          attributes:
+            description: "NATION.REGIONKEY must be non-null"
+      - row_count > 0:
+          name: nation_has_rows
+          attributes:
+            description: "NATION should not be empty"
+
+    uniqueness:
+      - duplicate_count(nationkey) = 0:
+          name: nationkey_unique
+          attributes:
+            description: "NATION.NATIONKEY must be unique"
+
+    validity:
+      - failed rows:
+          name: nation_region_fk_exists
+          fail query: |
+            SELECT n.*
+            FROM test_db.vulcan_test_project.nation n
+            LEFT JOIN test_db.vulcan_test_project.region r
+              ON n.regionkey = r.regionkey
+            WHERE r.regionkey IS NULL
+          samples limit: 10
+          attributes:
+            description: "Every NATION.REGIONKEY must exist in REGION.REGIONKEY"
+
+

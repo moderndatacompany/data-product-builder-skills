@@ -1,0 +1,42 @@
+models:
+  test_db.vulcan_test_project.customer:
+    alias: customers
+
+    measures:
+      total_customers:
+        type: count
+        expression: "{customers.CUSTKEY}"
+        description: "Total number of customers"
+        tags: [tpch, customer, count]
+
+      avg_acctbal:
+        type: avg
+        expression: "{customers.ACCTBAL}"
+        description: "Average customer account balance"
+        tags: [tpch, customer, acctbal]
+
+      total_acctbal:
+        type: sum
+        expression: "{customers.ACCTBAL}"
+        description: "Total customer account balance"
+        tags: [tpch, customer, acctbal]
+
+      # NOTE: Order-level measures live on the `orders` model to avoid
+      # bidirectional joins (customers <-> orders) which can cause cycles.
+
+    joins:
+      nations:
+        type: many_to_one
+        expression: "{customers.NATIONKEY} = {nations.NATIONKEY}"
+
+    dimensions:
+      includes:
+        - CUSTKEY
+        - NAME
+        - ADDRESS
+        - NATIONKEY
+        - PHONE
+        - MKTSEGMENT
+        - COMMENT
+
+

@@ -1,0 +1,60 @@
+version: v1alpha
+type: vulcan
+name: customer-intelligence-postgres
+tags:
+  - customer-analytics
+  - rfm-segmentation
+  - customer-intelligence
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: demo-staging-compute
+  engine: postgres
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=shreya-examples'
+      - '--submodules=off'
+    baseDir: vulcan-examples/postgres/demo/customer-intelligence-postgres
+    secret: demo:git-sync
+  depots:
+    - dataos://customerplatform?purpose=rw
+  workflow:
+    schedule:
+      crons:
+      - '0 0 * * *'  # Daily at midnight
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 5
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "4000m"
+        memory: "3Gi"

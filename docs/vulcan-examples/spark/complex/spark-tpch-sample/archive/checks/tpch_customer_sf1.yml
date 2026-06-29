@@ -1,0 +1,82 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_customers
+          attributes:
+            description: "At least one customer exists"
+      - missing_count(c_custkey) = 0:
+          name: no_missing_custkey
+          attributes:
+            description: "Primary key must never be null"
+      - missing_count(c_name) = 0:
+          name: no_missing_name
+          attributes:
+            description: "Customer name must not be null"
+      - missing_count(c_nationkey) = 0:
+          name: no_missing_nationkey
+          attributes:
+            description: "Every customer must belong to a nation"
+      - missing_count(c_mktsegment) = 0:
+          name: no_missing_mktsegment
+          attributes:
+            description: "Market segment should always be populated"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: invalid_acctbal_range
+          fail query: |
+            SELECT c_custkey, c_name, c_acctbal
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1
+            WHERE c_acctbal < -1000 OR c_acctbal > 10000
+          samples limit: 10
+          attributes:
+            description: "Account balance should be within reasonable range (-1000 to 10000)"
+      - failed rows:
+          name: invalid_mktsegment_values
+          fail query: |
+            SELECT c_custkey, c_mktsegment
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1
+            WHERE c_mktsegment NOT IN ('AUTOMOBILE', 'BUILDING', 'FURNITURE', 'HOUSEHOLD', 'MACHINERY')
+          samples limit: 5
+          attributes:
+            description: "Market segment must be one of the 5 TPC-H segments"
+      - failed rows:
+          name: invalid_phone_format
+          fail query: |
+            SELECT c_custkey, c_phone
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1
+            WHERE c_phone IS NOT NULL AND LENGTH(c_phone) < 10
+          samples limit: 5
+          attributes:
+            description: "Phone numbers must be at least 10 characters"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(c_custkey) = 0:
+          name: unique_custkey
+          attributes:
+            description: "Customer key is the primary key"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: orphan_nationkey
+          fail query: |
+            SELECT c.c_custkey, c.c_nationkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1 c
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_nation_sf1 n
+              ON n.n_nationkey = c.c_nationkey
+            WHERE n.n_nationkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every customer nationkey must exist in nation table"
+
+    # --- Timeliness ---
+    timeliness:
+      - change for row_count >= -10%:
+          name: customer_count_stable
+          attributes:
+            description: "Customer count should not drop more than 10% between runs"

@@ -1,0 +1,9 @@
+use_cases:
+  - Device engagement tracking across configurable roll-up periods (7, 30, 90, 180, 365 days)
+  - Engagement analysis by device category, device series, and product version
+  - Regional business unit analytics (country/region-based engagement)
+  - User engagement classification and segmentation
+  - Hardware component usage tracking and analytics
+  - Software OS family and version adoption analysis
+  - Product component version analytics
+  - Multi-dimensional view support (Product Tab, Hardware Tab, Software Tab)

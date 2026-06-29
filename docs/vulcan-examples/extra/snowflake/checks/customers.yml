@@ -1,0 +1,13 @@
+checks:
+  SALES.CUSTOMERS:
+    
+    validity:
+      - failed rows:
+          name: invalid_email_format
+          fail query: |
+            SELECT CUSTOMER_ID, FULL_NAME, EMAIL
+            FROM SALES.CUSTOMERS
+            WHERE EMAIL NOT LIKE '%@%' OR EMAIL IS NULL
+          samples limit: 10
+          attributes:
+            description: "Email addresses must be in valid format"

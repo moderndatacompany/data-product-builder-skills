@@ -1,0 +1,3 @@
+kind: metric
+name: total_products
+measure: product_profile.total_products

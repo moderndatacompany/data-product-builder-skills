@@ -1,0 +1,102 @@
+# kind: dq — converted from checks/system_update_v2.yml
+kind: dq
+name: system_update_v2_dq
+depends_on: lenovo.ldo.system_update_v2
+rules:
+- row_count > 0:
+    name: system_update_records_exist
+    dimension: completeness
+    description: At least one system update record should exist
+- missing_count(_ID) = 0:
+    name: no_missing_id
+    dimension: completeness
+    description: All records must have an _id
+- missing_count(PACKAGE_ID) = 0:
+    name: no_missing_package_id
+    dimension: completeness
+    description: All system updates must have a package_id
+- missing_count(ORG_ID) = 0:
+    name: no_missing_org_id
+    dimension: completeness
+    description: All system updates must belong to an organization
+- failed rows:
+    name: invalid_package_severity
+    dimension: validity
+    fail query: |
+      SELECT _ID, PACKAGE_ID, PACKAGE_SEVERITY, PACKAGE_NAME
+      FROM lenovo.ldo.system_update_v2
+      WHERE PACKAGE_SEVERITY NOT IN ('OPTIONAL', 'RECOMMENDED', 'CRITICAL')
+        AND PACKAGE_SEVERITY IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Package severity must be OPTIONAL, RECOMMENDED, or CRITICAL
+- failed rows:
+    name: invalid_package_type
+    dimension: validity
+    fail query: |
+      SELECT _ID, PACKAGE_ID, PACKAGE_TYPE, PACKAGE_NAME
+      FROM lenovo.ldo.system_update_v2
+      WHERE PACKAGE_TYPE NOT IN ('Bios', 'Driver', 'Firmware', 'Application', 'Other')
+        AND PACKAGE_TYPE IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Package type must be Bios, Driver, Firmware, Application, or Other
+- failed rows:
+    name: invalid_reboot_type
+    dimension: validity
+    fail query: |
+      SELECT _ID, PACKAGE_ID, PACKAGE_REBOOT_TYPE, PACKAGE_NAME
+      FROM lenovo.ldo.system_update_v2
+      WHERE PACKAGE_REBOOT_TYPE NOT IN ('RebootRequested', 'PowerOffForced', 'RebootDelayed', 'NoRebootRequired', 'RebootForced')
+        AND PACKAGE_REBOOT_TYPE IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Reboot type must be one of the valid values
+- failed rows:
+    name: invalid_test_state
+    dimension: validity
+    fail query: |
+      SELECT _ID, PACKAGE_ID, TEST_STATE, PACKAGE_NAME
+      FROM lenovo.ldo.system_update_v2
+      WHERE TEST_STATE NOT IN ('NOT_TESTED', 'TESTED', 'DEPLOY_ALLOWED', 'DEPLOY_DENIED', 'TESTING')
+        AND TEST_STATE IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Test state must be one of the valid values
+- failed rows:
+    name: future_release_date
+    dimension: validity
+    fail query: |
+      SELECT _ID, PACKAGE_ID, PACKAGE_RELEASE_DATE, PACKAGE_NAME
+      FROM lenovo.ldo.system_update_v2
+      WHERE PACKAGE_RELEASE_DATE > CURRENT_TIMESTAMP
+        AND __DELETED = 'False'
+    samples limit: 5
+    description: Package release date cannot be in the future
+- failed rows:
+    name: future_last_modified_date
+    dimension: validity
+    fail query: |
+      SELECT _ID, PACKAGE_ID, LAST_MODIFIED_DATE, PACKAGE_NAME
+      FROM lenovo.ldo.system_update_v2
+      WHERE LAST_MODIFIED_DATE > CURRENT_TIMESTAMP
+        AND __DELETED = 'False'
+    samples limit: 5
+    description: Last modified date cannot be in the future
+- failed rows:
+    name: duplicate_package_ids_per_org
+    dimension: consistency
+    fail query: "SELECT \n  PACKAGE_ID,\n  ORG_ID,\n  COUNT(*) as RECORD_COUNT\nFROM lenovo.ldo.system_update_v2\nWHERE __DELETED = 'False'\nGROUP BY PACKAGE_ID, ORG_ID\nHAVING COUNT(*) > 1\n"
+    samples limit: 10
+    description: Each package_id should be unique per organization among active records
+- failed rows:
+    name: critical_package_not_tested
+    dimension: consistency
+    fail query: |
+      SELECT _ID, PACKAGE_ID, PACKAGE_SEVERITY, TEST_STATE, PACKAGE_NAME
+      FROM lenovo.ldo.system_update_v2
+      WHERE PACKAGE_SEVERITY = 'CRITICAL'
+        AND TEST_STATE IN ('NOT_TESTED', 'TESTING')
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Critical packages should be tested before deployment

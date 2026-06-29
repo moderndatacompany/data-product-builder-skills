@@ -1,0 +1,173 @@
+# Converted from legacy: semantics/system_update_v2.yaml
+kind: semantic
+name: system_update
+depends_on: lenovo.ldo.system_update_v2
+ai_context:
+  instructions: >
+    Use this semantic model for questions about system update. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "system update"
+    - "system_update"
+    - "system"
+    - "update"
+  examples:
+    - "Show system update trends over time."
+    - "Break down system update by key dimensions."
+
+dimensions:
+- PACKAGE_ID
+- PACKAGE_NAME
+- PACKAGE_DESCRIPTION
+- PACKAGE_VERSION
+- CURRENT_INSTALLED_VERSION
+- PACKAGE_RELEASE_DATE
+- PACKAGE_TYPE
+- CATEGORY
+- PACKAGE_SEVERITY
+- PACKAGE_REBOOT_TYPE
+- TEST_STATE
+measures:
+- name: no_of_critical_firmware_updates
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for no of critical firmware updates.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "no of critical firmware updates"
+      - "no_of_critical_firmware_updates"
+      - "critical"
+      - "firmware"
+    examples:
+      - "What is no of critical firmware updates by month?"
+      - "Compare no of critical firmware updates across key segments."
+  type: sum
+  expression: CASE WHEN {system_update.PACKAGE_SEVERITY} = 'CRITICAL' AND {system_update.PACKAGE_TYPE} = 'Firmware' THEN 1 ELSE 0 END
+  description: Total number of critical firmware updates.
+  tags:
+  - metric
+  terms:
+  - metric.no_of_critical_firmware_updates
+- name: no_of_critical_updates_requires_reboot
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for no of critical updates requires
+      reboot. Respect its aggregation type and any configured filters before comparing
+      or segmenting results.
+    synonyms:
+      - "no of critical updates requires reboot"
+      - "no_of_critical_updates_requires_reboot"
+      - "critical"
+      - "updates"
+    examples:
+      - "What is no of critical updates requires reboot by month?"
+      - "Compare no of critical updates requires reboot across key segments."
+  type: sum
+  expression: CASE WHEN {system_update.PACKAGE_SEVERITY} = 'CRITICAL' AND {system_update.PACKAGE_REBOOT_TYPE} != 'NoRebootRequired' THEN 1 ELSE 0 END
+  description: Total number of critical updates that require a reboot.
+  tags:
+  - metric
+  terms:
+  - metric.no_of_critical_updates_requires_reboot
+- name: number_of_system_updates
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for number of system updates. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "number of system updates"
+      - "number_of_system_updates"
+      - "number"
+      - "system"
+    examples:
+      - "What is number of system updates by month?"
+      - "Compare number of system updates across key segments."
+  type: count_distinct
+  expression: '{system_update.PACKAGE_ID}'
+  description: Total number of all system updates available in the organization.
+  tags:
+  - metric
+  terms:
+  - metric.number_of_system_updates
+- name: total_critical_system_updates
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total critical system updates. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total critical system updates"
+      - "total_critical_system_updates"
+      - "total"
+      - "critical"
+    examples:
+      - "What is total critical system updates by month?"
+      - "Compare total critical system updates across key segments."
+  type: count_distinct
+  expression: CASE WHEN {system_update.PACKAGE_SEVERITY} = 'CRITICAL' THEN {system_update.PACKAGE_ID} ELSE NULL END
+  description: Total number of critical system updates only, i.e. system updates with severity = Critical.
+  tags:
+  - metric
+  terms:
+  - metric.total_critical_system_updates
+- name: total_optional_system_updates
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total optional system updates. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total optional system updates"
+      - "total_optional_system_updates"
+      - "total"
+      - "optional"
+    examples:
+      - "What is total optional system updates by month?"
+      - "Compare total optional system updates across key segments."
+  type: count_distinct
+  expression: CASE WHEN {system_update.PACKAGE_SEVERITY} = 'OPTIONAL' THEN {system_update.PACKAGE_ID} ELSE NULL END
+  description: Total number of optional system updates only, i.e. system updates with severity = Optional.
+  tags:
+  - metric
+  terms:
+  - metric.total_optional_system_updates
+- name: total_recommended_system_updates
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total recommended system updates.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total recommended system updates"
+      - "total_recommended_system_updates"
+      - "total"
+      - "recommended"
+    examples:
+      - "What is total recommended system updates by month?"
+      - "Compare total recommended system updates across key segments."
+  type: count_distinct
+  expression: CASE WHEN {system_update.PACKAGE_SEVERITY} = 'RECOMMENDED' THEN {system_update.PACKAGE_ID} ELSE NULL END
+  description: Total number of recommended system updates only, i.e. system updates with severity = Recommended.
+  tags:
+  - metric
+  terms:
+  - metric.total_recommended_system_updates
+joins:
+- name: system_update_devices
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from system update
+      devices. Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "system update devices"
+      - "system_update_devices"
+      - "system"
+      - "update"
+    examples:
+      - "Analyze this model with system update devices attributes."
+      - "Break measures down by system update devices."
+  type: one_to_many
+  expression: '{system_update.PACKAGE_ID} = {system_update_devices.PACKAGE_ID}'

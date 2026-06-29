@@ -1,0 +1,234 @@
+x-images:
+  postgres: &postgres_image "postgres:15-alpine"
+  minio: &minio_image "minio/minio:latest"
+  # minio-mc: &minio_mc_image "minio/mc:latest"
+
+volumes:
+  statestore:
+    driver: local
+  warehouse:
+    driver: local
+  # minio-warehouse-data:
+  # minio-sample-data:
+  # mongo-data:
+  #   driver: local
+
+
+networks:
+  vulcan:
+    external: true
+
+services:
+  #########################################################################
+  # Vulcan infrastructure services                                        #
+  #                                                                       #
+  # The services below (statestore, object store, etc.) are part of the   #
+  # shared Vulcan runtime and are not specific to this project.           #
+  #                                                                       #
+  # NOTE: When deployed in DataOS, these services will be automatically   #
+  # managed by DataOS. You typically should NOT modify them in individual #
+  # projects. Instead, treat them as managed infrastructure that Vulcan   #
+  # depends on.                                                           #
+  #########################################################################
+  
+  # PostgreSQL State Store
+  statestore:
+    image: *postgres_image
+    environment:
+      POSTGRES_DB: statestore
+      POSTGRES_USER: vulcan
+      POSTGRES_PASSWORD: vulcan
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5431:5432"
+    volumes:
+      - statestore:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vulcan -d statestore"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vulcan
+
+  # PostgreSQL Warehouse - with pre-populated product data
+  warehouse:
+    image: *postgres_image
+    environment:
+      POSTGRES_DB: warehouse
+      POSTGRES_USER: vulcan
+      POSTGRES_PASSWORD: vulcan
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+    volumes:
+      - warehouse:/var/lib/postgresql/data
+      - ./init-postgres.sql:/docker-entrypoint-initdb.d/init-postgres.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vulcan -d warehouse"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vulcan
+
+  # # MinIO Object Storage - Warehouse Catalog
+  # minio-warehouse:
+  #   image: *minio_image
+  #   command: server /data --console-address ":9001"
+  #   environment:
+  #     MINIO_ROOT_USER: admin
+  #     MINIO_ROOT_PASSWORD: password
+  #     MINIO_DOMAIN: minio-warehouse
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   volumes:
+  #     - minio-warehouse-data:/data
+  #   healthcheck:
+  #     test: ["CMD", "mc", "ready", "local"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - vulcan
+
+  # # MinIO Client for warehouse initialization
+  # minio-warehouse-init:
+  #   image: *minio_mc_image
+  #   depends_on:
+  #     minio-warehouse:
+  #       condition: service_healthy
+  #   entrypoint: >
+  #     /bin/sh -c "
+  #     /usr/bin/mc alias set minio-warehouse http://minio-warehouse:9000 admin password;
+  #     /usr/bin/mc mb minio-warehouse/warehouse --ignore-existing;
+  #     /usr/bin/mc anonymous set download minio-warehouse/warehouse;
+  #     exit 0;
+  #     "
+  #   networks:
+  #     - vulcan
+
+  # # MinIO Object Storage - Sample Catalog
+  # minio-sample:
+  #   image: *minio_image
+  #   command: server /data --console-address ":9001"
+  #   environment:
+  #     MINIO_ROOT_USER: admin
+  #     MINIO_ROOT_PASSWORD: password
+  #     MINIO_DOMAIN: minio-sample
+  #   ports:
+  #     - "9002:9000"
+  #     - "9003:9001"
+  #   volumes:
+  #     - minio-sample-data:/data
+  #   healthcheck:
+  #     test: ["CMD", "mc", "ready", "local"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - vulcan
+
+  # # MinIO Client for sample initialization
+  # minio-sample-init:
+  #   image: *minio_mc_image
+  #   depends_on:
+  #     minio-sample:
+  #       condition: service_healthy
+  #   entrypoint: >
+  #     /bin/sh -c "
+  #     /usr/bin/mc alias set minio-sample http://minio-sample:9000 admin password;
+  #     /usr/bin/mc mb minio-sample/sample --ignore-existing;
+  #     /usr/bin/mc anonymous set download minio-sample/sample;
+  #     exit 0;
+  #     "
+  #   networks:
+  #     - vulcan
+
+  # # Iceberg REST Catalog - Warehouse
+  # iceberg-rest-warehouse:
+  #   image: tabulario/iceberg-rest:latest
+  #   environment:
+  #     CATALOG_WAREHOUSE: s3://warehouse/
+  #     CATALOG_IO__IMPL: org.apache.iceberg.aws.s3.S3FileIO
+  #     CATALOG_S3_ENDPOINT: http://minio-warehouse:9000
+  #     CATALOG_S3_ACCESS__KEY__ID: admin
+  #     CATALOG_S3_SECRET__ACCESS__KEY: password
+  #     CATALOG_S3_PATH__STYLE__ACCESS: "true"
+  #     AWS_REGION: us-east-1
+  #     AWS_DEFAULT_REGION: us-east-1
+  #   ports:
+  #     - "8181:8181"
+  #   depends_on:
+  #     - minio-warehouse
+  #   networks:
+  #     vulcan:
+  #       aliases:
+  #         - iceberg-rest.minio-warehouse
+
+  # # Iceberg REST Catalog - Sample
+  # iceberg-rest-sample:
+  #   image: tabulario/iceberg-rest:latest
+  #   environment:
+  #     CATALOG_WAREHOUSE: s3://sample/
+  #     CATALOG_IO__IMPL: org.apache.iceberg.aws.s3.S3FileIO
+  #     CATALOG_S3_ENDPOINT: http://minio-sample:9000
+  #     CATALOG_S3_ACCESS__KEY__ID: admin
+  #     CATALOG_S3_SECRET__ACCESS__KEY: password
+  #     CATALOG_S3_PATH__STYLE__ACCESS: "true"
+  #     AWS_REGION: us-east-1
+  #     AWS_DEFAULT_REGION: us-east-1
+  #   ports:
+  #     - "8182:8181"
+  #   depends_on:
+  #     - minio-sample
+  #   networks:
+  #     vulcan:
+  #       aliases:
+  #         - iceberg-rest-sample.minio-sample
+
+  # # Trino Query Engine
+  # trino:
+  #   image: trinodb/trino:latest
+  #   container_name: trino
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     iceberg-rest-warehouse:
+  #       condition: service_started
+  #     iceberg-rest-sample:
+  #       condition: service_started
+  #     minio-warehouse:
+  #       condition: service_healthy
+  #     minio-sample:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./etc/trino:/etc/trino
+  #   networks:
+  #     - vulcan
+  #   healthcheck:
+  #     test: ["CMD", "trino", "--execute", "SELECT 1"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+
+  # # MongoDB
+  # mongo:
+  #   image: mongo:7
+  #   container_name: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: admin
+  #   volumes:
+  #     - mongo-data:/data/db
+  #   networks:
+  #     - vulcan
+  #   healthcheck:
+  #     test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5

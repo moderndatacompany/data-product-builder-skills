@@ -1,0 +1,11 @@
+customer_id,first_name,last_name,email,customer_segment
+C001,Alice,Johnson,alice.johnson@example.com,Platinum
+C002,Bob,Smith,bob.smith@example.com,Gold
+C003,Carol,Williams,carol.williams@example.com,Silver
+C004,David,Brown,david.brown@example.com,Bronze
+C005,Eva,Davis,eva.davis@example.com,Platinum
+C006,Frank,Miller,frank.miller@example.com,Gold
+C007,Grace,Wilson,grace.wilson@example.com,Silver
+C008,Henry,Moore,henry.moore@example.com,Bronze
+C009,Ivy,Taylor,ivy.taylor@example.com,Platinum
+C010,Jack,Anderson,jack.anderson@example.com,Gold

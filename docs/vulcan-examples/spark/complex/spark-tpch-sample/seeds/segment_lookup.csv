@@ -1,0 +1,4 @@
+segment_id,segment_name,min_acctbal
+1,Low,-9999.99
+2,Mid,0.00
+3,High,5000.00

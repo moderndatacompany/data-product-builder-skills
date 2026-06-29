@@ -1,0 +1,52 @@
+test_sales_order_items_single:
+  model: sales.order_items
+  description: >
+    Full-output test for the Order Items model using a single order header + single line item.
+
+  vars:
+    start: '2024-03-01'
+    end: '2024-03-31'
+
+  inputs:
+    raw.raw_orders:
+      rows:
+        - order_id: O2000
+          order_date: '2024-03-20'
+          customer_id: C0002
+          order_status: Completed
+          order_channel: Mobile
+          currency: USD
+          shipping_cost: 4.00
+          shipping_country: US
+          shipping_state: CA
+          shipping_city: Los Angeles
+          shipping_postal_code: "90001"
+          payment_status: Paid
+
+    raw.raw_order_items:
+      rows:
+        - order_item_id: OI2001
+          order_id: O2000
+          product_id: P0002
+          quantity: 2
+          unit_price: 50.00
+          discount_rate: 0.10
+          tax_rate: 0.08
+
+  outputs:
+    query:
+      rows:
+        - order_item_id: "OI2001"
+          order_id: "O2000"
+          order_date: "2024-03-20"
+          customer_id: "C0002"
+          product_id: "P0002"
+          quantity: 2
+          unit_price: 50.0
+          discount_rate: 0.1
+          tax_rate: 0.08
+          line_subtotal: 100.0
+          line_discount: 10.0
+          line_tax: 7.2
+          line_total: 97.2
+

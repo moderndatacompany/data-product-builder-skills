@@ -1,0 +1,3 @@
+kind: metric
+name: invoices_per_account_proof
+measure: sales.invoices_per_account_proof

@@ -1,0 +1,59 @@
+models:
+  lenovo.ldo.consumed_licenses:
+    alias: consumed_licenses
+    
+    dimensions:
+      includes:
+        - _ID
+        - BILLING_SUBSCRIPTION_ID
+        - COMMITMENT_END_DATE
+        - CREATED_DATE
+        - LAST_MODIFIED_DATE
+        - LICENSE_TYPE_ID
+        - ORDER_DATE
+        - PART_NUMBER
+        - START_DATE
+        - STATUS
+        - SUBSCRIPTION_ID
+        - ENTITY_ID
+        - ENTITY_TYPE
+        - IS_AUTOMATIC_ASSIGNMENT_ENABLED
+      
+    measures:
+      total_licenses:
+        type: count
+        expression: "{consumed_licenses._ID}"
+        filters:
+          - "(CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END) IS NOT NULL OR {consumed_licenses.ENTITY_TYPE} IS NULL"
+        description: "Total number of licenses."
+      
+      total_assigned_licenses:
+        type: count
+        expression: "{consumed_licenses._ID}"
+        filters:
+          - "{consumed_licenses.STATUS} = 'ASSIGNED'"
+          - "(CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END) IS NOT NULL"
+        description: "Total number of assigned licenses."
+      
+      total_assigned_license_devices:
+        type: count_distinct
+        expression: "CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END"
+        filters:
+          - "{consumed_licenses.STATUS} = 'ASSIGNED'"
+        description: "Total number of devices with an active or assigned license. Also known as the total number of licensed devices."
+      
+      total_unassigned_licenses:
+        type: count
+        expression: "{consumed_licenses._ID}"
+        filters:
+          - "{consumed_licenses.STATUS} IN ('NEW', 'UNASSIGNED')"
+        description: "Total number of unassigned licenses."
+      
+      total_expired_license_devices:
+        type: count_distinct
+        expression: "CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END"
+        filters:
+          - "{consumed_licenses.STATUS} = 'EXPIRED'"
+          - "(CASE WHEN {consumed_licenses.ENTITY_TYPE} = 'DEVICE' THEN {consumed_licenses.ENTITY_ID} ELSE NULL END) IS NOT NULL"
+        description: "Total number of devices with expired licenses."
+

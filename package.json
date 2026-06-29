@@ -1,0 +1,31 @@
+{
+  "name": "builder-skills",
+  "version": "1.0.0",
+  "description": "Cursor agent skills for designing and building Vulcan/DataOS data products. Run npx builder-skills to scaffold .cursor/skills and docs into your project.",
+  "bin": {
+    "builder-skills": "./bin/create.js"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "docs/"
+  ],
+  "keywords": [
+    "cursor",
+    "cursor-skills",
+    "vulcan",
+    "dataos",
+    "data-product",
+    "builder-skills",
+    "design-data-product",
+    "build-data-product"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akshaychame/builder-skills"
+  }
+}

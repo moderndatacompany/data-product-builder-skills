@@ -1,0 +1,48 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_region_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count = 5:
+          name: exact_region_count
+          attributes:
+            description: "TPC-H has exactly 5 regions"
+      - missing_count(r_regionkey) = 0:
+          name: no_missing_regionkey
+          attributes:
+            description: "Primary key must never be null"
+      - missing_count(r_name) = 0:
+          name: no_missing_region_name
+          attributes:
+            description: "Region name must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: invalid_region_names
+          fail query: |
+            SELECT r_regionkey, r_name
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_region_sf1
+            WHERE r_name NOT IN ('AFRICA', 'AMERICA', 'ASIA', 'EUROPE', 'MIDDLE EAST')
+          samples limit: 5
+          attributes:
+            description: "Region names must be one of the 5 TPC-H regions"
+      - failed rows:
+          name: invalid_regionkey_range
+          fail query: |
+            SELECT r_regionkey, r_name
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_region_sf1
+            WHERE r_regionkey < 0 OR r_regionkey > 4
+          samples limit: 5
+          attributes:
+            description: "Region keys must be 0-4"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(r_regionkey) = 0:
+          name: unique_regionkey
+          attributes:
+            description: "Region key is the primary key"
+      - duplicate_count(r_name) = 0:
+          name: unique_region_name
+          attributes:
+            description: "Region names must be unique"

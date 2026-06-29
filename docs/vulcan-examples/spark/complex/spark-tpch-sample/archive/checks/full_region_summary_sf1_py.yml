@@ -1,0 +1,76 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.full_region_summary_sf1_py:
+    # --- Completeness ---
+    completeness:
+      - row_count = 5:
+          name: exact_region_count
+          attributes:
+            description: "Python model should produce exactly 5 region summaries"
+      - missing_count(r_regionkey) = 0:
+          name: no_missing_regionkey
+          attributes:
+            description: "Region key must not be null"
+      - missing_count(r_name) = 0:
+          name: no_missing_region_name
+          attributes:
+            description: "Region name must not be null"
+      - missing_count(order_count) = 0:
+          name: no_missing_order_count
+          attributes:
+            description: "Aggregated order count must not be null"
+      - missing_count(total_amount) = 0:
+          name: no_missing_total_amount
+          attributes:
+            description: "Aggregated total amount must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_order_count
+          fail query: |
+            SELECT r_regionkey, r_name, order_count
+            FROM lhs3ny001depot.tpch_sparkv3.full_region_summary_sf1_py
+            WHERE order_count < 0
+          samples limit: 5
+          attributes:
+            description: "Order count cannot be negative"
+      - failed rows:
+          name: negative_total_amount
+          fail query: |
+            SELECT r_regionkey, r_name, total_amount
+            FROM lhs3ny001depot.tpch_sparkv3.full_region_summary_sf1_py
+            WHERE total_amount < 0
+          samples limit: 5
+          attributes:
+            description: "Total amount cannot be negative"
+      - failed rows:
+          name: invalid_region_names
+          fail query: |
+            SELECT r_regionkey, r_name
+            FROM lhs3ny001depot.tpch_sparkv3.full_region_summary_sf1_py
+            WHERE r_name NOT IN ('AFRICA', 'AMERICA', 'ASIA', 'EUROPE', 'MIDDLE EAST')
+          samples limit: 5
+          attributes:
+            description: "Region names must be valid TPC-H regions"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(r_regionkey) = 0:
+          name: unique_regionkey
+          attributes:
+            description: "Region key must be unique"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: all_regions_present
+          fail query: |
+            SELECT r.r_regionkey, r.r_name
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_region_sf1 r
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.full_region_summary_sf1_py s
+              ON s.r_regionkey = r.r_regionkey
+            WHERE s.r_regionkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Python model must produce a row for every region"
+

@@ -1,0 +1,3 @@
+limitations:
+  - Requires running Spark cluster with Iceberg support
+  - Source data read from mys3lh02depot.tpch_sf1

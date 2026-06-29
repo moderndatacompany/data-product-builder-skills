@@ -1,0 +1,5 @@
+limitations:
+  - Data based on GA4 BigQuery export
+  - Event data from 2020-11-02 (sample data)
+  - Follows GA4 sharded table structure (events_YYYYMMDD)
+  - BigQuery cloud data warehouse as data platform

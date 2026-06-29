@@ -1,0 +1,70 @@
+version: v1alpha
+type: vulcan
+name: ga4-analytics
+tags:
+  - ga4
+  - google-analytics
+  - web-analytics
+  - bigquery
+  - marketing
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: paradise-compute
+  engine: bigquery
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/ga4-project
+    secret: engineering:git-sync
+  depots:
+    - dataos://bigquery?purpose=rw
+  workflow:
+    type: schedule
+    schedule:
+      crons:
+      - '0 0 * * *'  # Daily at midnight UTC
+      endOn: '2027-12-31T23:59:59-00:00'
+      timezone: 'UTC'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+
+    migrate:
+      command:
+        - vulcan
+      arguments:
+        - migrate
+    plan:
+      command:
+        - vulcan 
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 2
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "2000m"
+        memory: "2Gi"
+

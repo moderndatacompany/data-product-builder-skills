@@ -1,0 +1,77 @@
+# ============================================================================
+# CHECKS: Sales Data Quality Monitoring
+# ============================================================================
+# Owner: rohitrajtmdcio
+# Description: Data quality checks for sales fact table ensuring transactional
+#              integrity, revenue validity, and source classification accuracy
+# ============================================================================
+
+checks:
+  web_analytics_gold.SALES:
+    
+    # ==================== COMPLETENESS ====================
+    completeness:
+      - row_count > 0:
+          name: sales_records_exist
+          attributes:
+            description: "Sales fact table must contain transaction records"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(customer_no) = 0:
+          name: customer_no_required
+          attributes:
+            description: "All sales transactions must be linked to a customer"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(invoice_no) = 0:
+          name: invoice_no_required
+          attributes:
+            description: "All sales transactions must have an invoice number for traceability"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(ext_net) = 0:
+          name: ext_net_required
+          attributes:
+            description: "All sales transactions must have an extended net amount (revenue)"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== VALIDITY ====================
+    validity:
+      - failed rows:
+          name: invalid_source
+          fail query: |
+            SELECT sales_pk, source
+            FROM web_analytics_gold.SALES
+            WHERE source NOT IN ('Proof', 'Non-proof')
+              AND source IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Sales source must be classified as either Proof or Non-proof channel"
+            owner: "rohitrajtmdcio"
+      
+      - failed rows:
+          name: negative_revenue
+          fail query: |
+            SELECT sales_pk, customer_no, ext_net
+            FROM web_analytics_gold.SALES
+            WHERE ext_net < -10000
+          samples limit: 10
+          attributes:
+            description: "Sales revenue should not be excessively negative (returns exceeding $10K should be investigated)"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== UNIQUENESS ====================
+    uniqueness:
+      - duplicate_count(sales_pk) = 0:
+          name: sales_pk_unique
+          attributes:
+            description: "Sales primary key must be unique for each transaction line"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== TIMELINESS ====================
+    timeliness:
+      - row_count > 0:
+          name: recent_sales_data
+          attributes:
+            description: "Sales data should be current and regularly updated"
+            owner: "rohitrajtmdcio"

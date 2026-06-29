@@ -1,0 +1,62 @@
+version: v2alpha
+name: delivery-performance-bundle
+type: bundle
+description: "Bundle to deploy the Delivery Performance Analytics Vulcan data product on a Spark Lakehouse (S3 + Iceberg + Postgres metastore)."
+tags:
+  - data-product
+  - vulcan
+  - spark
+  - lakehouse
+  - delivery-performance
+
+bundle:
+  resources:
+    # 1. Secrets — created first, no dependencies
+    - id: create-lh-s3-secret
+      file: lh_secret.yaml
+
+    - id: create-lh-postgres-secret
+      file: pg_secret.yaml
+
+    # 2. Depot — depends on the S3 secret being active
+    - id: create-lh-s3-depot
+      file: lh_depot.yaml
+      dependencies:
+        - create-lh-s3-secret
+      dependencyConditions:
+        - resourceId: create-lh-s3-secret
+          status:
+            is:
+              - active
+
+    # 3. Lakehouse — depends on both secrets being active
+    - id: create-lakehouse
+      file: lakehouse.yaml
+      dependencies:
+        - create-lh-s3-secret
+        - create-lh-postgres-secret
+      dependencyConditions:
+        - resourceId: create-lh-s3-secret
+          status:
+            is:
+              - active
+        - resourceId: create-lh-postgres-secret
+          status:
+            is:
+              - active
+
+    # 4. Vulcan data product — depends on depot and lakehouse being active
+    - id: vulcan-delivery-performance
+      file: vulcan/domain-resource.yaml
+      dependencies:
+        - create-lh-s3-depot
+        - create-lakehouse
+      dependencyConditions:
+        - resourceId: create-lh-s3-depot
+          status:
+            is:
+              - active
+        - resourceId: create-lakehouse
+          status:
+            is:
+              - active

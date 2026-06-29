@@ -1,0 +1,179 @@
+# Converted from legacy: semantics/flattened_main_base_table.yml
+kind: semantic
+name: events
+depends_on: LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE
+ai_context:
+  instructions: >
+    Use this semantic model for questions about events. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "events"
+  examples:
+    - "Show events trends over time."
+    - "Break down events by key dimensions."
+
+dimensions:
+- EVENT_DATE
+- DEVICE_TYPE
+- MANUFACTURER
+- MODEL
+- GEO
+- ACTION
+- PRODUCT_ID
+- COMPONENT_ID
+measures:
+- name: total_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total devices. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total devices"
+      - "total_devices"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total devices by month?"
+      - "Compare total devices across key segments."
+  type: count_distinct
+  expression: '{events.ANONYMOUS_DEVICE_IDV1}'
+  description: Total number of unique devices
+  tags:
+  - metric
+  terms:
+  - metric.total_devices
+- name: engaged_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for engaged devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "engaged devices"
+      - "engaged_devices"
+      - "engaged"
+      - "devices"
+    examples:
+      - "What is engaged devices by month?"
+      - "Compare engaged devices across key segments."
+  type: count_distinct
+  expression: '{events.ANONYMOUS_DEVICE_IDV1}'
+  filters:
+  - '{events.ACTION} = ''Engaged Activity'''
+  description: Number of unique devices with engaged activity
+  tags:
+  - metric
+  terms:
+  - metric.engaged_devices
+- name: avg_hardware_age
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg hardware age. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg hardware age"
+      - "avg_hardware_age"
+      - "avg"
+      - "hardware"
+    examples:
+      - "What is avg hardware age by month?"
+      - "Compare avg hardware age across key segments."
+  type: avg
+  expression: '{events.HW_IN_USE_YEARS}'
+  description: Average age of hardware in years
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_hardware_age
+  - metric.aggregate
+segments:
+- name: last_7_days
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the last 7 days subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "last 7 days"
+      - "last_7_days"
+      - "last"
+      - "days"
+    examples:
+      - "Show revenue for last 7 days."
+      - "How many records are in last 7 days?"
+  expression: '{events.ROLLUP_TYPE} = ''last_7_days'''
+  description: Events from the last 7 days
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.last_7_days
+  - segment.recent
+- name: engaged_activity
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the engaged activity subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "engaged activity"
+      - "engaged_activity"
+      - "engaged"
+      - "activity"
+    examples:
+      - "Show revenue for engaged activity."
+      - "How many records are in engaged activity?"
+  expression: '{events.ACTION} = ''Engaged Activity'''
+  description: Filter for engaged user activity
+  tags:
+  - metric
+  terms:
+  - metric.engaged_activity
+joins:
+- name: geo_mapping
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from geo mapping. Keep
+      the configured join relationship to avoid double counting.
+    synonyms:
+      - "geo mapping"
+      - "geo_mapping"
+      - "geo"
+      - "mapping"
+    examples:
+      - "Analyze this model with geo mapping attributes."
+      - "Break measures down by geo mapping."
+  type: many_to_one
+  expression: '{events.GEO} = {geo_mapping.COUNTRY_CODE}'
+- name: model_brand_mapping
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from model brand
+      mapping. Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "model brand mapping"
+      - "model_brand_mapping"
+      - "model"
+      - "brand"
+    examples:
+      - "Analyze this model with model brand mapping attributes."
+      - "Break measures down by model brand mapping."
+  type: many_to_one
+  expression: '{events.MODEL} = {model_brand_mapping.MTM}'
+- name: os_family
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from os family. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "os family"
+      - "os_family"
+      - "family"
+    examples:
+      - "Analyze this model with os family attributes."
+      - "Break measures down by os family."
+  type: many_to_one
+  expression: '{events.OS_VERSION} = {os_family.OS_VERSION}'

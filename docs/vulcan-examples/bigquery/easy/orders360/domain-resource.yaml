@@ -1,0 +1,55 @@
+version: v1alpha
+type: vulcan
+name: orders360
+description: Daily sales analytics pipeline tracking order volumes, revenue trends, and customer activity on BigQuery.
+tags:
+  - bigquery
+  - orders
+  - analytics
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: pacific
+  engine: bigquery
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/bigquery/easy/orders360
+    secret: sales:git-sync
+  workflow:
+    schedule:
+      crons:
+        - '0 0 * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - run
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"

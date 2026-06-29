@@ -1,0 +1,35 @@
+checks:
+  sales.daily_sales:
+    
+    completeness:     
+      - missing_count(total_orders) = 0:
+          name: no_missing_order_counts
+          attributes:
+            description: "All records must have order count"
+
+      - row_count > 0:
+          name: has_sales_data
+          attributes:
+            description: "At least one day of sales data exists"
+    validity:
+      - failed rows:
+          name: negative_order_counts
+          fail query: |
+            SELECT order_date, total_orders, total_revenue
+            FROM sales.daily_sales
+            WHERE order_date > current_date
+          samples limit: 10
+          attributes:
+            description: "Order counts cannot be negative"
+
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in daily sales record count"
+
+    timeliness:
+      - change for row_count >= -50%:
+          name: sales_volume_stability
+          attributes:
+            description: "Alert if row count drops more than 50% from previous run"

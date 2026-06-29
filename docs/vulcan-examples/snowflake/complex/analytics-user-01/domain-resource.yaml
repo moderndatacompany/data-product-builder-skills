@@ -1,0 +1,77 @@
+version: v1alpha
+type: vulcan
+name: analytics-user-engagement
+tags:
+  - snowflake-analytics
+  - user_engagement
+  - device_analytics
+  - consumer_analytics
+  - lenovo
+  - product_analytics
+  - hardware_analytics
+  - software_analytics
+  - power_bi
+  - usdk
+  - demo
+spec:
+  runAsUser: "shreyasikarwartmdcio"
+  compute: paradise-compute
+  engine: snowflake
+  repo: #enforced full as it is
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=main'
+      - '--submodules=off'
+    baseDir: vulcan-examples/snowflake-test
+    secret: engineering:git-sync # make it optional
+  depots: #enforced at-least 1
+    - dataos://snowflakevulcan2?purpose=rw
+  workflow: # enforced
+    # Dynamic based on the available cron
+    type: schedule #enum json schema
+    schedule: #optional
+      crons:
+      - '*/45 * * * *'
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO #default
+    resource: #optional
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+
+    #NOTE: - refer document for vulcan commands - https://tmdc-io.github.io/vulcan-book/cli-command/cli/?h=commands
+    migrate:
+      command:
+        - vulcan
+      arguments:
+        - migrate
+    plan:
+      command:
+        - vulcan 
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command: # enforced
+        - vulcan
+      arguments: #Optional
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 1
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "5000m"
+        memory: "4Gi"

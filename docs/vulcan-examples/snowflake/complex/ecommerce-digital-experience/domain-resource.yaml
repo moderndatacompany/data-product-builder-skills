@@ -1,0 +1,61 @@
+version: v1alpha
+type: vulcan
+name: ecommerce-digital-experience
+tags:
+  - ecommerce
+  - web-analytics
+  - digital-experience
+spec:
+  runAsUser: "anujsohanitmdcio"
+  compute: qa-compute
+  engine: snowflake
+  repo:
+    url: https://bitbucket.org/rubik_/vulcan-examples
+    syncFlags:
+      - '--ref=qa-deployment'
+      - '--submodules=off'
+    baseDir: vulcan-examples/snowflake/demo/ecommerce-digital-experience
+    secret: qa:git-secret-lh
+  depots:
+    - dataos://snowflakewarehouse?purpose=rw
+  workflow:
+    schedule:
+      crons:
+      - '0 0 * * *'  # Daily at midnight
+      endOn: '2027-01-01T00:00:00-00:00'
+      timezone: 'US/Pacific'
+      concurrencyPolicy: Forbid
+
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "1000m"
+        memory: "1Gi"
+    plan:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - plan
+        - --auto-apply
+    run:
+      command:
+        - vulcan
+      arguments:
+        - --log-to-stdout
+        - run
+
+  api:
+    replicas: 5
+    logLevel: INFO
+    resource:
+      request:
+        cpu: "200m"
+        memory: "512Mi"
+      limit:
+        cpu: "4000m"
+        memory: "3Gi"
+

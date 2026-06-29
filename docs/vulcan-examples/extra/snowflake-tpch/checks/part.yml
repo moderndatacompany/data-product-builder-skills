@@ -1,0 +1,38 @@
+checks:
+  test_db.vulcan_test_project.part:
+    completeness:
+      - missing_count(partkey) = 0:
+          name: partkey_not_null
+          attributes:
+            description: "PART.PARTKEY must be non-null"
+      - missing_count(name) = 0:
+          name: part_name_not_null
+          attributes:
+            description: "PART.NAME must be non-null"
+      - missing_count(retailprice) = 0:
+          name: retailprice_not_null
+          attributes:
+            description: "PART.RETAILPRICE must be non-null"
+      - row_count > 0:
+          name: part_has_rows
+          attributes:
+            description: "PART should not be empty"
+
+    uniqueness:
+      - duplicate_count(partkey) = 0:
+          name: partkey_unique
+          attributes:
+            description: "PART.PARTKEY must be unique"
+
+    validity:
+      - failed rows:
+          name: retailprice_non_negative
+          fail query: |
+            SELECT partkey, name, retailprice
+            FROM test_db.vulcan_test_project.part
+            WHERE retailprice < 0
+          samples limit: 10
+          attributes:
+            description: "PART.RETAILPRICE should be non-negative"
+
+

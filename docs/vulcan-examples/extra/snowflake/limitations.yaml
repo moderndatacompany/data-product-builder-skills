@@ -1,0 +1,13 @@
+limitations:
+  - Demo dataset with synthetic data (1000 customers, 1000 products, 1000 orders)
+  - Historical data from January 2024 onwards
+  - Data refreshes daily via full refresh for dimensions and incremental for facts
+  - Snowflake cloud warehouse as data platform
+  # data_sources:
+  #   - Postgres database (localhost:5433)
+  #   - Schema: vulcan_demo (bronze layer)
+  # sla:
+  #   bronze_refresh: "5 minutes for orders/order_items, 15 minutes for dimensions"
+  #   silver_refresh: "5-15 minutes depending on model"
+  #   gold_refresh: "5 minutes for advanced analytics"
+  #   availability: "99.5% uptime target"

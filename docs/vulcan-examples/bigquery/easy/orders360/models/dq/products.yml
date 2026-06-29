@@ -1,0 +1,14 @@
+kind: dq
+name: products_dq
+depends_on: sales.products
+
+rules:
+  - failed rows:
+      name: invalid_product_pricing
+      dimension: validity
+      fail query: |
+        SELECT product_id, product_name, price, cost
+        FROM sales.products
+        WHERE price <= 0 OR cost <= 0 OR price < cost
+      samples limit: 10
+      description: "Product price must be positive and greater than cost"

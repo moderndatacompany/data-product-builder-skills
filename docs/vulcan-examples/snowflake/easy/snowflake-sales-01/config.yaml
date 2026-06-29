@@ -1,0 +1,256 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - Postgres E-Commerce Analytics
+# ==============================================================================
+
+# Basic Information
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: snowflake-sales-01
+display_name: Snowflake Sales Analytics
+tenant: engineering
+description: Snowflake Sales Analytics is a cloud-native data product delivering comprehensive sales insights through customer dimensions, product catalog, and order transactions for advanced analytics and business intelligence.
+
+# Classification
+tags:
+  - snowflake
+  - sales
+  - sales_analytics
+  - customer_analytics
+  - product_catalog
+  - cloud_warehouse
+  - dimension_modeling
+  - demo
+
+terms:
+  - glossary.data_product
+  - glossary.sales_dimension
+  - glossary.product_dimension
+  - glossary.order_fact
+  - glossary.business_intelligence
+
+# Domain
+domain: sales_operations
+
+# ==============================================================================
+# Analytics & Telemetry (Vulcan CloudEvents)
+# ==============================================================================
+# Enables telemetry for run tracking, lineage, and observability
+analytics:
+  enabled: false  # Set to true and provide api_key to enable in production
+  # base_url: "https://your-dataos-instance.dataos.app/cloudevents/api/v1"
+  # api_key: ""  # Required when enabled: true
+  # source_name: "postgres_ecommerce"  # Custom source name for CloudEvents
+  # enable_search: true  # Enable search functionality for analytics
+  # retention_days: 90  # How long to retain analytics data
+
+# ==============================================================================
+# Virtual Environment
+# ==============================================================================
+# Use Python virtual environment only in dev, not in production containers
+#virtual_environment_mode: dev_only
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+# Enforces data quality and best practices
+# linter:
+#   enabled: true
+#   warn_rules:
+#     - RequireGrainForAllModels          # All models should define grain
+#     - RequireAuditsForAllKindsExceptEmbedded  # Models should have assertions
+#     - RequireChecksForModels            # Models should have data quality checks
+#     - PreferAssertions                  # Prefer assertions over audits
+#     - NoMissingAudits                   # Ensure no models are missing audits/assertions
+
+# ==============================================================================
+# Object Store Configuration (Query Service)
+# ==============================================================================
+# Stores query results and intermediate data
+# object_store:
+#   provider: minio
+#   bucket: warehouse1
+#   base_path: postgres_ecommerce/queries
+#   compression: snappy
+#   presigned_url_expiry_mins: 60  # URLs valid for 1 hour
+#   credentials:
+#     endpoint_url: http://localhost:9000
+#     access_key_id: admin
+#     secret_access_key: password
+#     region: us-east-1
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+# Default configuration for all models (can be overridden per model)
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'  # Default start date for incremental models
+  cron: '@daily'  # Default: Every 15 minutes (overridden per model)
+  # Note: Orders/order_items use */5 minutes, dimensions use */15-20 minutes
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+# Database connections and state management
+gateways:
+  default:
+    # Primary data connection (where models are materialized)
+    connection:
+      type: depot
+      address: dataos://snowflakedepot
+    #   type: postgres
+    #   host: localhost
+    #   port: 5433
+    #   user: vulcan
+    #   password: vulcan
+    #   database: warehouse
+    #   # Docs: https://sqlmesh.readthedocs.io/en/latest/integrations/engines/postgres/
+
+    # # State management connection (tracks model versions, runs, snapshots)
+    # # Recommended: Use separate database for state in production
+    # state_connection:
+    #   type: postgres
+    #   host: localhost
+    #   port: 5431
+    #   user: vulcan
+    #   password: vulcan
+    #   database: statestore
+    #   # For production, consider using dedicated state database:
+    #   # port: 5431
+    #   # database: statestore
+
+    # State schema (stores Vulcan metadata)
+    # state_schema: postgres_ecommerce_state1
+
+    # Gateway-specific variables (available in models, checks via ${variable_name})
+    # variables:
+    #   env: development
+    #   region: us-west-2
+    #   data_retention_days: 365
+    #   alert_threshold: 100
+    #   bronze_schema: vulcan_demo
+    #   silver_schema: silver
+    #   gold_schema: gold
+    #   min_customer_count: 50
+    #   min_order_count: 500
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+# Tracks data lineage, dependencies, and transformations
+# openlineage:
+#   enabled: false  # Set to true to enable lineage tracking
+#   # url: http://127.0.0.1:8000  # Marquez or OpenLineage collector URL
+#   # timeout_seconds: 10
+#   # api_key: ""  # Optional API key for authentication
+openlineage:
+  enabled: true
+  url: https://desert-011726.dataos.cloud/hera
+  timeout_seconds: 30
+  api_key: YXBpX25pbHVzX3Rva2VuX3NocmV5YS5mZDYyY2E3MS1mZTgxLTQ4ZTMtOWNmZi1lODk5MDZhMjkwMWM0ZTNmN2FlYTlhNmQwMTczYmExMDA3MTFmY2M5YWE4Mw==
+# ==============================================================================
+# Transpiler Service (SQL Dialect Translation)
+# ==============================================================================
+# Enables cross-dialect SQL translation if needed
+# transpiler:
+#   base_url: http://127.0.0.1:4000/transpiler
+#   timeout: 30
+
+# ==============================================================================
+# GraphQL API Configuration
+# ==============================================================================
+# Enables GraphQL API for semantic layer queries
+# graphql:
+#   base_url: http://vulcan-graphql:3000
+#   timeout: 60
+
+# ==============================================================================
+# Heimdall Authentication (Enterprise Security)
+# ==============================================================================
+# Provides authentication and authorization for production deployments
+# heimdall:
+#   enabled: false  # Set to true for production with DataOS
+#   # base_url: "https://your-dataos-instance.dataos.app/heimdall"
+#   # timeout: 10
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+# Send notifications for important events (runs, failures, migrations)
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+      - migration_start
+      - migration_end
+      - migration_failure
+      - plan_change
+#
+#   - type: slack
+#     webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+#     notify_on:
+#       - apply_failure
+#       - run_failure
+#       - audit_failure
+#       - check_failure
+#
+#   - type: email
+#     smtp_host: smtp.gmail.com
+#     smtp_port: 587
+#     from_email: vulcan@company.com
+#     to_emails:
+#       - data-team@company.com
+#     notify_on:
+#       - apply_failure
+#       - run_failure
+
+# ==============================================================================
+# Vulcan Production Run Configuration (Optional)
+# ==============================================================================
+# Configuration for prod-run command (catch-up mode, continuous processing)
+# vulcan:
+#   endpoint: https://your-webhook-endpoint.com/vulcan
+#   api_key: ""
+#   enabled: true
+#   environment: production
+#   
+#   # Prod-run behavior
+#   no_gaps: true          # Ensure data continuity (process all intervals)
+#   ignore_cron: true      # Process all missing intervals (catch-up mode)
+#   parallel_tasks: 4      # Number of parallel model runs
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+# Define users with access to this data product
+users:
+  - username: shreya
+    email: shreya.sikarwar@tmdc.io
+    type: OWNER
+    # role: data_engineer
+  - username: kanak
+    email: kanak.gupta@tmdc.io
+    type: CONTRIBUTOR
+    # role: analyst
+  - username: mukul
+    email: mukul.gupta@tmdc.io
+    type: CONTRIBUTOR
+# ==============================================================================
+# Connection String (for reference)
+# ==============================================================================
+# psql -h localhost -p 5433 -U vulcan -d postgres

@@ -1,0 +1,60 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - COBS (Snowflake) - Local / Dev
+# ==============================================================================
+# Use with: vulcan plan --config config_local.yaml (or set VULCAN_CONFIG_PATH)
+
+# Basic Information
+name: ldo-analytics
+display_name: LDO - Lenovo Device Optimizer
+tenant: ct-onboarding
+description: LDO (Lenovo Device Optimizer) is a production-grade device optimizer data product that optimizes the performance of Lenovo devices.
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'
+  cron: '@daily'
+
+# ==============================================================================
+# Gateway Configuration (local: direct Snowflake + local statestore)
+# ==============================================================================
+gateways:
+  default:
+    connection:
+      type: snowflake
+      account: {{ env_var('SNOWFLAKE_ACCOUNT') }}
+      user: {{ env_var('SNOWFLAKE_USER') }}
+      authenticator: SNOWFLAKE_JWT
+      private_key_path: {{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH') }}
+      private_key_passphrase: {{ env_var('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE') }}
+      warehouse: {{ env_var('SNOWFLAKE_WAREHOUSE') }}
+      database: {{ env_var('SNOWFLAKE_DATABASE') }}
+      role: {{ env_var('SNOWFLAKE_ROLE') }}
+
+    state_connection:
+      type: postgres
+      host: {{ env_var('STATESTORE_HOST') }}
+      port: {{ env_var('STATESTORE_PORT') }}
+      database: {{ env_var('STATESTORE_DATABASE') }}
+      user: {{ env_var('STATESTORE_USER') }}
+      password: {{ env_var('STATESTORE_PASSWORD') }}
+    state_schema: new
+
+default_gateway: default
+
+openlineage:
+  enabled: true
+  url: http://127.0.0.1:8000
+  timeout_seconds: 10
+  # api_key: optional_api_key_here
+
+transpiler:
+  base_url: http://vulcan-transpiler:4000/transpiler  
+
+graphql:
+  base_url: http://vulcan-graphql:3000
+  timeout: 60
+
+ 

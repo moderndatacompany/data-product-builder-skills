@@ -1,0 +1,4 @@
+limitations:
+  - Demo source data is provided as static CSV seed files
+  - External source tables must be created from the bundled source seeds before execution
+  - Full refresh models are optimized for reproducible examples

@@ -1,0 +1,63 @@
+# ============================================================================
+# CHECKS: Product Data Quality Monitoring
+# ============================================================================
+# Owner: rohitrajtmdcio
+# Description: Data quality checks for product catalog ensuring completeness,
+#              valid classifications, and unique product identifiers
+# ============================================================================
+
+checks:
+  web_analytics_gold.PRODUCT:
+    
+    # ==================== COMPLETENESS ====================
+    completeness:
+      - row_count > 0:
+          name: product_records_exist
+          attributes:
+            description: "Product catalog must contain at least one product"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(site_item_pk_product) = 0:
+          name: product_pk_required
+          attributes:
+            description: "All products must have a unique primary key identifier"
+            owner: "rohitrajtmdcio"
+      
+      - missing_count(itemnumber) = 0:
+          name: itemnumber_required
+          attributes:
+            description: "All products must have an item number from inventory system"
+            owner: "rohitrajtmdcio"
+      
+      - missing_percent(pim_product_name) < 10:
+          name: product_name_completeness
+          attributes:
+            description: "At least 90% of products should have standardized PIM product names"
+            owner: "rohitrajtmdcio"
+      
+      - missing_percent(brand_name) < 20:
+          name: brand_name_completeness
+          attributes:
+            description: "At least 80% of products should have brand names for merchandising"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== VALIDITY ====================
+    validity:
+      - failed rows:
+          name: invalid_class
+          fail query: |
+            SELECT site_item_pk_product, pim_product_name, class
+            FROM web_analytics_gold.PRODUCT
+            WHERE class IS NULL OR class = ''
+          samples limit: 10
+          attributes:
+            description: "All products must have a valid alcohol product class (Wine, Spirits, Beer)"
+            owner: "rohitrajtmdcio"
+    
+    # ==================== UNIQUENESS ====================
+    uniqueness:
+      - duplicate_count(site_item_pk_product) = 0:
+          name: product_pk_unique
+          attributes:
+            description: "Product primary key must be unique across all records"
+            owner: "rohitrajtmdcio"

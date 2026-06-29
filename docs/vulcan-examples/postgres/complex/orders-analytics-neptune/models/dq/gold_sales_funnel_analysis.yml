@@ -1,0 +1,81 @@
+# kind: dq — converted from checks/gold_sales_funnel_analysis.yml
+kind: dq
+name: sales_funnel_analysis_dq
+depends_on: gold_v1.sales_funnel_analysis
+rules:
+- missing_count(funnel_date) = 0:
+    name: no_missing_dates
+    dimension: completeness
+    description: All funnel records must have a date
+- missing_count(region_id) = 0:
+    name: no_missing_region_ids
+    dimension: completeness
+    description: All funnel records must have a region ID
+- missing_count(region_name) = 0:
+    name: no_missing_region_names
+    dimension: completeness
+    description: All funnel records must have a region name
+- row_count > 10:
+    name: sufficient_funnel_records
+    dimension: completeness
+    description: At least 10 funnel analysis records
+- failed rows:
+    name: non_negative_stage_values
+    dimension: validity
+    fail query: |
+      SELECT funnel_date, region_name,
+             stage_1_registered_customers,
+             stage_2_customers_with_orders,
+             stage_3_orders_placed,
+             stage_4_orders_with_items,
+             stage_5_orders_shipped
+      FROM gold_v1.sales_funnel_analysis
+      WHERE stage_1_registered_customers < 0
+         OR stage_2_customers_with_orders < 0
+         OR stage_3_orders_placed < 0
+         OR stage_4_orders_with_items < 0
+         OR stage_5_orders_shipped < 0
+    samples limit: 10
+    description: All stage values must be non-negative
+- failed rows:
+    name: funnel_progression_logic
+    dimension: validity
+    fail query: |
+      SELECT funnel_date, region_name,
+             stage_1_registered_customers,
+             stage_2_customers_with_orders,
+             stage_3_orders_placed,
+             stage_4_orders_with_items,
+             stage_5_orders_shipped
+      FROM gold_v1.sales_funnel_analysis
+      WHERE stage_2_customers_with_orders > stage_1_registered_customers
+         OR stage_4_orders_with_items > stage_3_orders_placed
+         OR stage_5_orders_shipped > stage_3_orders_placed
+    samples limit: 10
+    description: Funnel stages must follow logical progression
+- failed rows:
+    name: valid_conversion_rates
+    dimension: validity
+    fail query: "SELECT funnel_date, region_name,\n       conversion_rate_registration_to_order,\n       conversion_rate_order_to_items,\n       conversion_rate_order_to_shipment\nFROM gold_v1.sales_funnel_analysis\n\
+      WHERE conversion_rate_registration_to_order < 0 \n   OR conversion_rate_registration_to_order > 1\n   OR conversion_rate_order_to_items < 0 \n   OR conversion_rate_order_to_items > 1\n   OR conversion_rate_order_to_shipment\
+      \ < 0 \n   OR conversion_rate_order_to_shipment > 1\n"
+    samples limit: 10
+    description: Conversion rates must be between 0 and 1
+- failed rows:
+    name: perfect_conversion_check
+    dimension: validity
+    fail query: "SELECT funnel_date, region_name,\n       conversion_rate_registration_to_order,\n       stage_1_registered_customers\nFROM gold_v1.sales_funnel_analysis\nWHERE stage_1_registered_customers\
+      \ > 0 \n  AND conversion_rate_registration_to_order < 1.0\n"
+    samples limit: 10
+    description: All customers should convert to orders (100% rate) (EXPECTED TO FAIL)
+- failed rows:
+    name: high_shipment_conversion_check
+    dimension: validity
+    fail query: "SELECT funnel_date, region_name,\n       conversion_rate_order_to_shipment,\n       stage_3_orders_placed\nFROM gold_v1.sales_funnel_analysis\nWHERE stage_3_orders_placed > 0 \n  AND conversion_rate_order_to_shipment\
+      \ < 0.95\n"
+    samples limit: 10
+    description: Order-to-shipment conversion should be >= 95% (EXPECTED TO FAIL)
+- duplicate_count(funnel_date, region_id) = 0:
+    name: unique_date_region_combinations
+    dimension: uniqueness
+    description: Date and region combinations must be unique

@@ -1,0 +1,224 @@
+models:
+  silver_v1.dim_customer_profile:
+    alias: customer_profile
+    
+    measures:
+      total_customers:
+        type: count
+        expression: "{customer_profile.customer_id}"
+        description: "Total number of customers"
+        tags:
+          - customer
+          - count
+          - metric
+        terms:
+          - customer.total_count
+          - metric.customer_base
+      
+      total_customer_revenue:
+        type: sum
+        expression: "{customer_profile.total_revenue}"
+        format: currency
+        description: "Total lifetime value across all customers"
+        tags:
+          - revenue
+          - ltv
+          - financial
+        terms:
+          - customer.total_ltv
+          - finance.customer_revenue
+      
+      avg_customer_lifetime_value:
+        type: avg
+        expression: "{customer_profile.total_revenue}"
+        format: currency
+        description: "Average customer lifetime value"
+        tags:
+          - revenue
+          - ltv
+          - average
+        terms:
+          - customer.avg_ltv
+          - finance.avg_customer_value
+      
+      avg_orders_per_customer:
+        type: avg
+        expression: "{customer_profile.total_orders}"
+        description: "Average number of orders per customer"
+        tags:
+          - customer
+          - behavior
+          - average
+        terms:
+          - customer.avg_orders
+          - behavior.order_frequency
+      
+      avg_items_per_customer:
+        type: avg
+        expression: "{customer_profile.total_items_purchased}"
+        description: "Average items purchased per customer"
+        tags:
+          - customer
+          - behavior
+          - average
+        terms:
+          - customer.avg_items
+          - behavior.purchase_volume
+      
+      high_value_customer_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{customer_profile.customer_segment} = 'High Value'"
+        description: "Number of high value customers"
+        tags:
+          - customer
+          - segment
+          - high_value
+        terms:
+          - customer.high_value_count
+          - segment.premium_customers
+      
+      churned_customer_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{customer_profile.customer_segment} = 'Churned'"
+        description: "Number of churned customers"
+        tags:
+          - customer
+          - churn
+          - retention
+        terms:
+          - customer.churned_count
+          - churn.lost_customers
+      
+      avg_customer_lifetime_days:
+        type: avg
+        expression: "{customer_profile.customer_lifetime_days}"
+        description: "Average customer tenure in days"
+        tags:
+          - customer
+          - tenure
+          - lifecycle
+        terms:
+          - customer.avg_tenure
+          - lifecycle.avg_age
+      
+      avg_purchase_frequency_score:
+        type: avg
+        expression: "{customer_profile.purchase_frequency_score}"
+        description: "Average purchase frequency score across customers"
+        tags:
+          - customer
+          - behavior
+          - frequency
+        terms:
+          - customer.avg_frequency_score
+          - behavior.avg_purchase_rate
+      
+      high_frequency_customer_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{customer_profile.purchase_frequency_score} >= 4"
+        description: "Number of high-frequency customers (score 4-5)"
+        tags:
+          - customer
+          - frequency
+          - retention
+        terms:
+          - customer.high_frequency_count
+          - behavior.frequent_buyers
+    
+    segments:
+      high_value_customers:
+        expression: "{customer_profile.customer_segment} = 'High Value'"
+        description: "Customers with lifetime value >= $5,000"
+        tags:
+          - customer
+          - segment
+          - high_value
+        terms:
+          - customer.high_value
+          - segment.premium
+      
+      medium_value_customers:
+        expression: "{customer_profile.customer_segment} = 'Medium Value'"
+        description: "Customers with lifetime value $1,000-$5,000"
+        tags:
+          - customer
+          - segment
+          - medium_value
+        terms:
+          - customer.medium_value
+          - segment.mid_tier
+      
+      churned_customers:
+        expression: "{customer_profile.customer_segment} = 'Churned'"
+        description: "Customers inactive for 90+ days"
+        tags:
+          - customer
+          - churn
+          - retention
+        terms:
+          - customer.churned
+          - churn.inactive
+      
+      new_customers:
+        expression: "{customer_profile.customer_segment} = 'New'"
+        description: "Customers with no orders yet"
+        tags:
+          - customer
+          - new
+          - acquisition
+        terms:
+          - customer.new
+          - acquisition.prospects
+      
+      recent_purchasers:
+        expression: "{customer_profile.days_since_last_order} <= 30"
+        description: "Customers who ordered in last 30 days"
+        tags:
+          - customer
+          - recent
+          - active
+        terms:
+          - customer.recent_buyers
+          - engagement.active
+      
+      loyal_customers:
+        expression: "{customer_profile.total_orders} >= 10"
+        description: "Customers with 10+ lifetime orders"
+        tags:
+          - customer
+          - loyalty
+          - retention
+        terms:
+          - customer.loyal
+          - retention.repeat_buyers
+    
+    dimensions:
+      includes:
+        - customer_id
+        - customer_name
+        - email
+        - region_id
+        - region_name
+        - first_order_date
+        - last_order_date
+        - customer_lifetime_days
+        - purchase_frequency_score
+        - customer_segment
+        - favorite_category
+      
+      # enhancements:
+      #   - name: first_order_date
+      #     granularities:
+      #       - name: monthly
+      #         interval: "1 month"
+      #         description: "Customer cohorts by first order month"
+      #       - name: quarterly
+      #         interval: "3 months"
+      #         description: "Customer cohorts by quarter"
+

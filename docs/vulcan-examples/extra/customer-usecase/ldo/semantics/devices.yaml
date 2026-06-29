@@ -1,0 +1,103 @@
+models:
+  lenovo.ldo.devices:
+    alias: devices
+    joins:
+      devices_uptime:
+        type: one_to_one
+        expression: "{devices.DEVICE_ID} = {devices_uptime.DEVICE_ID}"
+      
+      system_update_reports:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {system_update_reports.DEVICE_ID} "
+      
+      schedules_app:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {schedules_app.DEVICE_ID} "
+      
+      storage:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {storage.DEVICE_ID}"
+      
+      battery:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {battery.DEVICE_ID}"
+      
+      device_bios:
+        type: one_to_one
+        expression: "{devices.DEVICE_ID} = {device_bios.DEVICE_ID}"
+      
+      device_os:
+        type: one_to_one
+        expression: "{devices.DEVICE_ID} = {device_os.DEVICE_ID}"
+      
+      issue:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {issue.DEVICE_ID}"
+      
+      device_warranty:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {device_warranty.DEVICE_ID} "
+      
+      device_context:
+        type: one_to_one
+        expression: "{devices.DEVICE_ID} = {device_context.DEVICE_ID} "
+      
+      consumed_licenses:
+        type: one_to_many
+        expression: "{devices.DEVICE_ORG_ID} = {consumed_licenses.ENTITY_ID} AND {consumed_licenses.ENTITY_TYPE} = 'DEVICE' "
+      
+      live_device_status:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {live_device_status.DEVICE_ID} "
+      
+      system_update_testing:
+        type: one_to_many
+        expression: "{devices.DEVICE_ID} = {system_update_testing.DEVICE_ID} "
+
+    
+    measures:
+      total_devices:
+        type: count_distinct
+        expression: "{devices.DEVICE_ID}"
+        description: "Total number of devices. Shall be used to get the count of devices."
+      
+      total_device_categories:
+        type: count_distinct
+        expression: "{devices.CATEGORY}"
+        description: "Total number of device categories."
+      
+      total_pc_devices:
+        type: count_distinct
+        expression: "{devices.DEVICE_ID}"
+        filters:
+          - "upper({devices.CATEGORY}) = 'PC'"
+        description: "Total number of PC devices."
+      
+      total_mobile_and_tablet_devices:
+        type: count_distinct
+        expression: "{devices.DEVICE_ID}"
+        filters:
+          - "upper({devices.CATEGORY}) IN ('MOBILE', 'PHONE', 'TABLET')"
+        description: "Total number of Mobile and Tablet devices."
+      
+      total_ar_and_vr_devices:
+        type: count_distinct
+        expression: "{devices.DEVICE_ID}"
+        filters:
+          - "upper({devices.CATEGORY}) IN ('AR', 'VR')"
+        description: "Total number of AR and VR devices."
+      
+      total_smartedge_devices:
+        type: count_distinct
+        expression: "{devices.DEVICE_ID}"
+        filters:
+          - "upper({devices.CATEGORY}) = 'SMARTEDGE'"
+        description: "Total number of SMARTEDGE devices."
+      
+      total_chromebook_devices:
+        type: count_distinct
+        expression: "{devices.DEVICE_ID}"
+        filters:
+          - "upper({devices.CATEGORY}) = 'CHROMEBOOK'"
+        description: "Total number of Chromebook devices."
+

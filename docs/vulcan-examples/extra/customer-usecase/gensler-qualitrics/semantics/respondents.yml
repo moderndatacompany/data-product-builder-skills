@@ -1,0 +1,29 @@
+models:
+  GENSLER.ANALYTICS.QUALTRICS_RESPONDENTS_DIMENSION:
+    alias: respondents
+
+    dimensions:
+      includes:
+        - SURVEY_ID
+        - RESPONSE_ID
+        - RESPONSE_TYPE
+        - RESPONSE_TYPE_STATUS
+        - SURVEY_NAME
+        - SURVEY_DESCRIPTION
+        - OWNER_ID
+        - ORGANIZATION_ID
+        - RESPONSE_STATUS
+        - SURVEY_TYPE
+        - SURVEY_STATUS
+
+    measures:
+      total_respondents:
+        type: count
+        expression: "*"
+        description: "Total respondents"
+
+    segments:
+      complete_responses:
+        expression: |
+          {respondents.RESPONSE_STATUS} = 'Complete'
+        description: "Complete responses only"

@@ -1,0 +1,76 @@
+name: user-engagement-nebula
+display_name: User Engagement Analytics
+tenant: engineering
+description: User Engagement Analytics is a comprehensive data product delivering insights into user engagement patterns across Lenovo's software ecosystem. It processes consumer analytics events to provide actionable metrics across product, hardware, and software dimensions for business intelligence and regional analysis.
+
+tags:
+  - snowflake
+  - user_engagement
+  - device_analytics
+  - consumer_analytics
+  - lenovo
+  - product_analytics
+  - hardware_analytics
+  - software_analytics
+  - power_bi
+  - usdk
+  - demo
+
+terms:
+  - data_product
+  - user_engagement
+  - device_analytics
+  - consumer_analytics
+  - hardware_dimension
+  - software_dimension
+  - business_intelligence
+
+domain: sales_operations
+# analytics:
+#   enabled: false
+
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'
+  cron: '@daily'
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://snowflakevulcan
+
+# openlineage:
+#   enabled: true
+#   url: https://forest-020226.dataos.cloud/hera
+#   timeout_seconds: 30
+#   api_key: cG9zaXRpdmVseV9zYWZlX2h1c2t5XzIwMjYwMjA1LjFmNzI0MTAwLWRjNWUtNDk5Yi1iNDlmLTFkYWU0NzVlNzE4MDhjN2QxZDA4YTE2MDZiNjc1NzViMTBhY2M1ZjRhZWIx
+
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+      - migration_start
+      - migration_end
+      - migration_failure
+      - plan_change
+
+users:
+  - username: shreya
+    email: shreya.sikarwar@tmdc.io
+    type: OWNER
+  - username: kanak
+    email: kanak.gupta@tmdc.io
+    type: CONTRIBUTOR
+  - username: mukul
+    email: mukul.gupta@tmdc.io
+    type: CONTRIBUTOR

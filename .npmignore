@@ -1,0 +1,10 @@
+# ignore everything except what's in package.json "files"
+*
+!bin/
+!bin/**
+!skills/
+!skills/**
+!docs/
+!docs/**
+!README.md
+!package.json

@@ -1,0 +1,2351 @@
+{
+  "result": {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
+      "$id": "http://qualtrics.com/API/v3/surveys/SV_3WY6TMZ2FCh85dc/response-schema",
+      "title": "NOX | Tempe | Department Questionnaire  (Kathryn Decker) (SV_3WY6TMZ2FCh85dc) - Survey Response",
+      "description": "This is a schema for survey responses from SV_3WY6TMZ2FCh85dc",
+      "type": "object",
+      "required": [
+          "values",
+          "displayedFields",
+          "displayedValues",
+          "labels",
+          "responseId"
+      ],
+      "properties": {
+          "displayedFields": {
+              "type": "array",
+              "description": "A list of questions or question rows that were displayed to the survey respondent",
+              "items": {
+                  "type": "string"
+              }
+          },
+          "displayedValues": {
+              "type": "object",
+              "description": "A list of the possible answers shown to the survey respondent for each question or question row",
+              "additionalProperties": {
+                  "type": "array"
+              }
+          },
+          "labels": {
+              "type": "object",
+              "description": "The labels of the answers given by the survey respondent for each question or question row",
+              "additionalProperties": true
+          },
+          "values": {
+              "type": "object",
+              "description": "The answers given by the survey respondent",
+              "properties": {
+                  "QID319_DO": {
+                      "description": "What are the most important qualities or spaces a workplace should have to best support in-person work (e.g., acoustics, visibility, access to daylight, privacy, flexibility)? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string"
+                      },
+                      "exportTag": "Q4.5_DO",
+                      "questionId": "QID319"
+                  },
+                  "endDate": {
+                      "description": "End Date",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "format": "date-time",
+                      "exportTag": "EndDate"
+                  },
+                  "QID325_DO": {
+                      "description": "What could improve the in-person experience at the new office? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string"
+                      },
+                      "exportTag": "Q8.1_DO",
+                      "questionId": "QID325"
+                  },
+                  "QID12_DO": {
+                      "description": "Please provide your information. - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Your Name",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Your Title",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Your Email",
+                                  "const": "3"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q1.1_DO",
+                      "questionId": "QID12"
+                  },
+                  "QID362#1_1_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - Current Headcount (2026) - Office-based - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#1_1_2",
+                      "questionId": "QID362"
+                  },
+                  "QID362#1_1_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - Current Headcount (2026) - Office-based - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#1_1_1",
+                      "questionId": "QID362"
+                  },
+                  "QID318_9_TEXT": {
+                      "description": "What storage needs exist for your department? (Select all that apply.) - Other (please specify): - Text",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q4.4_9_TEXT",
+                      "questionId": "QID318"
+                  },
+                  "QID353_G0_6_RANK": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Ranks - Ranked where 1=Anticipated most frequent in-person meeting size - 15-18 in-person attendees - Rank",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "const": 1
+                          },
+                          {
+                              "const": 2
+                          },
+                          {
+                              "const": 3
+                          },
+                          {
+                              "const": 4
+                          },
+                          {
+                              "const": 5
+                          },
+                          {
+                              "const": 6
+                          },
+                          {
+                              "const": 7
+                          }
+                      ],
+                      "exportTag": "Q3.2_0_6_RANK",
+                      "questionId": "QID353"
+                  },
+                  "QID251_DO": {
+                      "description": "Please indicate the frequency of your department\u2019s interactions with each department listed below. (Select one or more frequencies per department using the table below. If no interaction, leave blank.)\n\n \n\n\n\tDaily: Required daily coordination and communication for operations\n\tWeekly: Weekly coordination needed for effective functioning\n\tMonthly: Interaction at least once per month to support shared tasks\n\tSeasonally: Periodic interaction tied to seasonal needs or projects - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "The Apex",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Construction Operations",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Human Resources | Workforce Development & Talent",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Marketing | Studio",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Nox VDC",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Precon/Estimating",
+                                  "const": "6"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1_DO",
+                      "questionId": "QID251"
+                  },
+                  "QID308_1": {
+                      "description": "Thinking of the future, how often would members of your department prefer to work in-person with these groups of people? - Colleagues within our team",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Many times a day",
+                              "const": 1
+                          },
+                          {
+                              "label": "At least once a day",
+                              "const": 2
+                          },
+                          {
+                              "label": "At least once a week",
+                              "const": 3
+                          },
+                          {
+                              "label": "At least once a month",
+                              "const": 4
+                          },
+                          {
+                              "label": "Less than once a month",
+                              "const": 5
+                          }
+                      ],
+                      "exportTag": "Q2.2_1",
+                      "questionId": "QID308"
+                  },
+                  "QID360_DO": {
+                      "description": "Does you department have any special needs for... - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "<strong>Confidentiality</strong>:&nbsp;Requires privacy to protect sensitive information, such as HR, legal, or financial matters",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "<strong>Security:</strong>&nbsp;Requires physical or data security measures to prevent unauthorized access or protect personnel or materials",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "<strong>Conflict of Interest:</strong>&nbsp;Involves situations where proximity with another group may compromise ethical, financial, or oversight responsibilities",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "<strong>Something Else:&nbsp;</strong>Any other reason not described above, includes workstyles, functions, or processes that disrupt or conflict with each other when located nearby. (Please describe)",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.2_DO",
+                      "questionId": "QID360"
+                  },
+                  "QID308_3": {
+                      "description": "Thinking of the future, how often would members of your department prefer to work in-person with these groups of people? - Others outside the company",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Many times a day",
+                              "const": 1
+                          },
+                          {
+                              "label": "At least once a day",
+                              "const": 2
+                          },
+                          {
+                              "label": "At least once a week",
+                              "const": 3
+                          },
+                          {
+                              "label": "At least once a month",
+                              "const": 4
+                          },
+                          {
+                              "label": "Less than once a month",
+                              "const": 5
+                          }
+                      ],
+                      "exportTag": "Q2.2_3",
+                      "questionId": "QID308"
+                  },
+                  "QID308_2": {
+                      "description": "Thinking of the future, how often would members of your department prefer to work in-person with these groups of people? - Colleagues outside our team",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Many times a day",
+                              "const": 1
+                          },
+                          {
+                              "label": "At least once a day",
+                              "const": 2
+                          },
+                          {
+                              "label": "At least once a week",
+                              "const": 3
+                          },
+                          {
+                              "label": "At least once a month",
+                              "const": 4
+                          },
+                          {
+                              "label": "Less than once a month",
+                              "const": 5
+                          }
+                      ],
+                      "exportTag": "Q2.2_2",
+                      "questionId": "QID308"
+                  },
+                  "locationLongitude": {
+                      "description": "Location Longitude",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "LocationLongitude"
+                  },
+                  "QID328_DO": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Staff using a <strong>PRIVATE OFFICE</strong>",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Staff using a <strong>DEDICATED WORKSTATION</strong>",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Staff using a <strong>SHARED WORKSTATION</strong>",
+                                  "const": "3"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q7.3_DO",
+                      "questionId": "QID328"
+                  },
+                  "QID353_G0_5_RANK": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Ranks - Ranked where 1=Anticipated most frequent in-person meeting size - 11-14 in-person attendees - Rank",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "const": 1
+                          },
+                          {
+                              "const": 2
+                          },
+                          {
+                              "const": 3
+                          },
+                          {
+                              "const": 4
+                          },
+                          {
+                              "const": 5
+                          },
+                          {
+                              "const": 6
+                          },
+                          {
+                              "const": 7
+                          }
+                      ],
+                      "exportTag": "Q3.2_0_5_RANK",
+                      "questionId": "QID353"
+                  },
+                  "QID237_xx4": {
+                      "description": "For the departments you work with regularly, rate the importance of physical adjacency. (Select one level per department in the table below.) \n\n \n\n\n\tVirtual: No physical adjacency needed if we are able to work with them virtually\n\tImportant: Improves workflow\n\tEssential: Required for operations - Nox VDC",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Virtual only",
+                              "const": 1
+                          },
+                          {
+                              "label": "Physical adjacency is important",
+                              "const": 2
+                          },
+                          {
+                              "label": "Physical adjacency is essential",
+                              "const": 3
+                          }
+                      ],
+                      "exportTag": "Q5.1.1_5",
+                      "questionId": "QID237"
+                  },
+                  "QID237_xx3": {
+                      "description": "For the departments you work with regularly, rate the importance of physical adjacency. (Select one level per department in the table below.) \n\n \n\n\n\tVirtual: No physical adjacency needed if we are able to work with them virtually\n\tImportant: Improves workflow\n\tEssential: Required for operations - Human Resources | Workforce Development & Talent",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Virtual only",
+                              "const": 1
+                          },
+                          {
+                              "label": "Physical adjacency is important",
+                              "const": 2
+                          },
+                          {
+                              "label": "Physical adjacency is essential",
+                              "const": 3
+                          }
+                      ],
+                      "exportTag": "Q5.1.1_3",
+                      "questionId": "QID237"
+                  },
+                  "QID237_xx2": {
+                      "description": "For the departments you work with regularly, rate the importance of physical adjacency. (Select one level per department in the table below.) \n\n \n\n\n\tVirtual: No physical adjacency needed if we are able to work with them virtually\n\tImportant: Improves workflow\n\tEssential: Required for operations - Marketing | Studio",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Virtual only",
+                              "const": 1
+                          },
+                          {
+                              "label": "Physical adjacency is important",
+                              "const": 2
+                          },
+                          {
+                              "label": "Physical adjacency is essential",
+                              "const": 3
+                          }
+                      ],
+                      "exportTag": "Q5.1.1_4",
+                      "questionId": "QID237"
+                  },
+                  "QID237_xx1": {
+                      "description": "For the departments you work with regularly, rate the importance of physical adjacency. (Select one level per department in the table below.) \n\n \n\n\n\tVirtual: No physical adjacency needed if we are able to work with them virtually\n\tImportant: Improves workflow\n\tEssential: Required for operations - The Apex",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Virtual only",
+                              "const": 1
+                          },
+                          {
+                              "label": "Physical adjacency is important",
+                              "const": 2
+                          },
+                          {
+                              "label": "Physical adjacency is essential",
+                              "const": 3
+                          }
+                      ],
+                      "exportTag": "Q5.1.1_1",
+                      "questionId": "QID237"
+                  },
+                  "QID328#1_1_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - Current Headcount (2026) - Staff using a PRIVATE OFFICE - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#1_1_1",
+                      "questionId": "QID328"
+                  },
+                  "QID251_x4": {
+                      "description": "Please indicate the frequency of your department\u2019s interactions with each department listed below. (Select one or more frequencies per department using the table below. If no interaction, leave blank.)\n\n \n\n\n\tDaily: Required daily coordination and communication for operations\n\tWeekly: Weekly coordination needed for effective functioning\n\tMonthly: Interaction at least once per month to support shared tasks\n\tSeasonally: Periodic interaction tied to seasonal needs or projects - Nox VDC",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Daily",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Weekly",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Monthly",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Seasonally",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1_5",
+                      "questionId": "QID251"
+                  },
+                  "QID286_DO": {
+                      "description": "Would your department work best in the new office if... - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "The whole department sat together in the same area",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Team members were distributed and sat near other teams/individuals they work with often",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "A mix of both, where some of the department sat together and some were distributed",
+                                  "const": "6"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q6.1_DO",
+                      "questionId": "QID286"
+                  },
+                  "QID328#1_1_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - Current Headcount (2026) - Staff using a PRIVATE OFFICE - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#1_1_2",
+                      "questionId": "QID328"
+                  },
+                  "QID251_x3": {
+                      "description": "Please indicate the frequency of your department\u2019s interactions with each department listed below. (Select one or more frequencies per department using the table below. If no interaction, leave blank.)\n\n \n\n\n\tDaily: Required daily coordination and communication for operations\n\tWeekly: Weekly coordination needed for effective functioning\n\tMonthly: Interaction at least once per month to support shared tasks\n\tSeasonally: Periodic interaction tied to seasonal needs or projects - Human Resources | Workforce Development & Talent",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Daily",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Weekly",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Monthly",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Seasonally",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1_3",
+                      "questionId": "QID251"
+                  },
+                  "QID353_G0_7_RANK": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Ranks - Ranked where 1=Anticipated most frequent in-person meeting size - 19+ in-person attendees - Rank",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "const": 1
+                          },
+                          {
+                              "const": 2
+                          },
+                          {
+                              "const": 3
+                          },
+                          {
+                              "const": 4
+                          },
+                          {
+                              "const": 5
+                          },
+                          {
+                              "const": 6
+                          },
+                          {
+                              "const": 7
+                          }
+                      ],
+                      "exportTag": "Q3.2_0_7_RANK",
+                      "questionId": "QID353"
+                  },
+                  "QID251_x6": {
+                      "description": "Please indicate the frequency of your department\u2019s interactions with each department listed below. (Select one or more frequencies per department using the table below. If no interaction, leave blank.)\n\n \n\n\n\tDaily: Required daily coordination and communication for operations\n\tWeekly: Weekly coordination needed for effective functioning\n\tMonthly: Interaction at least once per month to support shared tasks\n\tSeasonally: Periodic interaction tied to seasonal needs or projects - Construction Operations",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Daily",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Weekly",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Monthly",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Seasonally",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1_2",
+                      "questionId": "QID251"
+                  },
+                  "QID237_xx6": {
+                      "description": "For the departments you work with regularly, rate the importance of physical adjacency. (Select one level per department in the table below.) \n\n \n\n\n\tVirtual: No physical adjacency needed if we are able to work with them virtually\n\tImportant: Improves workflow\n\tEssential: Required for operations - Construction Operations",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Virtual only",
+                              "const": 1
+                          },
+                          {
+                              "label": "Physical adjacency is important",
+                              "const": 2
+                          },
+                          {
+                              "label": "Physical adjacency is essential",
+                              "const": 3
+                          }
+                      ],
+                      "exportTag": "Q5.1.1_2",
+                      "questionId": "QID237"
+                  },
+                  "QID251_x5": {
+                      "description": "Please indicate the frequency of your department\u2019s interactions with each department listed below. (Select one or more frequencies per department using the table below. If no interaction, leave blank.)\n\n \n\n\n\tDaily: Required daily coordination and communication for operations\n\tWeekly: Weekly coordination needed for effective functioning\n\tMonthly: Interaction at least once per month to support shared tasks\n\tSeasonally: Periodic interaction tied to seasonal needs or projects - Precon/Estimating",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Daily",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Weekly",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Monthly",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Seasonally",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1_6",
+                      "questionId": "QID251"
+                  },
+                  "QID237_xx5": {
+                      "description": "For the departments you work with regularly, rate the importance of physical adjacency. (Select one level per department in the table below.) \n\n \n\n\n\tVirtual: No physical adjacency needed if we are able to work with them virtually\n\tImportant: Improves workflow\n\tEssential: Required for operations - Precon/Estimating",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Virtual only",
+                              "const": 1
+                          },
+                          {
+                              "label": "Physical adjacency is important",
+                              "const": 2
+                          },
+                          {
+                              "label": "Physical adjacency is essential",
+                              "const": 3
+                          }
+                      ],
+                      "exportTag": "Q5.1.1_6",
+                      "questionId": "QID237"
+                  },
+                  "QID362#3_1_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 10-Year Projection (2036) - Office-based - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#3_1_2",
+                      "questionId": "QID362"
+                  },
+                  "QID353_G0_4_RANK": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Ranks - Ranked where 1=Anticipated most frequent in-person meeting size - 8-10 in-person attendees - Rank",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "const": 1
+                          },
+                          {
+                              "const": 2
+                          },
+                          {
+                              "const": 3
+                          },
+                          {
+                              "const": 4
+                          },
+                          {
+                              "const": 5
+                          },
+                          {
+                              "const": 6
+                          },
+                          {
+                              "const": 7
+                          }
+                      ],
+                      "exportTag": "Q3.2_0_4_RANK",
+                      "questionId": "QID353"
+                  },
+                  "QID287_TEXT": {
+                      "description": "How can the new office best support your teams' work together and with other departments? (Please write in your response.)",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q6.2",
+                      "questionId": "QID287"
+                  },
+                  "QID362#3_1_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 10-Year Projection (2036) - Office-based - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#3_1_1",
+                      "questionId": "QID362"
+                  },
+                  "QID328#2_3_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 5-Year Projection (2031) - Staff using a SHARED WORKSTATION - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#2_3_1",
+                      "questionId": "QID328"
+                  },
+                  "QID328#2_3_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 5-Year Projection (2031) - Staff using a SHARED WORKSTATION - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#2_3_2",
+                      "questionId": "QID328"
+                  },
+                  "QID251_x2": {
+                      "description": "Please indicate the frequency of your department\u2019s interactions with each department listed below. (Select one or more frequencies per department using the table below. If no interaction, leave blank.)\n\n \n\n\n\tDaily: Required daily coordination and communication for operations\n\tWeekly: Weekly coordination needed for effective functioning\n\tMonthly: Interaction at least once per month to support shared tasks\n\tSeasonally: Periodic interaction tied to seasonal needs or projects - Marketing | Studio",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Daily",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Weekly",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Monthly",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Seasonally",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1_4",
+                      "questionId": "QID251"
+                  },
+                  "QID251_x1": {
+                      "description": "Please indicate the frequency of your department\u2019s interactions with each department listed below. (Select one or more frequencies per department using the table below. If no interaction, leave blank.)\n\n \n\n\n\tDaily: Required daily coordination and communication for operations\n\tWeekly: Weekly coordination needed for effective functioning\n\tMonthly: Interaction at least once per month to support shared tasks\n\tSeasonally: Periodic interaction tied to seasonal needs or projects - The Apex",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Daily",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Weekly",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Monthly",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Seasonally",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1_1",
+                      "questionId": "QID251"
+                  },
+                  "QID308_DO": {
+                      "description": "Thinking of the future, how often would members of your department prefer to work in-person with these groups of people? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Colleagues within our team",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Colleagues outside our team",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Others outside the company",
+                                  "const": "3"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q2.2_DO",
+                      "questionId": "QID308"
+                  },
+                  "QID362#2_3_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 5-Year Projection (2031) - Remote - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#2_3_2",
+                      "questionId": "QID362"
+                  },
+                  "QID362#2_3_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 5-Year Projection (2031) - Remote - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#2_3_1",
+                      "questionId": "QID362"
+                  },
+                  "QID317_11_TEXT": {
+                      "description": "What technology or tools are essential for supporting your department's in-person work? (Select all that apply.) - Other (please specify): - Text",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q4.3_11_TEXT",
+                      "questionId": "QID317"
+                  },
+                  "QID326_TEXT": {
+                      "description": "Are there any additional space considerations we should be aware of?",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q8.2",
+                      "questionId": "QID326"
+                  },
+                  "QID328#3_1_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 10-Year Projection (2036) - Staff using a PRIVATE OFFICE - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#3_1_1",
+                      "questionId": "QID328"
+                  },
+                  "startDate": {
+                      "description": "Start Date",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "format": "date-time",
+                      "exportTag": "StartDate"
+                  },
+                  "QID328#3_1_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 10-Year Projection (2036) - Staff using a PRIVATE OFFICE - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#3_1_2",
+                      "questionId": "QID328"
+                  },
+                  "status": {
+                      "description": "Response Type",
+                      "dataType": "metadata",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "IP Address",
+                              "const": 0
+                          },
+                          {
+                              "label": "Survey Preview",
+                              "const": 1
+                          },
+                          {
+                              "label": "Survey Test",
+                              "const": 2
+                          },
+                          {
+                              "label": "Imported",
+                              "const": 4
+                          },
+                          {
+                              "label": "Spam",
+                              "const": 8
+                          },
+                          {
+                              "label": "Survey Preview Spam",
+                              "const": 9
+                          },
+                          {
+                              "label": "Imported Spam",
+                              "const": 12
+                          },
+                          {
+                              "label": "Offline",
+                              "const": 16
+                          },
+                          {
+                              "label": "Offline Survey Preview",
+                              "const": 17
+                          },
+                          {
+                              "label": "EX",
+                              "const": 32
+                          },
+                          {
+                              "label": "EX Spam",
+                              "const": 40
+                          },
+                          {
+                              "label": "EX Offline",
+                              "const": 48
+                          }
+                      ],
+                      "exportTag": "Status"
+                  },
+                  "userLanguage": {
+                      "description": "User Language",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "UserLanguage"
+                  },
+                  "QID307_DO": {
+                      "description": "How often do members of your department work with these groups of people either virtually or in-person? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Colleagues within our team",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Colleagues outside our team",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Others outside the company",
+                                  "const": "3"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q2.1_DO",
+                      "questionId": "QID307"
+                  },
+                  "QID286": {
+                      "description": "Would your department work best in the new office if...",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "The whole department sat together in the same area",
+                              "const": 4
+                          },
+                          {
+                              "label": "Team members were distributed and sat near other teams/individuals they work with often",
+                              "const": 5
+                          },
+                          {
+                              "label": "A mix of both, where some of the department sat together and some were distributed",
+                              "const": 6
+                          }
+                      ],
+                      "exportTag": "Q6.1",
+                      "questionId": "QID286"
+                  },
+                  "QID253_DO": {
+                      "description": "What are the core functions or services your department provides? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string"
+                      },
+                      "exportTag": "Q1.3_DO",
+                      "questionId": "QID253"
+                  },
+                  "QID353_G0_2_RANK": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Ranks - Ranked where 1=Anticipated most frequent in-person meeting size - 3-4 in-person attendees - Rank",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "const": 1
+                          },
+                          {
+                              "const": 2
+                          },
+                          {
+                              "const": 3
+                          },
+                          {
+                              "const": 4
+                          },
+                          {
+                              "const": 5
+                          },
+                          {
+                              "const": 6
+                          },
+                          {
+                              "const": 7
+                          }
+                      ],
+                      "exportTag": "Q3.2_0_2_RANK",
+                      "questionId": "QID353"
+                  },
+                  "QID253_TEXT": {
+                      "description": "What are the core functions or services your department provides?",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q1.3",
+                      "questionId": "QID253"
+                  },
+                  "QID360_4_TEXT": {
+                      "description": "Does you department have any special needs for... - Something Else: Any other reason not described above, includes workstyles, functions, or processes that disrupt or conflict with each other when located nearby. (Please describe) - Text",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q5.2_4_TEXT",
+                      "questionId": "QID360"
+                  },
+                  "QID325_TEXT": {
+                      "description": "What could improve the in-person experience at the new office?",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q8.1",
+                      "questionId": "QID325"
+                  },
+                  "recipientFirstName": {
+                      "description": "Recipient First Name",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "RecipientFirstName"
+                  },
+                  "QID359_11": {
+                      "description": "How often do members of your department participate in the following virtual, hybrid or in-person meetings/interactions? - Hybrid in a meeting room (virtual and in-person attendees)",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "At least once per day",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "At least once per week",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "At least once per month",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "At least once per quarter",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "At least once per year",
+                                  "const": "5"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q3.1_4",
+                      "questionId": "QID359"
+                  },
+                  "QID316_DO": {
+                      "description": "When working in the office, where would your department staff prefer to concentrate or focus? (Select all that apply) - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "At their individual desk",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "At an unassigned hoteling station",
+                                  "const": "10"
+                              },
+                              {
+                                  "label": "In a solo focus space (phone room, pod)",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "In an unoccupied meeting room",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "In an unoccupied or visitor office",
+                                  "const": "9"
+                              },
+                              {
+                                  "label": "In a group focus space (library, quiet zone)",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "In a common area (work cafe, lounge)",
+                                  "const": "11"
+                              },
+                              {
+                                  "label": "They focus anywhere as long as they wear headphones",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "They prefer to focus outside the office",
+                                  "const": "8"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.2_DO",
+                      "questionId": "QID316"
+                  },
+                  "externalDataReference": {
+                      "description": "External Data Reference",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "ExternalReference"
+                  },
+                  "QID328#2_2_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 5-Year Projection (2031) - Staff using a DEDICATED WORKSTATION - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#2_2_2",
+                      "questionId": "QID328"
+                  },
+                  "QID328#2_2_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 5-Year Projection (2031) - Staff using a DEDICATED WORKSTATION - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#2_2_1",
+                      "questionId": "QID328"
+                  },
+                  "QID319_TEXT": {
+                      "description": "What are the most important qualities or spaces a workplace should have to best support in-person work (e.g., acoustics, visibility, access to daylight, privacy, flexibility)?",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q4.5",
+                      "questionId": "QID319"
+                  },
+                  "QID362#2_2_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 5-Year Projection (2031) - Field-based - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#2_2_2",
+                      "questionId": "QID362"
+                  },
+                  "progress": {
+                      "description": "Progress",
+                      "dataType": "metadata",
+                      "type": "number",
+                      "exportTag": "Progress"
+                  },
+                  "QID362#2_2_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 5-Year Projection (2031) - Field-based - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#2_2_1",
+                      "questionId": "QID362"
+                  },
+                  "QID12_1": {
+                      "description": "Please provide your information. - Your Name",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q1.1_1",
+                      "questionId": "QID12"
+                  },
+                  "QID287_DO": {
+                      "description": "How can the new office best support your teams' work together and with other departments? (Please write in your response.) - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string"
+                      },
+                      "exportTag": "Q6.2_DO",
+                      "questionId": "QID287"
+                  },
+                  "QID362#1_3_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - Current Headcount (2026) - Remote - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#1_3_2",
+                      "questionId": "QID362"
+                  },
+                  "QID315_DO": {
+                      "description": "What types of spaces would best support your department's in-person work? (Select all that apply.) - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Small huddle rooms (2-4 people)",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Medium-sized meeting rooms (5-10 people)",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Large conference rooms (10-25 people)",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Event spaces (100+ people)",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "Private phone booths for calls or virtual meetings",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "Open lounge areas for casual discussions",
+                                  "const": "8"
+                              },
+                              {
+                                  "label": "Quiet zones for focus work between meetings",
+                                  "const": "9"
+                              },
+                              {
+                                  "label": "Multi-purpose rooms for flexible uses",
+                                  "const": "10"
+                              },
+                              {
+                                  "label": "Outdoor workspaces (patios, terraces, etc.)",
+                                  "const": "11"
+                              },
+                              {
+                                  "label": "Other (please specify):",
+                                  "const": "12"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.1_DO",
+                      "questionId": "QID315"
+                  },
+                  "QID362#1_3_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - Current Headcount (2026) - Remote - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#1_3_1",
+                      "questionId": "QID362"
+                  },
+                  "QID296_TEXT": {
+                      "description": "Please describe your department\u2019s current or in-development remote work, work from home, telecommuting, or flex time policy. Include details about who is eligible, how it\u2019s applied, and whether you expect it to continue long term.",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q7.4.1",
+                      "questionId": "QID296"
+                  },
+                  "QID359_1": {
+                      "description": "How often do members of your department participate in the following virtual, hybrid or in-person meetings/interactions? - Virtual meeting at an individual desk",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "At least once per day",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "At least once per week",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "At least once per month",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "At least once per quarter",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "At least once per year",
+                                  "const": "5"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q3.1_1",
+                      "questionId": "QID359"
+                  },
+                  "QID364_DO": {
+                      "description": "What is your company or department remote work, work from home, telecommuting, or flex time policy? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "All office-based staff works 5 days a week in the office",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "We have a flexible work policy or guideline",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "We are developing a flexible work policy",
+                                  "const": "3"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q7.4_DO",
+                      "questionId": "QID364"
+                  },
+                  "distributionChannel": {
+                      "description": "Distribution Channel",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "DistributionChannel"
+                  },
+                  "QID362#3_3_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 10-Year Projection (2036) - Remote - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#3_3_2",
+                      "questionId": "QID362"
+                  },
+                  "QID328#1_3_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - Current Headcount (2026) - Staff using a SHARED WORKSTATION - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#1_3_1",
+                      "questionId": "QID328"
+                  },
+                  "recipientLastName": {
+                      "description": "Recipient Last Name",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "RecipientLastName"
+                  },
+                  "QID362#3_3_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 10-Year Projection (2036) - Remote - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#3_3_1",
+                      "questionId": "QID362"
+                  },
+                  "QID328#1_3_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - Current Headcount (2026) - Staff using a SHARED WORKSTATION - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#1_3_2",
+                      "questionId": "QID328"
+                  },
+                  "QID353_G0_1_RANK": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Ranks - Ranked where 1=Anticipated most frequent in-person meeting size - 2 in-person attendees - Rank",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "const": 1
+                          },
+                          {
+                              "const": 2
+                          },
+                          {
+                              "const": 3
+                          },
+                          {
+                              "const": 4
+                          },
+                          {
+                              "const": 5
+                          },
+                          {
+                              "const": 6
+                          },
+                          {
+                              "const": 7
+                          }
+                      ],
+                      "exportTag": "Q3.2_0_1_RANK",
+                      "questionId": "QID353"
+                  },
+                  "QID318_DO": {
+                      "description": "What storage needs exist for your department? (Select all that apply.) - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "No dedicated storage is needed",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Personal lockers for occasional in-office visits",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Secure storage for IT equipment (laptops, monitors, accessories)",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Shared storage for office supplies and materials",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "Large storage for team supplies or equipment",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "File storage for sensitive documents or regulatory materials",
+                                  "const": "8"
+                              },
+                              {
+                                  "label": "Other (please specify):",
+                                  "const": "9"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.4_DO",
+                      "questionId": "QID318"
+                  },
+                  "ipAddress": {
+                      "description": "IP Address",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "IPAddress"
+                  },
+                  "finished": {
+                      "description": "Finished",
+                      "dataType": "metadata",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "False",
+                              "const": 0
+                          },
+                          {
+                              "label": "True",
+                              "const": 1
+                          }
+                      ],
+                      "exportTag": "Finished"
+                  },
+                  "QID353_DO": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "2 in-person attendees",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "3-4 in-person attendees",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "5-7 in-person attendees",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "8-10 in-person attendees",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "11-14 in-person attendees",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "15-18 in-person attendees",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "19+ in-person attendees",
+                                  "const": "7"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q3.2_DO",
+                      "questionId": "QID353"
+                  },
+                  "QID328#2_1_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 5-Year Projection (2031) - Staff using a PRIVATE OFFICE - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#2_1_1",
+                      "questionId": "QID328"
+                  },
+                  "QID328#2_1_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 5-Year Projection (2031) - Staff using a PRIVATE OFFICE - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#2_1_2",
+                      "questionId": "QID328"
+                  },
+                  "QID316": {
+                      "description": "When working in the office, where would your department staff prefer to concentrate or focus? (Select all that apply)",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "At their individual desk",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "At an unassigned hoteling station",
+                                  "const": "10"
+                              },
+                              {
+                                  "label": "In a solo focus space (phone room, pod)",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "In an unoccupied meeting room",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "In an unoccupied or visitor office",
+                                  "const": "9"
+                              },
+                              {
+                                  "label": "In a group focus space (library, quiet zone)",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "In a common area (work cafe, lounge)",
+                                  "const": "11"
+                              },
+                              {
+                                  "label": "They focus anywhere as long as they wear headphones",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "They prefer to focus outside the office",
+                                  "const": "8"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.2",
+                      "questionId": "QID316"
+                  },
+                  "QID317": {
+                      "description": "What technology or tools are essential for supporting your department's in-person work? (Select all that apply.) - Selected Choice",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "High-quality hybrid meeting technology (cameras, microphones, screens)",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Digital collaboration tools (interactive whiteboards, smartboards)",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Video conferencing booths for high-quality virtual interactions",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Reliable, high-speed Wi-Fi",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "Wireless charging stations and plentiful power outlets",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "Reservable desk and meeting room booking systems",
+                                  "const": "8"
+                              },
+                              {
+                                  "label": "Smart climate & lighting controls for a comfortable environment",
+                                  "const": "9"
+                              },
+                              {
+                                  "label": "Noise-canceling solutions (soundproofing, white noise machines)",
+                                  "const": "10"
+                              },
+                              {
+                                  "label": "Dual monitors",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Digital room scheduler",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "They don't need any specific technology or tools when working in-person.",
+                                  "const": "12"
+                              },
+                              {
+                                  "label": "Other (please specify):",
+                                  "const": "11"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.3",
+                      "questionId": "QID317"
+                  },
+                  "QID359_9": {
+                      "description": "How often do members of your department participate in the following virtual, hybrid or in-person meetings/interactions? - All in-person in a meeting room",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "At least once per day",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "At least once per week",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "At least once per month",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "At least once per quarter",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "At least once per year",
+                                  "const": "5"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q3.1_3",
+                      "questionId": "QID359"
+                  },
+                  "QID318": {
+                      "description": "What storage needs exist for your department? (Select all that apply.) - Selected Choice",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "No dedicated storage is needed",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Personal lockers for occasional in-office visits",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Secure storage for IT equipment (laptops, monitors, accessories)",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Shared storage for office supplies and materials",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "Large storage for team supplies or equipment",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "File storage for sensitive documents or regulatory materials",
+                                  "const": "8"
+                              },
+                              {
+                                  "label": "Other (please specify):",
+                                  "const": "9"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.4",
+                      "questionId": "QID318"
+                  },
+                  "QID359_8": {
+                      "description": "How often do members of your department participate in the following virtual, hybrid or in-person meetings/interactions? - Virtual meeting in a phone room / focus room",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "At least once per day",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "At least once per week",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "At least once per month",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "At least once per quarter",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "At least once per year",
+                                  "const": "5"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q3.1_2",
+                      "questionId": "QID359"
+                  },
+                  "QID353_0_GROUP": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Groups - Ranked where 1=Anticipated most frequent in-person meeting size",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "2 in-person attendees",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "3-4 in-person attendees",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "5-7 in-person attendees",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "8-10 in-person attendees",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "11-14 in-person attendees",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "15-18 in-person attendees",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "19+ in-person attendees",
+                                  "const": "7"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q3.2_0_GROUP",
+                      "questionId": "QID353"
+                  },
+                  "QID296_DO": {
+                      "description": "Please describe your department\u2019s current or in-development remote work, work from home, telecommuting, or flex time policy. Include details about who is eligible, how it\u2019s applied, and whether you expect it to continue long term. - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string"
+                      },
+                      "exportTag": "Q7.4.1_DO",
+                      "questionId": "QID296"
+                  },
+                  "QID315": {
+                      "description": "What types of spaces would best support your department's in-person work? (Select all that apply.) - Selected Choice",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Small huddle rooms (2-4 people)",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Medium-sized meeting rooms (5-10 people)",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Large conference rooms (10-25 people)",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Event spaces (100+ people)",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "Private phone booths for calls or virtual meetings",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "Open lounge areas for casual discussions",
+                                  "const": "8"
+                              },
+                              {
+                                  "label": "Quiet zones for focus work between meetings",
+                                  "const": "9"
+                              },
+                              {
+                                  "label": "Multi-purpose rooms for flexible uses",
+                                  "const": "10"
+                              },
+                              {
+                                  "label": "Outdoor workspaces (patios, terraces, etc.)",
+                                  "const": "11"
+                              },
+                              {
+                                  "label": "Other (please specify):",
+                                  "const": "12"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.1",
+                      "questionId": "QID315"
+                  },
+                  "QID328#3_3_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 10-Year Projection (2036) - Staff using a SHARED WORKSTATION - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#3_3_2",
+                      "questionId": "QID328"
+                  },
+                  "QID362#2_1_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 5-Year Projection (2031) - Office-based - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#2_1_2",
+                      "questionId": "QID362"
+                  },
+                  "QID362#2_1_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 5-Year Projection (2031) - Office-based - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#2_1_1",
+                      "questionId": "QID362"
+                  },
+                  "QID328#3_3_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 10-Year Projection (2036) - Staff using a SHARED WORKSTATION - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#3_3_1",
+                      "questionId": "QID328"
+                  },
+                  "QID237_DO": {
+                      "description": "For the departments you work with regularly, rate the importance of physical adjacency. (Select one level per department in the table below.) \n\n \n\n\n\tVirtual: No physical adjacency needed if we are able to work with them virtually\n\tImportant: Improves workflow\n\tEssential: Required for operations - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "The Apex",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Construction Operations",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Human Resources | Workforce Development & Talent",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Marketing | Studio",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Nox VDC",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Precon/Estimating",
+                                  "const": "6"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.1.1_DO",
+                      "questionId": "QID237"
+                  },
+                  "QID317_DO": {
+                      "description": "What technology or tools are essential for supporting your department's in-person work? (Select all that apply.) - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "High-quality hybrid meeting technology (cameras, microphones, screens)",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Digital collaboration tools (interactive whiteboards, smartboards)",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Video conferencing booths for high-quality virtual interactions",
+                                  "const": "5"
+                              },
+                              {
+                                  "label": "Reliable, high-speed Wi-Fi",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "Wireless charging stations and plentiful power outlets",
+                                  "const": "7"
+                              },
+                              {
+                                  "label": "Reservable desk and meeting room booking systems",
+                                  "const": "8"
+                              },
+                              {
+                                  "label": "Smart climate & lighting controls for a comfortable environment",
+                                  "const": "9"
+                              },
+                              {
+                                  "label": "Noise-canceling solutions (soundproofing, white noise machines)",
+                                  "const": "10"
+                              },
+                              {
+                                  "label": "Dual monitors",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Digital room scheduler",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "They don't need any specific technology or tools when working in-person.",
+                                  "const": "12"
+                              },
+                              {
+                                  "label": "Other (please specify):",
+                                  "const": "11"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q4.3_DO",
+                      "questionId": "QID317"
+                  },
+                  "QID362#1_2_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - Current Headcount (2026) - Field-based - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#1_2_2",
+                      "questionId": "QID362"
+                  },
+                  "QID362#1_2_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - Current Headcount (2026) - Field-based - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#1_2_1",
+                      "questionId": "QID362"
+                  },
+                  "QID353_G0_3_RANK": {
+                      "description": "If room availability was not a constraint, how many people would gather in-person for the meetings you have most often? \n\n(Drag and drop the top 5 meeting sizes into the box, and rank where 1=anticipated most frequent in-person meeting size) - Ranks - Ranked where 1=Anticipated most frequent in-person meeting size - 5-7 in-person attendees - Rank",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "const": 1
+                          },
+                          {
+                              "const": 2
+                          },
+                          {
+                              "const": 3
+                          },
+                          {
+                              "const": 4
+                          },
+                          {
+                              "const": 5
+                          },
+                          {
+                              "const": 6
+                          },
+                          {
+                              "const": 7
+                          }
+                      ],
+                      "exportTag": "Q3.2_0_3_RANK",
+                      "questionId": "QID353"
+                  },
+                  "QID359_DO": {
+                      "description": "How often do members of your department participate in the following virtual, hybrid or in-person meetings/interactions? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Virtual meeting at an individual desk",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Virtual meeting in a phone room / focus room",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "All in-person in a meeting room",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Hybrid in a meeting room (virtual and in-person attendees)",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q3.1_DO",
+                      "questionId": "QID359"
+                  },
+                  "duration": {
+                      "description": "Duration (in seconds)",
+                      "dataType": "metadata",
+                      "type": "number",
+                      "exportTag": "Duration (in seconds)"
+                  },
+                  "QID307_1": {
+                      "description": "How often do members of your department work with these groups of people either virtually or in-person? - Colleagues within our team",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Many times a day",
+                              "const": 1
+                          },
+                          {
+                              "label": "At least once a day",
+                              "const": 2
+                          },
+                          {
+                              "label": "At least once a week",
+                              "const": 3
+                          },
+                          {
+                              "label": "At least once a month",
+                              "const": 4
+                          },
+                          {
+                              "label": "Less than once a month",
+                              "const": 5
+                          }
+                      ],
+                      "exportTag": "Q2.1_1",
+                      "questionId": "QID307"
+                  },
+                  "QID307_2": {
+                      "description": "How often do members of your department work with these groups of people either virtually or in-person? - Colleagues outside our team",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Many times a day",
+                              "const": 1
+                          },
+                          {
+                              "label": "At least once a day",
+                              "const": 2
+                          },
+                          {
+                              "label": "At least once a week",
+                              "const": 3
+                          },
+                          {
+                              "label": "At least once a month",
+                              "const": 4
+                          },
+                          {
+                              "label": "Less than once a month",
+                              "const": 5
+                          }
+                      ],
+                      "exportTag": "Q2.1_2",
+                      "questionId": "QID307"
+                  },
+                  "QID307_3": {
+                      "description": "How often do members of your department work with these groups of people either virtually or in-person? - Others outside the company",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "Many times a day",
+                              "const": 1
+                          },
+                          {
+                              "label": "At least once a day",
+                              "const": 2
+                          },
+                          {
+                              "label": "At least once a week",
+                              "const": 3
+                          },
+                          {
+                              "label": "At least once a month",
+                              "const": 4
+                          },
+                          {
+                              "label": "Less than once a month",
+                              "const": 5
+                          }
+                      ],
+                      "exportTag": "Q2.1_3",
+                      "questionId": "QID307"
+                  },
+                  "QID364": {
+                      "description": "What is your company or department remote work, work from home, telecommuting, or flex time policy?",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "All office-based staff works 5 days a week in the office",
+                              "const": 1
+                          },
+                          {
+                              "label": "We have a flexible work policy or guideline",
+                              "const": 2
+                          },
+                          {
+                              "label": "We are developing a flexible work policy",
+                              "const": 3
+                          }
+                      ],
+                      "exportTag": "Q7.4",
+                      "questionId": "QID364"
+                  },
+                  "QID326_DO": {
+                      "description": "Are there any additional space considerations we should be aware of? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string"
+                      },
+                      "exportTag": "Q8.2_DO",
+                      "questionId": "QID326"
+                  },
+                  "QID362_DO": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Office-based",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Field-based",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Remote",
+                                  "const": "3"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q7.1_DO",
+                      "questionId": "QID362"
+                  },
+                  "recipientEmail": {
+                      "description": "Recipient Email",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "RecipientEmail"
+                  },
+                  "QID360": {
+                      "description": "Does you department have any special needs for... - Selected Choice",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "Confidentiality: Requires privacy to protect sensitive information, such as HR, legal, or financial matters",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Security: Requires physical or data security measures to prevent unauthorized access or protect personnel or materials",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Conflict of Interest: Involves situations where proximity with another group may compromise ethical, financial, or oversight responsibilities",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Something Else: Any other reason not described above, includes workstyles, functions, or processes that disrupt or conflict with each other when located nearby. (Please describe)",
+                                  "const": "4"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q5.2",
+                      "questionId": "QID360"
+                  },
+                  "QID328#1_2_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - Current Headcount (2026) - Staff using a DEDICATED WORKSTATION - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#1_2_1",
+                      "questionId": "QID328"
+                  },
+                  "QID328#1_2_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - Current Headcount (2026) - Staff using a DEDICATED WORKSTATION - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#1_2_2",
+                      "questionId": "QID328"
+                  },
+                  "QID362#3_2_2": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 10-Year Projection (2036) - Field-based - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#3_2_2",
+                      "questionId": "QID362"
+                  },
+                  "QID362#3_2_1": {
+                      "description": "Please tell us about your current and projected headcounts.\u00a0 Staff is categorized into two types:... - 10-Year Projection (2036) - Field-based - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.1#3_2_1",
+                      "questionId": "QID362"
+                  },
+                  "recordedDate": {
+                      "description": "Recorded Date",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "format": "date-time",
+                      "exportTag": "RecordedDate"
+                  },
+                  "locationLatitude": {
+                      "description": "Location Latitude",
+                      "dataType": "metadata",
+                      "type": "string",
+                      "exportTag": "LocationLatitude"
+                  },
+                  "QID315_12_TEXT": {
+                      "description": "What types of spaces would best support your department's in-person work? (Select all that apply.) - Other (please specify): - Text",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q4.1_12_TEXT",
+                      "questionId": "QID315"
+                  },
+                  "QID365_DO": {
+                      "description": "If you have field-based and/or remote-based employees, how often do they visit the office?  What activities or types of work do they participate in when they are in the office? - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string"
+                      },
+                      "exportTag": "Q7.2_DO",
+                      "questionId": "QID365"
+                  },
+                  "QID365_TEXT": {
+                      "description": "If you have field-based and/or remote-based employees, how often do they visit the office?  What activities or types of work do they participate in when they are in the office?",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q7.2",
+                      "questionId": "QID365"
+                  },
+                  "QID12_3": {
+                      "description": "Please provide your information. - Your Email",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q1.1_3",
+                      "questionId": "QID12"
+                  },
+                  "QID252_DO": {
+                      "description": "Please select your department from the list below. - Display Order",
+                      "dataType": "question",
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "oneOf": [
+                              {
+                                  "label": "The Apex",
+                                  "const": "1"
+                              },
+                              {
+                                  "label": "Construction Operations",
+                                  "const": "6"
+                              },
+                              {
+                                  "label": "Human Resources | Workforce Development & Talent",
+                                  "const": "3"
+                              },
+                              {
+                                  "label": "Marketing | Studio",
+                                  "const": "2"
+                              },
+                              {
+                                  "label": "Nox VDC",
+                                  "const": "4"
+                              },
+                              {
+                                  "label": "Precon/Estimating",
+                                  "const": "5"
+                              }
+                          ]
+                      },
+                      "exportTag": "Q1.2_DO",
+                      "questionId": "QID252"
+                  },
+                  "QID328#3_2_1": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 10-Year Projection (2036) - Staff using a DEDICATED WORKSTATION - Regular/ Ongoing Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#3_2_1",
+                      "questionId": "QID328"
+                  },
+                  "QID12_2": {
+                      "description": "Please provide your information. - Your Title",
+                      "dataType": "question",
+                      "type": "string",
+                      "exportTag": "Q1.1_2",
+                      "questionId": "QID12"
+                  },
+                  "QID252": {
+                      "description": "Please select your department from the list below.",
+                      "dataType": "question",
+                      "type": "number",
+                      "oneOf": [
+                          {
+                              "label": "The Apex",
+                              "const": 1
+                          },
+                          {
+                              "label": "Construction Operations",
+                              "const": 6
+                          },
+                          {
+                              "label": "Human Resources | Workforce Development & Talent",
+                              "const": 3
+                          },
+                          {
+                              "label": "Marketing | Studio",
+                              "const": 2
+                          },
+                          {
+                              "label": "Nox VDC",
+                              "const": 4
+                          },
+                          {
+                              "label": "Precon/Estimating",
+                              "const": 5
+                          }
+                      ],
+                      "exportTag": "Q1.2",
+                      "questionId": "QID252"
+                  },
+                  "QID328#3_2_2": {
+                      "description": "We want to understand what type of workspace each staff requires. They fall under three categorie... - 10-Year Projection (2036) - Staff using a DEDICATED WORKSTATION - Seasonal/ Temporary/ Project-Based Staff",
+                      "dataType": "question",
+                      "type": "number",
+                      "exportTag": "Q7.3#3_2_2",
+                      "questionId": "QID328"
+                  }
+              }
+          },
+          "responseId": {
+              "type": "string"
+          }
+      }
+  },
+  "meta": {
+      "requestId": "1287670d-0616-4b3a-a2d8-93d1a4525aff",
+      "httpStatus": "200 - OK",
+      "notice": "Request proxied. For faster response times, use this host instead: iad1.qualtrics.com"
+  }
+}

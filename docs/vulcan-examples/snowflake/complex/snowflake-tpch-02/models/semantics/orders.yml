@@ -1,0 +1,139 @@
+# Converted from legacy: semantics/orders.yml
+kind: semantic
+name: orders
+depends_on: test_db.vulcan_test_project.orders
+ai_context:
+  instructions: >
+    Use this semantic model for questions about orders. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "orders"
+  examples:
+    - "Show orders trends over time."
+    - "Break down orders by key dimensions."
+
+dimensions:
+- ORDERKEY
+- CUSTKEY
+- ORDERSTATUS
+- name: ORDERDATE
+  ai_context:
+    instructions: >
+      Use this dimension to filter, group, or drill into questions about orderdate.
+    synonyms:
+      - "orderdate"
+    examples:
+      - "Break results down by orderdate."
+      - "Filter the analysis using orderdate."
+  granularities:
+  - name: daily
+    ai_context:
+      instructions: >
+        Use this dimension to filter, group, or drill into questions about daily.
+      synonyms:
+        - "daily"
+      examples:
+        - "Break results down by daily."
+        - "Filter the analysis using daily."
+    interval: 1 day
+    description: Daily order date grain
+  - name: monthly
+    ai_context:
+      instructions: >
+        Use this dimension to filter, group, or drill into questions about monthly.
+      synonyms:
+        - "monthly"
+      examples:
+        - "Break results down by monthly."
+        - "Filter the analysis using monthly."
+    interval: 1 month
+    description: Monthly order date grain
+- ORDERPRIORITY
+- CLERK
+- SHIPPRIORITY
+- COMMENT
+measures:
+- name: total_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total orders. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total orders"
+      - "total_orders"
+      - "total"
+      - "orders"
+    examples:
+      - "What is total orders by month?"
+      - "Compare total orders across key segments."
+  type: count
+  expression: '{orders.ORDERKEY}'
+  description: Total number of orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_orders
+  - metric.order_count
+- name: total_sales
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total sales. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total sales"
+      - "total_sales"
+      - "total"
+      - "sales"
+    examples:
+      - "What is total sales by month?"
+      - "Compare total sales across key segments."
+  type: sum
+  expression: '{orders.TOTALPRICE}'
+  description: Total order value (sum of ORDERS.totalprice)
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_sales
+  - finance.gross_sales
+- name: avg_order_value
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg order value. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg order value"
+      - "avg_order_value"
+      - "avg"
+      - "order"
+    examples:
+      - "What is avg order value by month?"
+      - "Compare avg order value across key segments."
+  type: avg
+  expression: '{orders.TOTALPRICE}'
+  description: Average order value
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_order_value
+  - metric.aggregate
+joins:
+- name: customers
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from customers. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "customers"
+    examples:
+      - "Analyze this model with customers attributes."
+      - "Break measures down by customers."
+  type: many_to_one
+  expression: '{orders.CUSTKEY} = {customers.CUSTKEY}'

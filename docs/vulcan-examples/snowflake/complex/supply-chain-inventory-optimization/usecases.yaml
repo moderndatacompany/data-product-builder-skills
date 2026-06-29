@@ -1,0 +1,5 @@
+use_cases:
+  - Inventory ABC classification analysis
+  - Supplier on-time delivery tracking
+  - Stockout risk prediction monitoring
+  - Excess inventory identification optimization

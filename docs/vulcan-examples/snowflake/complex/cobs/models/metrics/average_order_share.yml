@@ -1,0 +1,3 @@
+kind: metric
+name: average_order_share
+measure: rfm_segments.average_order_share

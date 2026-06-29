@@ -1,0 +1,22 @@
+customer_id,region_id,name,email
+1,1,John Smith,john.smith@example.com
+2,2,Jane Doe,jane.doe@example.com
+3,3,Bob Johnson,bob.johnson@example.com
+4,4,Alice Williams,alice.williams@example.com
+5,5,Charlie Brown,charlie.brown@example.com
+6,1,Diana Prince,diana.prince@example.com
+7,2,Ethan Hunt,ethan.hunt@example.com
+8,3,Fiona Apple,fiona.apple@example.com
+9,4,George Lucas,george.lucas@example.com
+10,5,Hannah Montana,hannah.montana@example.com
+11,1,Ivan Drago,ivan.drago@example.com
+12,2,Julia Roberts,julia.roberts@example.com
+13,3,Kevin Hart,kevin.hart@example.com
+14,4,Laura Palmer,laura.palmer@example.com
+15,5,Michael Scott,michael.scott@example.com
+16,1,Nancy Drew,nancy.drew@example.com
+17,2,Oscar Wilde,oscar.wilde@example.com
+18,3,Pam Beesly,pam.beesly@example.com
+19,4,Quincy Jones,quincy.jones@example.com
+20,5,Rachel Green,rachel.green@example.com
+

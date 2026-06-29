@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: weekly_revenue_trends
+measure: weekly_sales.total_weekly_revenue
+ts: weekly_sales.week_start_date
+dimensions:
+- weekly_sales.region_name
+- weekly_sales.year
+description: Weekly revenue trends by region
+tags:
+- sales
+- revenue
+- weekly
+terms:
+- sales.weekly_trends
+- metric.weekly_revenue

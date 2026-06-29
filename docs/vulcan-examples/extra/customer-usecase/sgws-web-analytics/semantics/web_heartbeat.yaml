@@ -1,0 +1,304 @@
+# ============================================================================
+# SEMANTIC MODEL: Web Heartbeat (Aligned with dp_web_heartbeat/model/tables/web_heartbeat.yaml)
+# ============================================================================
+# Table containing information about adobe analytics data
+# Contains ALL 50+ measures from the reference artifact
+# ============================================================================
+
+models:
+  web_analytics_gold.WEB_HEARTBEAT:
+    alias: web_heartbeat
+    # description: "Table containing information about adobe analytics data"
+    
+    dimensions:
+      excludes: []
+    
+    measures:
+      # ==================== SESSION MEASURES ====================
+      account_sessions:
+        type: number
+        expression: "COUNT(DISTINCT {web_heartbeat.SESSIONID})"
+        description: "Total number of sessions recorded. A session typically starts when a user lands on the site and ends after a period of inactivity or closing the site."
+      
+      authenticated_account_sessions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL OR {web_heartbeat.AUTHENTICATION_STATUS} = 'logged in' THEN {web_heartbeat.SESSIONID} END)"
+        description: "Total number of sessions recorded from authenticated user."
+      
+      unique_users:
+        type: number
+        expression: "COUNT(DISTINCT {web_heartbeat.ADOBE_ECID})"
+        description: "Total unique users visited the site."
+      
+      last_30_account_sessions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 31 DAY THEN {web_heartbeat.SESSIONID} END)"
+        description: "Total number of sessions in last 30 days."
+      
+      last_90_account_sessions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 91 DAY THEN {web_heartbeat.SESSIONID} END)"
+        description: "Total number of sessions in last 90 days."
+      
+      prev_last_30_account_sessions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 61 DAY AND CAST({web_heartbeat.DATE_TIME} AS DATE) < CURRENT_DATE - INTERVAL 31 DAY THEN {web_heartbeat.SESSIONID} END)"
+        description: "Total number of sessions in previous 30 days."
+      
+      prev_last_90_account_sessions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 181 DAY AND CAST({web_heartbeat.DATE_TIME} AS DATE) < CURRENT_DATE - INTERVAL 91 DAY THEN {web_heartbeat.SESSIONID} END)"
+        description: "Total number of sessions in previous 90 days."
+      
+      # ==================== PAGE VIEW MEASURES ====================
+      total_page_views:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.PAGE_EVENT} = 0 THEN {web_heartbeat.HITID} END)"
+        description: "Total page views occurred on the site"
+      
+      total_impressions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%201%' THEN {web_heartbeat.HITID} END)"
+        description: "Provides total Impressions made on hit level."
+      
+      total_product_impressions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%201%' THEN CONCAT(CAST({web_heartbeat.PRODUCT_ID} AS STRING), {web_heartbeat.HITID}) END)"
+        description: "Provides total Impressions made on each products."
+      
+      # ==================== CLICK MEASURES ====================
+      total_clicks:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%202%' OR {web_heartbeat.EVENT_LIST} LIKE '%20170%' OR {web_heartbeat.EVENT_LIST} LIKE '%236%' THEN {web_heartbeat.HITID} END)"
+        description: "Total number of click events in proof sites."
+      
+      total_product_clicks:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%279%' THEN {web_heartbeat.HITID} END)"
+        description: "Total number of product clicks in proof sites."
+      
+      click_through_rate:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%279%' THEN {web_heartbeat.HITID} END) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%201%' THEN CONCAT(CAST({web_heartbeat.PRODUCT_ID} AS STRING), {web_heartbeat.HITID}) END), 0)"
+        description: "Provides the rate of Clicks over Impressions on product"
+      
+      # ==================== HIT MEASURES ====================
+      total_hits:
+        type: number
+        expression: "COUNT(DISTINCT {web_heartbeat.HITID})"
+        description: "Total number of hits in proof sites."
+      
+      total_landingpage_hits:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_PAGE_NUM} = 1 THEN {web_heartbeat.HITID} END)"
+        description: "Total number of landing page hits in proof sites."
+      
+      # ==================== ACCOUNT MEASURES ====================
+      total_accounts_visiting:
+        type: number
+        expression: "COUNT(DISTINCT {web_heartbeat.ACCOUNT_UNIQUE_ID})"
+        description: "Total Visiting Accounts to the proof sites."
+      
+      total_accounts_new_visit:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_NUM} = 1 THEN {web_heartbeat.ACCOUNT_UNIQUE_ID} END)"
+        description: "Total New Visiting Accounts to the proof sites."
+      
+      total_accounts_repeated_visits:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_NUM} > 1 THEN {web_heartbeat.ACCOUNT_UNIQUE_ID} END)"
+        description: "Total Repeated Visiting Accounts to the proof sites."
+      
+      # ==================== COMMERCE MEASURES ====================
+      pdp_views:
+        type: number
+        expression: "SUM(CASE WHEN {web_heartbeat.PAGE_TYPE} = 'productdetails' AND {web_heartbeat.EVENT_LIST} LIKE '%2%' THEN 1 ELSE 0 END)"
+        description: "Total occurrences of Product Details Page (PDP) views."
+      
+      total_addtocart:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%12%' THEN {web_heartbeat.HITID} END)"
+        description: "Total occurrences of ATC on proof site."
+      
+      total_checkouts:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' THEN {web_heartbeat.HITID} END)"
+        description: "Total occurrences of checkouts on proof site."
+      
+      bulk_add_to_cart:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN LOWER({web_heartbeat.PAGE_URL}) LIKE '%bulkorder%' AND {web_heartbeat.EVENT_LIST} LIKE '%20140%' AND {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL THEN {web_heartbeat.HITID} END)"
+        description: "Number of Bulk Add ATC occurred on proof site."
+      
+      # ==================== DEALS MEASURES ====================
+      deal_landing_page_view:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN LOWER(TRIM({web_heartbeat.PAGE_TYPE})) = 'sgwsdeallandingpage' AND {web_heartbeat.PAGE_EVENT} = 0 THEN {web_heartbeat.HITID} END)"
+        description: "sgwsdeallandingpage page views occurred on site"
+      
+      show_deal_views:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%257%' THEN {web_heartbeat.HITID} END)"
+        description: "Deals - Product Modal Tab View"
+      
+      # ==================== SEARCH MEASURES ====================
+      total_searches:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%205%' THEN {web_heartbeat.HITID} END)"
+        description: "The unique search hits that a user had when performing searches from the Search bar."
+      
+      search_sessions:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%205%' THEN {web_heartbeat.SESSIONID} END)"
+        description: "The unique search sessions occurred."
+      
+      search_purchase_session:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' AND {web_heartbeat.SEARCH_KEYWORDS} IS NOT NULL THEN {web_heartbeat.SESSIONID} END)"
+        description: "Searched users purchase unique sessions."
+      
+      search_conversion_rate:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' AND {web_heartbeat.SEARCH_KEYWORDS} IS NOT NULL THEN {web_heartbeat.SESSIONID} END) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%205%' THEN {web_heartbeat.SESSIONID} END), 0)"
+        description: "Provides the conversion rate of users used search activity"
+      
+      # ==================== CONVERSION MEASURES ====================
+      conversion_rate:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' THEN {web_heartbeat.SESSIONID} END) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL THEN {web_heartbeat.SESSIONID} END), 0)"
+        description: "Conversion Rate - Purchased Session / total sessions after login"
+      
+      # ==================== BOUNCE/EXIT MEASURES ====================
+      exit_rate:
+        type: number
+        expression: "CAST(COUNT(DISTINCT CASE WHEN {web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = {web_heartbeat.VISIT_PAGE_NUM} THEN {web_heartbeat.HITID} END) AS DECIMAL(15,5)) / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.PAGE_EVENT} = 0 THEN {web_heartbeat.HITID} END), 0)"
+        description: "Calculates the exit rate, which is the proportion of page views that result in an exit from the website."
+      
+      bounce_hit:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = 1 THEN {web_heartbeat.HITID} END)"
+        description: "Provides the bounce hits from proof sites"
+      
+      bounce_rate:
+        type: number
+        expression: "CAST(COUNT(DISTINCT CASE WHEN {web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = 1 THEN {web_heartbeat.HITID} END) AS DECIMAL(15,5)) / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_PAGE_NUM} = 1 THEN {web_heartbeat.HITID} END), 0)"
+        description: "Represents the percentage of single-page visits or sessions where the user left the site from the entrance page without interacting with the page"
+      
+      # ==================== ORDER MEASURES ====================
+      orders_per_sessions:
+        type: number
+        expression: "COUNT(DISTINCT {web_heartbeat.ORDER_NUMBER}) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL THEN {web_heartbeat.SESSIONID} END), 0)"
+        description: "Calculates the average number of unique orders per session after logins."
+      
+      total_orders_placed:
+        type: number
+        expression: "COUNT(DISTINCT {web_heartbeat.ORDER_NUMBER})"
+        description: "The unique orders placed on proof sites."
+      
+      # ==================== TIME MEASURES ====================
+      time_spent:
+        type: number
+        expression: "SUM(UNIX_TIMESTAMP({web_heartbeat.NEXT_HIT_CUST_HIT_TIME}) - UNIX_TIMESTAMP({web_heartbeat.POST_CUST_HIT_TIME_GMT}))"
+        description: "Time spent on each hit in site (in secs)."
+      
+      avg_time_spent_by_user:
+        type: number
+        expression: "SUM(UNIX_TIMESTAMP({web_heartbeat.NEXT_HIT_CUST_HIT_TIME}) - UNIX_TIMESTAMP({web_heartbeat.POST_CUST_HIT_TIME_GMT})) * 1.00 / NULLIF(COUNT(DISTINCT {web_heartbeat.ADOBE_ECID}), 0)"
+        description: "Average time spent on site by users (in secs)."
+      
+      avg_page_speed_in_sec:
+        type: number
+        expression: "AVG({web_heartbeat.TOTAL_PAGE_LOAD_TIME}) / 1000"
+        description: "give average speed in seconds"
+      
+      # ==================== LOGIN MEASURES ====================
+      total_logins:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%289%' THEN {web_heartbeat.HITID} END)"
+        description: "Total Logins happened on Proof Sites"
+      
+      total_users_logins:
+        type: number
+        expression: "COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%289%' THEN {web_heartbeat.ADOBE_ECID} END)"
+        description: "Total Users Login into Proof Sites"
+      
+      # ==================== REVENUE MEASURES ====================
+      total_atc_cart_value:
+        type: number
+        expression: "SUM(CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%12%' THEN CAST(COALESCE({web_heartbeat.ATC_REV}, '0') AS DECIMAL(15,2)) ELSE 0 END)"
+        description: "Provides the revenue generated from total ATC."
+      
+      total_checkout_cart_value:
+        type: number
+        expression: "SUM({web_heartbeat.REVENUES})"
+        description: "Provides the revenue generated from checkouts."
+    
+    segments:
+      # ==================== VISIT SEGMENTS ====================
+      is_new_visit:
+        expression: "{web_heartbeat.NEW_VISIT} = 1"
+        description: "New visits"
+      
+      is_return_visit:
+        expression: "{web_heartbeat.NEW_VISIT} = 0 OR {web_heartbeat.NEW_VISIT} IS NULL"
+        description: "Return visits"
+      
+      # ==================== AUTHENTICATION SEGMENTS ====================
+      is_authenticated:
+        expression: "{web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL OR {web_heartbeat.AUTHENTICATION_STATUS} = 'logged in'"
+        description: "Authenticated users"
+      
+      is_guest:
+        expression: "{web_heartbeat.ACCOUNT_UNIQUE_ID} IS NULL AND ({web_heartbeat.AUTHENTICATION_STATUS} IS NULL OR {web_heartbeat.AUTHENTICATION_STATUS} != 'logged in')"
+        description: "Guest users"
+      
+      # ==================== PLATFORM SEGMENTS ====================
+      is_app:
+        expression: "{web_heartbeat.DIGITALPLATFORM} = 'App'"
+        description: "Mobile app users"
+      
+      is_web:
+        expression: "{web_heartbeat.DIGITALPLATFORM} = 'Web'"
+        description: "Web users"
+      
+      # ==================== PAGE SEGMENTS ====================
+      is_landing_page:
+        expression: "{web_heartbeat.VISIT_PAGE_NUM} = 1"
+        description: "Landing page hits"
+      
+      is_exit_page:
+        expression: "{web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = {web_heartbeat.VISIT_PAGE_NUM}"
+        description: "Exit page hits"
+      
+      is_bounce:
+        expression: "{web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = 1"
+        description: "Bounce hits"
+      
+      # ==================== LIST SEGMENTS ====================
+      is_favorites:
+        expression: "{web_heartbeat.LIST_TYPE} = 'Favorites'"
+        description: "Favorites list interactions"
+      
+      is_my_list:
+        expression: "{web_heartbeat.LIST_TYPE} = 'My List'"
+        description: "My List interactions"
+      
+      is_previously_purchased:
+        expression: "{web_heartbeat.LIST_TYPE} = 'Previously Purchased'"
+        description: "Previously Purchased interactions"
+      
+      is_ready_to_reorder:
+        expression: "{web_heartbeat.LIST_TYPE} = 'Ready to Reorder'"
+        description: "Ready to Reorder interactions"
+      
+      is_customers_like_you:
+        expression: "{web_heartbeat.LIST_TYPE} = 'Customers Like You'"
+        description: "Customers Like You recommendations"
+      
+      is_algorithmic:
+        expression: "{web_heartbeat.LIST_ALGORITHMIC_TYPE} = 'Algorithmic'"
+        description: "Algorithmic recommendations"
+      
+      is_non_algorithmic:
+        expression: "{web_heartbeat.LIST_ALGORITHMIC_TYPE} = 'Non-Algorithmic'"
+        description: "Non-algorithmic lists"

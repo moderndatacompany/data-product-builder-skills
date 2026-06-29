@@ -1,0 +1,43 @@
+version: "3.9"
+
+x-images:
+  vulcan: &vulcan_image "tmdcio/vulcan-spark:0.228.1.1"
+  vulcan-transpiler: &vulcan_transpiler_image "tmdcio/vulcan-transpiler:0.228.1.1"
+
+networks:
+  vulcan:
+    external: true
+
+services:
+  # Vulcan API for this example project
+  vulcan-api:
+    image: *vulcan_image
+    working_dir: /workspace
+    command: ["vulcan", "--log-to-stdout","api", "--host", "0.0.0.0", "--port", "8100"]
+    environment:
+      PROJECT_PATH: ${PROJECT_PATH:-/workspace}
+    ports:
+      - "8100:8100"
+    volumes:
+      - ../:/workspace
+
+      # 🔥 Persist Ivy and m2 cache so Spark does NOT redownload jars
+      - ~/.ivy2:/home/vulcan/.ivy2
+      - ~/.m2:/home/vulcan/.m2
+    restart: unless-stopped
+    networks:
+      - vulcan
+
+  # Transpiler service
+  vulcan-transpiler:
+    image: *vulcan_transpiler_image
+    platform: linux/amd64
+    environment:
+      VULCAN_API_URL: http://vulcan-api:8100/api/v1
+    ports:
+      - "4000:4000"
+    depends_on:
+      - vulcan-api
+    restart: unless-stopped
+    networks:
+      - vulcan

@@ -1,0 +1,3 @@
+kind: metric
+name: number_of_batteries
+measure: battery.number_of_batteries

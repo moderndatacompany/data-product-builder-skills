@@ -1,0 +1,15 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: fulfillment_performance
+measure: sales_funnel.avg_order_to_shipment_conversion
+ts: sales_funnel.funnel_date
+dimensions:
+- sales_funnel.region_name
+description: Order to shipment conversion rate
+tags:
+- funnel
+- fulfillment
+- logistics
+terms:
+- funnel.fulfillment_rate
+- logistics.shipment_conversion

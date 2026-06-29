@@ -1,0 +1,35 @@
+# kind: dq — converted from checks/daily_sales.yml
+kind: dq
+name: daily_sales_dq
+depends_on: sales.daily_sales
+
+rules:
+  - missing_count(total_orders) = 0:
+      name: no_missing_order_counts
+      dimension: completeness
+      description: "All records must have order count"
+
+  - row_count > 0:
+      name: has_sales_data
+      dimension: completeness
+      description: "At least one day of sales data exists"
+
+  - failed rows:
+      name: negative_order_counts
+      dimension: validity
+      fail query: |
+        SELECT order_date, total_orders, total_revenue
+        FROM sales.daily_sales
+        WHERE order_date > current_date
+      samples limit: 10
+      description: "Order counts cannot be negative"
+
+  - anomaly detection for row_count:
+      name: row_count_anomaly
+      dimension: accuracy
+      description: "Detect anomalies in daily sales record count"
+
+  - change for row_count >= -50%:
+      name: sales_volume_stability
+      dimension: timeliness
+      description: "Alert if row count drops more than 50% from previous run"

@@ -1,0 +1,3 @@
+kind: metric
+name: deal_landing_page_view
+measure: web_heartbeat.deal_landing_page_view

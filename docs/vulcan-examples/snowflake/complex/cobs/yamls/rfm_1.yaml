@@ -1,0 +1,461 @@
+version: v1
+name: wf-web-segment-1m
+type: workflow
+tags:
+  -  web-segment
+description: This job ingests Web Segment Data.
+workflow:
+  #  schedule:
+  #    cron: '*/15 * * * *'
+  #    endOn: 2023-10-07T00:00:00Z
+  #    concurrencyPolicy: Forbid
+  title: Web Segment Data
+  dag:
+    - name: dg-web-segment-1
+      title: Web Segment Data
+      description: This job ingests Web Segment data
+      spec:
+        tags:
+          -  web-segment
+        stack: flare:4.0
+        compute: runnable-default
+        flare:
+          driver:
+            coreLimit: 6000m
+            cores: 2
+            memory: 6000m
+          executor:
+            coreLimit: 10000m
+            cores: 2
+            instances: 6
+            memory: 8000m
+          job:
+            explain: true
+            inputs:
+              - name: f_Sales
+                dataset: dataos://onesourceplus:ent_os/v_fact_sales?acl=rw
+              - name: d_customer
+                dataset: dataos://onesourceplus:ent_os/v_d_customer?acl=rw
+
+            logLevel: INFO
+            outputs:
+              - name: customer_segment
+                dataset: dataos://icebase:sandbox/rfm_segment_1_month_data?acl=rw
+                format: Iceberg
+                title: Web Segment Data
+                description: Ingests Web Segment Data
+                options:
+                  saveMode: append
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+                      write.metadata.compression-codec: gzip
+            steps:
+              - sequence:
+                  - name: params_filters
+                    sql: >
+                      SELECT
+                        date(end_date - INTERVAL '1' MONTH) AS date,
+                        start_date,
+                        end_date,
+                        cast(
+                          date_format(add_months(end_date, -1), 'yyyyMM') AS int
+                        ) AS last_month_str,
+                        cast(
+                          date_format(add_months(start_date, -1), 'yyyyMM') AS int
+                        ) AS cutoff_months,
+                         date(start_date - INTERVAL '1' MONTH) AS actvtn_cutoff_date
+                      FROM
+                        (
+                          SELECT
+                             current_date - interval '1' month AS start_date,
+                             current_date AS end_date
+                        )
+
+                  - name: cust
+                    sql: >
+                      SELECT
+                          customer_no,
+                          site,
+                          STATUS,
+                          CASE
+                            WHEN activated_acct IN ('Re-Ordered', 'Ordered') THEN 'Y'
+                            ELSE 'N'
+                          END AS order_flag,
+                          CASE
+                            WHEN rtm_national_channel_desc IN ('ON PREMISE NATIONAL', 'OFF PREMISE NATIONAL') THEN 'National'
+                            ELSE 'Others'
+                          END naop_flag,
+                          CASE
+                            WHEN proof_of_eligible_acct = 'Y' THEN TRUE
+                            ELSE false
+                          END tam
+                        FROM
+                          d_customer
+                  - name: trans
+                    sql: >
+                      SELECT
+                         sales.customer_no,
+                         cast(CASE
+                             WHEN sales.site = 55 THEN cast (
+                               CONCAT(
+                                 lpad(cast(sales.site AS string), 4, '0'),
+                                 lpad(cast(sales.customer_no AS string), 10, '0')
+                               ) AS bigint
+                             )
+                             ELSE cast (
+                               CONCAT(
+                                 lpad(cast(sales.site AS string), 4, '0'),
+                                 CASE
+                                   WHEN length (cast(sales.customer_no AS string)) <= 7 THEN lpad(cast(sales.customer_no AS string), 7, '0')
+                                   ELSE lpad(cast(sales.customer_no AS string), 10, '0')
+                                 END
+                               ) AS bigint
+                             ) 
+                           END as string)  AS Account_ID,
+                         CASE
+                           WHEN sales.site = 55 THEN cast (
+                             CONCAT(
+                               lpad(cast(sales.site AS string), 4, '0'),
+                               lpad(cast(sales.customer_no AS string), 10, '0')
+                             ) AS bigint
+                           )
+                           ELSE cast (
+                             CONCAT(
+                               lpad(cast(sales.site AS string), 4, '0'),
+                               CASE
+                                 WHEN length (cast(sales.customer_no AS string)) <= 7 THEN lpad(cast(sales.customer_no AS string), 7, '0')
+                                 ELSE lpad(cast(sales.customer_no AS string), 10, '0')
+                               END
+                             ) AS bigint
+                           )
+                         END AS GCP_Account_ID,
+                          cast(to_date(posting_dt_sk, 'yyyyMMdd') as date) AS posting_date,
+                         sales.site,
+                         invoice_no,
+                         posting_prd,
+                         ext_net,
+                         entry_origin,
+                         CASE
+                           WHEN entry_origin IN ('G', 'H') THEN 'Proof'
+                           ELSE 'Non-proof'
+                         END source,
+                         cases,
+                         order_flag,
+                         naop_flag,
+                         STATUS
+                       FROM
+                         f_Sales AS sales
+                         LEFT JOIN cust ON sales.customer_no = cust.customer_no
+                         AND sales.site = cust.site
+                       WHERE
+                         cast(to_date(posting_dt_sk, 'yyyyMMdd') as date) < ( SELECT  end_date  FROM  params_filters ) 
+                         AND ext_net > 0
+                         AND order_flag = 'Y'
+                         AND naop_flag != 'National'
+                         AND STATUS = 'A'
+                         AND tam = true
+
+
+                  - name: actv_dts
+                    sql: >
+                      SELECT
+                          customer_no,
+                          site,
+
+                          MIN(
+                            cast(to_date(posting_dt_sk, 'yyyyMMdd') as date)
+                          ) AS activation_date
+                        FROM
+                         f_Sales
+                        WHERE
+                          entry_origin IN ('H', 'G')
+                          AND ext_net > 0
+                        GROUP BY
+                          customer_no,
+                          site
+                  - name: proof_transaction_items
+                    sql: >
+                      SELECT
+                         trans.customer_no,
+                         trans.Account_ID,
+                         trans.invoice_no,
+                         trans.site,
+                         GCP_Account_ID,
+                         CASE
+                           WHEN (trans.source = 'Proof')
+                           AND (
+                             trans.posting_date >= (
+                               SELECT
+                                 start_date
+                               FROM
+                                 params_filters
+                             )
+                           ) THEN 1
+                           ELSE 0
+                         END proof_trans,
+                         CASE
+                           WHEN (trans.source = 'Non-proof')
+                           AND (
+                             trans.posting_date >= (
+                               SELECT
+                                 start_date
+                               FROM
+                                 params_filters
+                             )
+                           ) THEN 1
+                           ELSE 0
+                         END non_proof_trans,
+                         IF(
+                           trans.posting_date >= (
+                             SELECT
+                               start_date
+                             FROM
+                               params_filters
+                           ),
+                           1,
+                           0
+                         ) total_trans,
+                         IF(
+                           posting_date >= cast('2022-11-01' AS date),
+                           ext_net,
+                           0
+                         ) total_rev,
+                         CASE
+                           WHEN trans.source = 'Proof'
+                           AND (
+                             trans.posting_date >= (
+                               SELECT
+                                 start_date
+                               FROM
+                                 params_filters
+                             )
+                           ) THEN trans.ext_net
+                           ELSE 0
+                         END proof_rev,
+                         CASE
+                           WHEN trans.source = 'Non-proof'
+                           AND (
+                             trans.posting_date >= (
+                               SELECT
+                                 start_date
+                               FROM
+                                 params_filters
+                             )
+                           ) THEN trans.ext_net
+                           ELSE 0
+                         END non_proof_rev,
+                         IF(
+                           trans.posting_date >= (
+                             SELECT
+                               start_date
+                             FROM
+                               params_filters
+                           ),
+                           trans.posting_date,
+                           NULL
+                         ) posting_date,
+                         CASE
+                           WHEN trans.source = 'Proof'
+                           AND (
+                             trans.posting_date >= (
+                               SELECT
+                                 start_date
+                               FROM
+                                 params_filters
+                             )
+                           ) THEN trans.posting_date
+                           ELSE NULL
+                         END proof_posting_date,
+                         actv_dts.activation_date,
+                         IF(
+                           trans.posting_prd = (
+                             SELECT
+                               last_month_str
+                             FROM
+                               params_filters
+                           ),
+                           trans.ext_net,
+                           0
+                         ) total_rev_mnth,
+                         CASE
+                           WHEN trans.source = 'Proof'
+                           AND (
+                             trans.posting_prd = (
+                               SELECT
+                                 last_month_str
+                               FROM
+                                 params_filters
+                             )
+                           ) THEN trans.ext_net
+                           ELSE 0
+                         END proof_rev_mnth
+                       FROM
+                         trans
+                         LEFT JOIN actv_dts ON trans.customer_no = actv_dts.customer_no
+                         AND trans.site = actv_dts.site
+                       WHERE
+                         posting_date < (
+                              SELECT
+                                end_date
+                              FROM
+                                params_filters
+                            )
+                         AND trans.ext_net > 0
+
+                  - name: proof_transactions
+                    sql: >
+                      SELECT
+                          invoice_no,
+                          Account_ID,
+                          site,
+                          customer_no,
+                          GCP_Account_ID,
+                          COALESCE(MAX(proof_trans), 0) proof_trans,
+                          COALESCE(MAX(non_proof_trans), 0) AS non_proof_trans,
+                          COALESCE(MAX(total_trans), 0) total_trans,
+                          SUM(total_rev) total_rev,
+                          SUM(proof_rev) proof_rev,
+                          SUM(non_proof_rev) AS non_proof_rev,
+                          SUM(
+                            CASE
+                              WHEN posting_date >= activation_date THEN total_rev
+                              ELSE 0
+                            END
+                          ) total_rev_after_activation,
+                          SUM(
+                            CASE
+                              WHEN posting_date >= activation_date THEN total_trans
+                              ELSE 0
+                            END
+                          ) total_trans_after_activation,
+                          SUM(proof_rev_mnth) AS proof_rev_mnth,
+                          SUM(
+                            CASE
+                              WHEN posting_date >= activation_date THEN total_rev_mnth
+                              ELSE 0
+                            END
+                          ) total_rev_after_activation_mnth,
+                          MAX(posting_date) posting_date,
+                          MAX(proof_posting_date) proof_posting_date,
+                          MAX(activation_date) activation_date
+                        FROM
+                          proof_transaction_items
+                        GROUP BY
+                          invoice_no,
+                          Account_ID,
+                          site,
+                          customer_no,
+                          GCP_Account_ID
+
+                  - name: rfm_data
+                    sql: >
+                      SELECT
+                          Account_ID,
+                          site,
+                          customer_no,
+                          GCP_Account_ID,
+                          CASE
+                            WHEN sum(total_rev) < 25000 THEN '1. 0-25K'
+                            WHEN sum(total_rev) >= 25000
+                            AND sum(total_rev) < 50000 THEN '2. 25-50K'
+                            WHEN sum(total_rev) >= 50000
+                            AND sum(total_rev) < 75000 THEN '3. 50-75K'
+                            WHEN sum(total_rev) >= 75000
+                            AND sum(total_rev) < 100000 THEN '4. 75-100K'
+                            WHEN sum(total_rev) >= 100000
+                            AND sum(total_rev) < 200000 THEN '5. 100K-200K'
+                            WHEN sum(total_rev) >= 200000
+                            AND sum(total_rev) < 300000 THEN '6. 200K-300K'
+                            WHEN sum(total_rev) >= 300000
+                            AND sum(total_rev) < 400000 THEN '7. 300K-400K'
+                            WHEN sum(total_rev) >= 400000
+                            AND sum(total_rev) < 500000 THEN '8. 400K-500K'
+                            ELSE '9. 500K+'
+                          END AS sales_bucket,
+                          MAX(proof_posting_date) last_date,
+                          cast(to_date(max(proof_posting_date), 'yyyyMM') as date) as last_trans_month,
+                          DATEDIFF(( SELECT end_date FROM params_filters), MAX(posting_date)) AS recency,
+                          DATEDIFF(( SELECT end_date FROM params_filters), MAX(proof_posting_date)) as  proof_recency,
+                          AVG(total_rev) total_monetary,
+                          AVG(proof_rev) proof_monetary,
+                          SUM(total_trans) total_frequency,
+                          SUM(proof_trans) proof_frequency,
+                          SUM(non_proof_trans) AS non_frequency,
+                          SUM(total_rev) total_rev,
+                          SUM(proof_rev) proof_rev,
+                          SUM(non_proof_rev) AS non_proof_rev,
+                          SUM(total_rev_after_activation) total_rev_after_activation,
+                          SUM(total_trans_after_activation) total_trans_after_activation,
+                          CASE
+                            WHEN SUM(total_rev_after_activation) > 0 THEN SUM(proof_rev) / SUM(total_rev_after_activation)
+                            ELSE NULL
+                          END wallet_share,
+                          CASE
+                            WHEN SUM(total_trans_after_activation) > 0 THEN SUM(proof_trans) / SUM(total_trans_after_activation)
+                            ELSE NULL
+                          END order_share,
+                          CASE
+                            WHEN SUM(total_rev_after_activation_mnth) > 0 THEN SUM(proof_rev_mnth) / SUM(total_rev_after_activation_mnth)
+                            ELSE NULL
+                          END wallet_share_mnth,
+                          MIN(activation_date) activation_date,
+                          cast(to_date(min(activation_date), 'yyyyMM') as date) AS activation_month,
+                          DATEDIFF(( SELECT end_date FROM params_filters), MIN(activation_date)) AS proof_tenure
+                        FROM
+                          proof_transactions
+                        WHERE
+                          activation_date IS NOT NULL
+                        GROUP BY
+                          Account_ID,
+                          site,
+                          customer_no,
+                          GCP_Account_ID
+
+                  - name: customer_segment
+                    sql: >
+                      SELECT
+                        sales_bucket AS Sales_Bucket,
+                        Account_ID,
+                        activation_date,
+                        activation_month,
+                        last_date,
+                        last_trans_month,
+                        coalesce(recency, 0) AS recency,
+                        coalesce(proof_recency, 0) AS proof_recency,
+                        total_monetary,
+                        proof_monetary,
+                        total_frequency,
+                        proof_frequency,
+                        total_rev,
+                        proof_rev,
+                        total_rev_after_activation,
+                        total_trans_after_activation,
+                        wallet_share,
+                        order_share,
+                        wallet_share_mnth,
+                        proof_tenure,
+                        (
+                          SELECT
+                            date
+                          FROM
+                            params_filters
+                        ) AS date
+                      FROM
+                        rfm_data
+
+
+          sparkConfig:
+            - spark.driver.maxResultSize: 2048M
+            - spark.serializer: org.apache.spark.serializer.KryoSerializer
+    - name: dt-web-segment-1
+      spec:
+        stack: toolbox
+        compute: runnable-default
+        toolbox:
+          dataset: dataos://icebase:sandbox/rfm_segment_1_month_data?acl=rw
+          action:
+            name: set_version
+            value: latest
+      dependencies:
+        - dg-web-segment-1

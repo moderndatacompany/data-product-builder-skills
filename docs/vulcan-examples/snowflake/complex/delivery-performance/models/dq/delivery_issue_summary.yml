@@ -1,0 +1,32 @@
+# kind: dq — converted from checks/delivery_issue_summary.yml
+kind: dq
+name: delivery_issue_summary_dq
+depends_on: QCOMMERCE_PLATFORM.GOLD.DELIVERY_ISSUE_SUMMARY
+
+rules:
+- row_count >= 20:
+    name: minimum_issue_summary_rows
+    dimension: completeness
+    description: At least 20 delivery issue summary rows should exist
+
+- missing_count(ISSUE_TYPE) = 0:
+    name: no_missing_issue_type
+    dimension: completeness
+    description: All records must have an ISSUE_TYPE
+
+- invalid_count(TOTAL_ORDERS) = 0:
+    name: issue_rate_in_range
+    dimension: validity
+    description: TOTAL_ORDERS must be zero or positive
+    valid min: 0
+
+- invalid_count(AFFECTED_ORDERS) = 0:
+    name: affected_orders_positive
+    dimension: validity
+    description: AFFECTED_ORDERS must be at least 1 for every issue summary row
+    valid min: 1
+
+- duplicate_count(DS, CITY, ISSUE_TYPE) = 0:
+    name: unique_ds_city_issue_type
+    dimension: uniqueness
+    description: Each DS, CITY, and ISSUE_TYPE combination must be unique

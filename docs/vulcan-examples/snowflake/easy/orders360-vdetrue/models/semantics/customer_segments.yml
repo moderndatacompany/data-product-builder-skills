@@ -1,0 +1,42 @@
+kind: semantic
+name: customer_segments
+depends_on: DEMODB.VDETRUE.CUSTOMER_SEGMENTS
+description: Static segment lookup exposing segment-level dimensions and tier-rank measures for cohorting customers and orders.
+
+dimensions:
+  - SEGMENT_CODE
+  - SEGMENT_NAME
+  - SEGMENT_TIER
+  - DISCOUNT_RATE
+  - DESCRIPTION
+
+measures:
+  - name: total_segments
+    type: count
+    expression: "{customer_segments.SEGMENT_CODE}"
+    description: Total number of segments defined in the lookup
+    tags:
+      - segment
+      - count
+    terms:
+      - segment.total_segments
+  - name: average_segment_discount
+    type: avg
+    expression: "{customer_segments.DISCOUNT_RATE}"
+    description: Average discount rate across all segments
+    tags:
+      - segment
+      - financial
+    terms:
+      - segment.average_discount
+      - pricing.segment_average_discount
+
+segments:
+  - name: premium_segments
+    expression: "{customer_segments.SEGMENT_TIER} >= 3"
+    description: Premium (Gold and Platinum) segments
+    tags:
+      - segment
+      - premium
+    terms:
+      - segment.premium_tier

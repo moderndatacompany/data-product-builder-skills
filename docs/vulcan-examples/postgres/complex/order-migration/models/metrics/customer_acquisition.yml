@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: customer_acquisition
+measure: customer_profile.total_customers
+ts: customer_profile.first_order_date
+dimensions:
+- customer_profile.region_name
+- customer_profile.customer_segment
+description: Customer acquisition trends by cohort
+tags:
+- customer
+- acquisition
+- growth
+terms:
+- customer.acquisition
+- metric.new_customers

@@ -1,0 +1,149 @@
+checks:
+  silver_v2alpha.fct_daily_sales:
+    completeness:
+      - missing_count(order_date) = 0:
+          name: no_missing_dates
+          attributes:
+            description: "All records must have an order date"
+      
+      - missing_count(region_id) = 0:
+          name: no_missing_region_ids
+          attributes:
+            description: "All records must have a region ID"
+      
+      - missing_count(customer_id) = 0:
+          name: no_missing_customer_ids
+          attributes:
+            description: "All records must have a customer ID"
+      
+      - missing_count(product_id) = 0:
+          name: no_missing_product_ids
+          attributes:
+            description: "All records must have a product ID"
+      
+      - row_count > 100:
+          name: sufficient_daily_records
+          attributes:
+            description: "At least 100 daily sales records"
+    
+    validity:
+      - failed rows:
+          name: non_negative_orders
+          fail query: |
+            SELECT order_date, region_name, customer_id, product_id, total_orders
+            FROM silver_v2alpha.fct_daily_sales
+            WHERE total_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Total orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT order_date, region_name, customer_id, product_id, total_revenue
+            FROM silver_v2alpha.fct_daily_sales
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Total revenue cannot be negative"
+      
+      - failed rows:
+          name: positive_avg_order_value
+          fail query: |
+            SELECT order_date, region_name, customer_id, product_id, avg_order_value
+            FROM silver_v2alpha.fct_daily_sales
+            WHERE total_orders > 0 AND avg_order_value <= 0
+          samples limit: 10
+          attributes:
+            description: "Average order value must be positive when orders exist"
+      
+      - failed rows:
+          name: valid_shipment_rate
+          fail query: |
+            SELECT order_date, region_name, customer_id, product_id, shipment_rate
+            FROM silver_v2alpha.fct_daily_sales
+            WHERE shipment_rate < 0 OR shipment_rate > 1
+          samples limit: 10
+          attributes:
+            description: "Shipment rate must be between 0 and 1"
+      
+      # This will FAIL - checking for high average order values
+      - failed rows:
+          name: low_avg_order_value_check
+          fail query: |
+            SELECT order_date, region_name, customer_id, product_id, avg_order_value, total_orders
+            FROM silver_v2alpha.fct_daily_sales
+            WHERE total_orders > 0 AND avg_order_value > 500
+          samples limit: 10
+          attributes:
+            description: "Average order value should not exceed $500 (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for perfect shipment rates
+      - failed rows:
+          name: perfect_shipment_rate_check
+          fail query: |
+            SELECT order_date, region_name, customer_id, product_id, shipment_rate, total_orders
+            FROM silver_v2alpha.fct_daily_sales
+            WHERE total_orders > 0 AND shipment_rate < 1.0
+          samples limit: 10
+          attributes:
+            description: "All orders should be shipped (100% rate) (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(order_date, region_id, customer_id, product_id) = 0:
+          name: unique_daily_sales_grain
+          attributes:
+            description: "Order date, region, customer, and product combinations must be unique"
+    
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in daily sales record count"
+      
+      - anomaly detection for avg(total_revenue):
+          name: avg_revenue_anomaly
+          attributes:
+            description: "Detect anomalies in average daily revenue"
+      
+      - anomaly detection for sum(total_revenue):
+          name: sum_revenue_anomaly
+          attributes:
+            description: "Detect anomalies in total revenue"
+      
+      - anomaly detection for avg(avg_order_value):
+          name: avg_order_value_anomaly
+          attributes:
+            description: "Detect anomalies in average order value"
+      
+      - anomaly detection for avg(shipment_rate):
+          name: shipment_rate_anomaly
+          attributes:
+            description: "Detect anomalies in shipment rate"
+      
+      - anomaly detection for distinct_count(customer_id):
+          name: distinct_customers_anomaly
+          attributes:
+            description: "Detect anomalies in number of distinct customers"
+    
+    timeliness:
+      - change for row_count >= -15%:
+          name: row_count_timeliness_check
+          attributes:
+            description: "Alert if daily sales record count drops more than 15% from same day last week"
+      
+      - change for sum(total_revenue) >= -20%:
+          name: revenue_timeliness_check
+          attributes:
+            description: "Alert if total revenue drops more than 20% from same day last week"
+      
+      - change for avg(shipment_rate) between -10% and 10%:
+          name: shipment_rate_timeliness_check
+          attributes:
+            description: "Alert if average shipment rate changes more than 10% from same day last week"
+      
+      - change for distinct_count(customer_id) >= -15%:
+          name: customer_count_timeliness_check
+          attributes:
+            description: "Alert if distinct customer count drops more than 15% from same day last week"
+

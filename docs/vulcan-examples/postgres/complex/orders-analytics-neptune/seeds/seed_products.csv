@@ -1,0 +1,17 @@
+product_id,supplier_id,name,category,price
+1,1,Widget A,Widgets,19.99
+2,1,Widget B,Widgets,24.99
+3,2,Gadget X,Gadgets,49.99
+4,2,Gadget Y,Gadgets,39.99
+5,3,Doohickey Pro,Doohickeys,99.99
+6,3,Doohickey Lite,Doohickeys,59.99
+7,4,Thingamajig Plus,Thingamajigs,79.99
+8,4,Thingamajig Basic,Thingamajigs,29.99
+9,5,Widget Premium,Widgets,89.99
+10,5,Gadget Elite,Gadgets,149.99
+11,6,Doohickey Max,Doohickeys,199.99
+12,7,Thingamajig Ultra,Thingamajigs,119.99
+13,8,Widget Special,Widgets,44.99
+14,9,Gadget Standard,Gadgets,69.99
+15,10,Doohickey Mini,Doohickeys,34.99
+

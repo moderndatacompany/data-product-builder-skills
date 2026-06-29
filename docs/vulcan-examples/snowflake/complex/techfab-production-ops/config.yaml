@@ -1,0 +1,117 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - TechFab Production Operations Analytics
+# ==============================================================================
+
+# Basic Information
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: techfab-production-ops
+display_name: TechFab Production Operations Analytics
+tenant: demo-staging
+description: TechFab Production Operations Analytics delivers comprehensive manufacturing intelligence through production tracking, equipment utilization, quality metrics, and downtime analysis across 10 manufacturing plants. Built for operational excellence, OEE optimization, and continuous improvement initiatives.
+
+# Classification
+tags:
+  - manufacturing
+  - production
+  - operations
+  - equipment
+  - quality
+  - downtime
+  - oee
+  - mes
+  - snowflake
+  - industrial_iot
+
+terms:
+  - data_product
+  - manufacturing_analytics
+  - production_fact
+  - equipment_dimension
+  - operational_excellence
+  - quality_metrics
+  - downtime_analysis
+
+# Domain
+domain: manufacturing_operations
+
+# ==============================================================================
+# Analytics & Telemetry (Vulcan CloudEvents)
+# ==============================================================================
+# analytics:
+#   enabled: false  # Set to true and provide api_key to enable in production
+  # api_key: ${VULCAN_API_KEY}
+  # api_base_url: https://your-dataos-instance.com
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+model_defaults:
+  dialect: snowflake
+  start: '2024-07-01'  # Start of production data
+  cron: '@daily'  # Daily refresh for all models
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://mesplatform
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+openlineage:
+  enabled: false
+  # url: https://your-dataos-instance.dataos.cloud/hera
+  # timeout_seconds: 30
+  # api_key: ${OPENLINEAGE_API_KEY}
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+      - migration_start
+      - migration_end
+      - migration_failure
+      - plan_change
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+users:
+  - username: shreyasikarwartmdcio
+    email: shreya.sikarwar@tmdc.io
+    type: OWNER
+  - username: aakanshajainctmdcio
+    email: aakansha.jain@tmdc.io
+    type: CONTRIBUTOR

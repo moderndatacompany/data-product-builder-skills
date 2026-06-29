@@ -1,0 +1,25 @@
+# kind: dq — converted from checks/06-numeric-metrics.yaml
+kind: dq
+name: tpch_part_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.tpch_part_sf1
+
+rules:
+- row_count > 0:
+    name: parts_exist
+    dimension: completeness
+    description: Part table must not be empty
+
+- min(p_retailprice) >= 0:
+    name: min_retailprice_non_negative
+    dimension: accuracy
+    description: "Minimum retail price must be >= 0"
+
+- max(p_retailprice) <= 1000000:
+    name: max_retailprice_reasonable
+    dimension: accuracy
+    description: Maximum retail price should be reasonable
+
+- avg(p_retailprice) > 0:
+    name: avg_retailprice_positive
+    dimension: accuracy
+    description: Average retail price should be positive

@@ -1,0 +1,8 @@
+kind: metric
+name: total_quantity_sold
+measure: orders.total_quantity_sold
+ts: orders.order_date
+granularity: day
+dimensions:
+  - orders.product_id
+description: Total quantity of items sold

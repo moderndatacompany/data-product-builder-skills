@@ -1,0 +1,14 @@
+models:
+  testawslhnewdepot.tpch_sparkv1.tpch_customer_sf1:
+    alias: tpch_customer
+    dimensions:
+      includes:
+        - c_custkey
+        - c_name
+        - c_acctbal
+
+    measures:
+      customer_count:
+        type: count
+        expression: "{tpch_customer.c_custkey}"
+

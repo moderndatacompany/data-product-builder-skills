@@ -1,0 +1,7 @@
+raw_refund_reason,refund_reason_group,issue_group,priority_label
+late_delivery,late_delivery,delivery_issue,ops_high
+damaged_item,damaged_item,quality_issue,quality_high
+stale_product,stale_product,quality_issue,quality_high
+missing_item,missing_item,missing_item,ops_high
+wrong_item,missing_item,missing_item,ops_high
+price_mismatch,pricing_issue,pricing_issue,finance_medium

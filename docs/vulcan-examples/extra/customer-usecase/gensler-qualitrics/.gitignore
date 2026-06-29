@@ -1,0 +1,40 @@
+# Secrets and credentials
+.secrets/
+*.p8
+*.pem
+*.key
+.env
+.env.local
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.python-version
+
+# Vulcan / SQLMesh
+.cache/
+.logs/
+
+# Spark
+.ivy2/
+metastore_db/
+derby.log
+spark-warehouse/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+

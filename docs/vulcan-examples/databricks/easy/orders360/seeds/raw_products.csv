@@ -1,0 +1,12 @@
+product_id,product_name,category,subcategory,brand,color,size,weight,material,model_number,sku,upc,price,cost,supplier,warranty_period,release_date,rating,stock_quantity,discontinued
+P001,Wireless Mouse,Electronics,Accessories,TechPro,Black,OneSize,0.15,Plastic,TM-2024,SKU-001,123456789012,29.99,12.50,Tech Supplies Inc,1 year,2023-01-15,4.5,150,false
+P002,Cotton T-Shirt,Clothing,Tops,ComfortWear,Blue,M,0.20,Fabric,CW-TS-001,SKU-002,123456789013,24.99,8.00,Fashion Direct,30 days,2023-03-01,4.2,300,false
+P003,Yoga Mat,Sports,Fitness,FitLife,Purple,L,1.50,Plastic,FL-YM-001,SKU-003,123456789014,39.99,15.00,Sports Wholesale,90 days,2022-06-10,4.8,200,false
+P004,LED Desk Lamp,Home,Lighting,BrightHome,White,OneSize,0.80,Metal,BH-DL-001,SKU-004,123456789015,49.99,22.00,Home Essentials,2 years,2023-05-20,4.3,100,false
+P005,Organic Coffee Beans,Food,Beverages,JavaPure,Brown,OneSize,0.50,Food,JP-CB-001,SKU-005,123456789016,18.99,7.50,Organic Foods Co,N/A,2024-01-05,4.7,500,false
+P006,Building Blocks Set,Toys,Educational,KidsBuild,Multi,OneSize,2.00,Plastic,KB-BL-001,SKU-006,123456789017,34.99,14.00,Toy Factory Ltd,1 year,2023-08-12,4.6,250,false
+P007,Bluetooth Headphones,Electronics,Audio,SoundMax,Silver,OneSize,0.25,Plastic,SM-BH-001,SKU-007,123456789018,79.99,35.00,Tech Supplies Inc,1 year,2023-02-28,4.4,120,false
+P008,Running Shoes,Sports,Footwear,SpeedRun,Red,L,0.60,Fabric,SR-RS-001,SKU-008,123456789019,89.99,40.00,Sports Wholesale,6 months,2023-04-15,4.1,80,false
+P009,Glass Vase,Home,Decor,HomeStyle,Clear,M,1.20,Glass,HS-GV-001,SKU-009,123456789020,29.99,10.00,Home Essentials,N/A,2022-11-20,3.9,60,true
+P010,Wool Sweater,Clothing,Tops,WarmKnit,Gray,XL,0.45,Fabric,WK-WS-001,SKU-010,123456789021,59.99,25.00,Fashion Direct,30 days,2023-09-01,4.0,150,false
+

@@ -1,0 +1,164 @@
+x-images:
+  # Unified Vulcan image (Python API + Go MySQL server)
+  # Version format: MAJOR.MINOR.PATCH.REVISION (e.g., 0.228.1.1)
+  vulcan: &vulcan_image "tmdcio/vulcan-postgres:${VERSION:-0.228.1.1}"
+  vulcan-transpiler: &vulcan_transpiler_image "tmdcio/vulcan-transpiler:${VERSION:-0.228.1.1}"
+  vulcan-graphql: &vulcan_graphql_image "tmdcio/vulcan-graphql:${VERSION:-0.228.1.1}"
+
+networks:
+  vulcan:
+    external: true
+
+services:
+  # Vulcan API for this example project
+  vulcan-api:
+    image: *vulcan_image
+    working_dir: /workspace
+    command: ["vulcan", "--log-to-stdout","api", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      PROJECT_PATH: ${PROJECT_PATH:-/workspace}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/workspace
+    restart: unless-stopped
+    networks:
+      - vulcan
+    # Note: depends_on with external services (statestore, minio) won't work across compose files
+    # Ensure infra services are running before starting this service
+
+  # Transpiler service
+  vulcan-transpiler:
+    image: *vulcan_transpiler_image
+    environment:
+      VULCAN_API_URL: http://vulcan-api:8000/api/v1
+    ports:
+      - "4000:4000"
+    depends_on:
+      - vulcan-api
+    restart: unless-stopped
+    networks:
+      - vulcan
+
+
+  # Vulcan GraphQL service
+  vulcan-graphql:
+    image: *vulcan_graphql_image
+    environment:
+      VULCAN_API_URL: http://vulcan-api:8000
+      VULCAN_TRANSPILER_URL: http://vulcan-transpiler:4000
+    depends_on:
+      - vulcan-api
+      - vulcan-transpiler
+    restart: unless-stopped
+    networks:
+      - vulcan
+
+  # Vulcan MySQL service - provides MySQL wire protocol access to Vulcan
+  # Connect using: mysql -h 127.0.0.1 -P 3306 -u <username> -p'<api-key>' --enable-cleartext-plugin
+  # With SSL: mysql -h 127.0.0.1 -P 3306 -u <username> -p'<api-key>' --ssl-mode=REQUIRED
+  vulcan-mysql:
+    image: *vulcan_image
+    # Override entrypoint to run Go MySQL binary directly
+    # The binary is at /usr/local/bin/vulcan-mysql in the unified image
+    entrypoint: ["/usr/local/bin/vulcan-mysql"]
+    ports:
+      - "3306:3306"       # MySQL wire protocol - standard MySQL port
+      - "8081:8080"       # HTTP monitoring endpoints (/health, /livez, /metrics) - mapped to 8081 to avoid conflict with API on 8000
+    environment:
+      LOG_LEVEL: ${MYSQL_LOG_LEVEL:-debug}
+      
+      # -------------------------------------------------------------------------
+      # MySQL Server Configuration
+      # -------------------------------------------------------------------------
+      MYSQL_HOST: "0.0.0.0"           # Bind to all interfaces
+      MYSQL_PORT: "3306"              # Standard MySQL port
+      MYSQL_DB_NAME: "vulcan"         # Default database name for semantic layer tables
+      MYSQL_ALLOW_CLEARTEXT_AUTH: "true"  # Required for password auth without SSL
+      # MYSQL_CONN_IDLE_TIMEOUT: "0"  # 0=disabled, >0=seconds before warning on idle connections
+      
+      # -------------------------------------------------------------------------
+      # SSL/TLS Configuration
+      # -------------------------------------------------------------------------
+      # For DEVELOPMENT: SSL disabled (no certificates needed)
+      # For PRODUCTION: Set MYSQL_SSL_ENABLED=true and mount certificates
+      #
+      # To enable SSL:
+      # 1. Generate certificates (see mysql/README.md)
+      # 2. Mount certificates to /ssl directory
+      # 3. Set MYSQL_SSL_ENABLED=true
+      # 4. Optionally set MYSQL_SSL_REQUIRED=true to reject non-SSL connections
+      # -------------------------------------------------------------------------
+      MYSQL_SSL_ENABLED: "${MYSQL_SSL_ENABLED:-false}"
+      MYSQL_SSL_REQUIRED: "${MYSQL_SSL_REQUIRED:-false}"
+      MYSQL_SSL_CERT_FILE: "/ssl/server.crt"
+      MYSQL_SSL_KEY_FILE: "/ssl/server.key"
+      # MYSQL_SSL_CA_FILE: "/ssl/ca.crt"  # Optional: for client cert verification
+      
+      # -------------------------------------------------------------------------
+      # Heimdall Authentication Service (REQUIRED)
+      # -------------------------------------------------------------------------
+      # Heimdall validates user credentials (username/apikey) before allowing
+      # MySQL connections. Set HEIMDALL_URL to your DataOS Heimdall endpoint.
+      # -------------------------------------------------------------------------
+      HEIMDALL_URL: ${HEIMDALL_URL:-https://glacier-121525.dataos.app/heimdall}
+      HEIMDALL_AUTH_PATH: /api/v1/authorize
+      HEIMDALL_TIMEOUT: "10"
+      
+      # -------------------------------------------------------------------------
+      # DataOS User Identity (REQUIRED)
+      # -------------------------------------------------------------------------
+      # The user-id of the person who deployed/runs Vulcan.
+      # Used for internal service-to-service calls (Transpiler X-User header).
+      # Service will FAIL TO START if not set.
+      # -------------------------------------------------------------------------
+      DATAOS_RUN_AS_USER: ${DATAOS_RUN_AS_USER:-akshayjaintmdcio}
+      
+      # -------------------------------------------------------------------------
+      # HTTP Server Configuration (Monitoring Only)
+      # -------------------------------------------------------------------------
+      HTTP_HOST: "0.0.0.0"
+      HTTP_PORT: "8080"
+      
+      # -------------------------------------------------------------------------
+      # API Service Configuration (Query Execution)
+      # -------------------------------------------------------------------------
+      # MySQL server forwards SQL queries to Vulcan API for execution.
+      # Note: Endpoint paths are hardcoded in the service, only URL is configurable.
+      # -------------------------------------------------------------------------
+      API_URL: http://vulcan-api:8000
+      
+      # -------------------------------------------------------------------------
+      # API Query Execution Polling Configuration
+      # -------------------------------------------------------------------------
+      # Controls how MySQL server polls API for query results.
+      # Uses exponential backoff from initial to max delay.
+      # -------------------------------------------------------------------------
+      API_POLL_INITIAL_MS: "1000"     # Start polling at 1 second
+      API_POLL_MAX_MS: "5000"         # Max delay between polls: 5 seconds
+      API_QUERY_TIMEOUT: "300"        # Total query timeout: 5 minutes
+      
+      # -------------------------------------------------------------------------
+      # Transpiler Service Configuration (Metadata & Schema)
+      # -------------------------------------------------------------------------
+      # MySQL server fetches schema metadata from Transpiler to create
+      # in-memory tables that BI tools can discover via SHOW TABLES/DESCRIBE.
+      # Note: Endpoint paths are hardcoded in the service, only URL is configurable.
+      # -------------------------------------------------------------------------
+      TRANSPILER_URL: http://vulcan-transpiler:4000
+      TRANSPILER_BASE_PATH: /transpiler
+      TRANSPILER_POLL_INTERVAL: "60"  # Refresh schema every 60 seconds
+    volumes:
+      - ./ssl:/ssl:ro
+    depends_on:
+      - vulcan-api
+      - vulcan-transpiler
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/livez"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - vulcan

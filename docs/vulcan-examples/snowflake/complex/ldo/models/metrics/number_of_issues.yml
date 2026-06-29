@@ -1,0 +1,3 @@
+kind: metric
+name: number_of_issues
+measure: issue.number_of_issues

@@ -1,0 +1,133 @@
+# Converted from legacy: semantics/active_surveys_detail.yml
+kind: semantic
+name: qualtrics_active_surveys
+depends_on: GENSLER.ANALYTICS.QUALTRICS_ACTIVE_SURVEYS_DETAIL
+ai_context:
+  instructions: >
+    Use this semantic model for questions about qualtrics active surveys. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "qualtrics active surveys"
+    - "qualtrics_active_surveys"
+    - "qualtrics"
+    - "active"
+  examples:
+    - "Show qualtrics active surveys trends over time."
+    - "Break down qualtrics active surveys by key dimensions."
+
+dimensions:
+- SURVEY_ID
+- SURVEY_NAME
+- SURVEY_DESCRIPTION
+- OWNER_ID
+- ORGANIZATION_ID
+- CREATION_DATE
+- LAST_MODIFIED_DATE
+- LAST_ACCESSED_DATE
+- IS_ACTIVE
+- EARLIEST_RESPONSE_DATE
+- LATEST_RESPONSE_DATE
+- TOTAL_RESPONSE_COUNT
+- LIVE_RESPONSE_COUNT
+- SURVEY_TYPE
+- STATUS
+- COUNT_PREVIEWS
+- QUESTION_COUNT
+- BLOCK_COUNT
+- ACTUAL_RESPONSE_COUNT
+- DAYS_SINCE_ACCESSED
+- ACTIVITY_LEVEL
+measures:
+- name: total_surveys
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total surveys. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total surveys"
+      - "total_surveys"
+      - "total"
+      - "surveys"
+    examples:
+      - "What is total surveys by month?"
+      - "Compare total surveys across key segments."
+  type: count
+  expression: '*'
+  description: Total active surveys
+  tags:
+  - metric
+  terms:
+  - metric.total_surveys
+- name: total_responses
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total responses. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total responses"
+      - "total_responses"
+      - "total"
+      - "responses"
+    examples:
+      - "What is total responses by month?"
+      - "Compare total responses across key segments."
+  type: sum
+  expression: '{qualtrics_active_surveys.TOTAL_RESPONSE_COUNT}'
+  description: Total responses
+  tags:
+  - metric
+  terms:
+  - metric.total_responses
+segments:
+- name: recently_active
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recently active subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "recently active"
+      - "recently_active"
+      - "recently"
+      - "active"
+    examples:
+      - "Show revenue for recently active."
+      - "How many records are in recently active?"
+  expression: '{qualtrics_active_surveys.ACTIVITY_LEVEL} = ''Recently Active'''
+  description: Recently active surveys
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recently_active
+  - segment.recent
+joins:
+- name: respondents
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from respondents. Keep
+      the configured join relationship to avoid double counting.
+    synonyms:
+      - "respondents"
+    examples:
+      - "Analyze this model with respondents attributes."
+      - "Break measures down by respondents."
+  type: one_to_many
+  expression: '{qualtrics_active_surveys.SURVEY_ID} = {respondents.SURVEY_ID}'
+- name: question_response_summary
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from question response
+      summary. Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "question response summary"
+      - "question_response_summary"
+      - "question"
+      - "response"
+    examples:
+      - "Analyze this model with question response summary attributes."
+      - "Break measures down by question response summary."
+  type: one_to_many
+  expression: '{qualtrics_active_surveys.SURVEY_ID} = {question_response_summary.SURVEY_ID}'

@@ -1,0 +1,53 @@
+# Converted from legacy: semantics/products.yml
+kind: semantic
+name: products
+depends_on: sales.products
+description: Product dimension table with catalog details, pricing, and inventory information
+dimensions:
+- product_id
+- product_name
+- category
+- subcategory
+- brand
+- color
+- size
+- price
+- rating
+- stock_quantity
+- discontinued
+measures:
+- name: total_products
+  type: count
+  expression: '{products.product_id}'
+  description: Total number of products
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_products
+  - metric.product_count
+- name: active_products
+  type: count
+  expression: '*'
+  filters:
+  - '{products.discontinued} = FALSE'
+  description: Number of active (non-discontinued) products
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active
+segments:
+- name: high_rated_products
+  expression: '{products.rating} >= 4.0'
+  description: Products with rating >= 4.0
+  tags:
+  - product
+  - rating
+  - segment
+  terms:
+  - product.top_rated
+  - segment.high_rated_products

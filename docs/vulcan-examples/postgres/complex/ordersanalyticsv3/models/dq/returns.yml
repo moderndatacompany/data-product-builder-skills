@@ -1,0 +1,23 @@
+# kind: dq — converted from checks/returns.yml
+kind: dq
+name: returns_dq
+depends_on: sales.returns
+rules:
+- failed rows:
+    name: negative_refunds
+    dimension: validity
+    fail query: |
+      SELECT return_id, order_id, order_item_id, refund_amount
+      FROM sales.returns
+      WHERE refund_amount < 0
+    samples limit: 10
+    description: Refund amounts must not be negative
+- failed rows:
+    name: invalid_return_status
+    dimension: validity
+    fail query: |
+      SELECT return_id, return_status
+      FROM sales.returns
+      WHERE return_status NOT IN ('Approved', 'Rejected', 'Pending')
+    samples limit: 10
+    description: Return status must be one of the allowed values

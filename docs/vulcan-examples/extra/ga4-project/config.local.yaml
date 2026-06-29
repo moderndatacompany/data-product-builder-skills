@@ -1,0 +1,140 @@
+# virtual_environment_mode: dev_only
+name: ga4_analytics
+display_name: GA4 Analytics Project
+tenant: marketing
+description: Google Analytics 4 data transformation and analytics pipeline using Vulcan
+tags:
+  - ga4
+  - google-analytics
+  - web-analytics
+  - bigquery
+  - marketing
+terms:
+  - glossary.data_product
+  - glossary.analytics_platform
+  - glossary.business_intelligence
+metadata:
+  domain: marketing
+  use_cases:
+    - Web analytics and user behavior tracking
+    - Session analysis and conversion tracking
+    - Traffic source attribution
+    - E-commerce performance metrics
+    - User engagement and retention analysis
+  limitations:
+    - Data based on GA4 BigQuery export
+    - Event data from 2020-11-02 (sample data)
+    - Follows GA4 sharded table structure (events_YYYYMMDD)
+
+# Analytics configuration (Vulcan CloudEvents telemetry)
+# Set enabled: true and provide api_key to enable analytics
+analytics:
+  enabled: false  # Set to true and provide api_key to enable
+  # base_url: "" #"https://glacier-121525.dataos.app/cloudevents/api/v1"
+  # api_key: "" # Required when enabled: true
+  # source_name: "vulcanlocal" # This is not required in production as default vulcan will be used.
+  # enable_search: true
+  # retention_days: 30
+
+# linter:
+#   enabled: true
+#   warn_rules:
+#     - preferassertions  # Yellow warning, doesn't block
+#     - nomissingaudits
+#   rules:
+#     - ambiguousorinvalidcolumn
+#     - invalidselectstarexpansion
+#     - noambiguousprojections
+
+object_store:
+  provider: minio
+  bucket: warehouse
+  base_path: queries
+  compression: snappy
+  presigned_url_expiry_mins: 60  # URLs valid for 1 hour
+  credentials:
+    endpoint_url: http://127.0.0.1:9000
+    access_key_id: admin
+    secret_access_key: password
+    region: us-east-1
+
+model_defaults:
+  dialect: bigquery
+  start: '2020-11-02' # Start date matches our GA4 sample data
+  cron: '@daily'      # Run models daily at 12am UTC (can override per model)
+
+# --- Gateway Connection ---
+gateways:
+  default:
+    connection:
+      type: bigquery
+      method: service-account
+      project: tmdc-platform-engineering
+      keyfile: /Users/shreyasikarwar/Desktop/DataOs-Research/Vulcan/Ga4-projects/vulcan-project/bigquery_key.json
+    state_connection:
+      type: postgres
+      host: localhost
+      port: 5431
+      user: vulcan
+      password: vulcan
+      database: statestore
+
+    # State schema name
+    state_schema: ga4_analytics1 
+
+default_gateway: default
+
+openlineage:
+  enabled: true
+  url: http://127.0.0.1:8000
+  timeout_seconds: 10
+  # api_key: optional_api_key_here
+
+transpiler:
+  base_url: http://127.0.0.1:4000/transpiler  
+
+graphql:
+  base_url: http://vulcan-graphql:3000
+  timeout: 60
+
+# Heimdall authentication configuration
+# Set enabled: true and provide base_url for production
+heimdall:
+  enabled: false  # Set to true for production
+  # base_url: "https://glacier-121525.dataos.app/heimdall"  # Required when enabled: true
+  # timeout: 10
+
+notification_targets:
+  # Console notifications for all lifecycle events
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - run_start
+      - run_end
+      - migration_start
+      - migration_end
+      - apply_failure
+      - run_failure
+      - audit_failure
+      - migration_failure
+      - plan_change
+      - check_start
+      - check_end
+      - check_failure
+
+  # Example: Slack webhook for deployment changes
+  # - type: slack_webhook
+  #   url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+  #   notify_on:
+  #     - apply_start
+  #     - apply_end
+  #     - plan_change
+  #     - apply_failure
+  #     - run_failure
+
+# Project team members
+users:
+  - username: shreya
+    email: shreya@example.com
+    type: OWNER

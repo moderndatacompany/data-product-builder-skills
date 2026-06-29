@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml (revenue_trends)
+kind: metric
+name: revenue_trends
+measure: daily_sales.total_daily_revenue
+ts: daily_sales.order_date
+granularity: day
+dimensions:
+  - daily_sales.total_orders
+description: "Revenue trends over time with order volume"
+tags:
+  - revenue
+  - trends
+  - metric
+terms:
+  - finance.revenue_trends
+  - sales.revenue_over_time

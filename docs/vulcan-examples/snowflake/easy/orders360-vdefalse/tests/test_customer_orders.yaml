@@ -1,0 +1,47 @@
+test_sales_analytics_customer_orders_single:
+  model: DEMODB.VDEFALSE.CUSTOMER_ORDERS
+  description: >-
+    Single-record join test. Provides one customer and one matching order;
+    asserts the projected join row carries both sides correctly.
+
+  inputs:
+    DEMODB.VDEFALSE.CUSTOMERS:
+      rows:
+        - CUSTOMER_ID: "C100"
+          FULL_NAME: "Alice Johnson"
+          EMAIL: "alice.johnson@example.com"
+          PHONE: "555-9999"
+          ADDRESS_LINE: "10 Market St Suite 200 Denver CO 80205"
+          CUSTOMER_SEGMENT: "Gold"
+          ACCOUNT_STATUS: "Active"
+          SIGNUP_DATE: "2024-01-15"
+          LOYALTY_SCORE: 78
+    DEMODB.VDEFALSE.ORDERS:
+      rows:
+        - ORDER_ID: "O100"
+          ORDER_DATE: "2025-03-15"
+          CUSTOMER_ID: "C100"
+          PRODUCT_ID: "P100"
+          QUANTITY: 2
+          UNIT_PRICE: 29.99
+          DISCOUNT: 0.10
+          TAX: 4.32
+          SHIPPING_COST: 5.99
+          TOTAL_AMOUNT: 64.29
+
+  outputs:
+    query:
+      rows:
+        - CUSTOMER_ID: "C100"
+          FULL_NAME: "Alice Johnson"
+          EMAIL: "alice.johnson@example.com"
+          CUSTOMER_SEGMENT: "Gold"
+          ACCOUNT_STATUS: "Active"
+          LOYALTY_SCORE: 78
+          ORDER_ID: "O100"
+          ORDER_DATE: "2025-03-15"
+          PRODUCT_ID: "P100"
+          QUANTITY: 2
+          UNIT_PRICE: 29.99
+          DISCOUNT: 0.1
+          TOTAL_AMOUNT: 64.29

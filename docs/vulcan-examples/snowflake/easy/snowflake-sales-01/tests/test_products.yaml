@@ -1,0 +1,53 @@
+test_sales_products_single:
+  model: SALES.PRODUCTS
+  description: >
+    Full-output test for the Products model using a single input record.
+
+  inputs:
+    VULCAN.RAW.PRODUCTS:
+      rows:
+        - PRODUCT_ID: P100
+          PRODUCT_NAME: "Test Widget"
+          CATEGORY: "Electronics"
+          SUBCATEGORY: "Accessories"
+          BRAND: "TestBrand"
+          COLOR: "Blue"
+          SIZE: "M"
+          WEIGHT: 0.5
+          MATERIAL: "Plastic"
+          MODEL_NUMBER: "TB-001"
+          SKU: "SKU-100"
+          UPC: "999999999999"
+          PRICE: 49.99
+          COST: 20.00
+          SUPPLIER: "Test Supplier"
+          WARRANTY_PERIOD: "1 year"
+          RELEASE_DATE: 2024-01-01
+          RATING: 4.5
+          STOCK_QUANTITY: 100
+          DISCONTINUED: false
+
+  outputs:
+    query:
+      rows:
+        - PRODUCT_ID: "P100"
+          PRODUCT_NAME: "Test Widget"
+          CATEGORY: "Electronics"
+          SUBCATEGORY: "Accessories"
+          BRAND: "TestBrand"
+          COLOR: "Blue"
+          SIZE: "M"
+          WEIGHT: 0.5
+          MATERIAL: "Plastic"
+          MODEL_NUMBER: "TB-001"
+          SKU: "SKU-100"
+          UPC: "999999999999"
+          PRICE: 49.99
+          COST: 20.00
+          SUPPLIER: "Test Supplier"
+          WARRANTY_PERIOD: "1 year"
+          RELEASE_DATE: "2024-01-01"
+          RATING: 4.5
+          STOCK_QUANTITY: 100
+          DISCONTINUED: false
+

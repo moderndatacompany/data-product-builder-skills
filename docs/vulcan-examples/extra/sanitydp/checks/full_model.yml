@@ -1,0 +1,24 @@
+checks:
+  lenovo.vulcan_example.full_model:
+    completeness:
+      - missing_count(item_id) = 0:
+          name: item_id_not_null
+          attributes:
+            description: "Item ID must not be null"
+      
+      - row_count > 0:
+          name: has_rows
+          attributes:
+            description: "Model must have at least one row"
+    
+    validity:
+      - failed rows:
+          name: positive_item_id
+          fail query: |
+            SELECT item_id, num_orders
+            FROM lenovo.vulcan_example.full_model
+            WHERE item_id <= 0
+          samples limit: 10
+          attributes:
+            description: "Item ID must be positive"
+  

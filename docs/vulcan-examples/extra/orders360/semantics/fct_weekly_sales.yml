@@ -1,0 +1,124 @@
+models:
+  curated.fct_weekly_sales:
+    alias: weekly_sales
+    
+    measures:
+      total_weekly_orders:
+        type: sum
+        expression: "{weekly_sales.total_orders}"
+        description: "Total orders across all weeks"
+        tags:
+          - sales
+          - orders
+          - weekly
+        terms:
+          - sales.weekly_orders
+          - metric.weekly_order_count
+      
+      total_weekly_revenue:
+        type: sum
+        expression: "{weekly_sales.total_revenue}"
+        format: currency
+        description: "Total revenue across all weeks"
+        tags:
+          - revenue
+          - financial
+          - weekly
+        terms:
+          - sales.weekly_revenue
+          - finance.weekly_total
+      
+      avg_weekly_order_value:
+        type: avg
+        expression: "{weekly_sales.avg_order_value}"
+        format: currency
+        description: "Average order value across weeks"
+        tags:
+          - revenue
+          - average
+          - weekly
+        terms:
+          - sales.avg_weekly_aov
+          - finance.weekly_average
+      
+      avg_daily_revenue_in_weeks:
+        type: avg
+        expression: "{weekly_sales.avg_daily_revenue}"
+        format: currency
+        description: "Average daily revenue within weeks"
+        tags:
+          - revenue
+          - daily
+          - average
+        terms:
+          - sales.avg_daily_in_week
+          - finance.daily_average
+    
+    segments:
+      high_performing_weeks:
+        expression: "{weekly_sales.total_revenue} >= 20000"
+        description: "Weeks with revenue >= $20,000"
+        tags:
+          - revenue
+          - performance
+          - segment
+        terms:
+          - sales.high_performing_weeks
+          - performance.strong_weeks
+      
+      recent_weeks:
+        expression: "{weekly_sales.week_start_date} >= CURRENT_DATE - INTERVAL '4 weeks'"
+        description: "Last 4 weeks"
+        tags:
+          - temporal
+          - recent
+          - analysis
+        terms:
+          - time.recent_weeks
+          - analysis.last_month
+      
+      current_year:
+        expression: "{weekly_sales.year} = EXTRACT(YEAR FROM CURRENT_DATE)"
+        description: "Current year weeks"
+        tags:
+          - temporal
+          - year
+          - current
+        terms:
+          - time.current_year
+          - analysis.ytd
+    
+    joins:
+      customer_profile:
+        type: many_to_one
+        expression: "{weekly_sales.customer_id} = {customer_profile.customer_id}"
+      
+      product_profile:
+        type: many_to_one
+        expression: "{weekly_sales.product_id} = {product_profile.product_id}"
+    
+    dimensions:
+      includes:
+        - week_start_date
+        - week_end_date
+        - year
+        - week_number
+        - region_id
+        - region_name
+        - customer_id
+        - product_id
+      
+      # enhancements:
+      #   - name: week_start_date
+      #     granularities:
+      #       - name: weekly
+      #         interval: "1 week"
+      #         description: "Weekly aggregation"
+      #       - name: monthly
+      #         interval: "1 month"
+      #         description: "Monthly rollup from weeks"
+      
+      proxies:
+        - name: customer_lifetime_value
+          measure: customer_profile.total_customer_revenue
+

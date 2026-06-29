@@ -1,0 +1,63 @@
+models:
+  sales.order_items:
+    alias: order_items
+
+    dimensions:
+      includes:
+        - order_item_id
+        - order_id
+        - order_date
+        - customer_id
+        - product_id
+        - quantity
+        - unit_price
+        - discount_rate
+        - tax_rate
+        - line_subtotal
+        - line_discount
+        - line_tax
+        - line_total
+
+    measures:
+      total_line_items:
+        type: count_distinct
+        expression: "{order_items.order_item_id}"
+
+      units_sold:
+        type: sum
+        expression: "{order_items.quantity}"
+
+      gross_sales:
+        type: sum
+        expression: "{order_items.line_subtotal}"
+
+      total_line_discounts:
+        type: sum
+        expression: "{order_items.line_discount}"
+
+      net_sales:
+        type: sum
+        expression: "{order_items.line_total}"
+
+      avg_unit_price:
+        type: avg
+        expression: "{order_items.unit_price}"
+
+    segments:
+      discounted_lines:
+        expression: |
+          {order_items.discount_rate} > 0
+
+      high_tax_lines:
+        expression: |
+          {order_items.tax_rate} >= 0.08
+
+    joins:
+      orders:
+        type: many_to_one
+        expression: "{order_items.order_id} = {orders.order_id}"
+
+      products:
+        type: many_to_one
+        expression: "{order_items.product_id} = {products.product_id}"
+

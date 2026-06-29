@@ -1,0 +1,56 @@
+models:
+  GENSLER.ANALYTICS.QUALTRICS_SURVEY_METRICS:
+    alias: survey_metrics
+
+    joins:
+      respondents:
+        type: one_to_many
+        expression: "{survey_metrics.SURVEY_ID} = {respondents.SURVEY_ID}"
+
+      question_response_summary:
+        type: one_to_many
+        expression: "{survey_metrics.SURVEY_ID} = {question_response_summary.SURVEY_ID}"
+
+    dimensions:
+      includes:
+        - SURVEY_ID
+        - SURVEY_NAME
+        - SURVEY_DESCRIPTION
+        - OWNER_ID
+        - ORGANIZATION_ID
+        - CREATION_DATE
+        - LAST_MODIFIED_DATE
+        - LAST_ACCESSED_DATE
+        - IS_ACTIVE
+        - TOTAL_RESPONSE_COUNT
+        - LIVE_RESPONSE_COUNT
+        - TEST_RESPONSE_COUNT
+        - PREVIEW_RESPONSE_COUNT
+        - IMPORTED_RESPONSE_COUNT
+        - EARLIEST_RESPONSE_DATE
+        - LATEST_RESPONSE_DATE
+        - SURVEY_TYPE
+        - STATUS
+        - COUNT_PREVIEWS
+        - TOTAL_QUESTIONS
+        - TOTAL_BLOCKS
+        - DAYS_SINCE_CREATION
+        - DAYS_SINCE_LAST_MODIFIED
+        - LIVE_RESPONSE_PERCENTAGE
+
+    measures:
+      total_surveys:
+        type: count
+        expression: "*"
+        description: "Total number of surveys"
+
+      total_responses:
+        type: sum
+        expression: "{survey_metrics.TOTAL_RESPONSE_COUNT}"
+        description: "Total responses"
+
+    segments:
+      active_surveys:
+        expression: |
+          {survey_metrics.IS_ACTIVE} = TRUE
+        description: "Active surveys only"

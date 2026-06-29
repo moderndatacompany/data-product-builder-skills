@@ -1,0 +1,89 @@
+checks:
+  GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001:
+    completeness:
+      - missing_count(SURVEY_ID) = 0:
+          name: no_missing_survey_ids
+          attributes:
+            description: "All questions must be associated with a survey"
+      
+      - missing_count(QUESTION_ID) = 0:
+          name: no_missing_question_ids
+          attributes:
+            description: "All questions must have a valid question ID"
+      
+      - missing_count(QUESTIONS_KEY) = 0:
+          name: no_missing_questions_key
+          attributes:
+            description: "All questions must have a questions_key for response mapping"
+      
+      - missing_count(QUESTION_TEXT) = 0:
+          name: no_missing_question_text
+          attributes:
+            description: "All questions should have text (may fail for hidden/embedded data questions)"
+      
+      - row_count > 0:
+          name: has_questions
+          attributes:
+            description: "At least one question must exist in the survey"
+    
+    validity:
+      - failed rows:
+          name: invalid_question_ids
+          fail query: |
+            SELECT SURVEY_ID, QUESTION_ID, QUESTION_TEXT
+            FROM GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001
+            WHERE QUESTION_ID NOT LIKE 'QID%'
+              AND QUESTION_ID NOT LIKE 'Q%'
+          samples limit: 10
+          attributes:
+            description: "Question IDs should follow Qualtrics format (QID or Q prefix)"
+      
+      - failed rows:
+          name: invalid_question_types
+          fail query: |
+            SELECT SURVEY_ID, QUESTION_ID, QUESTION_TYPE, QUESTION_TEXT
+            FROM GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001
+            WHERE QUESTION_TYPE NOT IN ('MC', 'Matrix', 'TE', 'Slider', 'RO', 'DB', 'DD', 'Timing', 'CS', 'PGR', 'SBS', 'Meta', 'HL')
+              AND QUESTION_TYPE IS NOT NULL
+          samples limit: 10
+          attributes:
+            description: "Question types must be valid Qualtrics types"
+      
+      - failed rows:
+          name: missing_block_info
+          fail query: |
+            SELECT SURVEY_ID, QUESTION_ID, BLOCK_ID, BLOCK_DESCRIPTION
+            FROM GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001
+            WHERE BLOCK_ID IS NULL OR BLOCK_DESCRIPTION IS NULL
+          samples limit: 10
+          attributes:
+            description: "Questions should have block association"
+      
+      - failed rows:
+          name: invalid_question_numbers
+          fail query: |
+            SELECT SURVEY_ID, QUESTION_ID, QUESTION_NUMBER, BLOCK_NUMBER
+            FROM GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001
+            WHERE QUESTION_NUMBER <= 0 OR BLOCK_NUMBER <= 0
+          samples limit: 10
+          attributes:
+            description: "Question and block numbers must be positive integers"
+    
+    uniqueness:
+      - duplicate_count(QUESTIONS_KEY) = 0:
+          name: unique_questions_keys
+          attributes:
+            description: "Questions keys must be unique within a survey (may have duplicates for matrix sub-questions)"
+    
+    accuracy:
+      - failed rows:
+          name: orphaned_sub_questions
+          fail query: |
+            SELECT SURVEY_ID, QUESTION_ID, SBS_QUESTION_NUMBER, SBS_QUESTION_TEXT
+            FROM GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001
+            WHERE SBS_QUESTION_NUMBER IS NOT NULL 
+              AND (SBS_QUESTION_TEXT IS NULL OR SBS_QUESTION_TEXT = '')
+          samples limit: 10
+          attributes:
+            description: "Side-by-side questions with numbers should have text"
+

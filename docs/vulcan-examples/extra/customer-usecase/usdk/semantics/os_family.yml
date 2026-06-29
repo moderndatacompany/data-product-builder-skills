@@ -1,0 +1,26 @@
+models:
+  LENOVO.USDK.OS_FAMILY:
+    alias: os_family
+
+    dimensions:
+      includes:
+        - OS_VERSION
+        - OS_FAMILY
+
+    measures:
+      total_os_versions:
+        type: count_distinct
+        expression: "{os_family.OS_VERSION}"
+        description: "Total number of unique OS versions mapped"
+
+      total_os_families:
+        type: count_distinct
+        expression: "{os_family.OS_FAMILY}"
+        description: "Total number of unique OS family names"
+
+    segments:
+      windows_11:
+        expression: |
+          {os_family.OS_FAMILY} LIKE 'Windows 11%'
+        description: "Windows 11 versions only"
+

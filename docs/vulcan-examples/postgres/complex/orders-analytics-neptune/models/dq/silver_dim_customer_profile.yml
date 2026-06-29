@@ -1,0 +1,105 @@
+# kind: dq — converted from checks/silver_dim_customer_profile.yml
+kind: dq
+name: dim_customer_profile_dq
+depends_on: silver_v1.dim_customer_profile
+rules:
+- missing_count(customer_id) = 0:
+    name: no_missing_customer_ids
+    dimension: completeness
+    description: All profiles must have a customer ID
+- missing_count(customer_name) = 0:
+    name: no_missing_names
+    dimension: completeness
+    description: All profiles must have a customer name
+- missing_count(email) = 0:
+    name: no_missing_emails
+    dimension: completeness
+    description: All profiles must have an email
+- missing_count(customer_segment) = 0:
+    name: no_missing_segments
+    dimension: completeness
+    description: All profiles must have a customer segment
+- row_count > 50:
+    name: sufficient_customer_profiles
+    dimension: completeness
+    description: At least 50 customer profiles
+- failed rows:
+    name: valid_segments
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, customer_segment
+      FROM silver_v1.dim_customer_profile
+      WHERE customer_segment NOT IN ('High Value', 'Medium Value', 'Low Value', 'Churned', 'New')
+    samples limit: 10
+    description: Customer segments must be from valid set
+- failed rows:
+    name: non_negative_orders
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, total_orders
+      FROM silver_v1.dim_customer_profile
+      WHERE total_orders < 0
+    samples limit: 10
+    description: Total orders cannot be negative
+- failed rows:
+    name: non_negative_revenue
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, total_revenue
+      FROM silver_v1.dim_customer_profile
+      WHERE total_revenue < 0
+    samples limit: 10
+    description: Total revenue cannot be negative
+- failed rows:
+    name: positive_avg_order_value
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, avg_order_value, total_orders
+      FROM silver_v1.dim_customer_profile
+      WHERE total_orders > 0 AND avg_order_value <= 0
+    samples limit: 10
+    description: Average order value must be positive when orders exist
+- failed rows:
+    name: valid_purchase_frequency_score
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, purchase_frequency_score, total_orders
+      FROM silver_v1.dim_customer_profile
+      WHERE purchase_frequency_score < 0 OR purchase_frequency_score > 5
+    samples limit: 10
+    description: Purchase frequency score must be between 0 and 5
+- failed rows:
+    name: non_negative_customer_lifetime
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, customer_lifetime_days
+      FROM silver_v1.dim_customer_profile
+      WHERE customer_lifetime_days < 0
+    samples limit: 10
+    description: Customer lifetime days cannot be negative
+- failed rows:
+    name: all_high_value_check
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, customer_segment, total_revenue
+      FROM silver_v1.dim_customer_profile
+      WHERE customer_segment != 'High Value'
+    samples limit: 10
+    description: All customers should be high value (EXPECTED TO FAIL)
+- failed rows:
+    name: minimum_revenue_check
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, total_revenue, customer_segment
+      FROM silver_v1.dim_customer_profile
+      WHERE total_revenue < 1000
+    samples limit: 10
+    description: All customers should have at least $1000 revenue (EXPECTED TO FAIL)
+- duplicate_count(customer_id) = 0:
+    name: unique_customer_ids
+    dimension: uniqueness
+    description: Customer IDs must be unique
+- duplicate_count(email) = 0:
+    name: unique_emails
+    dimension: uniqueness
+    description: Email addresses must be unique

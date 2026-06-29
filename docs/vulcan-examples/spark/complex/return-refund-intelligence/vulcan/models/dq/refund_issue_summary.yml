@@ -1,0 +1,27 @@
+# kind: dq — converted from checks/refund_issue_summary.yml
+kind: dq
+name: refund_issue_summary_dq
+depends_on: qcommerce_returns_gold.refund_issue_summary
+
+rules:
+- row_count >= 4:
+    name: minimum_issue_rows
+    dimension: completeness
+    description: At least four refund issue summary rows should exist
+
+- missing_count(issue_group) = 0:
+    name: no_missing_issue_group
+    dimension: completeness
+    description: Every issue summary row must have an issue group
+
+- invalid_count(issue_rate) = 0:
+    name: issue_rate_in_range
+    dimension: validity
+    description: Issue rate must be between 0 and 1
+    valid min: 0
+    valid max: 1
+
+- duplicate_count(ds, city, refund_reason_group) = 0:
+    name: unique_ds_city_reason_group
+    dimension: uniqueness
+    description: Each ds, city, and refund reason group combination must be unique

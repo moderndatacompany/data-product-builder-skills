@@ -1,0 +1,117 @@
+# checks/device_warranty.yml
+# Quality checks for device warranty
+# Reference: https://tmdc-io.github.io/vulcan-book/components/checks/checks/
+
+checks:
+  lenovo.ldo.device_warranty:
+    # Completeness: Ensure warranty data exists
+    completeness:
+      - row_count > 0:
+          name: warranty_records_exist
+          attributes:
+            description: "At least one warranty record should exist"
+            #severity: error
+
+      - missing_count(_ID) = 0:
+          name: no_missing_id
+          attributes:
+            description: "All records must have an _id"
+            #severity: error
+
+      - missing_count(DEVICE_ID) = 0:
+          name: no_missing_device_id
+          attributes:
+            description: "All warranty records must be linked to a device"
+            #severity: error
+
+      - missing_count(WARRANTY_ID) = 0:
+          name: no_missing_warranty_id
+          attributes:
+            description: "All records must have a warranty_id"
+            #severity: error
+
+    # Validity: Check warranty data quality
+    validity:
+      - failed rows:
+          name: invalid_warranty_type
+          fail query: |
+            SELECT _ID, WARRANTY_ID, WARRANTY_TYPE, DEVICE_ID
+            FROM lenovo.ldo.device_warranty
+            WHERE WARRANTY_TYPE NOT IN ('UPGRADE', 'BASE')
+              AND WARRANTY_TYPE IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Warranty type must be UPGRADE or BASE"
+            #severity: error
+
+      - failed rows:
+          name: invalid_warranty_category
+          fail query: |
+            SELECT _ID, WARRANTY_ID, WARRANTY_CATEGORY, DEVICE_ID
+            FROM lenovo.ldo.device_warranty
+            WHERE WARRANTY_CATEGORY NOT IN ('MACHINE', 'COMPONENT')
+              AND WARRANTY_CATEGORY IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Warranty category must be MACHINE or COMPONENT"
+            #severity: warning
+
+      - failed rows:
+          name: invalid_warranty_date_range
+          fail query: |
+            SELECT _ID, WARRANTY_ID, WARRANTY_START, WARRANTY_END, DEVICE_ID
+            FROM lenovo.ldo.device_warranty
+            WHERE WARRANTY_END < WARRANTY_START
+              AND WARRANTY_START IS NOT NULL
+              AND WARRANTY_END IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 10
+          attributes:
+            description: "Warranty end date should be after start date"
+            #severity: error
+
+      - failed rows:
+          name: future_created_at
+          fail query: |
+            SELECT _ID, WARRANTY_ID, CREATED_AT, DEVICE_ID
+            FROM lenovo.ldo.device_warranty
+            WHERE CREATED_AT > CURRENT_TIMESTAMP
+              AND __DELETED = 'False'
+          samples limit: 5
+          attributes:
+            description: "Created timestamp cannot be in the future"
+            #severity: error
+
+    # Consistency: Validate warranty data
+    consistency:
+      - failed rows:
+          name: duplicate_warranty_records
+          fail query: |
+            SELECT 
+              _ID,
+              COUNT(*) as RECORD_COUNT
+            FROM lenovo.ldo.device_warranty
+            WHERE __DELETED = 'False'
+            GROUP BY _ID
+            HAVING COUNT(*) > 1
+          samples limit: 10
+          attributes:
+            description: "Each _id should be unique among active records"
+            #severity: error
+
+      - failed rows:
+          name: updated_before_created
+          fail query: |
+            SELECT _ID, WARRANTY_ID, CREATED_AT, LAST_UPDATED, DEVICE_ID
+            FROM lenovo.ldo.device_warranty
+            WHERE LAST_UPDATED < CREATED_AT
+              AND CREATED_AT IS NOT NULL
+              AND LAST_UPDATED IS NOT NULL
+              AND __DELETED = 'False'
+          samples limit: 5
+          attributes:
+            description: "Last updated should be after created timestamp"
+            #severity: error
+

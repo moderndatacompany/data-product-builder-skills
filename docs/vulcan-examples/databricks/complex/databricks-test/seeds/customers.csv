@@ -1,0 +1,12 @@
+customer_id,customer_name,email,phone,city,state,country,registration_date,customer_type
+1,Tech Solutions Inc,contact@techsolutions.com,+1-555-0101,San Francisco,CA,USA,2024-01-15,enterprise
+2,StartUp Innovators,hello@startupinnovators.com,+1-555-0102,Austin,TX,USA,2024-02-01,startup
+3,Mid Market Co,sales@midmarketco.com,+1-555-0103,Chicago,IL,USA,2024-01-20,mid_market
+4,Global Enterprises,info@globalenterprises.com,+1-555-0104,New York,NY,USA,2024-01-10,enterprise
+5,Small Business LLC,contact@smallbiz.com,+1-555-0105,Seattle,WA,USA,2024-02-15,startup
+6,Retail Partners,partners@retailpartners.com,+1-555-0106,Los Angeles,CA,USA,2024-01-25,mid_market
+7,Finance Corp,contact@financecorp.com,+1-555-0107,Boston,MA,USA,2024-02-05,enterprise
+8,Healthcare Solutions,info@healthcaresolutions.com,+1-555-0108,Miami,FL,USA,2024-01-30,mid_market
+9,Consulting Group,contact@consultinggroup.com,+1-555-0109,Denver,CO,USA,2024-02-10,startup
+10,Manufacturing Ltd,sales@manufacturingltd.com,+1-555-0110,Detroit,MI,USA,2024-01-18,enterprise
+

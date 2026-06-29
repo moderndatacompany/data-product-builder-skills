@@ -1,0 +1,3 @@
+kind: metric
+name: bulk_add_to_cart
+measure: web_heartbeat.bulk_add_to_cart

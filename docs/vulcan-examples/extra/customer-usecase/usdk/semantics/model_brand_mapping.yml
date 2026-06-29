@@ -1,0 +1,38 @@
+models:
+  LENOVO.USDK.MODEL_BRAND_MAPPING:
+    alias: model_brand_mapping
+
+    dimensions:
+      includes:
+        - MTM
+        - BRAND
+        - PRODUCT_NAME
+        - CATEGORY
+        - PRODUCT_SEGMENT
+        - FORM_FACTOR
+        - GEN
+
+    measures:
+      total_models:
+        type: count_distinct
+        expression: "{model_brand_mapping.MTM}"
+        description: "Total number of unique product models (MTM codes)"
+
+      total_brands:
+        type: count_distinct
+        expression: "{model_brand_mapping.BRAND}"
+        description: "Total number of unique brands"
+
+      commercial_models:
+        type: count_distinct
+        expression: "{model_brand_mapping.MTM}"
+        filters:
+          - "{model_brand_mapping.PRODUCT_SEGMENT} = 'Commercial'"
+        description: "Number of models in commercial segment"
+
+    segments:
+      thinkpad_products:
+        expression: |
+          {model_brand_mapping.BRAND} = 'ThinkPad'
+        description: "ThinkPad brand products"
+

@@ -1,0 +1,38 @@
+models:
+  sales.shipments:
+    alias: shipments
+
+    dimensions:
+      includes:
+        - shipment_id
+        - order_id
+        - shipped_date
+        - delivered_date
+        - carrier
+        - tracking_number
+        - shipping_status
+        - shipping_cost
+
+    measures:
+      total_shipments:
+        type: count_distinct
+        expression: "{shipments.shipment_id}"
+
+      total_shipping_cost:
+        type: sum
+        expression: "{shipments.shipping_cost}"
+
+    segments:
+      in_transit_shipments:
+        expression: |
+          {shipments.shipping_status} = 'InTransit'
+
+      delivered_shipments:
+        expression: |
+          {shipments.shipping_status} = 'Delivered'
+
+    joins:
+      orders:
+        type: many_to_one
+        expression: "{shipments.order_id} = {orders.order_id}"
+

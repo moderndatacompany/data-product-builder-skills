@@ -1,0 +1,73 @@
+# Converted from legacy: semantics/seeds/customers.yml
+kind: semantic
+name: customers
+depends_on: raw.raw_customers
+description: "Customer dimension table with profile information and segment classification"
+
+ai_context:
+  instructions: >
+    Use this semantic model for questions about customers. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "customers"
+  examples:
+    - "Show customers trends over time."
+    - "Break down customers by key dimensions."
+
+dimensions:
+  - customer_id
+  - first_name
+  - last_name
+  - email
+  - customer_segment
+
+measures:
+  - name: total_customers
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total customers. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "total customers"
+        - "total_customers"
+        - "total"
+        - "customers"
+      examples:
+        - "What is total customers by month?"
+        - "Compare total customers across key segments."
+    type: count
+    expression: "{customers.customer_id}"
+    description: "Total number of customers"
+    tags:
+      - customer
+      - count
+      - metric
+    terms:
+      - customer.total_customers
+      - metric.customer_count
+
+segments:
+  - name: gold_tier
+    ai_context:
+      instructions: >
+        Apply this segment when the question asks for the gold tier subset. Combine it
+        with measures to answer filtered business questions.
+      synonyms:
+        - "gold tier"
+        - "gold_tier"
+        - "gold"
+        - "tier"
+      examples:
+        - "Show revenue for gold tier."
+        - "How many records are in gold tier?"
+    expression: "{customers.customer_segment} = 'Gold'"
+    description: "Gold tier customers only"
+    tags:
+      - customer
+      - segment
+      - tier
+    terms:
+      - customer.gold_tier
+      - segment.gold

@@ -1,0 +1,21 @@
+kind: dq
+name: CUSTOMER_SEGMENTS_dq
+depends_on: DEMODB.VDETRUE.CUSTOMER_SEGMENTS
+rules:
+  - row_count > 0:
+      name: seed_has_rows
+      dimension: completeness
+      description: Customer segments seed must have at least one row
+  - missing_count(SEGMENT_CODE) = 0:
+      name: segment_code_not_null
+      dimension: completeness
+      description: Segment code must never be null
+  - failed rows:
+      name: discount_rate_in_range
+      dimension: validity
+      fail query: |
+        SELECT SEGMENT_CODE, SEGMENT_NAME, DISCOUNT_RATE
+        FROM DEMODB.VDETRUE.CUSTOMER_SEGMENTS
+        WHERE DISCOUNT_RATE < 0.0 OR DISCOUNT_RATE > 1.0
+      samples limit: 10
+      description: Discount rate must be a fraction between 0.0 and 1.0

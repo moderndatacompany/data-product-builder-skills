@@ -1,0 +1,5 @@
+kind: metric
+name: rejection_rate
+measure: orders.rejection_rate
+ts: orders.order_date
+granularity: day

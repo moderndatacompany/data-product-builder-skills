@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: customer_retention
+measure: customer_profile.total_customers
+ts: customer_profile.last_order_date
+dimensions:
+- customer_profile.customer_segment
+- customer_profile.region_name
+description: Customer retention analysis by segment
+tags:
+- customer
+- retention
+- churn
+terms:
+- customer.retention
+- metric.active_customers

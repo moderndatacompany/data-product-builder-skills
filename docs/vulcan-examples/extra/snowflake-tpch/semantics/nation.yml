@@ -1,0 +1,24 @@
+models:
+  test_db.vulcan_test_project.nation:
+    alias: nations
+
+    measures:
+      total_nations:
+        type: count
+        expression: "*"
+        description: "Total number of nations"
+        tags: [tpch, nation, count]
+
+    joins:
+      regions:
+        type: many_to_one
+        expression: "{nations.REGIONKEY} = {regions.REGIONKEY}"
+
+    dimensions:
+      includes:
+        - NATIONKEY
+        - NAME
+        - REGIONKEY
+        - COMMENT
+
+

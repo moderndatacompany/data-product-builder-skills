@@ -1,0 +1,32 @@
+# kind: dq — converted from checks/rider_efficiency_kpis.yml
+kind: dq
+name: rider_efficiency_kpis_dq
+depends_on: s3depot.qcommerce_delivery_gold.rider_efficiency_kpis
+
+rules:
+- row_count >= 50:
+    name: minimum_rider_efficiency_rows
+    dimension: completeness
+    description: At least 50 rider efficiency KPI rows should exist
+
+- missing_count(rider_id) = 0:
+    name: no_missing_rider_id
+    dimension: completeness
+    description: All records must have a rider_id
+
+- invalid_count(on_time_orders) = 0:
+    name: on_time_orders_non_negative
+    dimension: validity
+    description: on_time_orders must be zero or positive
+    valid min: 0
+
+- invalid_count(failed_drops) = 0:
+    name: failed_drops_non_negative
+    dimension: validity
+    description: failed_drops must be zero or positive
+    valid min: 0
+
+- duplicate_count(ds, city, rider_id) = 0:
+    name: unique_ds_city_rider
+    dimension: uniqueness
+    description: Each ds, city, and rider_id combination must be unique

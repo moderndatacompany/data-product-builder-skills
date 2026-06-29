@@ -1,0 +1,64 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.stg_customer_nation_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_rows
+          attributes:
+            description: "At least one staging row exists"
+      - missing_count(c_custkey) = 0:
+          name: no_missing_custkey
+          attributes:
+            description: "Customer key must not be null"
+      - missing_count(c_name) = 0:
+          name: no_missing_customer_name
+          attributes:
+            description: "Customer name must not be null"
+      - missing_count(n_name) = 0:
+          name: no_missing_nation_name
+          attributes:
+            description: "Nation name must not be null (LEFT JOIN should still resolve)"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(c_custkey) = 0:
+          name: unique_custkey
+          attributes:
+            description: "Customer key must be unique"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: row_count_matches_source
+          fail query: |
+            SELECT 'mismatch' AS issue,
+              (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.stg_customer_nation_sf1) AS stg_count,
+              (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1) AS src_count
+            WHERE (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.stg_customer_nation_sf1)
+               != (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1)
+          samples limit: 1
+          attributes:
+            description: "Staging view must preserve all source customers (LEFT JOIN)"
+      - failed rows:
+          name: nation_name_matches
+          fail query: |
+            SELECT s.c_custkey, s.c_nationkey, s.n_name, n.n_name AS expected_name
+            FROM lhs3ny001depot.tpch_sparkv3.stg_customer_nation_sf1 s
+            JOIN lhs3ny001depot.tpch_sparkv3.tpch_nation_sf1 n
+              ON n.n_nationkey = s.c_nationkey
+            WHERE s.n_name != n.n_name
+          samples limit: 5
+          attributes:
+            description: "Nation name in staging must match nation lookup table"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: invalid_nation_names
+          fail query: |
+            SELECT DISTINCT n_name
+            FROM lhs3ny001depot.tpch_sparkv3.stg_customer_nation_sf1
+            WHERE n_name IS NOT NULL AND LENGTH(TRIM(n_name)) = 0
+          samples limit: 5
+          attributes:
+            description: "Nation name should not be empty string"

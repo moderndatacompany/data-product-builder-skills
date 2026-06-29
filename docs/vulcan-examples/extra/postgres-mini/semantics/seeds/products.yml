@@ -1,0 +1,23 @@
+models:
+  raw.raw_products:
+    alias: products
+    description: "Product dimension table with catalog details, pricing, and inventory levels"
+
+    dimensions:
+      includes:
+        - product_id
+        - product_name
+        - category
+        - price
+        - stock_quantity
+
+    measures:
+      total_products:
+        type: count
+        expression: "{products.product_id}"
+        description: "Total number of products"
+
+      total_inventory:
+        type: sum
+        expression: "{products.stock_quantity}"
+        description: "Total inventory across all products"

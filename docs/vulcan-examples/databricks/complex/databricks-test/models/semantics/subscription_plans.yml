@@ -1,0 +1,50 @@
+models:
+  b2b_saas.subscription_plans:
+    alias: subscription_plans
+    
+    dimensions:
+      includes:
+        - plan_id
+        - plan_name
+        - tier
+        - max_users
+        - features
+        - price_monthly
+        - price_annual
+    measures:
+      plan_count:
+        type: count
+        expression: |
+          *
+        tags:
+          - catalog
+          - count
+          - reference
+        terms:
+          - product.plan_count
+          - catalog.total_plans
+      
+      avg_monthly_price:
+        type: avg
+        expression: |
+          {subscription_plans.price_monthly}
+        tags:
+          - pricing
+          - revenue
+          - average
+        terms:
+          - revenue.avg_monthly_price
+          - pricing.average
+      
+      avg_annual_price:
+        type: avg
+        expression: |
+          {subscription_plans.price_annual}
+        tags:
+          - pricing
+          - revenue
+          - average
+        terms:
+          - revenue.avg_annual_price
+          - pricing.average
+

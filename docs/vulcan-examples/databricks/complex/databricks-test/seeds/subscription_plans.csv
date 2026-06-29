@@ -1,0 +1,6 @@
+plan_id,plan_name,tier,price_monthly,price_annual,max_users,features
+1,Starter,basic,29.99,299.90,5,"Basic analytics, Email support"
+2,Professional,standard,99.99,999.90,20,"Advanced analytics, Priority support, API access"
+3,Enterprise,premium,299.99,2999.90,100,"Custom analytics, Dedicated support, SLA, SSO"
+4,Free Trial,trial,0.00,0.00,2,"Limited analytics, Community support"
+

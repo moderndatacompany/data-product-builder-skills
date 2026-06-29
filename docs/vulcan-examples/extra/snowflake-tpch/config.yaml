@@ -1,0 +1,24 @@
+name: snowflake-tpch-02
+display_name: Snowflake TPC-H Demo
+tenant: system
+description: TPC-H sample schema on Snowflake using SNOWFLAKE_SAMPLE_DATA (VIEW models over TPCH_SF1 tables).
+tags:
+  - snowflake
+  - tpch
+  - demo
+
+
+model_defaults:
+  dialect: snowflake
+  cron: "*/30 * * * *"
+
+gateways:
+  default:
+    connection:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', '') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', '') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', '') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'SNOWFLAKE_SAMPLE_DATA') }}"

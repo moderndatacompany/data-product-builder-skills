@@ -1,0 +1,192 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - GA4 Analytics
+# ==============================================================================
+
+# Basic Information
+name: ga4_analytics
+display_name: GA4 Analytics Project
+tenant: marketing
+description: Google Analytics 4 data transformation and analytics pipeline using Vulcan. Provides comprehensive web analytics including session analysis, conversion tracking, traffic source attribution, e-commerce metrics, and user engagement insights through GA4 BigQuery export data.
+
+# Classification
+tags:
+  - ga4
+  - google-analytics
+  - web-analytics
+  - bigquery
+  - marketing
+  - user-behavior
+  - conversion-tracking
+  - e-commerce
+
+terms:
+  - data_product
+  - analytics_platform
+  - business_intelligence
+
+# Domain
+domain: marketing
+
+# ==============================================================================
+# Analytics & Telemetry (Vulcan CloudEvents)
+# ==============================================================================
+# Enables telemetry for run tracking, lineage, and observability
+analytics:
+  enabled: false  # Set to true and provide api_key to enable in production
+  # base_url: "https://your-dataos-instance.dataos.app/cloudevents/api/v1"
+  # api_key: ""  # Required when enabled: true
+  # source_name: "ga4_analytics"  # Custom source name for CloudEvents
+  # enable_search: true  # Enable search functionality for analytics
+  # retention_days: 90  # How long to retain analytics data
+
+# ==============================================================================
+# Linter Configuration
+# ==============================================================================
+# Enforces data quality and best practices
+# linter:
+#   enabled: true
+#   warn_rules:
+#     - preferassertions  # Yellow warning, doesn't block
+#     - nomissingaudits
+#   rules:
+#     - ambiguousorinvalidcolumn
+#     - invalidselectstarexpansion
+#     - noambiguousprojections
+
+# ==============================================================================
+# Object Store Configuration (Query Service)
+# ==============================================================================
+# Stores query results and intermediate data
+# object_store:
+#   provider: minio
+#   bucket: warehouse
+#   base_path: ga4_analytics/queries
+#   compression: snappy
+#   presigned_url_expiry_mins: 60  # URLs valid for 1 hour
+#   credentials:
+#     endpoint_url: http://127.0.0.1:9000
+#     access_key_id: admin
+#     secret_access_key: password
+#     region: us-east-1
+
+# ==============================================================================
+# Model Defaults
+# ==============================================================================
+# Default configuration for all models (can be overridden per model)
+model_defaults:
+  dialect: bigquery
+  start: '2020-11-02'  # Start date matches our GA4 sample data
+  cron: '@daily'       # Run models daily at 12am UTC
+
+# ==============================================================================
+# Gateway Configuration
+# ==============================================================================
+# Database connections and state management
+gateways:
+  default:
+    # Primary data connection (where models are materialized)
+    connection:
+      type: depot
+      address: dataos://bigquery
+
+    # State schema (stores Vulcan metadata)
+    # state_schema: ga4_analytics_state
+
+    # Gateway-specific variables (available in models, checks via ${variable_name})
+    # variables:
+    #   env: production
+    #   region: us-central1
+    #   data_retention_days: 365
+    #   alert_threshold: 100
+    #   project_id: tmdc-platform-engineering
+
+# Default gateway
+default_gateway: default
+
+# ==============================================================================
+# OpenLineage Configuration (Data Lineage Tracking)
+# ==============================================================================
+openlineage:
+  enabled: true
+  url: https://paradise-020326.dataos.cloud/hera
+  timeout_seconds: 30
+  api_key: dnVsY2FuZGVwbG95LmQ1N2Q3ZWRjLTY2MDUtNGRkOS04OGFmLWI1MzY2YTFkZDg5NTE4ZjA4NjBmYjljNzYwOTE2YWFjMTM0MmIxNmUwYTBl
+
+# ==============================================================================
+# Heimdall Authentication (Enterprise Security)
+# ==============================================================================
+# Provides authentication and authorization for production deployments
+# heimdall:
+#   enabled: false  # Set to true for production with DataOS
+  # base_url: "https://your-dataos-instance.dataos.app/heimdall"
+  # timeout: 10
+
+# ==============================================================================
+# Notification Configuration
+# ==============================================================================
+# Send notifications for important events (runs, failures, migrations)
+notification_targets:
+  # Console notifications for all lifecycle events
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - run_start
+      - run_end
+      - migration_start
+      - migration_end
+      - apply_failure
+      - run_failure
+      - audit_failure
+      - migration_failure
+      - plan_change
+      - check_start
+      - check_end
+      - check_failure
+
+  # Example: Slack webhook for production alerts
+  # - type: slack_webhook
+  #   url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+  #   notify_on:
+  #     - apply_start
+  #     - apply_end
+  #     - plan_change
+  #     - apply_failure
+  #     - run_failure
+  #     - audit_failure
+
+  # Example: Email notifications
+  # - type: email
+  #   smtp_host: smtp.gmail.com
+  #   smtp_port: 587
+  #   from_email: vulcan@company.com
+  #   to_emails:
+  #     - data-team@company.com
+  #   notify_on:
+  #     - apply_failure
+  #     - run_failure
+  #     - audit_failure
+
+# ==============================================================================
+# Vulcan Production Run Configuration (Optional)
+# ==============================================================================
+# Configuration for prod-run command (catch-up mode, continuous processing)
+# vulcan:
+#   endpoint: https://your-webhook-endpoint.com/vulcan
+#   api_key: ""
+#   enabled: true
+#   environment: production
+#   
+#   # Prod-run behavior
+#   no_gaps: true          # Ensure data continuity (process all intervals)
+#   ignore_cron: true      # Process all missing intervals (catch-up mode)
+#   parallel_tasks: 4      # Number of parallel model runs
+
+# ==============================================================================
+# Users & Access Control
+# ==============================================================================
+# Define users with access to this data product
+users:
+  - username: shreya
+    email: shreya@example.com
+    type: OWNER

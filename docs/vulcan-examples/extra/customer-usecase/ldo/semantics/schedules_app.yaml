@@ -1,0 +1,15 @@
+models:
+  lenovo.ldo.schedules_app:
+    alias: schedules_app
+  
+    measures:
+      total_scheduled_app_deployments:
+        type: sum
+        expression: "CASE WHEN {schedules_app.STATUS} = 'SCHEDULED' THEN 1 ELSE 0 END"
+        description: "Total number of app deployments that are in SCHEDULED status."
+      
+      total_executed_app_deployments:
+        type: sum
+        expression: "CASE WHEN {schedules_app.STATUS} = 'EXECUTED' THEN 1 ELSE 0 END"
+        description: "Total number of app deployments that are in EXECUTED status."
+

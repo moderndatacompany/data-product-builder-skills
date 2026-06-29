@@ -1,0 +1,150 @@
+checks:
+  gold_v1.category_performance_analysis:
+    completeness:
+      - missing_count(category) = 0:
+          name: no_missing_categories
+          attributes:
+            description: "All records must have a category"
+      
+      - missing_count(region_id) = 0:
+          name: no_missing_regions
+          attributes:
+            description: "All records must have a region ID"
+      
+      - missing_count(category_tier) = 0:
+          name: no_missing_tiers
+          attributes:
+            description: "All categories must have a tier classification"
+      
+      - row_count > 0:
+          name: has_category_data
+          attributes:
+            description: "Must have at least one category analyzed"
+    
+    validity:
+      - failed rows:
+          name: valid_category_tiers
+          fail query: |
+            SELECT category, region_id, category_tier
+            FROM gold_v1.category_performance_analysis
+            WHERE category_tier NOT IN ('Star', 'Growth', 'Mature', 'Declining', 'Emerging')
+          samples limit: 10
+          attributes:
+            description: "Category tiers must be from valid set"
+      
+      - failed rows:
+          name: non_negative_products
+          fail query: |
+            SELECT category, region_id, total_products, active_products
+            FROM gold_v1.category_performance_analysis
+            WHERE total_products < 0 OR active_products < 0
+          samples limit: 10
+          attributes:
+            description: "Product counts cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT category, region_id, total_revenue
+            FROM gold_v1.category_performance_analysis
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Revenue cannot be negative"
+      
+      - failed rows:
+          name: valid_revenue_share
+          fail query: |
+            SELECT category, region_id, category_revenue_share
+            FROM gold_v1.category_performance_analysis
+            WHERE category_revenue_share < 0 OR category_revenue_share > 1
+          samples limit: 10
+          attributes:
+            description: "Revenue share must be between 0 and 1"
+      
+      - failed rows:
+          name: valid_health_score
+          fail query: |
+            SELECT category, region_id, category_health_score
+            FROM gold_v1.category_performance_analysis
+            WHERE category_health_score < 0 OR category_health_score > 100
+          samples limit: 10
+          attributes:
+            description: "Health score must be between 0 and 100"
+      
+      - failed rows:
+          name: active_within_total
+          fail query: |
+            SELECT category, region_id, active_products, total_products
+            FROM gold_v1.category_performance_analysis
+            WHERE active_products > total_products
+          samples limit: 10
+          attributes:
+            description: "Active products cannot exceed total products"
+      
+      - failed rows:
+          name: product_status_sum_check
+          fail query: |
+            SELECT 
+              category, 
+              region_id,
+              best_seller_products,
+              good_performer_products,
+              slow_mover_products,
+              declining_products,
+              stale_products,
+              at_risk_products,
+              new_products,
+              total_products,
+              (best_seller_products + good_performer_products + slow_mover_products + 
+               declining_products + stale_products + at_risk_products + new_products) as status_sum
+            FROM gold_v1.category_performance_analysis
+            WHERE (best_seller_products + good_performer_products + slow_mover_products + 
+                   declining_products + stale_products + at_risk_products + new_products) > total_products
+          samples limit: 10
+          attributes:
+            description: "Sum of product status counts should not exceed total products"
+      
+      - failed rows:
+          name: positive_top_product_revenue
+          fail query: |
+            SELECT category, region_id, top_product_name, top_product_revenue
+            FROM gold_v1.category_performance_analysis
+            WHERE top_product_revenue IS NOT NULL AND top_product_revenue <= 0
+          samples limit: 10
+          attributes:
+            description: "Top product revenue must be positive when present"
+    
+    uniqueness:
+      - duplicate_count(category, region_id) = 0:
+          name: unique_category_region
+          attributes:
+            description: "Each category-region combination must be unique"
+    
+    consistency:
+      - failed rows:
+          name: revenue_growth_calculation
+          fail query: |
+            SELECT 
+              category,
+              region_id,
+              total_revenue_last_30d,
+              total_revenue,
+              revenue_growth_30d_pct
+            FROM gold_v1.category_performance_analysis
+            WHERE total_revenue_last_30d > total_revenue
+          samples limit: 10
+          attributes:
+            description: "Last 30 days revenue should not exceed total lifetime revenue"
+      
+      - failed rows:
+          name: star_category_validation
+          fail query: |
+            SELECT category, region_id, category_tier, total_revenue, revenue_growth_30d_pct
+            FROM gold_v1.category_performance_analysis
+            WHERE category_tier = 'Star' AND (total_revenue < 15000 OR revenue_growth_30d_pct < 10)
+          samples limit: 10
+          attributes:
+            description: "Star categories should have high revenue and growth (soft check)"
+
+

@@ -1,0 +1,72 @@
+name: lenovo_analytics
+tenant: marketing
+description: Lenovo Consumer Analytics Platform - Hardware, Software, and Product Usage Analytics
+
+analytics:
+  enabled: false  # Set to true and provide api_key to enable
+
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions  # Yellow warning, doesn't block
+    - nomissingaudits
+
+object_store:
+  provider: minio
+  bucket: warehouse
+  base_path: queries
+  compression: snappy
+  presigned_url_expiry_mins: 60  # URLs valid for 1 hour
+  credentials:
+    endpoint_url: http://127.0.0.1:9000
+    access_key_id: admin
+    secret_access_key: password
+    region: us-east-1
+
+model_defaults:
+  dialect: snowflake
+  # start: '2025-01-01'
+  cron: '*/5 * * * *'  # Every 5 minutes
+
+gateways:
+  default:
+    # Primary Snowflake connection (where models are materialized)
+    connection:
+      type: snowflake
+      account: EQZOTUQ-JCA67320
+      user: SHREYA
+      warehouse: COMPUTE_WH
+      database: VULCAN
+      role: ACCOUNTADMIN
+      authenticator: snowflake_jwt
+      private_key_path: .secrets/snowflake_private_key.p8
+      private_key_passphrase: shreya
+
+    # State sync - use PostgreSQL (recommended for production)
+    state_connection:
+      type: postgres
+      host: localhost
+      port: 5431
+      user: vulcan
+      password: vulcan
+      database: statestore
+
+    # State schema name
+    state_schema: lenovo_analytics2
+
+# openlineage:
+#   enabled: true
+#   url: http://127.0.0.1:8000
+#   timeout_seconds: 10
+#   api_key: optional_api_key_here
+
+transpiler:
+  base_url: http://localhost:4000/transpiler  
+
+graphql:
+  base_url: http://localhost:3000
+  timeout: 60
+
+heimdall:
+  enabled: false  # Set to true for production
+

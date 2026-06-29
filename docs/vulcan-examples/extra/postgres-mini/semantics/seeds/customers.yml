@@ -1,0 +1,25 @@
+models:
+  raw.raw_customers:
+    alias: customers
+    description: "Customer dimension table with profile information and segment classification"
+
+    dimensions:
+      includes:
+        - customer_id
+        - first_name
+        - last_name
+        - email
+        - customer_segment
+
+    measures:
+      total_customers:
+        type: count
+        expression: "{customers.customer_id}"
+        description: "Total number of customers"
+
+
+    segments:
+      gold_tier:
+        expression: "{customers.customer_segment} = 'Gold'"
+        description: "Gold tier customers only"
+

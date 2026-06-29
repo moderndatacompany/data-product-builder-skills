@@ -1,0 +1,13 @@
+limitations:
+  - Demo dataset with synthetic data (100 customers, 1000 orders)
+  - Historical data from November 2025 onwards
+  - Data refreshes every 5-15 minutes (configurable by model)
+  - ~90% shipment rate (10% orders not shipped in demo data)
+  # data_sources:
+  #   - Postgres database (localhost:5433)
+  #   - Schema: vulcan_demo (bronze layer)
+  # sla:
+  #   bronze_refresh: "5 minutes for orders/order_items, 15 minutes for dimensions"
+  #   silver_refresh: "5-15 minutes depending on model"
+  #   gold_refresh: "5 minutes for advanced analytics"
+  #   availability: "99.5% uptime target"

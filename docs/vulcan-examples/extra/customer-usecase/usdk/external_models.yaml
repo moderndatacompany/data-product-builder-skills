@@ -1,0 +1,5 @@
+- name: '"VULCAN"."TEST"."CONSUMER_ANALYTICS_EVENTS_RAW"'
+  columns:
+    context: VARCHAR(16777216)
+    event: VARCHAR(16777216)
+    report_time: DECIMAL(38, 0)

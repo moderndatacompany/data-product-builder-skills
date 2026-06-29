@@ -1,0 +1,39 @@
+models:
+  lenovo.ldo.system_update_reports:
+    alias: system_update_reports
+
+    
+    dimensions:
+      includes:
+        - DEVICE_ID
+        - PACKAGE_ID
+        - INSTALLATION_STATUS
+        - PACKAGE_NAME
+        - PACKAGE_VERSION
+        - CURRENT_INSTALLED_VERSION
+        - PACKAGE_VENDOR
+        - PACKAGE_SIZE
+        - PACKAGE_REBOOT_TYPE
+        - LAST_MODIFIED_DATE
+        - DEVICE_PRODUCT_NAME
+        - DEVICE_SERIAL_NUMBER
+        - DISK_SPACE_REQUIRED
+        - FAILURE_REASON
+        - FAILURE_REASON_DETAILS  
+      
+    
+    measures:
+      total_executed_deployments:
+        type: count
+        expression: "1"
+        filters:
+          - "{system_update_reports.INSTALLATION_STATUS} = 'DEPLOYED'"
+        description: "Total number of successfully executed system updates."
+      
+      total_failed_deployments:
+        type: count
+        expression: "1"
+        filters:
+          - "{system_update_reports.INSTALLATION_STATUS} = 'FAILED'"
+        description: "Total number of failed system updates."
+

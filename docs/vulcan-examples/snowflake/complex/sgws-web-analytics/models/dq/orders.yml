@@ -1,0 +1,48 @@
+# kind: dq — converted from checks/orders.yaml
+kind: dq
+name: ORDERS_dq
+depends_on: web_analytics_gold.ORDERS
+rules:
+- row_count > 0:
+    name: orders_records_exist
+    dimension: completeness
+    description: Orders fact table must contain order transaction records
+- missing_count(order_pk) = 0:
+    name: order_pk_required
+    dimension: completeness
+    description: All orders must have a unique primary key identifier
+- missing_count(order_no) = 0:
+    name: order_no_required
+    dimension: completeness
+    description: All orders must have an order number for tracking
+- missing_count(customer_no) = 0:
+    name: customer_no_required
+    dimension: completeness
+    description: All orders must be linked to a customer
+- failed rows:
+    name: invalid_order_status
+    dimension: validity
+    fail query: |
+      SELECT order_pk, order_no, order_status
+      FROM web_analytics_gold.ORDERS
+      WHERE order_status NOT IN ('Approved', 'Pending', 'Rejected', 'Cancelled', 'Unknown')
+        AND order_status IS NOT NULL
+    samples limit: 10
+    description: Order status must be one of the valid lifecycle states
+- failed rows:
+    name: negative_order_value
+    dimension: validity
+    fail query: |
+      SELECT order_pk, order_no, order_net_amt
+      FROM web_analytics_gold.ORDERS
+      WHERE order_net_amt < 0
+    samples limit: 10
+    description: Order net amount should not be negative (business rule enforces non-negative values)
+- duplicate_count(order_pk) = 0:
+    name: order_pk_unique
+    dimension: uniqueness
+    description: Order primary key must be unique for each order line
+- row_count > 0:
+    name: recent_order_data
+    dimension: timeliness
+    description: Order data should be current for fulfillment operations

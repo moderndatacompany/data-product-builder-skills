@@ -1,0 +1,4 @@
+kind: metric
+name: total_products
+measure: products.total_products
+description: "Total number of products"

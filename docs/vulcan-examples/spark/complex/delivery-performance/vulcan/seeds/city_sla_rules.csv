@@ -1,0 +1,13 @@
+city,delivery_mode,sla_minutes,priority_weight
+Bengaluru,standard,35,1.00
+Bengaluru,express,20,1.25
+Mumbai,standard,32,1.05
+Mumbai,express,18,1.30
+Delhi,standard,34,1.00
+Delhi,express,19,1.20
+Hyderabad,standard,30,0.95
+Hyderabad,express,17,1.15
+Chennai,standard,31,0.95
+Chennai,express,18,1.10
+Pune,standard,29,0.90
+Pune,express,16,1.10

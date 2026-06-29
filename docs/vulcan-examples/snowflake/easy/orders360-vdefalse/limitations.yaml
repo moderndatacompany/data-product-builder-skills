@@ -1,0 +1,7 @@
+limitations:
+  - Snowflake as the data platform - assumes VULCAN.RAW.CUSTOMERS, VULCAN.RAW.ORDERS, and VULCAN.RAW.PRODUCTS exist with the expected source schema
+  - vde is disabled so every applied plan writes directly into the SALES_ANALYTICS schema; there is no virtual-environment safety net for previews
+  - No semantic layer or business metrics ship with this DP - downstream consumers must query the materialized tables directly via SQL
+  - No seed data is provided - the DP depends entirely on upstream raw tables; bootstrap them separately before the first run
+  - Orders fact and daily_sales_summary are incremental by date - backfill requires running with --start when the date range is older than model_defaults.start
+  - Demo dataset assumptions - one order per customer per product is sufficient; the DP is not tuned for high-cardinality grain conflicts

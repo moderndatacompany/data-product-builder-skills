@@ -1,0 +1,7 @@
+_id,_class,packageId,packageName,packageDescription,packageVersion,currentInstalledVersion,packageReleaseDate,packageType,category,packageSeverity,packageRebootType,orgId,lastModifiedDate,testState
+SUV001,com.lenovo.SystemUpdateV2,PKG-BIOS-001,BIOS Update,Critical BIOS security update,1.45,1.42,1704067200000,Bios,BIOS/UEFI,CRITICAL,RebootRequired,ORG001,1704153600000,DEPLOY_ALLOWED
+SUV002,com.lenovo.SystemUpdateV2,PKG-DRIVER-001,Intel Graphics Driver,Updated Intel UHD Graphics driver,31.0.101.4972,31.0.101.4255,1704070800000,Driver,DISPLAY_VIDEO_GRAPHICS,RECOMMENDED,NoRebootRequired,ORG001,1704157200000,TESTED
+SUV003,com.lenovo.SystemUpdateV2,PKG-FIRMWARE-001,Thunderbolt Firmware,Thunderbolt 4 firmware update,1.41.5,1.40.2,1704074400000,Firmware,MOTHERBOARD_DEVICES,OPTIONAL,RebootRequested,ORG002,1704160800000,NOT_TESTED
+SUV004,com.lenovo.SystemUpdateV2,PKG-APP-001,Lenovo Vantage,Updated Lenovo Vantage application,10.2312.17.0,10.2311.15.0,1704078000000,Application,SOFTWARE_UTILITIES,OPTIONAL,NoRebootRequired,ORG002,1704164400000,TESTING
+SUV005,com.lenovo.SystemUpdateV2,PKG-DRIVER-002,Realtek Audio Driver,Updated audio driver for better sound quality,6.0.9415.1,6.0.9394.1,1704081600000,Driver,AUDIO,RECOMMENDED,NoRebootRequired,ORG003,1704168000000,DEPLOY_ALLOWED
+

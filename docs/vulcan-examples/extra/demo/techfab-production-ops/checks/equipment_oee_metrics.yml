@@ -1,0 +1,119 @@
+# ============================================================================
+# DATA QUALITY CHECKS: Equipment OEE Metrics (Gold Layer)
+# ============================================================================
+
+checks:
+  MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS:
+
+    completeness:
+      - row_count >= 1000:
+          name: minimum_oee_records
+          attributes:
+            description: "At least 1000 OEE records should exist"
+
+      - missing_count(equipment_id) = 0:
+          name: no_missing_equipment_id
+          attributes:
+            description: "All records must have an equipment_id"
+
+      - missing_count(metric_date) = 0:
+          name: no_missing_metric_date
+          attributes:
+            description: "All records must have a metric_date"
+
+      - missing_count(oee_pct) = 0:
+          name: no_missing_oee_calculation
+          attributes:
+            description: "All records must have a calculated OEE value"
+
+    validity:
+      - invalid_count(availability_pct) = 0:
+          valid min: 0
+          valid max: 100
+          name: availability_percentage_valid
+          attributes:
+            description: "Availability percentage must be between 0 and 100"
+
+      - invalid_count(performance_pct) = 0:
+          valid min: 0
+          valid max: 100
+          name: performance_percentage_valid
+          attributes:
+            description: "Performance percentage must be between 0 and 100"
+
+      - invalid_count(quality_pct) = 0:
+          valid min: 0
+          valid max: 100
+          name: quality_percentage_valid
+          attributes:
+            description: "Quality percentage must be between 0 and 100"
+
+      - invalid_count(oee_pct) = 0:
+          valid min: 0
+          valid max: 100
+          name: oee_percentage_valid
+          attributes:
+            description: "OEE percentage must be between 0 and 100"
+
+      - invalid_count(total_downtime_hours) = 0:
+          valid min: 0
+          name: downtime_hours_non_negative
+          attributes:
+            description: "Downtime hours must be non-negative"
+
+      - invalid_count(mttr_hours) = 0:
+          valid min: 0
+          valid max: 24
+          name: mttr_reasonable_range
+          attributes:
+            description: "Mean Time To Repair must be between 0 and 24 hours"
+
+      - failed rows:
+          name: equipment_id_exists_in_master
+          fail query: |
+            SELECT o.equipment_id, o.metric_date
+            FROM MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS o
+            LEFT JOIN techfab_seeds.equipment_master e ON o.equipment_id = e.equipment_id
+            WHERE e.equipment_id IS NULL
+          samples limit: 10
+          attributes:
+            description: "All equipment_ids must exist in equipment_master"
+
+      - failed rows:
+          name: plant_code_exists_in_master
+          fail query: |
+            SELECT o.plant_code, o.equipment_id
+            FROM MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS o
+            LEFT JOIN techfab_seeds.plant_master p ON o.plant_code = p.plant_code
+            WHERE p.plant_code IS NULL
+          samples limit: 10
+          attributes:
+            description: "All plant_codes must exist in plant_master"
+
+    uniqueness:
+      - duplicate_count(equipment_id, metric_date) = 0:
+          name: unique_equipment_date_combination
+          attributes:
+            description: "Each equipment-date combination must be unique"
+
+    accuracy:
+      - avg(oee_pct) > 65.0:
+          name: average_oee_acceptable
+          attributes:
+            description: "Average OEE should be above 65% across all equipment"
+
+      - avg(availability_pct) > 85.0:
+          name: average_availability_target
+          attributes:
+            description: "Average availability should exceed 85%"
+
+      - avg(total_unplanned_downtime_hours) < 4.0:
+          name: average_unplanned_downtime_acceptable
+          attributes:
+            description: "Average unplanned downtime should be under 4 hours"
+
+    timeliness:
+      - freshness(metric_date) < 2d:
+          name: oee_data_freshness
+          attributes:
+            description: "OEE data must be refreshed within the last 2 days"

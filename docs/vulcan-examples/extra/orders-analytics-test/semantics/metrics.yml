@@ -1,0 +1,238 @@
+metrics:
+  # ============================================================================
+  # DAILY SALES METRICS
+  # ============================================================================
+  daily_sales_performance:
+    measure: daily_sales.total_daily_revenue
+    time: daily_sales.order_date
+    dimensions:
+      - daily_sales.region_name
+    description: "Daily revenue trends by region"
+    tags:
+      - sales
+      - revenue
+      - daily
+    terms:
+      - sales.daily_performance
+      - metric.daily_revenue
+  
+  daily_order_volume:
+    measure: daily_sales.total_daily_orders
+    time: daily_sales.order_date
+    dimensions:
+      - daily_sales.region_name
+    description: "Daily order volume by region"
+    tags:
+      - sales
+      - orders
+      - volume
+    terms:
+      - sales.order_volume
+      - metric.daily_orders
+  
+  # ============================================================================
+  # WEEKLY SALES METRICS
+  # ============================================================================
+  weekly_revenue_trends:
+    measure: weekly_sales.total_weekly_revenue
+    time: weekly_sales.week_start_date
+    dimensions:
+      - weekly_sales.region_name
+      - weekly_sales.year
+    description: "Weekly revenue trends by region"
+    tags:
+      - sales
+      - revenue
+      - weekly
+    terms:
+      - sales.weekly_trends
+      - metric.weekly_revenue
+  
+  # ============================================================================
+  # CUSTOMER ANALYTICS METRICS
+  # ============================================================================
+  customer_lifetime_value:
+    measure: customer_profile.avg_customer_lifetime_value
+    time: customer_profile.first_order_date
+    dimensions:
+      - customer_profile.region_name
+      - customer_profile.customer_segment
+    description: "Average customer lifetime value by segment and region"
+    tags:
+      - customer
+      - ltv
+      - revenue
+    terms:
+      - customer.ltv_analysis
+      - metric.customer_value
+  
+  customer_acquisition:
+    measure: customer_profile.total_customers
+    time: customer_profile.first_order_date
+    dimensions:
+      - customer_profile.region_name
+      - customer_profile.customer_segment
+    description: "Customer acquisition trends by cohort"
+    tags:
+      - customer
+      - acquisition
+      - growth
+    terms:
+      - customer.acquisition
+      - metric.new_customers
+  
+  customer_retention:
+    measure: customer_profile.total_customers
+    time: customer_profile.last_order_date
+    dimensions:
+      - customer_profile.customer_segment
+      - customer_profile.region_name
+    description: "Customer retention analysis by segment"
+    tags:
+      - customer
+      - retention
+      - churn
+    terms:
+      - customer.retention
+      - metric.active_customers
+  
+  # ============================================================================
+  # PRODUCT ANALYTICS METRICS
+  # ============================================================================
+  product_revenue_performance:
+    measure: product_profile.total_product_revenue
+    time: product_profile.first_sale_date
+    dimensions:
+      - product_profile.category
+      - product_profile.product_performance
+    description: "Product revenue by category and performance tier"
+    tags:
+      - product
+      - revenue
+      - performance
+    terms:
+      - product.revenue_analysis
+      - metric.product_performance
+  
+  inventory_turnover:
+    measure: product_profile.total_quantity_sold_agg
+    time: product_profile.first_sale_date
+    dimensions:
+      - product_profile.category
+      - product_profile.product_performance
+    description: "Product sales velocity by category"
+    tags:
+      - inventory
+      - sales
+      - turnover
+    terms:
+      - inventory.turnover
+      - metric.sales_velocity
+  
+  # ============================================================================
+  # RFM SEGMENTATION METRICS
+  # ============================================================================
+  rfm_customer_distribution:
+    measure: rfm.total_customers_rfm
+    time: customer_profile.first_order_date
+    dimensions:
+      - rfm.rfm_segment
+      - rfm.region_name
+    description: "Customer distribution across RFM segments"
+    tags:
+      - rfm
+      - segmentation
+      - customer
+    terms:
+      - rfm.distribution
+      - customer.segmentation
+  
+  rfm_value_by_segment:
+    measure: rfm.total_rfm_value
+    time: customer_profile.first_order_date
+    dimensions:
+      - rfm.rfm_segment
+      - rfm.region_name
+    description: "Total customer value by RFM segment"
+    tags:
+      - rfm
+      - revenue
+      - segmentation
+    terms:
+      - rfm.segment_value
+      - revenue.by_segment
+  
+  customer_risk_analysis:
+    measure: rfm.at_risk_count
+    time: customer_profile.last_order_date
+    dimensions:
+      - rfm.region_name
+      - rfm.rfm_segment
+    description: "At-risk customer analysis for retention campaigns"
+    tags:
+      - rfm
+      - churn
+      - retention
+    terms:
+      - rfm.risk_analysis
+      - churn.at_risk_customers
+  
+  # ============================================================================
+  # FUNNEL CONVERSION METRICS
+  # ============================================================================
+  funnel_conversion_performance:
+    measure: sales_funnel.avg_overall_conversion
+    time: sales_funnel.funnel_date
+    dimensions:
+      - sales_funnel.region_name
+    description: "End-to-end conversion rate trends by region"
+    tags:
+      - funnel
+      - conversion
+      - performance
+    terms:
+      - funnel.conversion_trends
+      - metric.conversion_rate
+  
+  registration_to_order_conversion:
+    measure: sales_funnel.avg_registration_conversion
+    time: sales_funnel.funnel_date
+    dimensions:
+      - sales_funnel.region_name
+    description: "Registration to first order conversion by region"
+    tags:
+      - funnel
+      - conversion
+      - acquisition
+    terms:
+      - funnel.registration_conversion
+      - conversion.acquisition_rate
+  
+  fulfillment_performance:
+    measure: sales_funnel.avg_order_to_shipment_conversion
+    time: sales_funnel.funnel_date
+    dimensions:
+      - sales_funnel.region_name
+    description: "Order to shipment conversion rate"
+    tags:
+      - funnel
+      - fulfillment
+      - logistics
+    terms:
+      - funnel.fulfillment_rate
+      - logistics.shipment_conversion
+  
+  funnel_dropoff_analysis:
+    measure: sales_funnel.total_registration_dropoff
+    time: sales_funnel.funnel_date
+    dimensions:
+      - sales_funnel.region_name
+    description: "Customer drop-off after registration"
+    tags:
+      - funnel
+      - dropoff
+      - churn
+    terms:
+      - funnel.dropoff_analysis
+      - churn.non_converting_customers
+

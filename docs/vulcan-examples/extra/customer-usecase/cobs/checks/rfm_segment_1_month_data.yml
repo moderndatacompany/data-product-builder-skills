@@ -1,0 +1,29 @@
+checks:
+  cobs.rfm_segment_1_month_data:
+    validity:
+      - failed rows:
+          name: unique_account_date
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              COUNT(*) as duplicate_count
+            FROM cobs.rfm_segment_1_month_data
+            GROUP BY ACCOUNT_ID, DATE
+            HAVING COUNT(*) > 1
+          samples limit: 5
+          attributes:
+            description: "Account_ID and date combination must be unique (grain validation)"
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT 
+              ACCOUNT_ID,
+              DATE,
+              TOTAL_REV,
+              PROOF_REV
+            FROM cobs.rfm_segment_1_month_data
+            WHERE TOTAL_REV < 0 OR PROOF_REV < 0
+          samples limit: 10
+          attributes:
+            description: "Revenue values must be non-negative"

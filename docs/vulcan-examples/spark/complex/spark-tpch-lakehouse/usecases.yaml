@@ -1,0 +1,5 @@
+use_cases:
+  - Data lakehouse analytics with Iceberg tables
+  - Incremental processing patterns (time-range, unique-key, partition)
+  - Semantic layer for BI and ad-hoc queries
+  - Automated data quality enforcement

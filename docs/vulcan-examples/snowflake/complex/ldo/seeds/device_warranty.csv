@@ -1,0 +1,7 @@
+_id,org_id,device_id,device_name,serial_number,device_category,created_at,last_updated,warranty_id,warranty_number,warranty_type,warranty_start,warranty_end,_class,warranty_name,warranty_category,warranty_delivery_type,warranty_description,warranty_duration,warranty_service_profile,warranty_response_profile
+WAR001,ORG001,DEV001,Lenovo ThinkPad X1,SN123456,PC,1672531200000,1704067200000,WID001,WN001,BASE,1672531200000,1767225600000,com.lenovo.DeviceWarranty,Standard Warranty,MACHINE,ON_SITE,3-year onsite warranty,36,Standard Service,Next Business Day
+WAR002,ORG001,DEV002,Lenovo ThinkPad T14,SN123457,PC,1672531200000,1704067200000,WID002,WN002,UPGRADE,1672531200000,1830297600000,com.lenovo.DeviceWarranty,Premium Support Plus,MACHINE,ON_SITE,5-year premium support,60,Premium Service,4-Hour Response
+WAR003,ORG002,DEV003,Lenovo IdeaPad 5,SN123458,PC,1675209600000,1704067200000,WID003,WN003,BASE,1675209600000,1769904000000,com.lenovo.DeviceWarranty,Standard Warranty,MACHINE,DEPOT,3-year depot warranty,36,Standard Service,5-7 Business Days
+WAR004,ORG002,DEV004,Lenovo Legion 5 Pro,SN123459,PC,1677628800000,1704067200000,WID004,WN004,BASE,1677628800000,1772496000000,com.lenovo.DeviceWarranty,Gaming Warranty,MACHINE,ON_SITE,3-year gaming warranty,36,Gaming Service,Next Business Day
+WAR005,ORG003,DEV005,Lenovo Yoga 9i,SN123460,PC,1680307200000,1704067200000,WID005,WN005,UPGRADE,1680307200000,1837987200000,com.lenovo.DeviceWarranty,Accidental Damage Protection,COMPONENT,ON_SITE,5-year ADP coverage,60,Premium Service,Same Business Day
+

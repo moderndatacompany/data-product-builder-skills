@@ -1,0 +1,2925 @@
+{
+  "responses": [
+      {
+          "responseId": "R_2ONfYZmgpzLw0bF",
+          "values": {
+              "startDate": "2025-12-31T19:05:49Z",
+              "endDate": "2025-12-31T19:30:56Z",
+              "status": 1,
+              "progress": 100,
+              "duration": 1506,
+              "finished": 1,
+              "recordedDate": "2025-12-31T19:30:57.202Z",
+              "_recordId": "R_2ONfYZmgpzLw0bF",
+              "locationLatitude": "33.4122",
+              "locationLongitude": "-112.0287",
+              "distributionChannel": "preview",
+              "userLanguage": "EN",
+              "QID12_1": "Justin Martin",
+              "QID12_2": "CEO",
+              "QID12_3": "j.martin@noxgroup.us",
+              "QID252": 6,
+              "QID253_TEXT": "All executive functions",
+              "QID307_1": 1,
+              "QID307_2": 1,
+              "QID307_3": 2,
+              "QID308_1": 1,
+              "QID308_2": 1,
+              "QID308_3": 2,
+              "QID359_1": [
+                  "1"
+              ],
+              "QID359_8": [
+                  "2"
+              ],
+              "QID359_9": [
+                  "1"
+              ],
+              "QID359_11": [
+                  "2"
+              ],
+              "QID353_0_GROUP": [],
+              "QID315": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8"
+              ],
+              "QID316": [
+                  "1"
+              ],
+              "QID317": [
+                  "1",
+                  "6",
+                  "7",
+                  "8",
+                  "3",
+                  "2"
+              ],
+              "QID318": [
+                  "6"
+              ],
+              "QID319_TEXT": "white boards, daylight, flexibility",
+              "QID251_x1": [
+                  "4"
+              ],
+              "QID251_x6": [
+                  "1"
+              ],
+              "QID251_x3": [
+                  "2"
+              ],
+              "QID251_x2": [
+                  "4"
+              ],
+              "QID251_x4": [
+                  "2"
+              ],
+              "QID251_x5": [
+                  "1"
+              ],
+              "QID237_xx1": 2,
+              "QID237_xx6": 3,
+              "QID237_xx3": 1,
+              "QID237_xx2": 2,
+              "QID237_xx4": 2,
+              "QID237_xx5": 2,
+              "QID360": [],
+              "QID286": 4,
+              "QID287_TEXT": "Access to small meeting rooms and conference rooms with screens and whiteboards for collaboration",
+              "QID362#1_1_1": 220,
+              "QID362#1_2_1": 1300,
+              "QID362#2_1_1": 330,
+              "QID362#2_2_1": 3000,
+              "QID362#3_1_1": 450,
+              "QID362#3_2_1": 5000,
+              "QID365_TEXT": "Some professional project staff (approx. 50 at current levels) visit the office weekly at different times and a lower quantity (approx. 20 at current levels) may work from the office for several weeks between assignments or for project planning.  Trainings are conducted at the main office that may draw in anywhere between 20-50 people for a day.  Large meetings, events, or trainings with outside or industry organizations or associations may be hosted at the main office also based on availability and capacity.",
+              "QID328#1_1_1": 50,
+              "QID328#1_2_1": 150,
+              "QID328#2_1_1": 75,
+              "QID328#2_2_1": 225,
+              "QID328#3_1_1": 100,
+              "QID328#3_2_1": 300,
+              "QID364": 2,
+              "QID296_TEXT": "It varies by department.",
+              "QID325_TEXT": "getting everyone under the same roof"
+          },
+          "labels": {
+              "status": "Survey Preview",
+              "finished": "True",
+              "QID252": "Construction Operations",
+              "QID307_1": "Many times a day",
+              "QID307_2": "Many times a day",
+              "QID307_3": "At least once a day",
+              "QID308_1": "Many times a day",
+              "QID308_2": "Many times a day",
+              "QID308_3": "At least once a day",
+              "QID359_1": [
+                  "At least once per day"
+              ],
+              "QID359_8": [
+                  "At least once per week"
+              ],
+              "QID359_9": [
+                  "At least once per day"
+              ],
+              "QID359_11": [
+                  "At least once per week"
+              ],
+              "QID353_0_GROUP": [],
+              "QID315": [
+                  "Small huddle rooms (2-4 people)",
+                  "Medium-sized meeting rooms (5-10 people)",
+                  "Large conference rooms (10-25 people)",
+                  "Event spaces (100+ people)",
+                  "Private phone booths for calls or virtual meetings",
+                  "Open lounge areas for casual discussions"
+              ],
+              "QID316": [
+                  "At their individual desk"
+              ],
+              "QID317": [
+                  "High-quality hybrid meeting technology (cameras, microphones, screens)",
+                  "Reliable, high-speed Wi-Fi",
+                  "Wireless charging stations and plentiful power outlets",
+                  "Reservable desk and meeting room booking systems",
+                  "Dual monitors",
+                  "Digital room scheduler"
+              ],
+              "QID318": [
+                  "Shared storage for office supplies and materials"
+              ],
+              "QID251_x1": [
+                  "Seasonally"
+              ],
+              "QID251_x6": [
+                  "Daily"
+              ],
+              "QID251_x3": [
+                  "Weekly"
+              ],
+              "QID251_x2": [
+                  "Seasonally"
+              ],
+              "QID251_x4": [
+                  "Weekly"
+              ],
+              "QID251_x5": [
+                  "Daily"
+              ],
+              "QID237_xx1": "Physical adjacency is important",
+              "QID237_xx6": "Physical adjacency is essential",
+              "QID237_xx3": "Virtual only",
+              "QID237_xx2": "Physical adjacency is important",
+              "QID237_xx4": "Physical adjacency is important",
+              "QID237_xx5": "Physical adjacency is important",
+              "QID360": [],
+              "QID286": "The whole department sat together in the same area",
+              "QID364": "We have a flexible work policy or guideline"
+          },
+          "displayedFields": [
+              "QID12_1",
+              "QID362#1_3_2",
+              "QID362#1_3_1",
+              "QID362#1_1_2",
+              "QID296_TEXT",
+              "QID362#1_1_1",
+              "QID359_1",
+              "QID318_9_TEXT",
+              "QID353_G0_6_RANK",
+              "QID308_1",
+              "QID308_3",
+              "QID308_2",
+              "QID353_G0_5_RANK",
+              "QID237_xx4",
+              "QID237_xx3",
+              "QID237_xx2",
+              "QID237_xx1",
+              "QID328#1_1_1",
+              "QID251_x4",
+              "QID328#1_1_2",
+              "QID251_x3",
+              "QID328#1_3_1",
+              "QID362#3_3_2",
+              "QID237_xx6",
+              "QID251_x6",
+              "QID353_G0_7_RANK",
+              "QID328#1_3_2",
+              "QID362#3_3_1",
+              "QID237_xx5",
+              "QID251_x5",
+              "QID362#3_1_2",
+              "QID353_G0_1_RANK",
+              "QID353_G0_4_RANK",
+              "QID287_TEXT",
+              "QID328#2_3_1",
+              "QID362#3_1_1",
+              "QID328#2_3_2",
+              "QID251_x2",
+              "QID328#2_1_1",
+              "QID251_x1",
+              "QID328#2_1_2",
+              "QID316",
+              "QID317",
+              "QID318",
+              "QID359_9",
+              "QID353_0_GROUP",
+              "QID359_8",
+              "QID362#2_3_2",
+              "QID362#2_3_1",
+              "QID317_11_TEXT",
+              "QID326_TEXT",
+              "QID315",
+              "QID328#3_3_2",
+              "QID362#2_1_2",
+              "QID362#2_1_1",
+              "QID328#3_1_1",
+              "QID328#3_1_2",
+              "QID328#3_3_1",
+              "QID362#1_2_2",
+              "QID362#1_2_1",
+              "QID353_G0_3_RANK",
+              "QID307_1",
+              "QID307_2",
+              "QID307_3",
+              "QID286",
+              "QID364",
+              "QID360",
+              "QID353_G0_2_RANK",
+              "QID328#1_2_1",
+              "QID253_TEXT",
+              "QID328#1_2_2",
+              "QID360_4_TEXT",
+              "QID362#3_2_2",
+              "QID325_TEXT",
+              "QID362#3_2_1",
+              "QID359_11",
+              "QID328#2_2_2",
+              "QID328#2_2_1",
+              "QID315_12_TEXT",
+              "QID319_TEXT",
+              "QID362#2_2_2",
+              "QID362#2_2_1",
+              "QID365_TEXT",
+              "QID12_3",
+              "QID328#3_2_1",
+              "QID12_2",
+              "QID252",
+              "QID328#3_2_2"
+          ],
+          "displayedValues": {
+              "QID359_1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_G0_6_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID308_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID353_G0_5_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx4": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx3": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx2": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx1": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x4": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x3": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID237_xx6": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x6": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_7_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx5": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x5": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_1_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID353_G0_4_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID251_x2": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID316": [
+                  "1",
+                  "10",
+                  "4",
+                  "5",
+                  "9",
+                  "6",
+                  "11",
+                  "7",
+                  "8"
+              ],
+              "QID317": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "3",
+                  "2",
+                  "12",
+                  "11"
+              ],
+              "QID318": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9"
+              ],
+              "QID359_9": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_0_GROUP": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7"
+              ],
+              "QID359_8": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID315": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+              ],
+              "QID353_G0_3_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID307_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID286": [
+                  4,
+                  5,
+                  6
+              ],
+              "QID364": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID360": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_2_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID359_11": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID252": [
+                  1,
+                  6,
+                  3,
+                  2,
+                  4,
+                  5
+              ]
+          }
+      },
+      {
+          "responseId": "R_30ek2Hy6oSAsXtO",
+          "values": {
+              "startDate": "2025-12-31T22:01:25Z",
+              "endDate": "2025-12-31T23:02:35Z",
+              "status": 0,
+              "ipAddress": "98.171.48.65",
+              "progress": 100,
+              "duration": 3670,
+              "finished": 1,
+              "recordedDate": "2025-12-31T23:02:35.961Z",
+              "_recordId": "R_30ek2Hy6oSAsXtO",
+              "recipientLastName": "Thompson",
+              "recipientFirstName": "Aaron",
+              "recipientEmail": "a.thompson@noxgroup.us",
+              "locationLatitude": "33.3429",
+              "locationLongitude": "-111.6347",
+              "distributionChannel": "gl",
+              "userLanguage": "EN",
+              "QID12_1": "Aaron C. Thompson",
+              "QID12_2": "SVP, Nox Innovations",
+              "QID12_3": "a.thompson@noxgroup.us",
+              "QID252": 4,
+              "QID253_TEXT": "The VDC group provides 3D designs of our projects for collaboration, field installation conflict resolution, and fabrication.",
+              "QID307_1": 1,
+              "QID307_2": 2,
+              "QID307_3": 3,
+              "QID308_1": 1,
+              "QID308_2": 2,
+              "QID308_3": 3,
+              "QID359_1": [
+                  "1"
+              ],
+              "QID359_8": [
+                  "2"
+              ],
+              "QID359_9": [
+                  "3"
+              ],
+              "QID359_11": [
+                  "2"
+              ],
+              "QID353_0_GROUP": [
+                  "2",
+                  "3",
+                  "1",
+                  "4",
+                  "5"
+              ],
+              "QID353_G0_1_RANK": 3,
+              "QID353_G0_2_RANK": 1,
+              "QID353_G0_3_RANK": 2,
+              "QID353_G0_4_RANK": 4,
+              "QID353_G0_5_RANK": 5,
+              "QID315": [
+                  "1",
+                  "4",
+                  "7",
+                  "8",
+                  "9"
+              ],
+              "QID316": [
+                  "1",
+                  "4",
+                  "9",
+                  "7",
+                  "8"
+              ],
+              "QID317": [
+                  "1",
+                  "5",
+                  "6",
+                  "10",
+                  "3",
+                  "2"
+              ],
+              "QID318": [
+                  "5",
+                  "9"
+              ],
+              "QID318_9_TEXT": "Secure Storage is to store the BIM and Scanning equipment. This includes BIM computers and monitors and scanning and layout equipment",
+              "QID319_TEXT": "The VDC group does 100% of their work on computers and is always asking for lighting to be darker to reduce the glare on their monitors. They are also having multiple meetings a day on Teams for collaboration and having an area that\u2019s not in a busy area is helpful. They currently use noise cancelling headphones.   ",
+              "QID251_x1": [
+                  "4"
+              ],
+              "QID251_x6": [
+                  "1"
+              ],
+              "QID251_x3": [
+                  "2",
+                  "3"
+              ],
+              "QID251_x2": [
+                  "2",
+                  "3"
+              ],
+              "QID251_x4": [
+                  "1"
+              ],
+              "QID251_x5": [
+                  "4"
+              ],
+              "QID237_xx1": 1,
+              "QID237_xx6": 2,
+              "QID237_xx3": 1,
+              "QID237_xx2": 2,
+              "QID237_xx4": 3,
+              "QID237_xx5": 1,
+              "QID360": [
+                  "4"
+              ],
+              "QID360_4_TEXT": "None",
+              "QID286": 4,
+              "QID287_TEXT": "Most of the other depts we need to work closely with and collaborate with are on the project sites. Specifically the project superintendents and project managers. It is beneficial for the dept managers to be able to collaborate with the other dept managers, but doesn\u2019t need to be next to each other to do so. ",
+              "QID362#1_1_1": 62,
+              "QID362#1_1_2": 5,
+              "QID362#1_2_1": 7,
+              "QID362#1_3_1": 5,
+              "QID362#2_1_1": 90,
+              "QID362#2_1_2": 10,
+              "QID362#2_2_1": 14,
+              "QID362#2_3_1": 8,
+              "QID362#3_1_1": 100,
+              "QID362#3_1_2": 10,
+              "QID362#3_2_1": 20,
+              "QID362#3_3_1": 12,
+              "QID365_TEXT": "Monthly for a few day for collaboration, training and meetings",
+              "QID328#1_1_1": 5,
+              "QID328#1_2_1": 57,
+              "QID328#1_2_2": 5,
+              "QID328#1_3_1": 12,
+              "QID328#2_1_1": 5,
+              "QID328#2_2_1": 85,
+              "QID328#2_2_2": 10,
+              "QID328#2_3_1": 22,
+              "QID328#3_1_1": 8,
+              "QID328#3_2_1": 92,
+              "QID328#3_2_2": 10,
+              "QID328#3_3_1": 32,
+              "QID364": 1,
+              "QID325_TEXT": "Ability to step into a quite space for a meeting when needed. ",
+              "QID326_TEXT": "We do have a VDC Work Force Development dept that has a classroom for training new hires and interns. Typically 6-8 training plus 1 instructor"
+          },
+          "labels": {
+              "status": "IP Address",
+              "finished": "True",
+              "QID252": "Nox VDC",
+              "QID307_1": "Many times a day",
+              "QID307_2": "At least once a day",
+              "QID307_3": "At least once a week",
+              "QID308_1": "Many times a day",
+              "QID308_2": "At least once a day",
+              "QID308_3": "At least once a week",
+              "QID359_1": [
+                  "At least once per day"
+              ],
+              "QID359_8": [
+                  "At least once per week"
+              ],
+              "QID359_9": [
+                  "At least once per month"
+              ],
+              "QID359_11": [
+                  "At least once per week"
+              ],
+              "QID353_0_GROUP": [
+                  "3-4 in-person attendees",
+                  "5-7 in-person attendees",
+                  "2 in-person attendees",
+                  "8-10 in-person attendees",
+                  "11-14 in-person attendees"
+              ],
+              "QID315": [
+                  "Small huddle rooms (2-4 people)",
+                  "Medium-sized meeting rooms (5-10 people)",
+                  "Private phone booths for calls or virtual meetings",
+                  "Open lounge areas for casual discussions",
+                  "Quiet zones for focus work between meetings"
+              ],
+              "QID316": [
+                  "At their individual desk",
+                  "In a solo focus space (phone room, pod)",
+                  "In an unoccupied or visitor office",
+                  "They focus anywhere as long as they wear headphones",
+                  "They prefer to focus outside the office"
+              ],
+              "QID317": [
+                  "High-quality hybrid meeting technology (cameras, microphones, screens)",
+                  "Video conferencing booths for high-quality virtual interactions",
+                  "Reliable, high-speed Wi-Fi",
+                  "Noise-canceling solutions (soundproofing, white noise machines)",
+                  "Dual monitors",
+                  "Digital room scheduler"
+              ],
+              "QID318": [
+                  "Secure storage for IT equipment (laptops, monitors, accessories)",
+                  "Other (please specify):"
+              ],
+              "QID251_x1": [
+                  "Seasonally"
+              ],
+              "QID251_x6": [
+                  "Daily"
+              ],
+              "QID251_x3": [
+                  "Weekly",
+                  "Monthly"
+              ],
+              "QID251_x2": [
+                  "Weekly",
+                  "Monthly"
+              ],
+              "QID251_x4": [
+                  "Daily"
+              ],
+              "QID251_x5": [
+                  "Seasonally"
+              ],
+              "QID237_xx1": "Virtual only",
+              "QID237_xx6": "Physical adjacency is important",
+              "QID237_xx3": "Virtual only",
+              "QID237_xx2": "Physical adjacency is important",
+              "QID237_xx4": "Physical adjacency is essential",
+              "QID237_xx5": "Virtual only",
+              "QID360": [
+                  "Something Else: Any other reason not described above, includes workstyles, functions, or processes that disrupt or conflict with each other when located nearby. (Please describe)"
+              ],
+              "QID286": "The whole department sat together in the same area",
+              "QID364": "All office-based staff works 5 days a week in the office"
+          },
+          "displayedFields": [
+              "QID12_1",
+              "QID362#1_3_2",
+              "QID362#1_3_1",
+              "QID362#1_1_2",
+              "QID362#1_1_1",
+              "QID359_1",
+              "QID318_9_TEXT",
+              "QID353_G0_6_RANK",
+              "QID308_1",
+              "QID308_3",
+              "QID308_2",
+              "QID353_G0_5_RANK",
+              "QID237_xx4",
+              "QID237_xx3",
+              "QID237_xx2",
+              "QID237_xx1",
+              "QID328#1_1_1",
+              "QID251_x4",
+              "QID328#1_1_2",
+              "QID251_x3",
+              "QID328#1_3_1",
+              "QID362#3_3_2",
+              "QID237_xx6",
+              "QID251_x6",
+              "QID353_G0_7_RANK",
+              "QID328#1_3_2",
+              "QID362#3_3_1",
+              "QID237_xx5",
+              "QID251_x5",
+              "QID362#3_1_2",
+              "QID353_G0_1_RANK",
+              "QID353_G0_4_RANK",
+              "QID287_TEXT",
+              "QID328#2_3_1",
+              "QID362#3_1_1",
+              "QID328#2_3_2",
+              "QID251_x2",
+              "QID328#2_1_1",
+              "QID251_x1",
+              "QID328#2_1_2",
+              "QID316",
+              "QID317",
+              "QID318",
+              "QID359_9",
+              "QID353_0_GROUP",
+              "QID359_8",
+              "QID362#2_3_2",
+              "QID362#2_3_1",
+              "QID317_11_TEXT",
+              "QID326_TEXT",
+              "QID315",
+              "QID328#3_3_2",
+              "QID362#2_1_2",
+              "QID362#2_1_1",
+              "QID328#3_1_1",
+              "QID328#3_1_2",
+              "QID328#3_3_1",
+              "QID362#1_2_2",
+              "QID362#1_2_1",
+              "QID353_G0_3_RANK",
+              "QID307_1",
+              "QID307_2",
+              "QID307_3",
+              "QID286",
+              "QID364",
+              "QID360",
+              "QID353_G0_2_RANK",
+              "QID328#1_2_1",
+              "QID253_TEXT",
+              "QID328#1_2_2",
+              "QID360_4_TEXT",
+              "QID362#3_2_2",
+              "QID325_TEXT",
+              "QID362#3_2_1",
+              "QID359_11",
+              "QID328#2_2_2",
+              "QID328#2_2_1",
+              "QID315_12_TEXT",
+              "QID319_TEXT",
+              "QID362#2_2_2",
+              "QID362#2_2_1",
+              "QID365_TEXT",
+              "QID12_3",
+              "QID328#3_2_1",
+              "QID12_2",
+              "QID252",
+              "QID328#3_2_2"
+          ],
+          "displayedValues": {
+              "QID359_1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_G0_6_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID308_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID353_G0_5_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx4": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx3": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx2": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx1": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x4": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x3": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID237_xx6": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x6": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_7_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx5": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x5": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_1_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID353_G0_4_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID251_x2": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID316": [
+                  "1",
+                  "10",
+                  "4",
+                  "5",
+                  "9",
+                  "6",
+                  "11",
+                  "7",
+                  "8"
+              ],
+              "QID317": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "3",
+                  "2",
+                  "12",
+                  "11"
+              ],
+              "QID318": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9"
+              ],
+              "QID359_9": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_0_GROUP": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7"
+              ],
+              "QID359_8": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID315": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+              ],
+              "QID353_G0_3_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID307_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID286": [
+                  4,
+                  5,
+                  6
+              ],
+              "QID364": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID360": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_2_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID359_11": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID252": [
+                  1,
+                  6,
+                  3,
+                  2,
+                  4,
+                  5
+              ]
+          }
+      },
+      {
+          "responseId": "R_6PPzqjpdQ5zYkp3",
+          "values": {
+              "startDate": "2026-01-02T13:37:39Z",
+              "endDate": "2026-01-02T14:05:18Z",
+              "status": 0,
+              "ipAddress": "68.231.52.34",
+              "progress": 100,
+              "duration": 1659,
+              "finished": 1,
+              "recordedDate": "2026-01-02T14:05:20.309Z",
+              "_recordId": "R_6PPzqjpdQ5zYkp3",
+              "recipientLastName": "Leukam",
+              "recipientFirstName": "Jessica",
+              "recipientEmail": "j.leukam@noxgroup.us",
+              "locationLatitude": "33.3124",
+              "locationLongitude": "-111.9195",
+              "distributionChannel": "gl",
+              "userLanguage": "EN",
+              "QID12_1": "Jessica Leukam",
+              "QID12_2": "VP of Marketing",
+              "QID12_3": "j.leukam@noxgroup.us",
+              "QID252": 2,
+              "QID253_TEXT": "Ensure consistency, credibility, and alignment of the enterprise brand across all internal and external touchpoints.\n\nFocus Areas:\n1. Internal Communications & Engagement\nIncludes Company Update and Videos\n\n2. Execute Marketing Campaigns & Enterprise Initiatives\nTrainings, Business Development, Recruiting, Workforce Development, & Culture Activation\n\n3. In-House Studio\nHeadshots, Team Photography, Instructional Videos, Training & Presentations, Creative Asset Execution, Podcasts\n",
+              "QID307_1": 1,
+              "QID307_2": 2,
+              "QID307_3": 3,
+              "QID308_1": 1,
+              "QID308_2": 2,
+              "QID308_3": 4,
+              "QID359_1": [
+                  "1"
+              ],
+              "QID359_8": [
+                  "2"
+              ],
+              "QID359_9": [
+                  "1"
+              ],
+              "QID359_11": [
+                  "1"
+              ],
+              "QID353_0_GROUP": [
+                  "3",
+                  "2",
+                  "4",
+                  "1",
+                  "7"
+              ],
+              "QID353_G0_1_RANK": 4,
+              "QID353_G0_2_RANK": 2,
+              "QID353_G0_3_RANK": 1,
+              "QID353_G0_4_RANK": 3,
+              "QID353_G0_7_RANK": 5,
+              "QID315": [
+                  "1",
+                  "4",
+                  "5",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11"
+              ],
+              "QID316": [
+                  "1",
+                  "6",
+                  "11"
+              ],
+              "QID317": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "3",
+                  "2"
+              ],
+              "QID318": [
+                  "5",
+                  "6",
+                  "7"
+              ],
+              "QID319_TEXT": "Ideally, a flexible space that offers both creative stimulation and the ability to focus. For some of our creatives (web dev, designers, videographers, editors), having the ability to have the space dark is essential when in their creative flow and focused on their screens. We have a wide range of creatives who do a fair share of collaborative brainstorming and head down time. In addition, having the space feel inspiring visually helps. ",
+              "QID251_x1": [
+                  "1",
+                  "2"
+              ],
+              "QID251_x6": [
+                  "2",
+                  "3"
+              ],
+              "QID251_x3": [
+                  "2"
+              ],
+              "QID251_x2": [
+                  "1",
+                  "2"
+              ],
+              "QID251_x4": [
+                  "4"
+              ],
+              "QID251_x5": [
+                  "4"
+              ],
+              "QID237_xx1": 2,
+              "QID237_xx6": 2,
+              "QID237_xx3": 2,
+              "QID237_xx2": 3,
+              "QID237_xx4": 1,
+              "QID237_xx5": 1,
+              "QID360": [
+                  "2"
+              ],
+              "QID286": 6,
+              "QID287_TEXT": "I believe it's essential for the building and design to reflect our enterprise's personality/ culture - bold, creative, and inspiring. We overall as an enterprise, attract high-performing individuals, so having a space that supports this is important. The building will need options to meet each others needs (quiet zone, collabroation zones, etc.) all while having plenty of meeting spaces. ",
+              "QID362#1_1_1": 20,
+              "QID362#2_1_1": 30,
+              "QID362#3_1_1": 40,
+              "QID328#1_1_1": 4,
+              "QID328#1_2_1": 16,
+              "QID328#2_1_1": 8,
+              "QID328#2_2_1": 12,
+              "QID328#2_3_1": 10,
+              "QID328#3_1_1": 12,
+              "QID328#3_2_1": 15,
+              "QID328#3_3_1": 13,
+              "QID364": 2,
+              "QID296_TEXT": "We have work from home once a week for all. Developers and Editors are able to do 2 days a week as needed.",
+              "QID325_TEXT": "Personality and Branding"
+          },
+          "labels": {
+              "status": "IP Address",
+              "finished": "True",
+              "QID252": "Marketing | Studio",
+              "QID307_1": "Many times a day",
+              "QID307_2": "At least once a day",
+              "QID307_3": "At least once a week",
+              "QID308_1": "Many times a day",
+              "QID308_2": "At least once a day",
+              "QID308_3": "At least once a month",
+              "QID359_1": [
+                  "At least once per day"
+              ],
+              "QID359_8": [
+                  "At least once per week"
+              ],
+              "QID359_9": [
+                  "At least once per day"
+              ],
+              "QID359_11": [
+                  "At least once per day"
+              ],
+              "QID353_0_GROUP": [
+                  "5-7 in-person attendees",
+                  "3-4 in-person attendees",
+                  "8-10 in-person attendees",
+                  "2 in-person attendees",
+                  "19+ in-person attendees"
+              ],
+              "QID315": [
+                  "Small huddle rooms (2-4 people)",
+                  "Medium-sized meeting rooms (5-10 people)",
+                  "Large conference rooms (10-25 people)",
+                  "Private phone booths for calls or virtual meetings",
+                  "Open lounge areas for casual discussions",
+                  "Quiet zones for focus work between meetings",
+                  "Multi-purpose rooms for flexible uses",
+                  "Outdoor workspaces (patios, terraces, etc.)"
+              ],
+              "QID316": [
+                  "At their individual desk",
+                  "In a group focus space (library, quiet zone)",
+                  "In a common area (work cafe, lounge)"
+              ],
+              "QID317": [
+                  "High-quality hybrid meeting technology (cameras, microphones, screens)",
+                  "Digital collaboration tools (interactive whiteboards, smartboards)",
+                  "Video conferencing booths for high-quality virtual interactions",
+                  "Reliable, high-speed Wi-Fi",
+                  "Wireless charging stations and plentiful power outlets",
+                  "Reservable desk and meeting room booking systems",
+                  "Smart climate & lighting controls for a comfortable environment",
+                  "Noise-canceling solutions (soundproofing, white noise machines)",
+                  "Dual monitors",
+                  "Digital room scheduler"
+              ],
+              "QID318": [
+                  "Secure storage for IT equipment (laptops, monitors, accessories)",
+                  "Shared storage for office supplies and materials",
+                  "Large storage for team supplies or equipment"
+              ],
+              "QID251_x1": [
+                  "Daily",
+                  "Weekly"
+              ],
+              "QID251_x6": [
+                  "Weekly",
+                  "Monthly"
+              ],
+              "QID251_x3": [
+                  "Weekly"
+              ],
+              "QID251_x2": [
+                  "Daily",
+                  "Weekly"
+              ],
+              "QID251_x4": [
+                  "Seasonally"
+              ],
+              "QID251_x5": [
+                  "Seasonally"
+              ],
+              "QID237_xx1": "Physical adjacency is important",
+              "QID237_xx6": "Physical adjacency is important",
+              "QID237_xx3": "Physical adjacency is important",
+              "QID237_xx2": "Physical adjacency is essential",
+              "QID237_xx4": "Virtual only",
+              "QID237_xx5": "Virtual only",
+              "QID360": [
+                  "Security: Requires physical or data security measures to prevent unauthorized access or protect personnel or materials"
+              ],
+              "QID286": "A mix of both, where some of the department sat together and some were distributed",
+              "QID364": "We have a flexible work policy or guideline"
+          },
+          "displayedFields": [
+              "QID12_1",
+              "QID362#1_3_2",
+              "QID362#1_3_1",
+              "QID362#1_1_2",
+              "QID296_TEXT",
+              "QID362#1_1_1",
+              "QID359_1",
+              "QID318_9_TEXT",
+              "QID353_G0_6_RANK",
+              "QID308_1",
+              "QID308_3",
+              "QID308_2",
+              "QID353_G0_5_RANK",
+              "QID237_xx4",
+              "QID237_xx3",
+              "QID237_xx2",
+              "QID237_xx1",
+              "QID328#1_1_1",
+              "QID251_x4",
+              "QID328#1_1_2",
+              "QID251_x3",
+              "QID328#1_3_1",
+              "QID362#3_3_2",
+              "QID237_xx6",
+              "QID251_x6",
+              "QID353_G0_7_RANK",
+              "QID328#1_3_2",
+              "QID362#3_3_1",
+              "QID237_xx5",
+              "QID251_x5",
+              "QID362#3_1_2",
+              "QID353_G0_1_RANK",
+              "QID353_G0_4_RANK",
+              "QID287_TEXT",
+              "QID328#2_3_1",
+              "QID362#3_1_1",
+              "QID328#2_3_2",
+              "QID251_x2",
+              "QID328#2_1_1",
+              "QID251_x1",
+              "QID328#2_1_2",
+              "QID316",
+              "QID317",
+              "QID318",
+              "QID359_9",
+              "QID353_0_GROUP",
+              "QID359_8",
+              "QID362#2_3_2",
+              "QID362#2_3_1",
+              "QID317_11_TEXT",
+              "QID326_TEXT",
+              "QID315",
+              "QID328#3_3_2",
+              "QID362#2_1_2",
+              "QID362#2_1_1",
+              "QID328#3_1_1",
+              "QID328#3_1_2",
+              "QID328#3_3_1",
+              "QID362#1_2_2",
+              "QID362#1_2_1",
+              "QID353_G0_3_RANK",
+              "QID307_1",
+              "QID307_2",
+              "QID307_3",
+              "QID286",
+              "QID364",
+              "QID360",
+              "QID353_G0_2_RANK",
+              "QID328#1_2_1",
+              "QID253_TEXT",
+              "QID328#1_2_2",
+              "QID360_4_TEXT",
+              "QID362#3_2_2",
+              "QID325_TEXT",
+              "QID362#3_2_1",
+              "QID359_11",
+              "QID328#2_2_2",
+              "QID328#2_2_1",
+              "QID315_12_TEXT",
+              "QID319_TEXT",
+              "QID362#2_2_2",
+              "QID362#2_2_1",
+              "QID365_TEXT",
+              "QID12_3",
+              "QID328#3_2_1",
+              "QID12_2",
+              "QID252",
+              "QID328#3_2_2"
+          ],
+          "displayedValues": {
+              "QID359_1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_G0_6_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID308_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID353_G0_5_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx4": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx3": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx2": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx1": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x4": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x3": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID237_xx6": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x6": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_7_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx5": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x5": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_1_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID353_G0_4_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID251_x2": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID316": [
+                  "1",
+                  "10",
+                  "4",
+                  "5",
+                  "9",
+                  "6",
+                  "11",
+                  "7",
+                  "8"
+              ],
+              "QID317": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "3",
+                  "2",
+                  "12",
+                  "11"
+              ],
+              "QID318": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9"
+              ],
+              "QID359_9": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_0_GROUP": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7"
+              ],
+              "QID359_8": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID315": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+              ],
+              "QID353_G0_3_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID307_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID286": [
+                  4,
+                  5,
+                  6
+              ],
+              "QID364": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID360": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_2_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID359_11": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID252": [
+                  1,
+                  6,
+                  3,
+                  2,
+                  4,
+                  5
+              ]
+          }
+      },
+      {
+          "responseId": "R_2WH9wvo3Sv0EKK8",
+          "values": {
+              "startDate": "2026-01-02T15:20:53Z",
+              "endDate": "2026-01-02T15:55:34Z",
+              "status": 0,
+              "ipAddress": "47.215.243.35",
+              "progress": 100,
+              "duration": 2081,
+              "finished": 1,
+              "recordedDate": "2026-01-02T15:55:35.074Z",
+              "_recordId": "R_2WH9wvo3Sv0EKK8",
+              "recipientLastName": "Brown",
+              "recipientFirstName": "K",
+              "recipientEmail": "K.brown@noxgroup.us",
+              "locationLatitude": "34.8266",
+              "locationLongitude": "-111.7506",
+              "distributionChannel": "gl",
+              "userLanguage": "EN",
+              "QID12_1": "Kim Brown",
+              "QID12_2": "Chief People Officer",
+              "QID12_3": "k.brown@noxgroup.us",
+              "QID252": 3,
+              "QID253_TEXT": "Recruiting, Workforce Development, Benefits, Payroll, Wellness (apex), Employee Relations",
+              "QID307_1": 1,
+              "QID307_2": 1,
+              "QID307_3": 3,
+              "QID308_1": 1,
+              "QID308_2": 1,
+              "QID308_3": 3,
+              "QID359_1": [
+                  "1"
+              ],
+              "QID359_8": [
+                  "2"
+              ],
+              "QID359_9": [
+                  "2"
+              ],
+              "QID359_11": [
+                  "3"
+              ],
+              "QID353_0_GROUP": [
+                  "2",
+                  "3",
+                  "4",
+                  "1",
+                  "5"
+              ],
+              "QID353_G0_1_RANK": 4,
+              "QID353_G0_2_RANK": 1,
+              "QID353_G0_3_RANK": 2,
+              "QID353_G0_4_RANK": 3,
+              "QID353_G0_5_RANK": 5,
+              "QID315": [
+                  "1",
+                  "4",
+                  "10"
+              ],
+              "QID316": [
+                  "1"
+              ],
+              "QID317": [
+                  "1",
+                  "6",
+                  "8",
+                  "10",
+                  "3",
+                  "2"
+              ],
+              "QID318": [
+                  "6"
+              ],
+              "QID319_TEXT": "The core HR team (benefits/payroll) needs to the ability to have private screens for viewing sensitive information and a quiet space to talk to employees. The Recruiting team is on the phone a lot- they need a space where others around them are not bothered by consistent talking. Additionally, HR and Recruiting (not WFD) needs to be in an area with similar employees as much of the information both departments talk about may be sensitive.",
+              "QID251_x1": [
+                  "3"
+              ],
+              "QID251_x6": [
+                  "1"
+              ],
+              "QID251_x3": [
+                  "1"
+              ],
+              "QID251_x2": [
+                  "3"
+              ],
+              "QID251_x4": [
+                  "2"
+              ],
+              "QID251_x5": [
+                  "2"
+              ],
+              "QID237_xx1": 1,
+              "QID237_xx6": 1,
+              "QID237_xx3": 2,
+              "QID237_xx2": 1,
+              "QID237_xx4": 1,
+              "QID237_xx5": 1,
+              "QID360": [
+                  "1",
+                  "2",
+                  "3"
+              ],
+              "QID286": 6,
+              "QID287_TEXT": "Majority of the People team is in person. The whole team does not need to be in close physical proximity, but there are sub departments that I would like together. For example, all of recruiting should be together, all of HR (benefits, payroll, HR admins, people experience) should be together. L&D/WFD there is more flexibility as they do not deal with sensitive information and are more collaborative. \nIt would be ideal if my managers/Directors had their own space/office as they do deal with a lot of sensitive information/conversations.",
+              "QID362#1_1_1": 40,
+              "QID362#1_1_2": 0,
+              "QID362#1_2_1": 10,
+              "QID362#1_2_2": 0,
+              "QID362#1_3_1": 2,
+              "QID362#1_3_2": 0,
+              "QID362#2_1_1": 45,
+              "QID362#2_1_2": 0,
+              "QID362#2_2_1": 25,
+              "QID362#2_2_2": 0,
+              "QID362#2_3_1": 5,
+              "QID362#2_3_2": 0,
+              "QID362#3_1_1": 50,
+              "QID362#3_1_2": 0,
+              "QID362#3_2_1": 35,
+              "QID362#3_2_2": 0,
+              "QID362#3_3_1": 15,
+              "QID362#3_3_2": 0,
+              "QID365_TEXT": "Varies, average of a month. Roles include HR business partners, WFD Craft Trainers, and a few recruiters.",
+              "QID328#1_1_1": 12,
+              "QID328#1_1_2": 0,
+              "QID328#1_2_1": 30,
+              "QID328#1_2_2": 0,
+              "QID328#1_3_1": 10,
+              "QID328#1_3_2": 0,
+              "QID328#2_1_1": 15,
+              "QID328#2_1_2": 0,
+              "QID328#2_2_1": 35,
+              "QID328#2_2_2": 0,
+              "QID328#2_3_1": 15,
+              "QID328#2_3_2": 0,
+              "QID328#3_1_1": 18,
+              "QID328#3_1_2": 0,
+              "QID328#3_2_1": 40,
+              "QID328#3_2_2": 0,
+              "QID328#3_3_1": 15,
+              "QID328#3_3_2": 0,
+              "QID364": 1,
+              "QID325_TEXT": "More collab spaces for meetings.",
+              "QID326_TEXT": "N/A"
+          },
+          "labels": {
+              "status": "IP Address",
+              "finished": "True",
+              "QID252": "Human Resources | Workforce Development & Talent",
+              "QID307_1": "Many times a day",
+              "QID307_2": "Many times a day",
+              "QID307_3": "At least once a week",
+              "QID308_1": "Many times a day",
+              "QID308_2": "Many times a day",
+              "QID308_3": "At least once a week",
+              "QID359_1": [
+                  "At least once per day"
+              ],
+              "QID359_8": [
+                  "At least once per week"
+              ],
+              "QID359_9": [
+                  "At least once per week"
+              ],
+              "QID359_11": [
+                  "At least once per month"
+              ],
+              "QID353_0_GROUP": [
+                  "3-4 in-person attendees",
+                  "5-7 in-person attendees",
+                  "8-10 in-person attendees",
+                  "2 in-person attendees",
+                  "11-14 in-person attendees"
+              ],
+              "QID315": [
+                  "Small huddle rooms (2-4 people)",
+                  "Medium-sized meeting rooms (5-10 people)",
+                  "Multi-purpose rooms for flexible uses"
+              ],
+              "QID316": [
+                  "At their individual desk"
+              ],
+              "QID317": [
+                  "High-quality hybrid meeting technology (cameras, microphones, screens)",
+                  "Reliable, high-speed Wi-Fi",
+                  "Reservable desk and meeting room booking systems",
+                  "Noise-canceling solutions (soundproofing, white noise machines)",
+                  "Dual monitors",
+                  "Digital room scheduler"
+              ],
+              "QID318": [
+                  "Shared storage for office supplies and materials"
+              ],
+              "QID251_x1": [
+                  "Monthly"
+              ],
+              "QID251_x6": [
+                  "Daily"
+              ],
+              "QID251_x3": [
+                  "Daily"
+              ],
+              "QID251_x2": [
+                  "Monthly"
+              ],
+              "QID251_x4": [
+                  "Weekly"
+              ],
+              "QID251_x5": [
+                  "Weekly"
+              ],
+              "QID237_xx1": "Virtual only",
+              "QID237_xx6": "Virtual only",
+              "QID237_xx3": "Physical adjacency is important",
+              "QID237_xx2": "Virtual only",
+              "QID237_xx4": "Virtual only",
+              "QID237_xx5": "Virtual only",
+              "QID360": [
+                  "Confidentiality: Requires privacy to protect sensitive information, such as HR, legal, or financial matters",
+                  "Security: Requires physical or data security measures to prevent unauthorized access or protect personnel or materials",
+                  "Conflict of Interest: Involves situations where proximity with another group may compromise ethical, financial, or oversight responsibilities"
+              ],
+              "QID286": "A mix of both, where some of the department sat together and some were distributed",
+              "QID364": "All office-based staff works 5 days a week in the office"
+          },
+          "displayedFields": [
+              "QID12_1",
+              "QID362#1_3_2",
+              "QID362#1_3_1",
+              "QID362#1_1_2",
+              "QID362#1_1_1",
+              "QID359_1",
+              "QID318_9_TEXT",
+              "QID353_G0_6_RANK",
+              "QID308_1",
+              "QID308_3",
+              "QID308_2",
+              "QID353_G0_5_RANK",
+              "QID237_xx4",
+              "QID237_xx3",
+              "QID237_xx2",
+              "QID237_xx1",
+              "QID328#1_1_1",
+              "QID251_x4",
+              "QID328#1_1_2",
+              "QID251_x3",
+              "QID328#1_3_1",
+              "QID362#3_3_2",
+              "QID237_xx6",
+              "QID251_x6",
+              "QID353_G0_7_RANK",
+              "QID328#1_3_2",
+              "QID362#3_3_1",
+              "QID237_xx5",
+              "QID251_x5",
+              "QID362#3_1_2",
+              "QID353_G0_1_RANK",
+              "QID353_G0_4_RANK",
+              "QID287_TEXT",
+              "QID328#2_3_1",
+              "QID362#3_1_1",
+              "QID328#2_3_2",
+              "QID251_x2",
+              "QID328#2_1_1",
+              "QID251_x1",
+              "QID328#2_1_2",
+              "QID316",
+              "QID317",
+              "QID318",
+              "QID359_9",
+              "QID353_0_GROUP",
+              "QID359_8",
+              "QID362#2_3_2",
+              "QID362#2_3_1",
+              "QID317_11_TEXT",
+              "QID326_TEXT",
+              "QID315",
+              "QID328#3_3_2",
+              "QID362#2_1_2",
+              "QID362#2_1_1",
+              "QID328#3_1_1",
+              "QID328#3_1_2",
+              "QID328#3_3_1",
+              "QID362#1_2_2",
+              "QID362#1_2_1",
+              "QID353_G0_3_RANK",
+              "QID307_1",
+              "QID307_2",
+              "QID307_3",
+              "QID286",
+              "QID364",
+              "QID360",
+              "QID353_G0_2_RANK",
+              "QID328#1_2_1",
+              "QID253_TEXT",
+              "QID328#1_2_2",
+              "QID360_4_TEXT",
+              "QID362#3_2_2",
+              "QID325_TEXT",
+              "QID362#3_2_1",
+              "QID359_11",
+              "QID328#2_2_2",
+              "QID328#2_2_1",
+              "QID315_12_TEXT",
+              "QID319_TEXT",
+              "QID362#2_2_2",
+              "QID362#2_2_1",
+              "QID365_TEXT",
+              "QID12_3",
+              "QID328#3_2_1",
+              "QID12_2",
+              "QID252",
+              "QID328#3_2_2"
+          ],
+          "displayedValues": {
+              "QID359_1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_G0_6_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID308_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID353_G0_5_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx4": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx3": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx2": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx1": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x4": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x3": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID237_xx6": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x6": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_7_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx5": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x5": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_1_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID353_G0_4_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID251_x2": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID316": [
+                  "1",
+                  "10",
+                  "4",
+                  "5",
+                  "9",
+                  "6",
+                  "11",
+                  "7",
+                  "8"
+              ],
+              "QID317": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "3",
+                  "2",
+                  "12",
+                  "11"
+              ],
+              "QID318": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9"
+              ],
+              "QID359_9": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_0_GROUP": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7"
+              ],
+              "QID359_8": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID315": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+              ],
+              "QID353_G0_3_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID307_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID286": [
+                  4,
+                  5,
+                  6
+              ],
+              "QID364": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID360": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_2_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID359_11": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID252": [
+                  1,
+                  6,
+                  3,
+                  2,
+                  4,
+                  5
+              ]
+          }
+      },
+      {
+          "responseId": "R_2zHYMhbjGYZifyx",
+          "values": {
+              "startDate": "2026-01-02T15:34:50Z",
+              "endDate": "2026-01-02T16:24:32Z",
+              "status": 0,
+              "ipAddress": "4.39.106.82",
+              "progress": 100,
+              "duration": 2982,
+              "finished": 1,
+              "recordedDate": "2026-01-02T16:24:33.186Z",
+              "_recordId": "R_2zHYMhbjGYZifyx",
+              "recipientLastName": "Abshere",
+              "recipientFirstName": "Caleb",
+              "recipientEmail": "c.abshere@noxgroup.us",
+              "locationLatitude": "33.4122",
+              "locationLongitude": "-112.0287",
+              "distributionChannel": "gl",
+              "userLanguage": "EN",
+              "QID12_1": "Caleb Abshere",
+              "QID12_2": "Wellness Coach",
+              "QID12_3": "c.abshere@noxgroup.us",
+              "QID252": 1,
+              "QID253_TEXT": "We focus on providing wellness services to the enterprise employees and their families. This includes physical, mental, and nutritional wellness. We also maintain our wellness center.",
+              "QID307_1": 1,
+              "QID307_2": 1,
+              "QID307_3": 3,
+              "QID308_1": 1,
+              "QID308_2": 1,
+              "QID308_3": 4,
+              "QID359_1": [
+                  "1"
+              ],
+              "QID359_8": [
+                  "5"
+              ],
+              "QID359_9": [
+                  "2"
+              ],
+              "QID359_11": [
+                  "2"
+              ],
+              "QID353_0_GROUP": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_G0_1_RANK": 1,
+              "QID353_G0_2_RANK": 2,
+              "QID353_G0_3_RANK": 3,
+              "QID353_G0_4_RANK": 4,
+              "QID353_G0_5_RANK": 5,
+              "QID315": [
+                  "4",
+                  "6",
+                  "8",
+                  "9",
+                  "12"
+              ],
+              "QID315_12_TEXT": "We need a large space for our wellness center with at least 3 individual spaces to hold 10 people each",
+              "QID316": [
+                  "1"
+              ],
+              "QID317": [
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "3",
+                  "2"
+              ],
+              "QID318": [
+                  "6",
+                  "7"
+              ],
+              "QID319_TEXT": "Access to daylight, access to privacy, ergonomic desks and chairs.",
+              "QID251_x1": [
+                  "1"
+              ],
+              "QID251_x6": [
+                  "2"
+              ],
+              "QID251_x3": [
+                  "1"
+              ],
+              "QID251_x2": [
+                  "2"
+              ],
+              "QID251_x4": [
+                  "2"
+              ],
+              "QID251_x5": [
+                  "2"
+              ],
+              "QID237_xx1": 3,
+              "QID237_xx6": 2,
+              "QID237_xx3": 2,
+              "QID237_xx2": 2,
+              "QID237_xx4": 2,
+              "QID237_xx5": 2,
+              "QID360": [
+                  "1",
+                  "2",
+                  "4"
+              ],
+              "QID360_4_TEXT": "Soundproofing from rest of company. It can get loud and disrupt workflow for nearby employees",
+              "QID286": 4,
+              "QID287_TEXT": "We need to be located at the wellness center and be able to go to others when needed.",
+              "QID362#1_1_1": 2,
+              "QID362#2_1_1": 2,
+              "QID362#3_1_1": 2,
+              "QID328#1_1_1": 1,
+              "QID328#1_2_1": 1,
+              "QID328#2_1_1": 1,
+              "QID328#2_2_1": 1,
+              "QID328#3_1_1": 1,
+              "QID328#3_2_1": 1,
+              "QID364": 1,
+              "QID325_TEXT": "N/A",
+              "QID326_TEXT": "We have a Sport court, Weight area, Cardio area, Yoga room, Recovery room, Mental health room, Game room, and Golf simulator."
+          },
+          "labels": {
+              "status": "IP Address",
+              "finished": "True",
+              "QID252": "The Apex",
+              "QID307_1": "Many times a day",
+              "QID307_2": "Many times a day",
+              "QID307_3": "At least once a week",
+              "QID308_1": "Many times a day",
+              "QID308_2": "Many times a day",
+              "QID308_3": "At least once a month",
+              "QID359_1": [
+                  "At least once per day"
+              ],
+              "QID359_8": [
+                  "At least once per year"
+              ],
+              "QID359_9": [
+                  "At least once per week"
+              ],
+              "QID359_11": [
+                  "At least once per week"
+              ],
+              "QID353_0_GROUP": [
+                  "2 in-person attendees",
+                  "3-4 in-person attendees",
+                  "5-7 in-person attendees",
+                  "8-10 in-person attendees",
+                  "11-14 in-person attendees"
+              ],
+              "QID315": [
+                  "Medium-sized meeting rooms (5-10 people)",
+                  "Event spaces (100+ people)",
+                  "Open lounge areas for casual discussions",
+                  "Quiet zones for focus work between meetings",
+                  "Other (please specify):"
+              ],
+              "QID316": [
+                  "At their individual desk"
+              ],
+              "QID317": [
+                  "Reliable, high-speed Wi-Fi",
+                  "Wireless charging stations and plentiful power outlets",
+                  "Reservable desk and meeting room booking systems",
+                  "Smart climate & lighting controls for a comfortable environment",
+                  "Dual monitors",
+                  "Digital room scheduler"
+              ],
+              "QID318": [
+                  "Shared storage for office supplies and materials",
+                  "Large storage for team supplies or equipment"
+              ],
+              "QID251_x1": [
+                  "Daily"
+              ],
+              "QID251_x6": [
+                  "Weekly"
+              ],
+              "QID251_x3": [
+                  "Daily"
+              ],
+              "QID251_x2": [
+                  "Weekly"
+              ],
+              "QID251_x4": [
+                  "Weekly"
+              ],
+              "QID251_x5": [
+                  "Weekly"
+              ],
+              "QID237_xx1": "Physical adjacency is essential",
+              "QID237_xx6": "Physical adjacency is important",
+              "QID237_xx3": "Physical adjacency is important",
+              "QID237_xx2": "Physical adjacency is important",
+              "QID237_xx4": "Physical adjacency is important",
+              "QID237_xx5": "Physical adjacency is important",
+              "QID360": [
+                  "Confidentiality: Requires privacy to protect sensitive information, such as HR, legal, or financial matters",
+                  "Security: Requires physical or data security measures to prevent unauthorized access or protect personnel or materials",
+                  "Something Else: Any other reason not described above, includes workstyles, functions, or processes that disrupt or conflict with each other when located nearby. (Please describe)"
+              ],
+              "QID286": "The whole department sat together in the same area",
+              "QID364": "All office-based staff works 5 days a week in the office"
+          },
+          "displayedFields": [
+              "QID12_1",
+              "QID362#1_3_2",
+              "QID362#1_3_1",
+              "QID362#1_1_2",
+              "QID362#1_1_1",
+              "QID359_1",
+              "QID318_9_TEXT",
+              "QID353_G0_6_RANK",
+              "QID308_1",
+              "QID308_3",
+              "QID308_2",
+              "QID353_G0_5_RANK",
+              "QID237_xx4",
+              "QID237_xx3",
+              "QID237_xx2",
+              "QID237_xx1",
+              "QID328#1_1_1",
+              "QID251_x4",
+              "QID328#1_1_2",
+              "QID251_x3",
+              "QID328#1_3_1",
+              "QID362#3_3_2",
+              "QID237_xx6",
+              "QID251_x6",
+              "QID353_G0_7_RANK",
+              "QID328#1_3_2",
+              "QID362#3_3_1",
+              "QID237_xx5",
+              "QID251_x5",
+              "QID362#3_1_2",
+              "QID353_G0_1_RANK",
+              "QID353_G0_4_RANK",
+              "QID287_TEXT",
+              "QID328#2_3_1",
+              "QID362#3_1_1",
+              "QID328#2_3_2",
+              "QID251_x2",
+              "QID328#2_1_1",
+              "QID251_x1",
+              "QID328#2_1_2",
+              "QID316",
+              "QID317",
+              "QID318",
+              "QID359_9",
+              "QID353_0_GROUP",
+              "QID359_8",
+              "QID362#2_3_2",
+              "QID362#2_3_1",
+              "QID317_11_TEXT",
+              "QID326_TEXT",
+              "QID315",
+              "QID328#3_3_2",
+              "QID362#2_1_2",
+              "QID362#2_1_1",
+              "QID328#3_1_1",
+              "QID328#3_1_2",
+              "QID328#3_3_1",
+              "QID362#1_2_2",
+              "QID362#1_2_1",
+              "QID353_G0_3_RANK",
+              "QID307_1",
+              "QID307_2",
+              "QID307_3",
+              "QID286",
+              "QID364",
+              "QID360",
+              "QID353_G0_2_RANK",
+              "QID328#1_2_1",
+              "QID253_TEXT",
+              "QID328#1_2_2",
+              "QID360_4_TEXT",
+              "QID362#3_2_2",
+              "QID325_TEXT",
+              "QID362#3_2_1",
+              "QID359_11",
+              "QID328#2_2_2",
+              "QID328#2_2_1",
+              "QID315_12_TEXT",
+              "QID319_TEXT",
+              "QID362#2_2_2",
+              "QID362#2_2_1",
+              "QID365_TEXT",
+              "QID12_3",
+              "QID328#3_2_1",
+              "QID12_2",
+              "QID252",
+              "QID328#3_2_2"
+          ],
+          "displayedValues": {
+              "QID359_1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_G0_6_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID308_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID308_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID353_G0_5_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx4": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx3": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx2": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID237_xx1": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x4": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x3": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID237_xx6": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x6": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_7_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID237_xx5": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID251_x5": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_1_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID353_G0_4_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID251_x2": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID251_x1": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID316": [
+                  "1",
+                  "10",
+                  "4",
+                  "5",
+                  "9",
+                  "6",
+                  "11",
+                  "7",
+                  "8"
+              ],
+              "QID317": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "3",
+                  "2",
+                  "12",
+                  "11"
+              ],
+              "QID318": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9"
+              ],
+              "QID359_9": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID353_0_GROUP": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7"
+              ],
+              "QID359_8": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID315": [
+                  "1",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+              ],
+              "QID353_G0_3_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID307_1": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_2": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID307_3": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+              ],
+              "QID286": [
+                  4,
+                  5,
+                  6
+              ],
+              "QID364": [
+                  1,
+                  2,
+                  3
+              ],
+              "QID360": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+              ],
+              "QID353_G0_2_RANK": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+              ],
+              "QID359_11": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+              ],
+              "QID252": [
+                  1,
+                  6,
+                  3,
+                  2,
+                  4,
+                  5
+              ]
+          }
+      }
+  ]
+}

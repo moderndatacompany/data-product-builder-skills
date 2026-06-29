@@ -1,0 +1,427 @@
+# Converted from legacy: semantics/fct_daily_sales.yml
+kind: semantic
+name: daily_sales
+depends_on: silver_v1.fct_daily_sales
+ai_context:
+  instructions: >
+    Use this semantic model for questions about daily sales. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "daily sales"
+    - "daily_sales"
+    - "daily"
+    - "sales"
+  examples:
+    - "Show daily sales trends over time."
+    - "Break down daily sales by key dimensions."
+
+dimensions:
+- order_date
+- day_of_week
+- is_weekend
+- region_id
+- region_name
+- customer_id
+- product_id
+measures:
+- name: total_daily_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total daily orders. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total daily orders"
+      - "total_daily_orders"
+      - "total"
+      - "daily"
+    examples:
+      - "What is total daily orders by month?"
+      - "Compare total daily orders across key segments."
+  type: sum
+  expression: '{daily_sales.total_orders}'
+  description: Total number of orders across all days
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_daily_orders
+  - metric.order_count
+- name: total_daily_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total daily revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total daily revenue"
+      - "total_daily_revenue"
+      - "total"
+      - "daily"
+    examples:
+      - "What is total daily revenue by month?"
+      - "Compare total daily revenue across key segments."
+  type: sum
+  expression: '{daily_sales.total_revenue}'
+  format: currency
+  description: Total revenue across all days
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_daily_revenue
+  - finance.gross_sales
+- name: avg_order_value_across_days
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg order value across days. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg order value across days"
+      - "avg_order_value_across_days"
+      - "avg"
+      - "order"
+    examples:
+      - "What is avg order value across days by month?"
+      - "Compare avg order value across days across key segments."
+  type: avg
+  expression: '{daily_sales.avg_order_value}'
+  format: currency
+  description: Average order value across all days
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_order_value_across_days
+  - metric.aggregate
+- name: total_items_sold_agg
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total items sold agg. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total items sold agg"
+      - "total_items_sold_agg"
+      - "total"
+      - "items"
+    examples:
+      - "What is total items sold agg by month?"
+      - "Compare total items sold agg across key segments."
+  type: sum
+  expression: '{daily_sales.total_items_sold}'
+  description: Total quantity of items sold
+  tags:
+  - metric
+  terms:
+  - metric.total_items_sold_agg
+- name: total_shipments_agg
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total shipments agg. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total shipments agg"
+      - "total_shipments_agg"
+      - "total"
+      - "shipments"
+    examples:
+      - "What is total shipments agg by month?"
+      - "Compare total shipments agg across key segments."
+  type: sum
+  expression: '{daily_sales.total_shipments}'
+  description: Total number of shipments
+  tags:
+  - metric
+  terms:
+  - metric.total_shipments_agg
+- name: avg_shipment_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg shipment rate. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg shipment rate"
+      - "avg_shipment_rate"
+      - "avg"
+      - "shipment"
+    examples:
+      - "What is avg shipment rate by month?"
+      - "Compare avg shipment rate across key segments."
+  type: avg
+  expression: '{daily_sales.shipment_rate}'
+  description: Average percentage of orders shipped
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_shipment_rate
+  - metric.aggregate
+- name: weekend_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for weekend revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "weekend revenue"
+      - "weekend_revenue"
+      - "weekend"
+      - "revenue"
+    examples:
+      - "What is weekend revenue by month?"
+      - "Compare weekend revenue across key segments."
+  type: sum
+  expression: '{daily_sales.total_revenue}'
+  filters:
+  - '{daily_sales.is_weekend} = TRUE'
+  format: currency
+  description: Total revenue from weekend sales
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.weekend_revenue
+  - finance.gross_sales
+- name: weekday_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for weekday revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "weekday revenue"
+      - "weekday_revenue"
+      - "weekday"
+      - "revenue"
+    examples:
+      - "What is weekday revenue by month?"
+      - "Compare weekday revenue across key segments."
+  type: sum
+  expression: '{daily_sales.total_revenue}'
+  filters:
+  - '{daily_sales.is_weekend} = FALSE'
+  format: currency
+  description: Total revenue from weekday sales
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.weekday_revenue
+  - finance.gross_sales
+- name: weekend_order_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for weekend order count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "weekend order count"
+      - "weekend_order_count"
+      - "weekend"
+      - "order"
+    examples:
+      - "What is weekend order count by month?"
+      - "Compare weekend order count across key segments."
+  type: sum
+  expression: '{daily_sales.total_orders}'
+  filters:
+  - '{daily_sales.is_weekend} = TRUE'
+  description: Total orders placed on weekends
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.weekend_order_count
+  - metric.order_count
+segments:
+- name: high_revenue_days
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high revenue days subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high revenue days"
+      - "high_revenue_days"
+      - "high"
+      - "revenue"
+    examples:
+      - "Show revenue for high revenue days."
+      - "How many records are in high revenue days?"
+  expression: '{daily_sales.total_revenue} >= 5000'
+  description: Days with revenue >= $5,000
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.high_revenue_days
+  - finance.gross_sales
+- name: recent_7_days
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recent 7 days subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "recent 7 days"
+      - "recent_7_days"
+      - "recent"
+      - "days"
+    examples:
+      - "Show revenue for recent 7 days."
+      - "How many records are in recent 7 days?"
+  expression: '{daily_sales.order_date} >= CURRENT_DATE - INTERVAL ''7 days'''
+  description: Last 7 days of sales
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recent_7_days
+  - segment.recent
+- name: recent_30_days
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recent 30 days subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "recent 30 days"
+      - "recent_30_days"
+      - "recent"
+      - "days"
+    examples:
+      - "Show revenue for recent 30 days."
+      - "How many records are in recent 30 days?"
+  expression: '{daily_sales.order_date} >= CURRENT_DATE - INTERVAL ''30 days'''
+  description: Last 30 days of sales
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recent_30_days
+  - segment.recent
+- name: high_volume_days
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high volume days subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "high volume days"
+      - "high_volume_days"
+      - "high"
+      - "volume"
+    examples:
+      - "Show revenue for high volume days."
+      - "How many records are in high volume days?"
+  expression: '{daily_sales.total_orders} >= 10'
+  description: Days with 10+ orders
+  tags:
+  - metric
+  terms:
+  - metric.high_volume_days
+- name: low_shipment_performance
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the low shipment performance subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "low shipment performance"
+      - "low_shipment_performance"
+      - "low"
+      - "shipment"
+    examples:
+      - "Show revenue for low shipment performance."
+      - "How many records are in low shipment performance?"
+  expression: '{daily_sales.shipment_rate} < 0.8'
+  description: Days with shipment rate below 80%
+  tags:
+  - metric
+  terms:
+  - metric.low_shipment_performance
+- name: weekend_sales
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the weekend sales subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "weekend sales"
+      - "weekend_sales"
+      - "weekend"
+      - "sales"
+    examples:
+      - "Show revenue for weekend sales."
+      - "How many records are in weekend sales?"
+  expression: '{daily_sales.is_weekend} = TRUE'
+  description: Sales that occurred on weekends (Saturday/Sunday)
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.weekend_sales
+  - finance.gross_sales
+- name: weekday_sales
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the weekday sales subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "weekday sales"
+      - "weekday_sales"
+      - "weekday"
+      - "sales"
+    examples:
+      - "Show revenue for weekday sales."
+      - "How many records are in weekday sales?"
+  expression: '{daily_sales.is_weekend} = FALSE'
+  description: Sales that occurred on weekdays (Monday-Friday)
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.weekday_sales
+  - finance.gross_sales
+joins:
+- name: customer_profile
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from customer profile.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "customer profile"
+      - "customer_profile"
+      - "customer"
+      - "profile"
+    examples:
+      - "Analyze this model with customer profile attributes."
+      - "Break measures down by customer profile."
+  type: many_to_one
+  expression: '{daily_sales.customer_id} = {customer_profile.customer_id}'
+- name: product_profile
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from product profile.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "product profile"
+      - "product_profile"
+      - "product"
+      - "profile"
+    examples:
+      - "Analyze this model with product profile attributes."
+      - "Break measures down by product profile."
+  type: many_to_one
+  expression: '{daily_sales.product_id} = {product_profile.product_id}'

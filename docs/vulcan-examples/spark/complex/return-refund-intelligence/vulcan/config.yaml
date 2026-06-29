@@ -1,0 +1,74 @@
+vde: false
+discoverable: true
+version: 0.1.2
+alignment: source_aligned
+reference_links:
+  - name: Document
+    href: https://tmdc-io.github.io/vulcan-book/
+
+name: rr-intel1
+display_name: Return and Refund Intelligence
+description: Trusted quick-commerce refund analytics for finance leakage control, return root-cause analysis, and customer segment impact monitoring on Spark.
+
+tags:
+  - quick-commerce
+  - refunds
+  - returns
+  - finance
+  - customer-support
+  - spark
+
+terms:
+  - refund-rate
+  - refund-leakage
+  - customer-tier
+  - refund-reason
+  - product-category
+
+domain: quick_commerce_returns
+linter:
+  enabled: false
+  warn_rules:
+    - preferassertions
+    - nomissingaudits
+
+analytics:
+  enabled: false
+
+model_defaults:
+  dialect: spark2
+  start: '2026-04-14'
+  cron: '*/15 * * * *'
+
+gateways:
+  default:
+    connection:
+      type: depot
+      address: dataos://s3depot?purpose=rw
+
+    state_connection:
+      type: duckdb
+      database: state/vulcan.db
+
+    state_schema: vulcan_state
+
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+
+users:
+  - username: shreyasikarwartmdcio
+    email: shreya.sikarwar@tmdc.io
+    type: OWNER
+
+virtual_environment_mode: dev_only

@@ -1,0 +1,994 @@
+# Converted from legacy: semantics/rfm_customer_segments_ml.yml
+kind: semantic
+name: rfm_segments
+depends_on: cobs.rfm_customer_segments_ml
+ai_context:
+  instructions: >
+    Use this semantic model for questions about rfm segments. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "rfm segments"
+    - "rfm_segments"
+    - "rfm"
+    - "segments"
+  examples:
+    - "Show rfm segments trends over time."
+    - "Break down rfm segments by key dimensions."
+
+dimensions:
+- ACCOUNT_ID
+- DATE
+- SALES_BUCKET
+- SEGMENT
+measures:
+- name: total_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total customers"
+      - "total_customers"
+      - "total"
+      - "customers"
+    examples:
+      - "What is total customers by month?"
+      - "Compare total customers across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  description: Total number of unique customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.total_customers
+  - metric.customer_count
+- name: champions_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for champions count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "champions count"
+      - "champions_count"
+      - "champions"
+      - "count"
+    examples:
+      - "What is champions count by month?"
+      - "Compare champions count across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  filters:
+  - '{rfm_segments.SEGMENT} = ''Champions'''
+  description: Number of Champion customers
+  tags:
+  - metric
+  terms:
+  - metric.champions_count
+- name: loyal_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for loyal customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "loyal customers"
+      - "loyal_customers"
+      - "loyal"
+      - "customers"
+    examples:
+      - "What is loyal customers by month?"
+      - "Compare loyal customers across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  filters:
+  - '{rfm_segments.SEGMENT} = ''Loyal'''
+  description: Number of Loyal customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.loyal_customers
+  - metric.customer_count
+- name: at_risk_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for at risk customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "at risk customers"
+      - "at_risk_customers"
+      - "risk"
+      - "customers"
+    examples:
+      - "What is at risk customers by month?"
+      - "Compare at risk customers across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  filters:
+  - '{rfm_segments.SEGMENT} = ''At Risk'''
+  description: Number of At Risk customers
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment
+- name: lapsed_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for lapsed customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "lapsed customers"
+      - "lapsed_customers"
+      - "lapsed"
+      - "customers"
+    examples:
+      - "What is lapsed customers by month?"
+      - "Compare lapsed customers across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  filters:
+  - '{rfm_segments.SEGMENT} = ''Lapsed'''
+  description: Number of Lapsed customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.lapsed_customers
+  - metric.customer_count
+- name: newly_activated_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for newly activated customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "newly activated customers"
+      - "newly_activated_customers"
+      - "newly"
+      - "activated"
+    examples:
+      - "What is newly activated customers by month?"
+      - "Compare newly activated customers across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  filters:
+  - '{rfm_segments.SEGMENT} = ''Newly Activated'''
+  description: Number of Newly Activated customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.newly_activated_customers
+  - metric.customer_count
+- name: outperformers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for outperformers. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "outperformers"
+    examples:
+      - "What is outperformers by month?"
+      - "Compare outperformers across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  filters:
+  - '{rfm_segments.SEGMENT} = ''Outperformers'''
+  description: Number of Outperformer customers
+  tags:
+  - metric
+  terms:
+  - metric.outperformers
+- name: dropping_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for dropping customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "dropping customers"
+      - "dropping_customers"
+      - "dropping"
+      - "customers"
+    examples:
+      - "What is dropping customers by month?"
+      - "Compare dropping customers across key segments."
+  type: count_distinct
+  expression: '{rfm_segments.ACCOUNT_ID}'
+  filters:
+  - '{rfm_segments.DROPPING} = TRUE'
+  description: Number of customers with dropping wallet share
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.dropping_customers
+  - metric.customer_count
+- name: total_proof_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total proof revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total proof revenue"
+      - "total_proof_revenue"
+      - "total"
+      - "proof"
+    examples:
+      - "What is total proof revenue by month?"
+      - "Compare total proof revenue across key segments."
+  type: sum
+  expression: '{rfm_segments.R12_PROOF_REV}'
+  description: Total proof revenue over 12 months
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_proof_revenue
+  - finance.gross_sales
+- name: total_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total revenue. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total revenue"
+      - "total_revenue"
+      - "total"
+      - "revenue"
+    examples:
+      - "What is total revenue by month?"
+      - "Compare total revenue across key segments."
+  type: sum
+  expression: '{rfm_segments.R12_TOTAL_REV}'
+  description: Total revenue over 12 months
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_revenue
+  - finance.gross_sales
+- name: total_non_proof_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total non proof revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total non proof revenue"
+      - "total_non_proof_revenue"
+      - "total"
+      - "non"
+    examples:
+      - "What is total non proof revenue by month?"
+      - "Compare total non proof revenue across key segments."
+  type: sum
+  expression: '{rfm_segments.R12_NON_PROOF_REV}'
+  description: Total non-proof revenue over 12 months
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_non_proof_revenue
+  - finance.gross_sales
+- name: average_revenue_per_customer
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average revenue per customer. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average revenue per customer"
+      - "average_revenue_per_customer"
+      - "average"
+      - "revenue"
+    examples:
+      - "What is average revenue per customer by month?"
+      - "Compare average revenue per customer across key segments."
+  type: avg
+  expression: '{rfm_segments.R12_TOTAL_REV}'
+  description: Average revenue per customer over 12 months
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_revenue_per_customer
+  - metric.aggregate
+- name: average_proof_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average proof revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average proof revenue"
+      - "average_proof_revenue"
+      - "average"
+      - "proof"
+    examples:
+      - "What is average proof revenue by month?"
+      - "Compare average proof revenue across key segments."
+  type: avg
+  expression: '{rfm_segments.R12_PROOF_REV}'
+  description: Average proof revenue per customer over 12 months
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_proof_revenue
+  - metric.aggregate
+- name: total_proof_invoices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total proof invoices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total proof invoices"
+      - "total_proof_invoices"
+      - "total"
+      - "proof"
+    examples:
+      - "What is total proof invoices by month?"
+      - "Compare total proof invoices across key segments."
+  type: sum
+  expression: '{rfm_segments.R12_PROOF_INVOICES}'
+  description: Total number of proof invoices over 12 months
+  tags:
+  - metric
+  terms:
+  - metric.total_proof_invoices
+- name: total_invoices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total invoices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total invoices"
+      - "total_invoices"
+      - "total"
+      - "invoices"
+    examples:
+      - "What is total invoices by month?"
+      - "Compare total invoices across key segments."
+  type: sum
+  expression: '{rfm_segments.R12_TOTAL_INVOICES}'
+  description: Total number of invoices over 12 months
+  tags:
+  - metric
+  terms:
+  - metric.total_invoices
+- name: average_invoices_per_customer
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average invoices per customer. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average invoices per customer"
+      - "average_invoices_per_customer"
+      - "average"
+      - "invoices"
+    examples:
+      - "What is average invoices per customer by month?"
+      - "Compare average invoices per customer across key segments."
+  type: avg
+  expression: '{rfm_segments.R12_TOTAL_INVOICES}'
+  description: Average number of invoices per customer over 12 months
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_invoices_per_customer
+  - metric.aggregate
+- name: average_wallet_share
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average wallet share. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average wallet share"
+      - "average_wallet_share"
+      - "average"
+      - "wallet"
+    examples:
+      - "What is average wallet share by month?"
+      - "Compare average wallet share across key segments."
+  type: avg
+  expression: '{rfm_segments.R12_WALLET_SHARE}'
+  description: Average wallet share across customers
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_wallet_share
+  - metric.aggregate
+- name: average_order_share
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average order share. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average order share"
+      - "average_order_share"
+      - "average"
+      - "order"
+    examples:
+      - "What is average order share by month?"
+      - "Compare average order share across key segments."
+  type: avg
+  expression: '{rfm_segments.R12_ORDER_SHARE}'
+  description: Average order share across customers
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_order_share
+  - metric.aggregate
+- name: average_recency
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average recency. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average recency"
+      - "average_recency"
+      - "average"
+      - "recency"
+    examples:
+      - "What is average recency by month?"
+      - "Compare average recency across key segments."
+  type: avg
+  expression: '{rfm_segments.PROOF_RECENCY}'
+  description: Average days since last proof transaction
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_recency
+  - metric.aggregate
+- name: average_tenure
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average tenure. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average tenure"
+      - "average_tenure"
+      - "average"
+      - "tenure"
+    examples:
+      - "What is average tenure by month?"
+      - "Compare average tenure across key segments."
+  type: avg
+  expression: '{rfm_segments.PROOF_TENURE}'
+  description: Average customer tenure in days
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_tenure
+  - metric.aggregate
+- name: average_recency_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average recency score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average recency score"
+      - "average_recency_score"
+      - "average"
+      - "recency"
+    examples:
+      - "What is average recency score by month?"
+      - "Compare average recency score across key segments."
+  type: avg
+  expression: '{rfm_segments.RECENCY_SCORE}'
+  description: Average recency score (1-5, lower is better)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_recency_score
+  - metric.aggregate
+- name: average_frequency_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average frequency score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average frequency score"
+      - "average_frequency_score"
+      - "average"
+      - "frequency"
+    examples:
+      - "What is average frequency score by month?"
+      - "Compare average frequency score across key segments."
+  type: avg
+  expression: '{rfm_segments.FREQUENCY_SCORE}'
+  description: Average frequency score (1-5, higher is better)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_frequency_score
+  - metric.aggregate
+- name: average_wallet_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average wallet score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average wallet score"
+      - "average_wallet_score"
+      - "average"
+      - "wallet"
+    examples:
+      - "What is average wallet score by month?"
+      - "Compare average wallet score across key segments."
+  type: avg
+  expression: '{rfm_segments.WALLET_SCORE}'
+  description: Average wallet score (1-5, higher is better)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_wallet_score
+  - metric.aggregate
+segments:
+- name: high_value_segments
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high value segments subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high value segments"
+      - "high_value_segments"
+      - "high"
+      - "value"
+    examples:
+      - "Show revenue for high value segments."
+      - "How many records are in high value segments?"
+  expression: '{rfm_segments.SEGMENT} IN (''Champions'', ''Loyal'', ''Outperformers'')'
+  description: High-value customer segments (Champions, Loyal, Outperformers)
+  tags:
+  - revenue
+  - high_value
+  - segment
+  terms:
+  - revenue.premium
+  - segment.high_value_segments
+- name: at_risk_segments
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the at risk segments subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "at risk segments"
+      - "at_risk_segments"
+      - "risk"
+      - "segments"
+    examples:
+      - "Show revenue for at risk segments."
+      - "How many records are in at risk segments?"
+  expression: '{rfm_segments.SEGMENT} IN (''At Risk'', ''About to Sleep'', ''Cannot Lose Them'')'
+  description: Customers requiring immediate attention
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment
+- name: inactive_segments
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the inactive segments subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "inactive segments"
+      - "inactive_segments"
+      - "inactive"
+      - "segments"
+    examples:
+      - "Show revenue for inactive segments."
+      - "How many records are in inactive segments?"
+  expression: '{rfm_segments.SEGMENT} IN (''Lapsed'', ''Hibernating'')'
+  description: Inactive or lapsed customers
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment
+- name: high_engagement
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high engagement subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "high engagement"
+      - "high_engagement"
+      - "high"
+      - "engagement"
+    examples:
+      - "Show revenue for high engagement."
+      - "How many records are in high engagement?"
+  expression: '{rfm_segments.RECENCY_SCORE} <= 2 AND {rfm_segments.FREQUENCY_SCORE} >= 4'
+  description: Highly engaged customers (recent and frequent)
+  tags:
+  - metric
+  terms:
+  - metric.high_engagement
+- name: low_engagement
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the low engagement subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "low engagement"
+      - "low_engagement"
+      - "low"
+      - "engagement"
+    examples:
+      - "Show revenue for low engagement."
+      - "How many records are in low engagement?"
+  expression: '{rfm_segments.RECENCY_SCORE} >= 4 OR {rfm_segments.FREQUENCY_SCORE} <= 2'
+  description: Low engagement customers
+  tags:
+  - metric
+  terms:
+  - metric.low_engagement
+- name: top_wallet_share
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the top wallet share subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "top wallet share"
+      - "top_wallet_share"
+      - "top"
+      - "wallet"
+    examples:
+      - "Show revenue for top wallet share."
+      - "How many records are in top wallet share?"
+  expression: '{rfm_segments.WALLET_SCORE} >= 4'
+  description: Customers with high wallet share
+  tags:
+  - metric
+  terms:
+  - metric.top_wallet_share
+- name: enterprise_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the enterprise customers subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "enterprise customers"
+      - "enterprise_customers"
+      - "enterprise"
+      - "customers"
+    examples:
+      - "Show revenue for enterprise customers."
+      - "How many records are in enterprise customers?"
+  expression: '{rfm_segments.SALES_BUCKET} IN (''7. 300K-400K'', ''8. 400K-500K'', ''9. 500K+'')'
+  description: Enterprise-level customers (300K+ revenue)
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.enterprise_customers
+  - metric.customer_count
+- name: mid_market_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the mid market customers subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "mid market customers"
+      - "mid_market_customers"
+      - "mid"
+      - "market"
+    examples:
+      - "Show revenue for mid market customers."
+      - "How many records are in mid market customers?"
+  expression: '{rfm_segments.SALES_BUCKET} IN (''5. 100K-200K'', ''6. 200K-300K'')'
+  description: Mid-market customers (100K-300K revenue)
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.mid_market_customers
+  - metric.customer_count
+- name: smb_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the smb customers subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "smb customers"
+      - "smb_customers"
+      - "smb"
+      - "customers"
+    examples:
+      - "Show revenue for smb customers."
+      - "How many records are in smb customers?"
+  expression: '{rfm_segments.SALES_BUCKET} IN (''1. 0-25K'', ''2. 25-50K'', ''3. 50-75K'', ''4. 75-100K'')'
+  description: Small and medium business customers (0-100K revenue)
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.smb_customers
+  - metric.customer_count
+- name: dropping_high_value
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the dropping high value subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "dropping high value"
+      - "dropping_high_value"
+      - "dropping"
+      - "high"
+    examples:
+      - "Show revenue for dropping high value."
+      - "How many records are in dropping high value?"
+  expression: '{rfm_segments.DROPPING} = TRUE AND {rfm_segments.SALES_BUCKET} >= ''5. 100K-200K'''
+  description: High-value customers with declining wallet share
+  tags:
+  - revenue
+  - high_value
+  - segment
+  terms:
+  - revenue.premium
+  - segment.dropping_high_value
+- name: recent_activation
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recent activation subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "recent activation"
+      - "recent_activation"
+      - "recent"
+      - "activation"
+    examples:
+      - "Show revenue for recent activation."
+      - "How many records are in recent activation?"
+  expression: '{rfm_segments.ACTIVATION_DATE} >= CURRENT_DATE() - INTERVAL ''90 days'''
+  description: Customers activated in the last 90 days
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recent_activation
+  - segment.recent
+- name: long_tenure
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the long tenure subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "long tenure"
+      - "long_tenure"
+      - "long"
+      - "tenure"
+    examples:
+      - "Show revenue for long tenure."
+      - "How many records are in long tenure?"
+  expression: '{rfm_segments.PROOF_TENURE} >= 365'
+  description: Customers with tenure over 1 year
+  tags:
+  - metric
+  terms:
+  - metric.long_tenure
+- name: recent_activity
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recent activity subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "recent activity"
+      - "recent_activity"
+      - "recent"
+      - "activity"
+    examples:
+      - "Show revenue for recent activity."
+      - "How many records are in recent activity?"
+  expression: '{rfm_segments.PROOF_RECENCY} <= 30'
+  description: Customers with activity in the last 30 days
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recent_activity
+  - segment.recent
+- name: inactive_30_days
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the inactive 30 days subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "inactive 30 days"
+      - "inactive_30_days"
+      - "inactive"
+      - "days"
+    examples:
+      - "Show revenue for inactive 30 days."
+      - "How many records are in inactive 30 days?"
+  expression: '{rfm_segments.PROOF_RECENCY} > 30 AND {rfm_segments.PROOF_RECENCY} <= 90'
+  description: Customers inactive for 30-90 days
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment
+- name: inactive_90_days
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the inactive 90 days subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "inactive 90 days"
+      - "inactive_90_days"
+      - "inactive"
+      - "days"
+    examples:
+      - "Show revenue for inactive 90 days."
+      - "How many records are in inactive 90 days?"
+  expression: '{rfm_segments.PROOF_RECENCY} > 90'
+  description: Customers inactive for more than 90 days
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment
+- name: high_proof_revenue
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high proof revenue subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high proof revenue"
+      - "high_proof_revenue"
+      - "high"
+      - "proof"
+    examples:
+      - "Show revenue for high proof revenue."
+      - "How many records are in high proof revenue?"
+  expression: '{rfm_segments.R12_PROOF_REV} >= 100000'
+  description: Customers with proof revenue >= $100K
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.high_proof_revenue
+  - finance.gross_sales
+- name: high_wallet_share
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high wallet share subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high wallet share"
+      - "high_wallet_share"
+      - "high"
+      - "wallet"
+    examples:
+      - "Show revenue for high wallet share."
+      - "How many records are in high wallet share?"
+  expression: '{rfm_segments.R12_WALLET_SHARE} >= 0.7'
+  description: Customers with wallet share >= 70%
+  tags:
+  - metric
+  terms:
+  - metric.high_wallet_share
+- name: frequent_buyers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the frequent buyers subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "frequent buyers"
+      - "frequent_buyers"
+      - "frequent"
+      - "buyers"
+    examples:
+      - "Show revenue for frequent buyers."
+      - "How many records are in frequent buyers?"
+  expression: '{rfm_segments.R12_PROOF_INVOICES} >= 50'
+  description: Customers with 50+ proof invoices in 12 months
+  tags:
+  - metric
+  terms:
+  - metric.frequent_buyers
+- name: critical_attention_needed
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the critical attention needed
+      subset. Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "critical attention needed"
+      - "critical_attention_needed"
+      - "critical"
+      - "attention"
+    examples:
+      - "Show revenue for critical attention needed."
+      - "How many records are in critical attention needed?"
+  expression: |-
+    ({rfm_segments.DROPPING} = TRUE OR {rfm_segments.SEGMENT} IN ('At Risk', 'Cannot Lose Them'))
+    AND {rfm_segments.SALES_BUCKET} >= '5. 100K-200K'
+  description: High-value customers requiring critical attention
+  tags:
+  - metric
+  terms:
+  - metric.critical_attention_needed
+- name: reactivation_opportunity
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the reactivation opportunity subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "reactivation opportunity"
+      - "reactivation_opportunity"
+      - "reactivation"
+      - "opportunity"
+    examples:
+      - "Show revenue for reactivation opportunity."
+      - "How many records are in reactivation opportunity?"
+  expression: |-
+    {rfm_segments.SEGMENT} IN ('Lapsed', 'Hibernating')
+    AND {rfm_segments.PROOF_TENURE} >= 180
+  description: Lapsed customers with established history (reactivation opportunity)
+  tags:
+  - metric
+  terms:
+  - metric.reactivation_opportunity

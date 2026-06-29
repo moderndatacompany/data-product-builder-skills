@@ -1,0 +1,39 @@
+models:
+  sales.daily_sales:
+    alias: daily_sales
+    description: "Daily sales aggregation tracking order volume and revenue trends over time"
+
+    dimensions:
+      includes:
+        - order_date
+        - total_orders
+        - total_revenue
+        - last_order_id
+      enhancements:
+        - name: order_date
+          granularities:
+            - name: weekly
+              interval: "1 week"
+              description: "Weekly sales aggregation"
+            - name: monthly
+              interval: "1 month"
+              description: "Monthly sales aggregation"
+            - name: quarterly
+              interval: "3 months"
+              description: "Quarterly sales aggregation"
+
+    measures:
+      total_daily_orders:
+        type: sum
+        expression: "{daily_sales.total_orders}"
+        description: "Sum of all orders across selected days"
+
+      total_daily_revenue:
+        type: sum
+        expression: "{daily_sales.total_revenue}"
+        description: "Sum of all revenue across selected days"
+
+    segments:
+      high_revenue_days:
+        expression: "{daily_sales.total_revenue} >= 100"
+        description: "Days with $100+ in revenue"

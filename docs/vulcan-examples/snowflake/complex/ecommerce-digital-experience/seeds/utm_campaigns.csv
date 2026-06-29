@@ -1,0 +1,17 @@
+campaign_id,campaign_name,channel,source,medium,campaign_start_date,campaign_end_date,campaign_budget_usd
+UTM-001,Q3 Industrial Search,Paid Search,Google Ads,CPC,2024-07-01,2024-09-30,25000.00
+UTM-002,Q3 Bing Manufacturing,Paid Search,Bing Ads,CPC,2024-07-01,2024-09-30,12000.00
+UTM-003,Q4 Holiday Promo Search,Paid Search,Google Ads,CPC,2024-10-01,2024-12-31,35000.00
+UTM-004,Monthly Product Newsletter,Email,Email,Email,2024-07-01,2024-12-31,5000.00
+UTM-005,Abandoned Cart Recovery,Email,Email,Email,2024-07-01,2024-12-31,3000.00
+UTM-006,New Product Launch Email,Email,Email,Email,2024-09-01,2024-10-31,8000.00
+UTM-007,Organic SEO Traffic,Organic,Google,Organic,2024-07-01,2024-12-31,0.00
+UTM-008,Organic Bing Traffic,Organic,Bing,Organic,2024-07-01,2024-12-31,0.00
+UTM-009,LinkedIn B2B Targeting,Social,LinkedIn Ads,Social,2024-07-01,2024-12-31,18000.00
+UTM-010,LinkedIn Thought Leadership,Social,LinkedIn,Social,2024-08-01,2024-12-31,6000.00
+UTM-011,Direct Traffic,Direct,Direct,None,2024-07-01,2024-12-31,0.00
+UTM-012,Q4 Bing Holiday Ads,Paid Search,Bing Ads,CPC,2024-10-15,2024-12-31,15000.00
+UTM-013,Industry Webinar Follow-up,Email,Email,Email,2024-08-15,2024-09-30,2000.00
+UTM-014,Partner Referral Program,Referral,Partner Sites,Referral,2024-07-01,2024-12-31,10000.00
+UTM-015,Retargeting Display Ads,Display,Google Ads,Display,2024-09-01,2024-12-31,20000.00
+

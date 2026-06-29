@@ -1,0 +1,36 @@
+- name: '`tmdc-platform-engineering`.`vulcan_ga4_demo`.`events_table`'
+  columns:
+    ecommerce: STRUCT<unique_items STRING, transaction_id STRING, shipping_value STRING,
+      shipping_value_in_usd STRING, tax_value_in_usd STRING, refund_value STRING,
+      total_item_quantity STRING, refund_value_in_usd STRING, tax_value STRING, purchase_revenue
+      STRING, purchase_revenue_in_usd STRING>
+    platform: STRING
+    items: ARRAY<STRING>
+    event_dimensions: STRING
+    traffic_source: STRUCT<source STRING, name STRING, medium STRING>
+    user_first_touch_timestamp: INT64
+    privacy_info: STRUCT<uses_transient_token BOOL, ads_storage STRING, analytics_storage
+      STRING>
+    user_id: STRING
+    app_info: STRING
+    user_pseudo_id: FLOAT64
+    event_bundle_sequence_id: INT64
+    event_value_in_usd: STRING
+    device: STRUCT<web_info STRUCT<browser_version STRING, browser STRING>, time_zone_offset_seconds
+      STRING, language STRING, operating_system STRING, mobile_os_hardware_model STRING,
+      mobile_marketing_name STRING, is_limited_ad_tracking BOOL, advertising_id STRING,
+      category STRING, operating_system_version STRING, mobile_model_name STRING,
+      vendor_id STRING, mobile_brand_name STRING>
+    event_server_timestamp_offset: STRING
+    user_properties: ARRAY<STRING>
+    event_previous_timestamp: STRING
+    event_date: INT64
+    event_name: STRING
+    geo: STRUCT<sub_continent STRING, city STRING, region STRING, metro STRING, country
+      STRING, continent STRING>
+    event_params: ARRAY<STRUCT<value STRUCT<double_value STRING, float_value STRING,
+      int_value INT64, string_value STRING>, key STRING>>
+    stream_id: INT64
+    user_ltv: STRUCT<currency STRING, revenue FLOAT64>
+    event_timestamp: INT64
+  # gateway: default

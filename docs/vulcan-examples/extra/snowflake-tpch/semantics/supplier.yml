@@ -1,0 +1,32 @@
+models:
+  test_db.vulcan_test_project.supplier:
+    alias: suppliers
+
+    measures:
+      total_suppliers:
+        type: count
+        expression: "{suppliers.SUPPKEY}"
+        description: "Total number of suppliers"
+        tags: [tpch, supplier, count]
+
+      avg_acctbal:
+        type: avg
+        expression: "{suppliers.ACCTBAL}"
+        description: "Average supplier account balance"
+        tags: [tpch, supplier, acctbal]
+
+    joins:
+      nations:
+        type: many_to_one
+        expression: "{suppliers.NATIONKEY} = {nations.NATIONKEY}"
+
+    dimensions:
+      includes:
+        - SUPPKEY
+        - NAME
+        - ADDRESS
+        - NATIONKEY
+        - PHONE
+        - COMMENT
+
+

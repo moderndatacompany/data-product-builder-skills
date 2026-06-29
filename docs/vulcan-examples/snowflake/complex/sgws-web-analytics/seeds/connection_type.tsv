@@ -1,0 +1,6 @@
+connection_type_id	connection_type_name
+0	Not Specified
+1	Modem
+2	LAN/Wifi
+3	Unknown
+4	Mobile Carrier

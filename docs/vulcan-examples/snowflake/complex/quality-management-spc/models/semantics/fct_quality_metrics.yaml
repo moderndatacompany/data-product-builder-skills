@@ -1,0 +1,79 @@
+models:
+  QMS_PLATFORM.GOLD.FCT_QUALITY_METRICS:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct quality metrics. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "fct quality metrics"
+        - "fct_quality_metrics"
+        - "fct"
+        - "quality"
+      examples:
+        - "Show fct quality metrics trends over time."
+        - "Break down fct quality metrics by key dimensions."
+    alias: fct_quality_metrics
+
+    dimensions:
+      includes:
+        - inspection_id
+        - inspection_date
+        - inspection_type
+        - material_number
+        - lot_number
+        - inspector_id
+        - defect_code
+        - defect_category
+        - severity
+        - pass_fail_status
+        - calculated_at
+
+    measures:
+      sample_size:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for sample size. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "sample size"
+            - "sample_size"
+            - "sample"
+            - "size"
+          examples:
+            - "What is sample size by month?"
+            - "Compare sample size across key dimensions."
+        type: sum
+        expression: "{fct_quality_metrics.sample_size}"
+
+      defects_found:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for defects found. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "defects found"
+            - "defects_found"
+            - "defects"
+            - "found"
+          examples:
+            - "What is defects found by month?"
+            - "Compare defects found across key dimensions."
+        type: sum
+        expression: "{fct_quality_metrics.defects_found}"
+
+      scrap_cost_usd:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for scrap cost usd. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "scrap cost usd"
+            - "scrap_cost_usd"
+            - "scrap"
+            - "cost"
+          examples:
+            - "What is scrap cost usd by month?"
+            - "Compare scrap cost usd across key dimensions."
+        type: sum
+        expression: "{fct_quality_metrics.scrap_cost_usd}"

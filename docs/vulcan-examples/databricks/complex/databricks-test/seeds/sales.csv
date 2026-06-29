@@ -1,0 +1,17 @@
+sale_id,order_id,product_id,product_name,quantity,unit_price,line_total,sale_date,sales_rep_id,sales_rep_name,commission_rate
+1,1001,101,Premium License,5,1000.00,5000.00,2024-01-16,201,John Sales,0.10
+2,1002,102,Starter License,3,400.00,1200.00,2024-02-02,202,Sarah Growth,0.08
+3,1003,103,Professional License,7,500.00,3500.00,2024-01-21,203,Mike Revenue,0.09
+4,1004,101,Premium License,8,1000.00,8000.00,2024-01-11,201,John Sales,0.10
+5,1005,104,Basic License,4,200.00,800.00,2024-02-16,204,Lisa Starter,0.07
+6,1006,101,Premium License,5,900.00,4500.00,2024-02-20,201,John Sales,0.10
+7,1007,103,Professional License,7,400.00,2800.00,2024-01-26,202,Sarah Growth,0.08
+8,1008,101,Premium License,6,1000.00,6000.00,2024-02-06,203,Mike Revenue,0.09
+9,1009,103,Professional License,8,400.00,3200.00,2024-01-31,201,John Sales,0.10
+10,1010,102,Starter License,5,300.00,1500.00,2024-02-11,204,Lisa Starter,0.07
+11,1011,101,Premium License,7,1100.00,7700.00,2024-01-19,201,John Sales,0.10
+12,1012,102,Starter License,6,300.00,1800.00,2024-02-25,202,Sarah Growth,0.08
+13,1013,103,Professional License,10,400.00,4000.00,2024-02-28,203,Mike Revenue,0.09
+14,1014,101,Premium License,9,1000.00,9000.00,2024-02-15,201,John Sales,0.10
+15,1015,103,Professional License,10,300.00,3000.00,2024-02-22,204,Lisa Starter,0.07
+

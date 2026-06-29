@@ -1,0 +1,17 @@
+# Converted from legacy: semantics/system_update_testing.yaml
+kind: semantic
+name: system_update_testing
+depends_on: lenovo.ldo.system_update_testing
+ai_context:
+  instructions: >
+    Use this semantic model for questions about system update testing. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "system update testing"
+    - "system_update_testing"
+    - "system"
+    - "update"
+  examples:
+    - "Show system update testing trends over time."
+    - "Break down system update testing by key dimensions."

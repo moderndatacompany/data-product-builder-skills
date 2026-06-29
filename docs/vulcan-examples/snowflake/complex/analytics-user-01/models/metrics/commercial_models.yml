@@ -1,0 +1,3 @@
+kind: metric
+name: commercial_models
+measure: model_brand_mapping.commercial_models

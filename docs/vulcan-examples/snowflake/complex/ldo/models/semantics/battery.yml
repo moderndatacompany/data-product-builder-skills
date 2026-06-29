@@ -1,0 +1,241 @@
+# Converted from legacy: semantics/battery.yaml
+kind: semantic
+name: battery
+depends_on: lenovo.ldo.battery
+ai_context:
+  instructions: >
+    Use this semantic model for questions about battery. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "battery"
+  examples:
+    - "Show battery trends over time."
+    - "Break down battery by key dimensions."
+
+measures:
+- name: number_of_batteries
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for number of batteries. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "number of batteries"
+      - "number_of_batteries"
+      - "number"
+      - "batteries"
+    examples:
+      - "What is number of batteries by month?"
+      - "Compare number of batteries across key segments."
+  type: count
+  expression: '{battery.BATTERY_ID}'
+  description: Total number of battery records.
+  tags:
+  - metric
+  terms:
+  - metric.number_of_batteries
+- name: average_battery_cycle_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average battery cycle count. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "average battery cycle count"
+      - "average_battery_cycle_count"
+      - "average"
+      - "battery"
+    examples:
+      - "What is average battery cycle count by month?"
+      - "Compare average battery cycle count across key segments."
+  type: avg
+  expression: '{battery.BATTERY_CYCLE_COUNT}'
+  description: Average number of charge cycles the battery has gone through.
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_battery_cycle_count
+  - metric.aggregate
+- name: average_battery_design_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average battery design capacity.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "average battery design capacity"
+      - "average_battery_design_capacity"
+      - "average"
+      - "battery"
+    examples:
+      - "What is average battery design capacity by month?"
+      - "Compare average battery design capacity across key segments."
+  type: avg
+  expression: '{battery.BATTERY_DESIGN_CAPACITY}'
+  description: Average design capacity of the battery.
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_battery_design_capacity
+  - metric.aggregate
+- name: average_battery_fullcharge_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average battery fullcharge capacity.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "average battery fullcharge capacity"
+      - "average_battery_fullcharge_capacity"
+      - "average"
+      - "battery"
+    examples:
+      - "What is average battery fullcharge capacity by month?"
+      - "Compare average battery fullcharge capacity across key segments."
+  type: avg
+  expression: '{battery.BATTERY_FULLCHARGE_CAPACITY}'
+  description: Average full charge capacity of the battery.
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_battery_fullcharge_capacity
+  - metric.aggregate
+- name: average_battery_remaining_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average battery remaining capacity.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "average battery remaining capacity"
+      - "average_battery_remaining_capacity"
+      - "average"
+      - "battery"
+    examples:
+      - "What is average battery remaining capacity by month?"
+      - "Compare average battery remaining capacity across key segments."
+  type: avg
+  expression: '{battery.BATTERY_REMAINING_CAPACITY}'
+  description: Average remaining capacity of the battery.
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_battery_remaining_capacity
+  - metric.aggregate
+- name: average_current_battery_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for average current battery capacity.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "average current battery capacity"
+      - "average_current_battery_capacity"
+      - "average"
+      - "current"
+    examples:
+      - "What is average current battery capacity by month?"
+      - "Compare average current battery capacity across key segments."
+  type: avg
+  expression: ({battery.BATTERY_FULLCHARGE_CAPACITY} * 100.0) / {battery.BATTERY_DESIGN_CAPACITY}
+  description: Average current capacity of the battery.
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.average_current_battery_capacity
+  - metric.aggregate
+- name: max_battery_design_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for max battery design capacity. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "max battery design capacity"
+      - "max_battery_design_capacity"
+      - "max"
+      - "battery"
+    examples:
+      - "What is max battery design capacity by month?"
+      - "Compare max battery design capacity across key segments."
+  type: max
+  expression: '{battery.BATTERY_DESIGN_CAPACITY}'
+  description: Maximum design capacity of the battery.
+  tags:
+  - metric
+  terms:
+  - metric.max_battery_design_capacity
+- name: max_battery_fullcharge_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for max battery fullcharge capacity.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "max battery fullcharge capacity"
+      - "max_battery_fullcharge_capacity"
+      - "max"
+      - "battery"
+    examples:
+      - "What is max battery fullcharge capacity by month?"
+      - "Compare max battery fullcharge capacity across key segments."
+  type: max
+  expression: '{battery.BATTERY_FULLCHARGE_CAPACITY}'
+  description: Maximum full charge capacity of the battery.
+  tags:
+  - metric
+  terms:
+  - metric.max_battery_fullcharge_capacity
+- name: min_battery_design_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for min battery design capacity. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "min battery design capacity"
+      - "min_battery_design_capacity"
+      - "min"
+      - "battery"
+    examples:
+      - "What is min battery design capacity by month?"
+      - "Compare min battery design capacity across key segments."
+  type: min
+  expression: '{battery.BATTERY_DESIGN_CAPACITY}'
+  description: Minimum design capacity of the battery.
+  tags:
+  - metric
+  terms:
+  - metric.min_battery_design_capacity
+- name: min_battery_fullcharge_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for min battery fullcharge capacity.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "min battery fullcharge capacity"
+      - "min_battery_fullcharge_capacity"
+      - "min"
+      - "battery"
+    examples:
+      - "What is min battery fullcharge capacity by month?"
+      - "Compare min battery fullcharge capacity across key segments."
+  type: min
+  expression: '{battery.BATTERY_FULLCHARGE_CAPACITY}'
+  description: Minimum full charge capacity of the battery.
+  tags:
+  - metric
+  terms:
+  - metric.min_battery_fullcharge_capacity

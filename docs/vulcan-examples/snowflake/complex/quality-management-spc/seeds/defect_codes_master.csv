@@ -1,0 +1,17 @@
+defect_code,defect_name,defect_category,severity,description,standard_cost_usd
+DEF-001,Solder Bridge,Assembly,Critical,Unintended solder connection between adjacent pins causing short circuit,150.00
+DEF-002,Cold Joint,Assembly,Major,Insufficient solder flow causing weak electrical connection,85.00
+DEF-003,Component Misalignment,Assembly,Major,Component placed off-pad exceeding positional tolerance,95.00
+DEF-004,Tombstoning,Assembly,Critical,Component standing on one end due to uneven reflow soldering,120.00
+DEF-005,Insufficient Solder,Assembly,Minor,Insufficient solder volume on pad below minimum fill requirement,45.00
+DEF-006,Dimensional Deviation,Dimensional,Major,Part dimension outside specification limits beyond tolerance band,175.00
+DEF-007,Surface Scratch,Cosmetic,Minor,Visible scratch on product surface affecting appearance,25.00
+DEF-008,Discoloration,Cosmetic,Minor,Color or finish deviation from specification standard,35.00
+DEF-009,Cracked PCB,Dimensional,Critical,Physical crack in printed circuit board compromising integrity,250.00
+DEF-010,Pin Bent,Assembly,Major,Connector pin bent outside positional tolerance,65.00
+DEF-011,Functional Failure,Functional,Critical,Component fails electrical or functional test completely,300.00
+DEF-012,Intermittent Connection,Functional,Major,Unreliable electrical connection under thermal or mechanical stress,200.00
+DEF-013,ESD Damage,Functional,Critical,Electrostatic discharge damage to sensitive component,275.00
+DEF-014,Label Error,Cosmetic,Minor,Incorrect or illegible product labeling or marking,15.00
+DEF-015,Contamination,Assembly,Major,Foreign material contamination on assembly surface or joints,110.00
+

@@ -1,0 +1,6 @@
+limitations:
+  - Snowflake as the data platform (VDE requires a Snowflake-style virtual schema; not supported on spark/trino)
+  - Demo dataset - relies on synthetic data populated in VULCAN.RAW (customers, orders)
+  - Customer segment enrichment is driven by a static seed (seeds/customer_segments.csv) - update the CSV to add or change segments
+  - Orders fact is incremental by ORDER_DATE - backfill requires running with --start when the date range is older than model_defaults.start
+  - Each plan creates / refreshes a virtual schema before promotion, which adds a small extra warehouse cost

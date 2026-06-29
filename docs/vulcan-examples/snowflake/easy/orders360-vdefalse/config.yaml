@@ -1,0 +1,113 @@
+# ==============================================================================
+# Vulcan Data Product Configuration - Orders360 (VDE Disabled) on Snowflake
+# ==============================================================================
+# Rich, layered Snowflake sales analytics data product that exercises the full
+# Vulcan transformation surface WITHOUT a semantic layer or seed data. Models
+# materialize directly into the SALES_ANALYTICS schema (no virtual data
+# environment shim) so each `vulcan plan` updates production objects in place.
+# Use this DP when you want a no-semantics, no-seed reference for SQL-only
+# transformation, data quality checks, audits, and unit testing on Snowflake.
+# ==============================================================================
+
+vde: false
+display_name: Orders360 (VDE Disabled)
+discoverable: true
+version: 0.1.0
+alignment: source_aligned
+# domain / reference_links are still rejected by the local dev54 wheel.
+# Uncomment both before deploying to DataOS.
+domain: sales_operations
+tags:
+  - snowflake
+  - orders360
+  - sales
+  - sales_analytics
+  - vde_disabled
+  - no_semantics
+  - no_seeds
+  - layered_modeling
+  - dimension_modeling
+  - incremental
+  - aggregation
+  - demo
+terms:
+  - glossary.data_product
+  - glossary.sales_dimension
+  - glossary.product_dimension
+  - glossary.order_fact
+  - glossary.daily_sales_summary
+  - glossary.business_intelligence
+# reference_links:
+#   - name: Document
+#     href: https://tmdc-io.github.io/vulcan-book/
+
+name: orders360-vdefalse
+description: >-
+  Orders360 (VDE Disabled) is a rich, layered Snowflake sales analytics data
+  product that materializes a customer dimension, a product dimension, an
+  incremental orders fact, a customer-orders join view, and an incremental
+  daily sales summary aggregate into the SALES_ANALYTICS schema. It
+  intentionally ships WITHOUT a semantic layer, business metrics, or seeds -
+  exercising only Vulcan's pure SQL transformation surface (models, dq checks,
+  audits, and unit tests). VDE is disabled so every applied plan updates the
+  production schema directly, making this DP the right reference for teams
+  that want minimal abstractions over Snowflake.
+
+# --- Gateway Connection -------------------------------------------------------
+# Direct Snowflake connection. Credentials read from shell env vars - just
+# `export` them in the venv session before running vulcan. For DataOS
+# deployment, swap the snowflake block for the depot one below.
+gateways:
+  default:
+    # connection:
+    #   type: snowflake
+    #   account:   "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+    #   user:      "{{ env_var('SNOWFLAKE_USER') }}"
+    #   password:  "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+    #   role:      "{{ env_var('SNOWFLAKE_ROLE') }}"
+    #   warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+    #   database:  VULCAN
+    # DataOS deployment alternative - replace the snowflake block above with:
+    connection:
+      type: depot
+      address: dataos://snowflakevulcan
+
+
+# --- Model Defaults -----------------------------------------------------------
+model_defaults:
+  dialect: snowflake
+  start: '2025-01-01'
+  cron: '@daily'
+
+# --- Linting Rules ------------------------------------------------------------
+linter:
+  enabled: true
+  rules:
+    - ambiguousorinvalidcolumn
+    - invalidselectstarexpansion
+    - noambiguousprojections
+
+# --- Notifications ------------------------------------------------------------
+notification_targets:
+  - type: console
+    notify_on:
+      - apply_start
+      - apply_end
+      - apply_failure
+      - run_start
+      - run_end
+      - run_failure
+      - audit_failure
+      - check_start
+      - check_end
+      - check_failure
+      - migration_start
+      - migration_end
+      - migration_failure
+      - plan_change
+
+# --- Users & Access Control ---------------------------------------------------
+users:
+  - username: anushka
+    email: anushka.rakesh@tmdc.io
+    type: OWNER

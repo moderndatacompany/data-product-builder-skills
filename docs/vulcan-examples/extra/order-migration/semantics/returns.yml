@@ -1,0 +1,41 @@
+models:
+  sales.returns:
+    alias: returns
+
+    dimensions:
+      includes:
+        - return_id
+        - order_id
+        - order_item_id
+        - return_date
+        - return_reason
+        - return_status
+        - refund_amount
+
+    measures:
+      total_returns:
+        type: count_distinct
+        expression: "{returns.return_id}"
+
+      total_refund_amount:
+        type: sum
+        expression: "{returns.refund_amount}"
+
+      avg_refund_amount:
+        type: avg
+        expression: "{returns.refund_amount}"
+
+    segments:
+      cancelled_order_returns:
+        expression: |
+          {returns.return_reason} = 'CancelledOrder'
+
+      defective_returns:
+        expression: |
+          {returns.return_reason} = 'Defective'
+
+    joins:
+      orders:
+        type: many_to_one
+        expression: "{returns.order_id} = {orders.order_id}"
+

@@ -1,0 +1,3 @@
+kind: metric
+name: r12_proof_revenue_until_prev_30days
+measure: sales.r12_proof_revenue_until_prev_30days

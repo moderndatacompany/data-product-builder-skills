@@ -1,0 +1,30 @@
+models:
+  test_db.vulcan_test_project.part:
+    alias: parts
+
+    measures:
+      total_parts:
+        type: count
+        expression: "{parts.PARTKEY}"
+        description: "Total number of parts"
+        tags: [tpch, part, count]
+
+      avg_retailprice:
+        type: avg
+        expression: "{parts.RETAILPRICE}"
+        description: "Average part retail price"
+        tags: [tpch, part, price]
+
+    dimensions:
+      includes:
+        - PARTKEY
+        - NAME
+        - MFGR
+        - BRAND
+        - TYPE
+        - SIZE
+        - CONTAINER
+        - RETAILPRICE
+        - COMMENT
+
+

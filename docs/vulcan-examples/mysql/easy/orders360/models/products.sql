@@ -1,0 +1,56 @@
+MODEL (
+  name sales.products,
+  kind FULL,
+  cron '@daily',
+  grain product_id,
+  description 'Product dimension table with full refresh on each run',
+  assertions (
+    unique_values(columns := (product_id))
+  ),
+  column_descriptions (
+    product_id = 'Unique identifier for each product',
+    product_name = 'Product name',
+    category = 'Product category (Electronics, Home, Clothing, Sports, Food, Toys)',
+    subcategory = 'Product subcategory',
+    brand = 'Product brand name',
+    color = 'Product color',
+    size = 'Product size (XS, S, M, L, XL, OneSize)',
+    weight = 'Product weight',
+    material = 'Product material (Metal, Plastic, Wood, Fabric, Glass)',
+    model_number = 'Product model number',
+    sku = 'Stock keeping unit code',
+    upc = 'Universal product code',
+    price = 'Product selling price',
+    cost = 'Product cost price',
+    supplier = 'Product supplier name',
+    warranty_period = 'Product warranty period',
+    release_date = 'Product release date',
+    rating = 'Product rating (1.0-5.0)',
+    stock_quantity = 'Current stock quantity available',
+    discontinued = 'Whether product is discontinued'
+  )
+);
+
+SELECT
+  product_id,
+  product_name,
+  category,
+  subcategory,
+  brand,
+  color,
+  size,
+  weight,
+  material,
+  model_number,
+  sku,
+  upc,
+  price,
+  cost,
+  supplier,
+  warranty_period,
+  release_date,
+  rating,
+  stock_quantity,
+  discontinued
+FROM raw.raw_products
+

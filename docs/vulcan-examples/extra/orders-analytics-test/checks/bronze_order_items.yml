@@ -1,0 +1,94 @@
+checks:
+  bronze_v1.order_items:
+    completeness:
+      - missing_count(order_id) = 0:
+          name: no_missing_order_ids
+          attributes:
+            description: "All order items must have an order ID"
+      
+      - missing_count(product_id) = 0:
+          name: no_missing_product_ids
+          attributes:
+            description: "All order items must have a product ID"
+      
+      - missing_count(quantity) = 0:
+          name: no_missing_quantities
+          attributes:
+            description: "All order items must have a quantity"
+      
+      - missing_count(unit_price) = 0:
+          name: no_missing_prices
+          attributes:
+            description: "All order items must have a unit price"
+    
+    validity:
+      - failed rows:
+          name: positive_quantities
+          fail query: |
+            SELECT order_id, item_id, product_id, quantity
+            FROM bronze_v1.order_items
+            WHERE quantity <= 0
+          samples limit: 10
+          attributes:
+            description: "Quantities must be positive"
+      
+      - failed rows:
+          name: positive_prices
+          fail query: |
+            SELECT order_id, item_id, product_id, unit_price
+            FROM bronze_v1.order_items
+            WHERE unit_price <= 0
+          samples limit: 10
+          attributes:
+            description: "Unit prices must be positive"
+      
+      - failed rows:
+          name: valid_order_references
+          fail query: |
+            SELECT oi.order_id, oi.item_id, oi.product_id
+            FROM bronze_v1.order_items oi
+            LEFT JOIN bronze_v1.orders o ON oi.order_id = o.order_id
+            WHERE o.order_id IS NULL
+          samples limit: 10
+          attributes:
+            description: "All order items must reference valid orders"
+      
+      - failed rows:
+          name: valid_product_references
+          fail query: |
+            SELECT oi.order_id, oi.item_id, oi.product_id
+            FROM bronze_v1.order_items oi
+            LEFT JOIN bronze_v1.products p ON oi.product_id = p.product_id
+            WHERE p.product_id IS NULL
+          samples limit: 10
+          attributes:
+            description: "All order items must reference valid products"
+      
+      # This will FAIL - checking for quantities > 5 (data_gen creates 1-10)
+      - failed rows:
+          name: low_quantity_check
+          fail query: |
+            SELECT order_id, item_id, product_id, quantity
+            FROM bronze_v1.order_items
+            WHERE quantity > 5
+          samples limit: 10
+          attributes:
+            description: "Quantities should not exceed 5 (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for high prices
+      - failed rows:
+          name: expensive_items_check
+          fail query: |
+            SELECT order_id, item_id, product_id, unit_price
+            FROM bronze_v1.order_items
+            WHERE unit_price > 100
+          samples limit: 10
+          attributes:
+            description: "Unit prices should not exceed 100 (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(order_id, item_id) = 0:
+          name: unique_order_item_combinations
+          attributes:
+            description: "Order ID and Item ID combinations must be unique"
+

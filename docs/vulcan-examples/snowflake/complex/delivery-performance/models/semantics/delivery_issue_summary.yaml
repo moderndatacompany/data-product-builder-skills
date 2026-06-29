@@ -1,0 +1,71 @@
+models:
+  QCOMMERCE_PLATFORM.GOLD.DELIVERY_ISSUE_SUMMARY:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about delivery issue summary. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "delivery issue summary"
+        - "delivery_issue_summary"
+        - "delivery"
+        - "issue"
+      examples:
+        - "Show delivery issue summary trends over time."
+        - "Break down delivery issue summary by key dimensions."
+    alias: delivery_issue_summary
+
+    dimensions:
+      includes:
+        - DS
+        - CITY
+        - ISSUE_TYPE
+
+    measures:
+      ISSUE_COUNT:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for issue count. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "issue count"
+            - "issue_count"
+            - "issue"
+            - "count"
+          examples:
+            - "What is issue count by month?"
+            - "Compare issue count across key dimensions."
+        type: sum
+        expression: "{delivery_issue_summary.ISSUE_COUNT}"
+
+      AFFECTED_ORDERS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for affected orders. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "affected orders"
+            - "affected_orders"
+            - "affected"
+            - "orders"
+          examples:
+            - "What is affected orders by month?"
+            - "Compare affected orders across key dimensions."
+        type: sum
+        expression: "{delivery_issue_summary.AFFECTED_ORDERS}"
+
+      TOTAL_ORDERS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total orders"
+            - "total_orders"
+            - "total"
+            - "orders"
+          examples:
+            - "What is total orders by month?"
+            - "Compare total orders across key dimensions."
+        type: sum
+        expression: "{delivery_issue_summary.TOTAL_ORDERS}"

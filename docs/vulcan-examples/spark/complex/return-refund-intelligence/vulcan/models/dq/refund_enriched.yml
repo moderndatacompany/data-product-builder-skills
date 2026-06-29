@@ -1,0 +1,32 @@
+# kind: dq — converted from checks/refund_enriched.yml
+kind: dq
+name: refund_enriched_dq
+depends_on: qcommerce_returns_silver.refund_enriched
+
+rules:
+- row_count >= 5:
+    name: minimum_refund_rows
+    dimension: completeness
+    description: At least five enriched refund rows should exist
+
+- missing_count(refund_id) = 0:
+    name: no_missing_refund_id
+    dimension: completeness
+    description: Every refund row must have a refund_id
+
+- missing_count(city) = 0:
+    name: no_missing_city
+    dimension: completeness
+    description: Every refund row must have a city
+
+- invalid_count(refund_amount) = 0:
+    name: refund_amount_in_range
+    dimension: validity
+    description: Refund amount must remain within an expected range
+    valid min: 0
+    valid max: 100000
+
+- duplicate_count(refund_id) = 0:
+    name: unique_refund_id
+    dimension: uniqueness
+    description: Each refund_id must appear only once

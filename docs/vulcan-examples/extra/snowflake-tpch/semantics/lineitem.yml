@@ -1,0 +1,68 @@
+models:
+  test_db.vulcan_test_project.lineitem:
+    alias: lineitems
+
+    measures:
+      total_lineitems:
+        type: count
+        expression: "*"
+        description: "Total number of line items"
+        tags: [tpch, lineitem, count]
+
+      total_quantity:
+        type: sum
+        expression: "{lineitems.QUANTITY}"
+        description: "Total quantity ordered"
+        tags: [tpch, lineitem, quantity]
+
+      gross_revenue:
+        type: sum
+        expression: "{lineitems.EXTENDEDPRICE}"
+        description: "Gross revenue (sum of extended price)"
+        tags: [tpch, lineitem, revenue]
+
+      net_revenue:
+        type: sum
+        expression: |
+          {lineitems.EXTENDEDPRICE} * (1 - {lineitems.DISCOUNT})
+        description: "Net revenue (extended price after discount)"
+        tags: [tpch, lineitem, revenue]
+
+      avg_discount:
+        type: avg
+        expression: "{lineitems.DISCOUNT}"
+        description: "Average discount"
+        tags: [tpch, lineitem, discount]
+
+    joins:
+      orders:
+        type: many_to_one
+        expression: "{lineitems.ORDERKEY} = {orders.ORDERKEY}"
+
+      parts:
+        type: many_to_one
+        expression: "{lineitems.PARTKEY} = {parts.PARTKEY}"
+
+    dimensions:
+      includes:
+        - ORDERKEY
+        - PARTKEY
+        - SUPPKEY
+        - LINENUMBER
+        - RETURNFLAG
+        - LINESTATUS
+        - SHIPDATE
+        - COMMITDATE
+        - RECEIPTDATE
+        - SHIPINSTRUCT
+        - SHIPMODE
+        - COMMENT
+
+      enhancements:
+        - name: SHIPDATE
+          granularities:
+            - name: monthly
+              interval: "1 month"
+              description: "Monthly shipping date grain"
+
+

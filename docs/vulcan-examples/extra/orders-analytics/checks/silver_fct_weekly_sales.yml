@@ -1,0 +1,139 @@
+checks:
+  silver_v2alpha.fct_weekly_sales:
+    completeness:
+      - missing_count(week_start_date) = 0:
+          name: no_missing_week_start_dates
+          attributes:
+            description: "All records must have a week start date"
+      
+      - missing_count(year) = 0:
+          name: no_missing_years
+          attributes:
+            description: "All records must have a year"
+      
+      - missing_count(week_number) = 0:
+          name: no_missing_week_numbers
+          attributes:
+            description: "All records must have a week number"
+      
+      - row_count > 10:
+          name: sufficient_weekly_records
+          attributes:
+            description: "At least 10 weekly sales records"
+    
+    validity:
+      - failed rows:
+          name: valid_week_numbers
+          fail query: |
+            SELECT week_start_date, year, week_number
+            FROM silver_v2alpha.fct_weekly_sales
+            WHERE week_number < 1 OR week_number > 53
+          samples limit: 10
+          attributes:
+            description: "Week numbers must be between 1 and 53"
+      
+      - failed rows:
+          name: non_negative_orders
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_orders
+            FROM silver_v2alpha.fct_weekly_sales
+            WHERE total_orders < 0
+          samples limit: 10
+          attributes:
+            description: "Total orders cannot be negative"
+      
+      - failed rows:
+          name: non_negative_revenue
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_revenue
+            FROM silver_v2alpha.fct_weekly_sales
+            WHERE total_revenue < 0
+          samples limit: 10
+          attributes:
+            description: "Total revenue cannot be negative"
+      
+      - failed rows:
+          name: week_end_after_start
+          fail query: |
+            SELECT week_start_date, week_end_date, year, week_number
+            FROM silver_v2alpha.fct_weekly_sales
+            WHERE week_end_date < week_start_date
+          samples limit: 10
+          attributes:
+            description: "Week end date must be after start date"
+      
+      # This will FAIL - checking for high weekly revenue
+      - failed rows:
+          name: weekly_revenue_threshold_check
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_revenue
+            FROM silver_v2alpha.fct_weekly_sales
+            WHERE total_revenue > 1000
+          samples limit: 10
+          attributes:
+            description: "Weekly revenue should not exceed $1000 per customer-product (EXPECTED TO FAIL)"
+      
+      # This will FAIL - checking for multiple orders per week
+      - failed rows:
+          name: single_order_per_week_check
+          fail query: |
+            SELECT week_start_date, region_name, customer_id, product_id, total_orders
+            FROM silver_v2alpha.fct_weekly_sales
+            WHERE total_orders > 1
+          samples limit: 10
+          attributes:
+            description: "Should have max 1 order per customer-product per week (EXPECTED TO FAIL)"
+    
+    uniqueness:
+      - duplicate_count(week_start_date, region_id, customer_id, product_id) = 0:
+          name: unique_weekly_sales_grain
+          attributes:
+            description: "Week start date, region, customer, and product combinations must be unique"
+    
+    accuracy:
+      - anomaly detection for row_count:
+          name: row_count_anomaly
+          attributes:
+            description: "Detect anomalies in weekly sales record count using historic data"
+      
+      - anomaly detection for avg(total_revenue):
+          name: avg_revenue_anomaly
+          attributes:
+            description: "Detect anomalies in average weekly revenue"
+      
+      - anomaly detection for sum(total_revenue):
+          name: sum_revenue_anomaly
+          attributes:
+            description: "Detect anomalies in total weekly revenue"
+      
+      - anomaly detection for avg(total_orders):
+          name: avg_orders_anomaly
+          attributes:
+            description: "Detect anomalies in average weekly orders"
+      
+      - anomaly detection for distinct_count(customer_id):
+          name: distinct_customers_anomaly
+          attributes:
+            description: "Detect anomalies in number of distinct customers per week"
+    
+    timeliness:
+      - change for row_count >= -15%:
+          name: row_count_timeliness_check
+          attributes:
+            description: "Alert if weekly sales record count drops more than 15% from same week last year"
+      
+      - change for sum(total_revenue) >= -20%:
+          name: revenue_timeliness_check
+          attributes:
+            description: "Alert if total weekly revenue drops more than 20% from same week last year"
+      
+      - change for distinct_count(customer_id) >= -15%:
+          name: customer_count_timeliness_check
+          attributes:
+            description: "Alert if distinct customer count drops more than 15% from same week last year"
+      
+      - change for avg(total_orders) between -25% and 25%:
+          name: avg_orders_timeliness_check
+          attributes:
+            description: "Alert if average weekly orders changes more than 25% from same week last year"
+

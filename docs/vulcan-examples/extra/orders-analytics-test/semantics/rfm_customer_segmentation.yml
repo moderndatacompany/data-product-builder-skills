@@ -1,0 +1,229 @@
+models:
+  gold_v1.rfm_customer_segmentation:
+    alias: rfm
+    
+    measures:
+      total_customers_rfm:
+        type: count
+        expression: "{rfm.customer_id}"
+        description: "Total customers in RFM analysis"
+        tags:
+          - customer
+          - rfm
+          - metric
+        terms:
+          - customer.rfm_total
+          - rfm.customer_count
+      
+      avg_recency_score:
+        type: avg
+        expression: "{rfm.recency_score}"
+        description: "Average recency score (1-5)"
+        tags:
+          - rfm
+          - recency
+          - score
+        terms:
+          - rfm.avg_recency
+          - analytics.recency_metric
+      
+      avg_frequency_score:
+        type: avg
+        expression: "{rfm.frequency_score}"
+        description: "Average frequency score (1-5)"
+        tags:
+          - rfm
+          - frequency
+          - score
+        terms:
+          - rfm.avg_frequency
+          - analytics.frequency_metric
+      
+      avg_monetary_score:
+        type: avg
+        expression: "{rfm.monetary_score}"
+        description: "Average monetary score (1-5)"
+        tags:
+          - rfm
+          - monetary
+          - score
+        terms:
+          - rfm.avg_monetary
+          - analytics.monetary_metric
+      
+      total_rfm_value:
+        type: sum
+        expression: "{rfm.monetary_value}"
+        format: currency
+        description: "Total customer lifetime value in RFM"
+        tags:
+          - rfm
+          - revenue
+          - ltv
+        terms:
+          - rfm.total_value
+          - customer.total_ltv
+      
+      champions_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{rfm.rfm_segment} = 'Champions'"
+        description: "Number of champion customers"
+        tags:
+          - rfm
+          - segment
+          - champions
+        terms:
+          - rfm.champions
+          - segment.best_customers
+      
+      at_risk_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{rfm.rfm_segment} IN ('At Risk', 'Cannot Lose Them')"
+        description: "Number of at-risk customers"
+        tags:
+          - rfm
+          - segment
+          - churn
+        terms:
+          - rfm.at_risk
+          - churn.risk_customers
+      
+      lost_customer_count:
+        type: count
+        expression: "*"
+        filters:
+          - "{rfm.rfm_segment} IN ('Lost', 'Hibernating')"
+        description: "Number of lost/hibernating customers"
+        tags:
+          - rfm
+          - segment
+          - lost
+        terms:
+          - rfm.lost_customers
+          - churn.inactive
+    
+    segments:
+      champions:
+        expression: "{rfm.rfm_segment} = 'Champions'"
+        description: "Best customers - high R, F, M scores"
+        tags:
+          - rfm
+          - segment
+          - top_tier
+        terms:
+          - rfm.champions
+          - customer.champions
+      
+      loyal_customers:
+        expression: "{rfm.rfm_segment} = 'Loyal Customers'"
+        description: "Loyal customers with consistent purchases"
+        tags:
+          - rfm
+          - segment
+          - loyal
+        terms:
+          - rfm.loyal
+          - customer.loyal
+      
+      at_risk:
+        expression: "{rfm.rfm_segment} = 'At Risk'"
+        description: "Good customers who haven't purchased recently"
+        tags:
+          - rfm
+          - segment
+          - risk
+        terms:
+          - rfm.at_risk
+          - churn.at_risk
+      
+      cannot_lose:
+        expression: "{rfm.rfm_segment} = 'Cannot Lose Them'"
+        description: "High-value customers at serious risk"
+        tags:
+          - rfm
+          - segment
+          - critical
+        terms:
+          - rfm.cannot_lose
+          - churn.critical
+      
+      lost_customers:
+        expression: "{rfm.rfm_segment} = 'Lost'"
+        description: "Customers who have not engaged for very long"
+        tags:
+          - rfm
+          - segment
+          - lost
+        terms:
+          - rfm.lost
+          - churn.lost
+      
+      recent_customers:
+        expression: "{rfm.rfm_segment} = 'Recent Customers'"
+        description: "New customers who bought recently"
+        tags:
+          - rfm
+          - segment
+          - new
+        terms:
+          - rfm.recent
+          - customer.recent
+      
+      high_recency:
+        expression: "{rfm.recency_score} >= 4"
+        description: "Customers who purchased in last 60 days"
+        tags:
+          - rfm
+          - recency
+          - active
+        terms:
+          - rfm.high_recency
+          - customer.recent_buyers
+      
+      high_frequency:
+        expression: "{rfm.frequency_score} >= 4"
+        description: "Customers with 7+ orders"
+        tags:
+          - rfm
+          - frequency
+          - repeat
+        terms:
+          - rfm.high_frequency
+          - customer.frequent_buyers
+      
+      high_monetary:
+        expression: "{rfm.monetary_score} >= 4"
+        description: "Customers with $2,000+ lifetime value"
+        tags:
+          - rfm
+          - monetary
+          - high_value
+        terms:
+          - rfm.high_monetary
+          - customer.high_spenders
+    
+    joins:
+      customer_profile:
+        type: one_to_one
+        expression: "{rfm.customer_id} = {customer_profile.customer_id}"
+    
+    dimensions:
+      includes:
+        - customer_id
+        - customer_name
+        - email
+        - region_name
+        - recency_days
+        - frequency_orders
+        - monetary_value
+        - recency_score
+        - frequency_score
+        - monetary_score
+        - rfm_score
+        - rfm_segment
+        - recommended_action
+

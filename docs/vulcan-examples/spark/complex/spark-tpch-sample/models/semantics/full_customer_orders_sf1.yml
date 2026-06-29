@@ -1,0 +1,54 @@
+models:
+  lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about full customer orders sf1. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "full customer orders sf1"
+        - "full_customer_orders_sf1"
+        - "full"
+        - "customer"
+      examples:
+        - "Show full customer orders sf1 trends over time."
+        - "Break down full customer orders sf1 by key dimensions."
+    alias: full_customer_orders_sf1
+
+    dimensions:
+      includes:
+        - c_custkey
+        - c_name
+
+    measures:
+      order_count:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for order count. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "order count"
+            - "order_count"
+            - "order"
+            - "count"
+          examples:
+            - "What is order count by month?"
+            - "Compare order count across key dimensions."
+        type: sum
+        expression: "{full_customer_orders_sf1.order_count}"
+
+      total_amount:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total amount. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total amount"
+            - "total_amount"
+            - "total"
+            - "amount"
+          examples:
+            - "What is total amount by month?"
+            - "Compare total amount across key dimensions."
+        type: sum
+        expression: "{full_customer_orders_sf1.total_amount}"
