@@ -1,24 +1,46 @@
-# builder-skills
+# dataproduct-builder-skills
 
 Cursor agent skills for designing and building [Vulcan/DataOS](https://dataosinfo.gitbook.io) data products.
 
-Run a single command to scaffold two powerful Cursor skills and the full Vulcan reference docs into any project.
+Run a single command to scaffold two powerful Cursor agent skills and the full Vulcan reference docs into any project.
 
 ## Usage
 
 ```bash
-# Install skills + docs for all engines
 npx dataproduct-builder-skills
+```
 
-# Install skills + docs for a specific engine only (faster, smaller)
+This launches an interactive prompt to select your engine:
+
+```
+dataproduct-builder-skills — scaffolding Cursor skills + docs
+
+Which engine would you like to install examples for?
+
+  0  All engines
+  1  bigquery
+  2  databricks
+  3  fabric
+  4  mssql
+  5  mysql
+  6  postgres
+  7  redshift
+  8  snowflake
+  9  spark
+  10 trino
+
+Enter number (0–10):
+```
+
+To skip the prompt, pass the engine directly:
+
+```bash
 npx dataproduct-builder-skills snowflake
 npx dataproduct-builder-skills postgres
 npx dataproduct-builder-skills bigquery
 ```
 
-Available engines: `snowflake`, `postgres`, `bigquery`, `databricks`, `spark`, `trino`, `redshift`, `fabric`, `mssql`, `mysql`
-
-The command creates the following structure in your current directory:
+## What gets installed
 
 ```
 .cursor/
@@ -29,19 +51,29 @@ The command creates the following structure in your current directory:
       SKILL.md        ← turns a design spec into a deployed data product
 docs/
   dataos-philosophy/  ← DataOS core concepts
-  vulcan-book/        ← Vulcan CLI & framework reference
-  vulcan-examples/    ← real working data product examples (Snowflake, Postgres, Spark, …)
+  vulcan-docs/        ← Vulcan CLI & framework reference
+  vulcan-examples/
+    <engine>/         ← real working data product examples for your chosen engine
 ```
 
 ## What the skills do
 
 ### `design-data-product`
-Guides you from a vague idea to a validated `data-product-plan.md` spec through structured question batches, entity inference, table discovery, model-kind classification, grain definition, quality rules, and AI context drafting.
+
+Guides you from a vague idea to a validated `data-product-plan.md` spec through:
+
+- Structured question batches (business context, data sources, grain, measures, metrics)
+- Entity inference and table discovery via the Data Product MCP
+- Model-kind classification, join recommendations
+- Quality rules, AI context, and semantic behavior drafting
 
 **Trigger**: ask the agent to *"design a data product"*, *"start a Vulcan design session"*, or *"help me with data-product-plan.md"*.
 
+> **Requires**: Data Product MCP (`dataproduct-mcp/api/v1`) connected in Cursor Settings → MCP.
+
 ### `build-data-product-workflow`
-Turns the validated design spec into a working, deployed Vulcan data product — scaffolding models, generating SQL/YAML components, running `vulcan plan/evaluate`, enriching metadata, applying quality checks, and deploying to dev and prod.
+
+Turns the validated design spec into a working, deployed Vulcan data product — scaffolding models, generating SQL/YAML, running `vulcan plan/evaluate`, enriching metadata, applying quality checks, and deploying to dev and prod.
 
 **Trigger**: ask the agent to *"build the data product"*, *"scaffold the Vulcan project"*, or *"run vulcan plan"*.
 
@@ -49,11 +81,12 @@ Turns the validated design spec into a working, deployed Vulcan data product —
 
 - [Cursor IDE](https://cursor.com)
 - Node.js ≥ 16
-- Vulcan CLI installed (`pip install vulcan-data-tool`) for the build skill
+- Data Product MCP connected in Cursor (for the design skill)
+- Vulcan CLI (`pip install vulcan-data-tool`) for the build skill
 
 ## Re-running
 
-Running `npx dataproduct-builder-skills` again safely updates existing files with the latest skill content.
+Running `npx dataproduct-builder-skills` again safely updates existing files with the latest skill and docs content.
 
 ## License
 
