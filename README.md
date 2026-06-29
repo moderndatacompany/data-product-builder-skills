@@ -7,10 +7,18 @@ Run a single command to scaffold two powerful Cursor skills and the full Vulcan 
 ## Usage
 
 ```bash
+# Install skills + docs for all engines
 npx dataproduct-builder-skills
+
+# Install skills + docs for a specific engine only (faster, smaller)
+npx dataproduct-builder-skills snowflake
+npx dataproduct-builder-skills postgres
+npx dataproduct-builder-skills bigquery
 ```
 
-That's it. The command creates the following structure in your current directory:
+Available engines: `snowflake`, `postgres`, `bigquery`, `databricks`, `spark`, `trino`, `redshift`, `fabric`, `mssql`, `mysql`
+
+The command creates the following structure in your current directory:
 
 ```
 .cursor/
