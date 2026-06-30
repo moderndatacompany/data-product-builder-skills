@@ -88,6 +88,15 @@ Check if the project directory contains `config.yaml`, `models/`, `models/semant
 
   **Then delete the example scaffolding BEFORE any plan**: `vulcan init` drops demo files that reference a non-existent example model (e.g. `models/full_model.sql`, `models/incremental_model.sql`, `models/seed_model.sql`, `models/semantics/incremental_model.yml`, `models/metrics/*_activity.yml`, `dq/full_model.yml`, `tests/test_full_model.yaml`). Left in place, they fail the very first `vulcan plan` with `Relation does not exist` / `depends_on not found`. Remove ALL init-generated example/demo files (keep `config.yaml`, `usage.yaml`, and the empty directory structure) before generating your own files or running any plan.
 
+  **Add `ignore_patterns` to `config.yaml` BEFORE any plan** — this is mandatory. Vulcan scans the entire project directory, so without ignore patterns it will pick up files from `docs/` (including `docs/vulcan-examples/`, `docs/vulcan-book/`, `docs/dataos-philosophy/`) and attempt to compile them as models, causing spurious errors. Open `config.yaml` and add:
+
+  ```yaml
+  ignore_patterns:
+    - "docs/**"
+  ```
+
+  Do this immediately after init, before running any `vulcan plan` or generating any project files. If this step is skipped, every subsequent plan will fail with confusing errors from the docs files.
+
 **Extending an existing data product?** If the user is not building from scratch, first identify what's new vs. what already exists. Use `vulcan diff prod` to assess impact. Only build the gap — don't regenerate components that already work.
 
 ---
