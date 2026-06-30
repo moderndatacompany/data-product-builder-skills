@@ -55,6 +55,7 @@ docs/
   vulcan-docs/        ← Vulcan CLI & framework reference
   vulcan-examples/
     <engine>/         ← real working data product examples for your chosen engine
+vulcan-*.whl          ← Vulcan CLI wheel — install with: pip install vulcan-*.whl
 ```
 
 ## What the skills do

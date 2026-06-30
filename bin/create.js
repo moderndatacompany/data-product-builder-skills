@@ -134,6 +134,18 @@ async function main() {
     }
   }
 
+  // ── Vulcan CLI wheel ──────────────────────────────────────────────────────
+  const wheelsDir = path.join(packageDir, 'wheels');
+  if (fs.existsSync(wheelsDir)) {
+    for (const entry of fs.readdirSync(wheelsDir, { withFileTypes: true }).filter(e => !e.isDirectory() && e.name.endsWith('.whl'))) {
+      const src     = path.join(wheelsDir, entry.name);
+      const dest    = path.join(targetDir, entry.name);
+      const existed = fs.existsSync(dest);
+      fs.copyFileSync(src, dest);
+      ok(`${existed ? 'updated' : 'created'}  ${entry.name}  ${DIM}(pip install ./${entry.name})${RESET}`);
+    }
+  }
+
   // ── Done ──────────────────────────────────────────────────────────────────
   log('');
   log(`${GREEN}${BOLD}Done!${RESET}  Your project now has:`);
@@ -141,6 +153,7 @@ async function main() {
   info('.cursor/skills/design-data-product/         — design a Vulcan data product from scratch');
   info('.cursor/skills/build-data-product-workflow/ — build & deploy from a design spec');
   info(`docs/vulcan-examples/${engine || '{all engines}'}/`);
+  info('vulcan-*.whl                                — install with: pip install vulcan-*.whl');
   log('');
   log('Open Cursor and ask the agent to use the skills — e.g.:');
   log(`  ${CYAN}"design a data product for daily revenue by customer segment"${RESET}`);
