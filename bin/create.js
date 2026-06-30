@@ -33,10 +33,44 @@ function countFiles(dir) {
   return n;
 }
 
-function prompt(question) {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise(resolve => rl.question(question, ans => { rl.close(); resolve(ans.trim()); }));
+async function createPrompt() {
+  const isTTY = process.stdin.isTTY;
+  const lines  = [];
+  let   lineIdx = 0;
+
+  if (!isTTY) {
+    // piped input — read all lines up front
+    await new Promise(resolve => {
+      const rl = readline.createInterface({ input: process.stdin });
+      rl.on('line', l => lines.push(l.trim()));
+      rl.on('close', resolve);
+    });
+  }
+
+  const rl = isTTY
+    ? readline.createInterface({ input: process.stdin, output: process.stdout })
+    : null;
+
+  async function ask(question) {
+    if (!isTTY) {
+      process.stdout.write(question);
+      const ans = lineIdx < lines.length ? lines[lineIdx++] : '';
+      process.stdout.write(ans + '\n');
+      return ans;
+    }
+    return new Promise(resolve => rl.question(question, ans => resolve(ans.trim())));
+  }
+
+  function close() { if (rl) rl.close(); }
+  return { ask, close };
 }
+
+const IDE_OPTIONS = [
+  { label: 'Cursor',     folder: '.cursor' },
+  { label: 'Claude Code',folder: '.claude'  },
+  { label: 'Codex',      folder: '.codex'   },
+  { label: 'All three',  folder: null       },
+];
 
 async function main() {
   const packageDir  = path.join(__dirname, '..');
@@ -50,69 +84,88 @@ async function main() {
         .sort()
     : [];
 
+  const { ask, close } = await createPrompt();
+
   log('');
-  log(`${BOLD}dataproduct-builder-skills${RESET} — scaffolding Cursor skills + docs`);
+  log(`${BOLD}dataproduct-builder-skills${RESET} — scaffolding skills + docs`);
   log('');
 
-  // ── Engine selection ──────────────────────────────────────────────────────
-  let engine = process.argv[2] ? process.argv[2].toLowerCase() : null;
+  // ── Step 1: IDE selection ─────────────────────────────────────────────────
+  log(`${BOLD}Which IDE are you using?${RESET}`);
+  log('');
+  IDE_OPTIONS.forEach((ide, i) => log(`  ${DIM}${i + 1}${RESET}  ${ide.label}`));
+  log('');
 
-  if (engine && !validEngines.includes(engine)) {
-    err(`Unknown engine: "${engine}"`);
-    log('');
-    log(`  Available engines: ${validEngines.join(', ')}`);
-    log('');
-    process.exit(1);
+  const ideAnswer = await ask(`Enter number (1–${IDE_OPTIONS.length}): `);
+  const ideIdx    = parseInt(ideAnswer, 10);
+
+  if (isNaN(ideIdx) || ideIdx < 1 || ideIdx > IDE_OPTIONS.length) {
+    err(`Invalid selection "${ideAnswer}". Please enter a number between 1 and ${IDE_OPTIONS.length}.`);
+    close(); process.exit(1);
   }
 
-  if (!engine) {
-    log(`${BOLD}Which engine would you like to install examples for?${RESET}`);
-    log('');
-    log(`  ${DIM}0${RESET}  All engines`);
-    validEngines.forEach((e, i) => log(`  ${DIM}${i + 1}${RESET}  ${e}`));
-    log('');
+  const selectedIde = IDE_OPTIONS[ideIdx - 1];
+  const ideFolders  = selectedIde.folder
+    ? [selectedIde.folder]
+    : IDE_OPTIONS.filter(o => o.folder).map(o => o.folder);
 
-    const answer = await prompt(`Enter number (0–${validEngines.length}): `);
-    const idx = parseInt(answer, 10);
-
-    if (isNaN(idx) || idx < 0 || idx > validEngines.length) {
-      err(`Invalid selection "${answer}". Please enter a number between 0 and ${validEngines.length}.`);
-      log('');
-      process.exit(1);
-    }
-
-    engine = idx === 0 ? null : validEngines[idx - 1];
-    log('');
-  }
-
-  if (engine) info(`engine: ${BOLD}${engine}${RESET}`);
+  log('');
+  info(`IDE: ${BOLD}${selectedIde.label}${RESET}`);
   log('');
 
-  // ── .cursor/skills ────────────────────────────────────────────────────────
-  const skillsSrc  = path.join(packageDir, 'skills');
-  const skillsDest = path.join(targetDir, '.cursor', 'skills');
+  // ── Step 2: Engine selection ──────────────────────────────────────────────
+  log(`${BOLD}Which engine would you like to install examples for?${RESET}`);
+  log('');
+  log(`  ${DIM}0${RESET}  All engines`);
+  validEngines.forEach((e, i) => log(`  ${DIM}${i + 1}${RESET}  ${e}`));
+  log('');
+
+  const engAnswer = await ask(`Enter number (0–${validEngines.length}): `);
+  const engIdx    = parseInt(engAnswer, 10);
+
+  close();
+
+  if (isNaN(engIdx) || engIdx < 0 || engIdx > validEngines.length) {
+    err(`Invalid selection "${engAnswer}". Please enter a number between 0 and ${validEngines.length}.`);
+    log(''); process.exit(1);
+  }
+
+  const engine = engIdx === 0 ? null : validEngines[engIdx - 1];
+  log('');
+  info(`Engine: ${BOLD}${engine || 'all'}${RESET}`);
+  log('');
+
+  // ── Step 3: Skills ────────────────────────────────────────────────────────
+  const skillsSrc = path.join(packageDir, 'skills');
 
   if (!fs.existsSync(skillsSrc)) {
     warn('skills/ directory not found in package — skipping');
   } else {
-    for (const skill of fs.readdirSync(skillsSrc, { withFileTypes: true }).filter(e => e.isDirectory()).map(e => e.name)) {
-      const src     = path.join(skillsSrc, skill);
-      const dest    = path.join(skillsDest, skill);
-      const existed = fs.existsSync(dest);
-      copyDir(src, dest);
-      ok(`${existed ? 'updated' : 'created'}  .cursor/skills/${skill}/`);
+    const skills = fs.readdirSync(skillsSrc, { withFileTypes: true })
+      .filter(e => e.isDirectory())
+      .map(e => e.name);
+
+    for (const ideFolder of ideFolders) {
+      for (const skill of skills) {
+        const src    = path.join(skillsSrc, skill);
+        const dest   = path.join(targetDir, ideFolder, 'skills', skill);
+        const existed = fs.existsSync(dest);
+        copyDir(src, dest);
+        ok(`${existed ? 'updated' : 'created'}  ${ideFolder}/skills/${skill}/`);
+      }
     }
   }
 
-  // ── docs (non-examples) ───────────────────────────────────────────────────
+  // ── Step 4: docs (non-examples) ───────────────────────────────────────────
   const docsSrc  = path.join(packageDir, 'docs');
   const docsDest = path.join(targetDir, 'docs');
 
   if (!fs.existsSync(docsSrc)) {
     warn('docs/ directory not found in package — skipping');
   } else {
-    // copy subdirectories (excluding vulcan-examples, handled separately)
-    for (const dir of fs.readdirSync(docsSrc, { withFileTypes: true }).filter(e => e.isDirectory() && e.name !== 'vulcan-examples').map(e => e.name)) {
+    for (const dir of fs.readdirSync(docsSrc, { withFileTypes: true })
+        .filter(e => e.isDirectory() && e.name !== 'vulcan-examples')
+        .map(e => e.name)) {
       const src     = path.join(docsSrc, dir);
       const dest    = path.join(docsDest, dir);
       const existed = fs.existsSync(dest);
@@ -120,7 +173,7 @@ async function main() {
       const n = countFiles(src);
       ok(`${existed ? 'updated' : 'created'}  docs/${dir}/  (${n} file${n === 1 ? '' : 's'})`);
     }
-    // copy loose files at the docs/ root (e.g. .whl)
+    // loose files at docs/ root (e.g. .whl)
     fs.mkdirSync(docsDest, { recursive: true });
     for (const entry of fs.readdirSync(docsSrc, { withFileTypes: true }).filter(e => !e.isDirectory())) {
       const src     = path.join(docsSrc, entry.name);
@@ -131,7 +184,7 @@ async function main() {
     }
   }
 
-  // ── docs/vulcan-examples (filtered or all) ────────────────────────────────
+  // ── Step 5: docs/vulcan-examples (filtered or all) ────────────────────────
   if (fs.existsSync(examplesDir)) {
     const enginesToCopy = engine ? [engine] : validEngines;
     for (const eng of enginesToCopy) {
@@ -148,12 +201,14 @@ async function main() {
   log('');
   log(`${GREEN}${BOLD}Done!${RESET}  Your project now has:`);
   log('');
-  info('.cursor/skills/design-data-product/         — design a Vulcan data product from scratch');
-  info('.cursor/skills/build-data-product-workflow/ — build & deploy from a design spec');
+  for (const ideFolder of ideFolders) {
+    info(`${ideFolder}/skills/design-data-product/`);
+    info(`${ideFolder}/skills/build-data-product-workflow/`);
+  }
   info(`docs/vulcan-examples/${engine || '{all engines}'}/`);
-  info('vulcan-*.whl                                — install with: pip install docs/vulcan-*.whl');
+  info(`docs/vulcan-*.whl  — install: pip install "docs/vulcan-*.whl[\${ENGINE}]"`);
   log('');
-  log('Open Cursor and ask the agent to use the skills — e.g.:');
+  log('Ask the agent to use the skills — e.g.:');
   log(`  ${CYAN}"design a data product for daily revenue by customer segment"${RESET}`);
   log('');
 }
