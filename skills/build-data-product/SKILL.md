@@ -70,7 +70,7 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
       - Store it as `ENGINE`.
    5. Install the wheel with the engine extra into the venv:
       ```bash
-      .venv/bin/pip install "${WHEEL}[{ENGINE}]"
+      .venv/bin/pip install "${WHEEL}[${ENGINE}]"
       ```
       For example, for Postgres: `.venv/bin/pip install "${WHEEL}[postgres]"`
    6. Verify: `.venv/bin/vulcan --version`. If it prints a version, use `.venv/bin/vulcan` for all subsequent commands in this session.
