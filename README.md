@@ -132,6 +132,12 @@ npm publish --access public
 
 > First time only: run `npm login` before publishing and sign in with your npm account.
 
+### One-liner (steps 2–4 combined)
+
+```bash
+npm version patch && npm publish --access public && git push origin main --follow-tags
+```
+
 ### 5. Verify
 
 ```bash
