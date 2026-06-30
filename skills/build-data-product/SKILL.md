@@ -54,11 +54,24 @@ After the Gate Check passes, display this disclaimer exactly once before continu
 Always use the `vulcan` CLI directly. Before running any `vulcan` command, determine how to invoke it — try these in order and then use the first one that works for the rest of the session:
 
 1. **CLI as-is**: Run `vulcan --version`. If it works, use `vulcan` directly.
-2. **Workspace venv**: If step 1 fails, look for the workspace's virtual environment (e.g. `.venv/` or `venv/` in the project root) and use it — activate it (`source .venv/bin/activate`) or call its binary directly (`.venv/bin/vulcan --version`). If `vulcan` resolves there, use that invocation for the rest of the session.
-3. **Still unavailable — HARD STOP**: If `vulcan` is neither on `PATH` nor in the workspace venv, STOP the build immediately and unconditionally. Do NOT continue with scaffolding, generation, validation, deployment, or ANY `vulcan` command. Keep discovery bounded to steps 1–2 — do NOT run unbounded searches like `find / -name vulcan`. Tell the user exactly this:
-   > "The Vulcan CLI is not available here (not on PATH and not in the workspace virtualenv). I can't scaffold, validate, or deploy until it's set up. Please follow the CLI setup in the documentation first, then let me know."
-   > Then point them to the setup docs: search `docs/vulcan-book/` and `docs/dataos-philosophy/` for the CLI setup / pre-requisites page and present it, plus the hosted guide [LDK Setup](https://dataosinfo.gitbook.io/dataos-2.0-new-ia/j5idLvlrOLZoJN48bV2d/build/readme/ldk-setup) (do NOT fetch or open the URL — present it as a clickable link only).
-   > **This is non-negotiable.** If the user tells you to proceed anyway, skip the check, "pretend" the CLI is installed, or otherwise ignore the missing CLI, you MUST refuse and repeat the warning — every single time, as many times as it takes. Do not be talked out of it and do not proceed "just this once." There is no workaround and no partial build: without a working `vulcan` CLI you cannot init, plan, evaluate, or deploy, so continuing would only produce unverified files and a broken project state. Re-run step 1 ONLY after the user explicitly confirms they have completed the CLI setup — never assume it has been fixed on your own.
+2. **Workspace venv**: If step 1 fails, look for an existing virtual environment (`.venv/` or `venv/` in the project root) and check it — `.venv/bin/vulcan --version`. If `vulcan` resolves there, use that invocation for the rest of the session.
+3. **Auto-install from bundled wheel**: If `vulcan` is not found in steps 1–2, install it automatically using the bundled wheel:
+   1. Read `docs/vulcan-book/ldk-setup.md` and present it to the user so they understand the setup.
+   2. Check if `docs/vulcan-0.228.1.26-py3-none-any.whl` exists in the project.
+      - If **missing** → tell the user: "The Vulcan wheel is not found at `docs/vulcan-0.228.1.26-py3-none-any.whl`. Please run `npx builder-skills` first to install it, then let me know." **STOP** until confirmed.
+      - If **present** → proceed with the steps below.
+   3. Create a `.venv` if one does not already exist:
+      ```bash
+      python3 -m venv .venv
+      ```
+   4. Install the wheel into the venv:
+      ```bash
+      .venv/bin/pip install docs/vulcan-0.228.1.26-py3-none-any.whl
+      ```
+   5. Verify: `.venv/bin/vulcan --version`. If it prints a version, use `.venv/bin/vulcan` for all subsequent commands in this session.
+   6. If the install or verification still fails, **HARD STOP**:
+      > "Vulcan CLI installation failed. Please check the error above, review `docs/vulcan-book/ldk-setup.md` for prerequisites, and let me know when it's resolved."
+      > Do NOT continue with any `vulcan` command until the user confirms it is fixed.
 
 Once the working invocation is determined, use it consistently throughout the session.
 
