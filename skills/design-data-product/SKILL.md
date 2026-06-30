@@ -19,7 +19,7 @@ Design data products for Vulcan/DataOS. Be methodical, artifact-driven, and assu
 
 1. **Never invent information** — if documentation doesn't support a claim, say "Unknown." Never invent column names, table names, schema details, or documentation links.
 2. **Never skip requirements** — always gather context before jumping to solutions. Don't skip stages.
-3. **Ground everything in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against the Vulcan documentation in `docs/vulcan-book/` (search your indexed workspace and read the relevant page). For concrete code syntax, also call `retrieve_examples`. When in doubt, look it up — never rely on memory.
+3. **Ground everything in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against the Vulcan documentation in `docs/vulcan-book/` and `docs/dataos-philosophy/` (search your indexed workspace and read the relevant page). For concrete code syntax, also read from `docs/vulcan-examples/`. When in doubt, look it up — never rely on memory.
 4. **Build the artifact progressively** — create and update `data-product-plan.md` at every stage. Document decisions as you go.
 5. **Mark assumptions explicitly** — use the `[Assumption]` tag for anything not confirmed by the user.
 6. **Vulcan is anti-pipeline** — never use "pipeline." Use "model DAG", "data product", or "model layers" instead.
@@ -50,9 +50,9 @@ Use these resources proactively — grounding every decision in the docs is mand
 
 | Situation                           | What to do                                                                         | When                                                                           |
 | ----------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Any Vulcan concept mentioned        | Read the relevant page(s) in `docs/vulcan-book/`                                   | BEFORE using the concept in any output                                         |
+| Any Vulcan concept mentioned        | Read the relevant page(s) in `docs/vulcan-book/` and `docs/dataos-philosophy/`     | BEFORE using the concept in any output                                         |
 | Any design decision                 | Reason from the docs + confirmed requirements; record it in `data-product-plan.md` | AFTER each batch of questions                                                  |
-| Need implementation pattern         | `retrieve_examples(file_category=..., engine=...)`                                 | BEFORE generating any code or recommending patterns                            |
+| Need implementation pattern         | read from `docs/vulcan-examples/` (category=..., engine=...)                       | BEFORE generating any code or recommending patterns                            |
 | Quality checks for the data product | Derive them yourself from the spec columns, grounded in the `dq`/audits docs       | At end of Stage 3.5 (Step 2.5) after spec is finalized                         |
 | Profile confirmed source tables     | `table_profile`                                                                    | AFTER columns are fetched for each confirmed table (Batch 2 — Table Discovery) |
 
@@ -121,7 +121,7 @@ Then continue to Stage 1.
 **Goal**: Understand what the user wants to build.
 
 - Listen to the user's initial request
-- If they use unfamiliar terms, read the relevant page in `docs/vulcan-book/` to clarify
+- If they use unfamiliar terms, read the relevant page in `docs/vulcan-book/` and `docs/dataos-philosophy/` to clarify
 - Ask probing questions: "What problem are you solving?", "Who consumes this?", "What decisions does it enable?"
 
 No artifact yet — this is exploratory conversation.
@@ -238,7 +238,7 @@ If `table_profile` returns "profiler has not been run", note it and continue —
 
 **[Checkpoint — Model Kind Classification]** (mandatory, once per confirmed table)
 
-Read the **model kinds** page in `docs/vulcan-book/` now — before any architecture decisions are made.
+Read the **model kinds** page in `docs/vulcan-book/` and `docs/dataos-philosophy/` now — before any architecture decisions are made.
 
 Then, for each confirmed source table, classify it using this decision rule:
 
@@ -357,7 +357,7 @@ After answers → update plan with section 10.
 **Rules for all batches**:
 
 - Keep a running record of all confirmed values in `data-product-plan.md`: problem, use_case, consumers, key_questions, data_source, engine, entities, tables, model_kinds (each with table, kind = EXTERNAL|FULL|VIEW|INCREMENTAL|SEED, and owned_by = this DP / <other-dp-name> / raw source), joins, filters, measures, dimensions, metrics, grain, modeling_approach, consumption, freshness, backfill.
-- After each batch, actively look for gaps and open questions yourself — do not wait for the user to volunteer them. Ground every inference in `docs/vulcan-book/`.
+- After each batch, actively look for gaps and open questions yourself — do not wait for the user to volunteer them. Ground every inference in `docs/vulcan-book/` and `docs/dataos-philosophy/`.
 - Summarize what you understood and confirm with the user before moving to the next batch
 
 ---
@@ -411,10 +411,10 @@ Iterate with the user until they confirm. Persist confirmed assumptions to Secti
 
 **Stall handling**: If the user can't answer a critical question or you hit uncertainty:
 
-- **Blocked on a question** (especially grain): Surface what's blocking, offer 2-3 concrete options grounded in the docs and real examples (`retrieve_examples`). If still unresolved, document as an open question with a recommended default and move on.
-- **Unknown concept**: Be transparent. Tell the user you couldn't find it in `docs/vulcan-book/`, ask if it's a custom term.
+- **Blocked on a question** (especially grain): Surface what's blocking, offer 2-3 concrete options grounded in the docs and real examples (read from `docs/vulcan-examples/`). If still unresolved, document as an open question with a recommended default and move on.
+- **Unknown concept**: Be transparent. Tell the user you couldn't find it in `docs/vulcan-book/` and `docs/dataos-philosophy/`, ask if it's a custom term.
 - **Vague requirements**: State specifically what you need to proceed. If you can't get clarity, provide a partial spec with grain marked UNKNOWN.
-- **No matching examples**: Say so, and offer the closest alternatives from `retrieve_examples`.
+- **No matching examples**: Say so, and offer the closest alternatives from `docs/vulcan-examples/`.
 
 ---
 
@@ -426,7 +426,7 @@ Complete all steps before handing off to build.
 
 **Step 1 — Extract ALL technical terms from the spec:**
 
-Create two checklists from your `data-product-plan.md`, then read the relevant page(s) in `docs/vulcan-book/` for each item (search your indexed workspace) and confirm your understanding:
+Create two checklists from your `data-product-plan.md`, then read the relevant page(s) in `docs/vulcan-book/` and `docs/dataos-philosophy/` for each item (search your indexed workspace) and confirm your understanding:
 
 **Vulcan Concepts Checklist** (minimum required — read the docs page for each):
 
@@ -445,23 +445,22 @@ Create two checklists from your `data-product-plan.md`, then read the relevant p
 - [ ] each business term from measures/metrics
 - [ ] each domain-specific term
 
-Read the `docs/vulcan-book/` page for every Vulcan concept above; for business terms, confirm the definition with the user if the docs don't cover them.
+Read the `docs/vulcan-book/` and `docs/dataos-philosophy/` pages for every Vulcan concept above; for business terms, confirm the definition with the user if the docs don't cover them.
 
 **Step 2 — Retrieve reference patterns:**
 
-`retrieve_examples` takes a `file_category` (one of: models, semantics, dq, checks, metrics, audits, tests) and an `engine` — it returns real files of that type for the dialect. Always pass `engine=<Q5b>`.
+Read from `docs/vulcan-examples/` filtering by `file_category` (one of: models, semantics, dq, checks, metrics, audits, tests) and `engine` to get real files of that type for the dialect. Always filter by `engine=<Q5b>`.
 
-- [ ] `retrieve_examples(file_category="models", engine=<Q5b>)` — see how real models and grain are structured
-- [ ] `retrieve_examples(file_category="semantics", engine=<Q5b>)` — see how measures/dimensions are defined
-- [ ] `retrieve_examples(file_category="metrics", engine=<Q5b>)` — see how metrics reference measures
+- [ ] Read from `docs/vulcan-examples/` (category: `models`, engine: `<Q5b>`) — see how real models and grain are structured
+- [ ] Read from `docs/vulcan-examples/` (category: `semantics`, engine: `<Q5b>`) — see how measures/dimensions are defined
+- [ ] Read from `docs/vulcan-examples/` (category: `metrics`, engine: `<Q5b>`) — see how metrics reference measures
 
-If NO examples found: tell the user, and fall back to the patterns documented in `docs/vulcan-book/`.
+If NO examples found: tell the user, and fall back to the patterns documented in `docs/vulcan-book/` and `docs/dataos-philosophy/`.
 
 **Step 2.5 — Derive quality rules**:
 
 Derive the quality rules yourself from the finalized spec — there is no tool for this. Ground the
-rule types and YAML structure in the `dq` and audits pages of `docs/vulcan-book/`, and use
-`retrieve_examples(file_category="dq", engine=<Q5b>)` and `retrieve_examples(file_category="audits", engine=<Q5b>)`
+rule types and YAML structure in the `dq` and audits pages of `docs/vulcan-book/` and `docs/dataos-philosophy/`, and read from `docs/vulcan-examples/` (category: `dq`, engine: `<Q5b>`) and `docs/vulcan-examples/` (category: `audits`, engine: `<Q5b>`)
 for concrete syntax. Because the model is not yet deployed, mark any numeric threshold as
 [Estimated] — these MUST be replaced with real values after deployment (re-derive from
 `vulcan evaluate` output during build).
@@ -619,11 +618,11 @@ Create a summary showing you completed the work:
 ## VERIFICATION SUMMARY
 
 ### Concepts Verified:
-- Grain: [definition from docs/vulcan-book]
+- Grain: [definition from docs/vulcan-book and docs/dataos-philosophy]
 - Measures: [list with explanations for each]
 - Metrics: [list — each as measure + time dimension, e.g., "revenue_by_segment = total_revenue over order_date"]
 - Dimensions: [list with types]
-- Model Kind: [chosen kind with rationale from docs/vulcan-book]
+- Model Kind: [chosen kind with rationale from docs/vulcan-book and docs/dataos-philosophy]
 - Assertions: [types needed based on grain/measures]
 
 ### Model Selection Reasoning (WHY):

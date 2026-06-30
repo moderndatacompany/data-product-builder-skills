@@ -57,7 +57,7 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
 2. **Workspace venv**: If step 1 fails, look for the workspace's virtual environment (e.g. `.venv/` or `venv/` in the project root) and use it — activate it (`source .venv/bin/activate`) or call its binary directly (`.venv/bin/vulcan --version`). If `vulcan` resolves there, use that invocation for the rest of the session.
 3. **Still unavailable — HARD STOP**: If `vulcan` is neither on `PATH` nor in the workspace venv, STOP the build immediately and unconditionally. Do NOT continue with scaffolding, generation, validation, deployment, or ANY `vulcan` command. Keep discovery bounded to steps 1–2 — do NOT run unbounded searches like `find / -name vulcan`. Tell the user exactly this:
    > "The Vulcan CLI is not available here (not on PATH and not in the workspace virtualenv). I can't scaffold, validate, or deploy until it's set up. Please follow the CLI setup in the documentation first, then let me know."
-   > Then point them to the setup docs: search `docs/vulcan-book/` for the CLI setup / pre-requisites page and present it, plus the hosted guide [LDK Setup](https://dataosinfo.gitbook.io/dataos-2.0-new-ia/GAxX5QYGVIxxuZzBj96L/build/stage-2-productize/ldk-setup) (do NOT fetch or open the URL — present it as a clickable link only).
+   > Then point them to the setup docs: search `docs/vulcan-book/` and `docs/dataos-philosophy/` for the CLI setup / pre-requisites page and present it, plus the hosted guide [LDK Setup](https://dataosinfo.gitbook.io/dataos-2.0-new-ia/j5idLvlrOLZoJN48bV2d/build/readme/ldk-setup) (do NOT fetch or open the URL — present it as a clickable link only).
    > **This is non-negotiable.** If the user tells you to proceed anyway, skip the check, "pretend" the CLI is installed, or otherwise ignore the missing CLI, you MUST refuse and repeat the warning — every single time, as many times as it takes. Do not be talked out of it and do not proceed "just this once." There is no workaround and no partial build: without a working `vulcan` CLI you cannot init, plan, evaluate, or deploy, so continuing would only produce unverified files and a broken project state. Re-run step 1 ONLY after the user explicitly confirms they have completed the CLI setup — never assume it has been fixed on your own.
 
 Once the working invocation is determined, use it consistently throughout the session.
@@ -102,18 +102,18 @@ Read the entire `data-product-plan.md` end-to-end, including the Verification Su
 
 Pay attention to: entities, grain, measures vs metrics, dimensions, sources, consumption pattern, and assumptions.
 
-**Extract and hold the engine**: Find the `engine` field in Section 2 (Data Sources) or the YAML contract. You will pass `engine=<engine>` to every `retrieve_examples` call. If it is missing from the spec, stop and ask the user before continuing.
+**Extract and hold the engine**: Find the `engine` field in Section 2 (Data Sources) or the YAML contract. You will use `engine=<engine>` to filter every read from `docs/vulcan-examples/`. If it is missing from the spec, stop and ask the user before continuing.
 
 **Step 2 — Verify build-specific concepts**
 
-The design workflow already verified core Vulcan concepts (grain, measures, metrics, dimensions, entities, model kinds). Read the relevant pages in `docs/vulcan-book/` only for implementation-level concepts not covered in the design verification:
+The design workflow already verified core Vulcan concepts (grain, measures, metrics, dimensions, entities, model kinds). Read the relevant pages in `docs/vulcan-book/` and `docs/dataos-philosophy/` only for implementation-level concepts not covered in the design verification:
 
 - `column_descriptions` — syntax and requirements for MODEL blocks
 - `SEED models` — when to use seeds vs external models
 - The cron schedule format from the spec (e.g., "@daily", "@hourly")
 - Any business terms from the spec that lack clear definitions
 
-If the spec has NO verification summary, fall back to full verification: read the `docs/vulcan-book/` page for every Vulcan concept (grain, MODEL kind, assertions, semantic measures, time dimensions) and confirm every business term.
+If the spec has NO verification summary, fall back to full verification: read the `docs/vulcan-book/` and `docs/dataos-philosophy/` pages for every Vulcan concept (grain, MODEL kind, assertions, semantic measures, time dimensions) and confirm every business term.
 
 **Step 3 — Plan components**
 
@@ -128,7 +128,7 @@ Document your understanding and show this to the user before proceeding to Stage
 
 ### Spec Understanding:
 - **Grain**: [one row represents...]
-  Source: docs/vulcan-book (grain)
+  Source: docs/vulcan-book and docs/dataos-philosophy (grain)
 - **Entities**: [list]
 - **Measures**: [list with aggregation types]
 - **Metrics**: [list — each as measure + time dimension]
@@ -137,7 +137,7 @@ Document your understanding and show this to the user before proceeding to Stage
 ### Implementation Reasoning (WHY & HOW):
 
 **WHY these models:**
-- **Gold Model**: [chosen because grain requires aggregation of X over Y timeframe, matches [example pattern] from retrieve_examples]
+- **Gold Model**: [chosen because grain requires aggregation of X over Y timeframe, matches [example pattern] from docs/vulcan-examples]
 - **Silver Model** (if needed): [chosen because multiple gold models need [shared join], OR raw data needs [cleaning/dedup] before aggregation]
 - **Bronze Models**: [chosen to ingest from [sources] because gold columns [A, B, C] come from these tables]
 
@@ -151,13 +151,13 @@ Flow: Bronze [raw_orders, raw_customers]
 ```
 
 **Model Selection Justification:**
-- Model Kind: [FULL/INCREMENTAL_BY_TIME_RANGE/INCREMENTAL_BY_UNIQUE_KEY/EMBEDDED/SEED/SCD_TYPE_2_BY_TIME/SCD_TYPE_2_BY_COLUMN/VIEW] chosen because [data volume/refresh pattern/source characteristics from docs/vulcan-book]
+- Model Kind: [FULL/INCREMENTAL_BY_TIME_RANGE/INCREMENTAL_BY_UNIQUE_KEY/EMBEDDED/SEED/SCD_TYPE_2_BY_TIME/SCD_TYPE_2_BY_COLUMN/VIEW] chosen because [data volume/refresh pattern/source characteristics from docs/vulcan-book and docs/dataos-philosophy]
 - Grain Justification: [one row per X because metrics require Y level of detail, verified against [example]]
 - Staging Decision: [needed/not needed because: shared logic across N models / single gold use only]
 
 ### Vulcan Implementation Plan:
 - **Model Kind**: [FULL/INCREMENTAL_BY_TIME_RANGE/INCREMENTAL_BY_UNIQUE_KEY/EMBEDDED/SEED/SCD_TYPE_2_BY_TIME/SCD_TYPE_2_BY_COLUMN/VIEW]
-  Rationale: [from docs/vulcan-book]
+  Rationale: [from docs/vulcan-book and docs/dataos-philosophy]
 - **Schema**: [raw/staging/analytics]
 - **Assertions Needed**: [list based on grain/measures]
 - **Time Dimension**: [field name, TIMESTAMP cast required: yes/no]
@@ -181,7 +181,7 @@ CHECKPOINT: Present this summary to the user and STOP. Do NOT proceed to Stage 1
 
 ### Core Principles
 
-1. **Ground in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against `docs/vulcan-book/` (and `retrieve_examples` for syntax). See Resource Selection Quick Reference.
+1. **Ground in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against `docs/vulcan-book/` and `docs/dataos-philosophy/` (and read from `docs/vulcan-examples/` for syntax). See Resource Selection Quick Reference.
 2. **Fix, don't explain** — when errors occur, apply the exact fix. Don't stop at diagnosis.
 3. **Iterate per component** — generate → `vulcan evaluate` → fix → `vulcan plan dev --auto-apply` → fix → next component. Never batch all files before your first plan run.
 
@@ -192,9 +192,9 @@ CHECKPOINT: Present this summary to the user and STOP. Do NOT proceed to Stage 1
 This loop is used whenever `vulcan plan dev --auto-apply` fails, at any stage:
 
 1. Read the error message from `vulcan plan dev --auto-apply` output
-2. Look up the error in `docs/vulcan-book/` (search for the error text or the concept it touches) to understand the root cause and fix
-3. Fix the broken file yourself, cross-checking against the relevant `docs/vulcan-book/` page and the Vulcan syntax rules below
-4. If the root cause is structural (not just syntax) → call `retrieve_examples(file_category=<affected category>, engine=<engine>)` to see how working projects handle it
+2. Look up the error in `docs/vulcan-book/` and `docs/dataos-philosophy/` (search for the error text or the concept it touches) to understand the root cause and fix
+3. Fix the broken file yourself, cross-checking against the relevant `docs/vulcan-book/` and `docs/dataos-philosophy/` pages and the Vulcan syntax rules below
+4. If the root cause is structural (not just syntax) → read from `docs/vulcan-examples/` (category: `<affected category>`, engine: `<engine>`) to see how working projects handle it
 5. Apply the fix
 6. Re-run `vulcan plan dev --auto-apply`
 7. Repeat until the plan succeeds
@@ -235,9 +235,9 @@ Ground every step in the docs and real examples — this is mandatory, not optio
 
 | Situation                                          | What to do                                                                                                                                     | When                                                                                    |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Any Vulcan concept mentioned                       | Read the relevant page(s) in `docs/vulcan-book/`                                                                                               | BEFORE using the concept in any output                                                  |
-| Before starting a component group                  | `retrieve_examples(file_category=<category>, engine=<engine>)`                                                                                 | ONCE per group, before generating any file in it                                        |
-| After generating a file, or when vulcan plan fails | Self-review the file against `docs/vulcan-book/`, the Vulcan syntax rules below, and the group examples                                        | After writing each file to catch Vulcan-specific issues; and in the error recovery loop |
+| Any Vulcan concept mentioned                       | Read the relevant page(s) in `docs/vulcan-book/` and `docs/dataos-philosophy/`                                                                 | BEFORE using the concept in any output                                                  |
+| Before starting a component group                  | read from `docs/vulcan-examples/` (category: `<category>`, engine: `<engine>`)                                                                 | ONCE per group, before generating any file in it                                        |
+| After generating a file, or when vulcan plan fails | Self-review the file against `docs/vulcan-book/` and `docs/dataos-philosophy/`, the Vulcan syntax rules below, and the group examples          | After writing each file to catch Vulcan-specific issues; and in the error recovery loop |
 | Plan the project structure                         | Derive the file manifest yourself from the spec + `VULCAN_PROJECT_LAYOUT` + examples                                                           | BEFORE generating files                                                                 |
 | Enrich metadata                                    | Derive column descriptions/tags/owner/terms yourself from the spec + docs                                                                      | After Groups A-C are written to disk (Step 2.5)                                         |
 | Plan quality rules and checks                      | Derived during design (Section 15 of spec); re-derive yourself after Group B only if Section 15 is absent or any values are marked [Estimated] | —                                                                                       |
@@ -266,14 +266,14 @@ When a docs page you used has a reference URL, show it to the user as "Reference
 
 Derive the project blueprint yourself from the spec — there is no scaffold tool. Using the
 `data-product-plan.md` (Section 13 Model Architecture especially), the `VULCAN_PROJECT_LAYOUT`,
-and `retrieve_examples` for each component type, produce a **ScaffoldPlan** consisting of:
+and `docs/vulcan-examples/` for each component type, produce a **ScaffoldPlan** consisting of:
 
 - `file_manifest`: files to create, each with `path`, `vulcan_component`, `purpose`, `traceability` (which spec section drove it)
 - `consistency_rules`: cross-file dependency rules (matching model names, matching column names, semantic measure names that differ from columns)
 - `generation_order`: seeds → staging → final → semantics → metrics → checks → tests
 
 Write this plan down before generating any files. Ground every file's structure in the matching
-`retrieve_examples(file_category=..., engine=<engine>)` output and the relevant `docs/vulcan-book/` page.
+examples from `docs/vulcan-examples/` (category: `...`, engine: `<engine>`) and the relevant `docs/vulcan-book/` and `docs/dataos-philosophy/` pages.
 
 **Note**: Metadata enrichment runs AFTER models are written to disk — see Step 2.5.
 
@@ -323,7 +323,7 @@ MEDIUM: [area] — [recommendation]  (can address later)
 **If Section 15 is absent or any values are marked [Estimated]**, re-derive the quality rules yourself
 AFTER Group B completes (you will then have a deployed model — pull real schema/values from
 `vulcan evaluate <model_ref> --limit 1`). Ground the rule types in the `dq`/audits pages of
-`docs/vulcan-book/` and `retrieve_examples(file_category="dq"|"audits", engine=<engine>)`, then
+`docs/vulcan-book/` and `docs/dataos-philosophy/` and read from `docs/vulcan-examples/` (category: `dq` or `audits`, engine: `<engine>`), then
 update Section 15 of `data-product-plan.md` with the refined rules and real thresholds.
 
 **Step 2 — Generate and verify component-by-component**:
@@ -373,16 +373,16 @@ Follow `generation_order`, grouped by component type. After each group, run `vul
 - **`vars: {execution_time: <ISO-date>}`** — required for INCREMENTAL_BY_TIME_RANGE models; the date controls which weekly/daily interval the model processes during the test. The date MUST fall within the test mock data's date range or the model will return empty results
 - **Mock the direct dependency** — test inputs must mock the silver/staging model (the direct FROM clause target), not the raw seed tables
 
-**Before generating any file in a group**, call `retrieve_examples` once to load real syntax examples for that group:
+**Before generating any file in a group**, read from `docs/vulcan-examples/` once to load real syntax examples for that group:
 
-- Group A/B → `retrieve_examples(file_category="models", engine=<engine>)`
-- Group C → `retrieve_examples(file_category="semantics", engine=<engine>)` (files live in `models/semantics/`)
-- Group C.5 → `retrieve_examples(file_category="metrics", engine=<engine>)` (files live in `models/metrics/`)
-- Group D dq → `retrieve_examples(file_category="dq", engine=<engine>)`
-- Group D audits → `retrieve_examples(file_category="audits", engine=<engine>)`
-- Group E → `retrieve_examples(file_category="tests", engine=<engine>)`
+- Group A/B → read from `docs/vulcan-examples/` (category: `models`, engine: `<engine>`)
+- Group C → read from `docs/vulcan-examples/` (category: `semantics`, engine: `<engine>`) (files live in `models/semantics/`)
+- Group C.5 → read from `docs/vulcan-examples/` (category: `metrics`, engine: `<engine>`) (files live in `models/metrics/`)
+- Group D dq → read from `docs/vulcan-examples/` (category: `dq`, engine: `<engine>`)
+- Group D audits → read from `docs/vulcan-examples/` (category: `audits`, engine: `<engine>`)
+- Group E → read from `docs/vulcan-examples/` (category: `tests`, engine: `<engine>`)
 
-Use the returned snippets as your syntax reference for all files in that group. If no examples are found, note it and continue.
+Use the found examples as your syntax reference for all files in that group. If no examples are found, note it and continue.
 
 **For EACH file within a group**:
 
@@ -393,11 +393,11 @@ Use the returned snippets as your syntax reference for all files in that group. 
 
 2. Generate the file:
    - **Write the MODEL() block first** — define name, kind, grain, assertions, and column_descriptions before writing the SELECT query. This forces you to think about the grain and contract before the implementation.
-   - Use the group examples from `retrieve_examples` as your syntax reference
+   - Use the group examples from `docs/vulcan-examples/` as your syntax reference
    - Fill in model names, columns, grain, measures, and assertions from `data-product-plan.md`
    - Add traceability header: `-- Source: design spec > [traceability field]` (SQL) or `# Source: design spec > [traceability field]` (YAML)
    - **For Group C (semantic YAML) only**: after writing the main semantic structure, insert `ai_context:` blocks at the model level and under each dimension, measure, segment, and join where Section 15.5 provides data. Include only fields that are present (`instructions`, `synonyms`, `examples`, `caveats`). Do NOT add unknown keys — Vulcan fails validation on unknown ai_context keys. Insert `behavior:` blocks per the plan from pre-check step 6.
-   - After drafting: self-review the file against `docs/vulcan-book/`, the Vulcan syntax rules below, and the group examples — check for Vulcan-specific issues (forbidden keys, measure name collisions, test format errors, unknown ai_context keys). Fix any issues before writing the file to disk.
+   - After drafting: self-review the file against `docs/vulcan-book/` and `docs/dataos-philosophy/`, the Vulcan syntax rules below, and the group examples — check for Vulcan-specific issues (forbidden keys, measure name collisions, test format errors, unknown ai_context keys). Fix any issues before writing the file to disk.
 
 3. Write the corrected file to the project directory
 
@@ -408,7 +408,7 @@ Use the returned snippets as your syntax reference for all files in that group. 
 **Step 2.5 — Metadata enrichment (after all SQL/YAML files are written)**:
 
 Enrich the written files yourself now — AFTER Groups A, B, C are on disk — working from the ACTUAL
-file contents plus the spec. Ground naming conventions and metadata fields in `docs/vulcan-book/`.
+file contents plus the spec. Ground naming conventions and metadata fields in `docs/vulcan-book/` and `docs/dataos-philosophy/`.
 Go file by file:
 
 1. **Naming violations** → check each column/model name against the Vulcan naming conventions in the docs; rename offenders in the SQL/YAML files and tell the user what was renamed.
@@ -495,7 +495,7 @@ By this point, each component has already passed individually. This is the full-
   - Are dimensions populated? (no unexpected NULLs)
   - Does the grain hold? (row count matches expectations)
 
-If results look wrong, consult `docs/vulcan-book/` to understand the issue and fix the syntax yourself (cross-check with `retrieve_examples`).
+If results look wrong, consult `docs/vulcan-book/` and `docs/dataos-philosophy/` to understand the issue and fix the syntax yourself (cross-check with `docs/vulcan-examples/`).
 
 ---
 
@@ -536,7 +536,7 @@ vulcan plan prod \
 
 Use the backfill start date from Section 10 of `data-product-plan.md` (Q9). For "full history", use the earliest date in the source data.
 
-**DataOS deployment (scheduled production runs)**: After the local prod plan succeeds, generate the deployment manifest so the user can register the data product as a DataOS Vulcan resource for scheduled runs. Deploying to DataOS involves several setup steps outside of the Vulcan CLI — refer the user to the deployment guide: [LDK Setup](https://dataosinfo.gitbook.io/dataos-2.0-new-ia/GAxX5QYGVIxxuZzBj96L/build/stage-3-publish/overview). Do NOT fetch or open this URL — present it as a clickable link only.
+**DataOS deployment (scheduled production runs)**: After the local prod plan succeeds, generate the deployment manifest so the user can register the data product as a DataOS Vulcan resource for scheduled runs. Deploying to DataOS involves several setup steps outside of the Vulcan CLI — refer the user to the deployment guide: [LDK Setup](https://dataosinfo.gitbook.io/dataos-2.0-new-ia/j5idLvlrOLZoJN48bV2d/build/readme/ldk-setup). Do NOT fetch or open this URL — present it as a clickable link only.
 
 1. **Generate the deployment manifest**:
 
@@ -603,7 +603,7 @@ If `vulcan plan dev --auto-apply` fails 5+ times on the same component after app
 
 1. Present the recurring error and all attempted fixes to the user
 2. Suggest examining the design spec for conflicting requirements
-3. Offer to use `retrieve_examples(file_category=<category>, engine=<engine>)` to find an alternate structural approach
+3. Offer to read from `docs/vulcan-examples/` (category: `<category>`, engine: `<engine>`) to find an alternate structural approach
 
 ---
 
