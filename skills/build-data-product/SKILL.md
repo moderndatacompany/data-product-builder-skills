@@ -61,14 +61,20 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
       - If **no match** → tell the user: "The Vulcan wheel is not found under `docs/`. Please run `npx builder-skills` first to install it, then let me know." **STOP** until confirmed.
       - If **found** → let `WHEEL=$(ls docs/vulcan-*.whl | head -1)` and proceed.
    3. Create the `.venv` — run this unconditionally (it is a no-op if `.venv` already exists):
-      ```bash
-      python3 -m venv .venv
-      ```
-      Then confirm it worked before proceeding:
-      ```bash
-      ls .venv/bin/pip
-      ```
-      If `ls` fails, stop and tell the user: "Could not create `.venv` — please ensure Python 3.10+ is installed (`python3 --version`) and try again."
+      - First verify Python 3.10 is available (Vulcan requires `>=3.9, <3.11`):
+        ```bash
+        python3.10 --version
+        ```
+        If the command fails, tell the user: "Python 3.10 is required but not found. Please install it (`brew install python@3.10` on macOS) and try again." **STOP** until confirmed.
+      - Then create the venv using Python 3.10 explicitly:
+        ```bash
+        python3.10 -m venv .venv
+        ```
+      - Confirm it worked before proceeding:
+        ```bash
+        ls .venv/bin/pip
+        ```
+        If `ls` fails, stop and tell the user: "Could not create `.venv` — please ensure Python 3.10 is installed (`python3.10 --version`) and try again."
    4. Determine the engine extra:
       - Check `data-product-plan.md` Section 2 for the engine (e.g. `postgres`, `snowflake`, `databricks`, `spark`, `trino`).
       - If not found in the spec, ask the user: "Which engine are you using? (postgres / snowflake / databricks / spark / trino)"
