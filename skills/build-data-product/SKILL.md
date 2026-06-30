@@ -64,12 +64,17 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
       ```bash
       python3 -m venv .venv
       ```
-   4. Install the wheel into the venv:
+   4. Determine the engine extra:
+      - Check `data-product-plan.md` Section 2 for the engine (e.g. `postgres`, `snowflake`, `databricks`, `spark`, `trino`).
+      - If not found in the spec, ask the user: "Which engine are you using? (postgres / snowflake / databricks / spark / trino)"
+      - Store it as `ENGINE`.
+   5. Install the wheel with the engine extra into the venv:
       ```bash
-      .venv/bin/pip install "${WHEEL}"
+      .venv/bin/pip install "${WHEEL}[{ENGINE}]"
       ```
-   5. Verify: `.venv/bin/vulcan --version`. If it prints a version, use `.venv/bin/vulcan` for all subsequent commands in this session.
-   6. If the install or verification still fails, **HARD STOP**:
+      For example, for Postgres: `.venv/bin/pip install "${WHEEL}[postgres]"`
+   6. Verify: `.venv/bin/vulcan --version`. If it prints a version, use `.venv/bin/vulcan` for all subsequent commands in this session.
+   7. If the install or verification still fails, **HARD STOP**:
       > "Vulcan CLI installation failed. Please check the error above, review `docs/vulcan-book/ldk-setup.md` for prerequisites, and let me know when it's resolved."
       > Do NOT continue with any `vulcan` command until the user confirms it is fixed.
 
