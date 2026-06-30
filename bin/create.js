@@ -111,6 +111,7 @@ async function main() {
   if (!fs.existsSync(docsSrc)) {
     warn('docs/ directory not found in package — skipping');
   } else {
+    // copy subdirectories (excluding vulcan-examples, handled separately)
     for (const dir of fs.readdirSync(docsSrc, { withFileTypes: true }).filter(e => e.isDirectory() && e.name !== 'vulcan-examples').map(e => e.name)) {
       const src     = path.join(docsSrc, dir);
       const dest    = path.join(docsDest, dir);
@@ -118,6 +119,15 @@ async function main() {
       copyDir(src, dest);
       const n = countFiles(src);
       ok(`${existed ? 'updated' : 'created'}  docs/${dir}/  (${n} file${n === 1 ? '' : 's'})`);
+    }
+    // copy loose files at the docs/ root (e.g. .whl)
+    fs.mkdirSync(docsDest, { recursive: true });
+    for (const entry of fs.readdirSync(docsSrc, { withFileTypes: true }).filter(e => !e.isDirectory())) {
+      const src     = path.join(docsSrc, entry.name);
+      const dest    = path.join(docsDest, entry.name);
+      const existed = fs.existsSync(dest);
+      fs.copyFileSync(src, dest);
+      ok(`${existed ? 'updated' : 'created'}  docs/${entry.name}`);
     }
   }
 
@@ -131,19 +141,6 @@ async function main() {
       copyDir(src, dest);
       const n = countFiles(src);
       ok(`${existed ? 'updated' : 'created'}  docs/vulcan-examples/${eng}/  (${n} file${n === 1 ? '' : 's'})`);
-    }
-  }
-
-  // ── Vulcan CLI wheel ──────────────────────────────────────────────────────
-  const wheelsDir = path.join(packageDir, 'wheels');
-  if (fs.existsSync(wheelsDir)) {
-    fs.mkdirSync(path.join(targetDir, 'docs'), { recursive: true });
-    for (const entry of fs.readdirSync(wheelsDir, { withFileTypes: true }).filter(e => !e.isDirectory() && e.name.endsWith('.whl'))) {
-      const src     = path.join(wheelsDir, entry.name);
-      const dest    = path.join(targetDir, 'docs', entry.name);
-      const existed = fs.existsSync(dest);
-      fs.copyFileSync(src, dest);
-      ok(`${existed ? 'updated' : 'created'}  docs/${entry.name}  ${DIM}(pip install ./docs/${entry.name})${RESET}`);
     }
   }
 
