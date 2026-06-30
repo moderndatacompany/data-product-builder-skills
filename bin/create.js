@@ -91,26 +91,30 @@ async function main() {
   log('');
 
   // ── Step 1: IDE selection ─────────────────────────────────────────────────
-  log(`${BOLD}Which IDE are you using?${RESET}`);
+  const IDE_LIST = IDE_OPTIONS.filter(o => o.folder); // exclude "All three"
+
+  log(`${BOLD}Which IDE(s) are you using?${RESET} ${DIM}(comma-separated for multiple, e.g. 1,2)${RESET}`);
   log('');
-  IDE_OPTIONS.forEach((ide, i) => log(`  ${DIM}${i + 1}${RESET}  ${ide.label}`));
+  IDE_LIST.forEach((ide, i) => log(`  ${DIM}${i + 1}${RESET}  ${ide.label}`));
+  log(`  ${DIM}${IDE_LIST.length + 1}${RESET}  All`);
   log('');
 
-  const ideAnswer = await ask(`Enter number (1–${IDE_OPTIONS.length}): `);
-  const ideIdx    = parseInt(ideAnswer, 10);
+  const ideAnswer = await ask(`Enter number(s) (1–${IDE_LIST.length + 1}): `);
 
-  if (isNaN(ideIdx) || ideIdx < 1 || ideIdx > IDE_OPTIONS.length) {
-    err(`Invalid selection "${ideAnswer}". Please enter a number between 1 and ${IDE_OPTIONS.length}.`);
+  const ideNums = ideAnswer.split(',').map(s => parseInt(s.trim(), 10));
+  const invalidIde = ideNums.find(n => isNaN(n) || n < 1 || n > IDE_LIST.length + 1);
+  if (invalidIde !== undefined) {
+    err(`Invalid selection "${ideAnswer}". Use numbers 1–${IDE_LIST.length + 1}, comma-separated.`);
     close(); process.exit(1);
   }
 
-  const selectedIde = IDE_OPTIONS[ideIdx - 1];
-  const ideFolders  = selectedIde.folder
-    ? [selectedIde.folder]
-    : IDE_OPTIONS.filter(o => o.folder).map(o => o.folder);
+  const ideFolders = ideNums.includes(IDE_LIST.length + 1)
+    ? IDE_LIST.map(o => o.folder)
+    : ideNums.map(n => IDE_LIST[n - 1].folder);
 
+  const ideLabels = ideFolders.map(f => IDE_LIST.find(o => o.folder === f).label).join(', ');
   log('');
-  info(`IDE: ${BOLD}${selectedIde.label}${RESET}`);
+  info(`IDE(s): ${BOLD}${ideLabels}${RESET}`);
   log('');
 
   // ── Step 2: Engine selection ──────────────────────────────────────────────
