@@ -57,16 +57,16 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
 2. **Workspace venv**: If step 1 fails, look for an existing virtual environment (`.venv/` or `venv/` in the project root) and check it — `.venv/bin/vulcan --version`. If `vulcan` resolves there, use that invocation for the rest of the session.
 3. **Auto-install from bundled wheel**: If `vulcan` is not found in steps 1–2, install it automatically using the bundled wheel:
    1. Read `docs/vulcan-book/ldk-setup.md` and present it to the user so they understand the setup.
-   2. Check if `docs/vulcan-0.228.1.26-py3-none-any.whl` exists in the project.
-      - If **missing** → tell the user: "The Vulcan wheel is not found at `docs/vulcan-0.228.1.26-py3-none-any.whl`. Please run `npx builder-skills` first to install it, then let me know." **STOP** until confirmed.
-      - If **present** → proceed with the steps below.
+   2. Find the wheel file: look for `docs/vulcan-*.whl` (glob — pick the first match).
+      - If **no match** → tell the user: "The Vulcan wheel is not found under `docs/`. Please run `npx builder-skills` first to install it, then let me know." **STOP** until confirmed.
+      - If **found** → let `WHEEL=$(ls docs/vulcan-*.whl | head -1)` and proceed.
    3. Create a `.venv` if one does not already exist:
       ```bash
       python3 -m venv .venv
       ```
    4. Install the wheel into the venv:
       ```bash
-      .venv/bin/pip install docs/vulcan-0.228.1.26-py3-none-any.whl
+      .venv/bin/pip install "${WHEEL}"
       ```
    5. Verify: `.venv/bin/vulcan --version`. If it prints a version, use `.venv/bin/vulcan` for all subsequent commands in this session.
    6. If the install or verification still fails, **HARD STOP**:
