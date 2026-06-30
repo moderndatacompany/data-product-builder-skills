@@ -188,7 +188,9 @@ If inference is low-confidence (fewer than 2 clear entities, or ambiguous nouns)
 
 Before calling `search`, display this disclaimer exactly once:
 
-> **Data Discovery Disclaimer:** Table search and profiling are experimental features — results may be incomplete, include false matches, or reflect stale data. Treat all table recommendations and profile statistics as directional signals and confirm before proceeding.
+> **Data Discovery Disclaimer:**
+> - Table search and profiling are experimental features — results may be incomplete, include false matches, or reflect stale data. Treat all table recommendations and profile statistics as directional signals and confirm before proceeding.
+> - The `search` tool can only find datasets that have been scanned by the **Nilus Metadata Workflow**. If you expect to use a specific database, schema, or dataset, make sure the Nilus Metadata Workflow has been run on it first — otherwise it will not appear in search results.
 
 **Data source gate**: Do NOT call `search` until Q5a (data source) is confirmed. If data source is not yet confirmed, stop and ask for it before proceeding.
 
@@ -229,7 +231,9 @@ If `table_profile` returns "profiler has not been run", note it and continue —
 
 **Fallback — no matches or user rejects all**:
 
-> "I couldn't find relevant tables for **[entity]**. You can provide seed data as a CSV — add it to the `seeds/` folder and share the filename."
+> "I couldn't find any tables matching your data. This might be because the Nilus Metadata Workflow hasn't been run on the database or schema where your data lives."
+
+> "Alternatively, you can provide seed data as a CSV — add it to the `seeds/` folder and share the filename."
 > Register the seed CSV as the source for that entity.
 
 **Gate**: every confirmed entity must have either a confirmed table (with fetched columns) or a registered seed CSV before moving on.
