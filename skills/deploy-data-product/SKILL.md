@@ -3,7 +3,8 @@ name: deploy-data-product
 description: >-
   Deploy a Vulcan Data Product on a DataOS instance and troubleshoot deployment
   failures. Use when the user asks to deploy a Vulcan data product, configure
-  config.yaml / deploy.yaml, apply a vulcan resource, or fix a deployment issue
+  config.yaml / deploy.yaml for a cloud engine, set up the required secrets, push
+  the Vulcan project to a repo, apply a vulcan resource, or fix a deployment issue
   (repo not syncing, depot/secret/compute access, plan/run/api failures, product
   not visible in discovery).
 disable-model-invocation: true
@@ -18,145 +19,114 @@ warehouse grants, verify/log commands, and the common-issues table live in:
 
 **`docs/vulcan-book/deploy-help.md`**
 
-**Always read `deploy-help.md` before answering or acting.** It is the single
-source of truth for this workflow — do not rely on memory for command syntax,
-permission names, or manifest fields.
-
----
+**Always read `deploy-help.md` and follow it** before answering or acting. It is
+the single source of truth for command syntax, permission names, and manifest
+fields — do not rely on memory.
 
 ## When to use this skill
 
 - The user wants to deploy a Vulcan Data Product on a DataOS instance.
+- The user needs to configure `config.yaml` / `deploy.yaml` for their cloud engine.
+- The user needs to know which secrets to create (or reuse) and how to reference them.
 - A deployment is failing and needs troubleshooting.
-- The user is preparing `config.yaml` / `deploy.yaml` or configuring Git-sync,
-  Vulcan state, or object-store secrets.
 
----
+## Deployment workflow (guide the user through this)
 
-## How to use it
+1. **Read `docs/vulcan-book/deploy-help.md`** and confirm
+   role + permissions (Sections 1–2) and prerequisites (Section 3).
+2. **Configure `config.yaml` for the target cloud/engine** (see below).
+3. **Create or reuse the required secrets** (see below).
+4. **Push the Vulcan project to the Git repo** (see below).
+5. **Write `deploy.yaml`** referencing the compute, engine, depots, and secret.
+6. **Apply and verify**: `dataos-ctl resource apply -f deploy.yaml`, then check
+   status/logs and confirm discovery (deploy-help.md Sections 6–7).
 
-1. **Read `docs/vulcan-book/deploy-help.md` in full** before responding.
-2. **Deploying from scratch** — follow the numbered sections in order:
-   Role → Permissions → Prerequisites → `deploy.yaml` → Warehouse grants →
-   Deploy/verify → Common issues.
-3. **Troubleshooting** — start from the **Symptom → where to look** table in
-   the doc and jump to the matching section.
-4. Use the **exact `dataos-ctl` commands** from the doc; do not invent flags or
-   modify command syntax.
+## Configure `config.yaml` for the cloud environment
 
----
+Before deploying, the user must point the Vulcan project at their cloud engine,
+not local defaults.
 
-## Workflow
+**What to fill in `config.yaml`:**
 
-### Step 1 — Confirm prerequisites
+- `name`, `display_name`, `description`, `version` — product identity.
+- `discoverable: true` — so the product shows up in discovery.
+- `domain` and `owners` — ownership/routing metadata.
+- `model_defaults.dialect` — the target engine (`postgres`, `snowflake`,
+  `bigquery`, `databricks`, `trino`, `spark`, etc.).
+- `gateways.default.connection` — the DataOS Depot for that engine, e.g.
+  `type: depot`, `address: dataos://<depot-name>`.
+- `model_defaults.start` / `cron` — schedule defaults if applicable.
+- `variables` — any env-specific values (schemas, thresholds).
 
-Before touching any manifest, verify the checklist in Section 3 of
-`deploy-help.md`:
+**What to check:**
 
-- DataOS CLI installed and logged in (`dataos-ctl login`, `dataos-ctl version`)
-- Depot with read/write access confirmed (`dataos-ctl resource -t depot get -a`)
-- Valid engine stack and Compute resource available
-- Git repository with the Vulcan project ready
-- Git-sync Secret created (if repo is private)
-- `config.yaml` and `deploy.yaml` ready or to be generated
+- `DATAOS_TENANT_ID` is provided via environment / `.env`, **not** as a YAML key.
+- The depot in `gateways` exists and the user has `Can Use Depot` on it.
+- `dialect` matches the actual engine of that depot.
+- Run `vulcan plan` locally — it must succeed with no errors before pushing.
 
-If any prerequisite is missing, stop and help the user resolve it before
-proceeding.
+## What to fill in `deploy.yaml` (a.k.a. `domain_resource.yaml`)
 
----
+This is the DataOS Vulcan resource manifest (`type: vulcan`). Fill:
 
-### Step 2 — Verify permissions
+- `name` — the Data Product / resource name.
+- `spec.compute` — the Compute pool name (verify with `dataos-ctl resource -t compute get -a`).
+- `spec.engine` — same engine as `config.yaml` (`postgres`, `snowflake`, …).
+- `spec.repo.url` — the Git repo URL holding the Vulcan project.
+- `spec.repo.syncFlags` — `--ref=<branch>` must match the branch you pushed.
+- `spec.repo.baseDir` — path to the project inside the repo.
+- `spec.repo.secretId` — `<workspace>:<git-sync-secret-name>` (see Secrets below).
+- `spec.depots` — `dataos://<depot-name>?purpose=rw` for each source/target depot.
+- `spec.workflow.schedule` — `crons`, `timezone`, `concurrencyPolicy`.
+- `spec.workflow.plan` / `spec.workflow.run` — the `vulcan plan`/`run` commands.
+- `spec.api` — `replicas` and resources if the product exposes an API.
 
-Check that the user has the required DataOS permissions (Section 2 of
-`deploy-help.md`):
+**What to check before `apply`:**
 
-| Permission        | Needed for                                      |
-| ----------------- | ----------------------------------------------- |
-| `Can Use Compute` | `plan`/`run`/`api` pods                         |
-| `Can Use Depot`   | Warehouse read/write                            |
-| `Can Use Secret`  | Depot credentials, Git-sync, state/object-store |
-| `Can Use Minerva` | Only if the product exposes a Minerva endpoint  |
+- `spec.engine` matches `config.yaml` dialect and the depot's engine.
+- `spec.repo.secretId` points to an existing Git-sync secret (correct workspace).
+- Each depot in `spec.depots` exists and has `Can Use Depot` granted.
+- `spec.compute` exists and has `Can Use Compute` granted.
+- Branch in `syncFlags` and `baseDir` actually contain the pushed project.
 
-If permissions are missing, tell the user exactly which ones to request from
-the Tenant Admin and what they are needed for.
+## Secrets the user needs (create or reuse)
 
----
+> **Never ask the user to share secret values, and never fill credentials
+> yourself.** Credentials (access keys, passwords, tokens) must be entered
+> **manually by the user** in their own secret manifest. Provide the manifest
+> template with placeholders (e.g. `<your-git-token>`), instruct the user to fill
+> and apply it themselves, and only reference secrets by name/path afterward.
 
-### Step 3 — Generate or review `deploy.yaml`
+Each secret is a separate DataOS Resource (`type: secret`). If it already exists,
+**reuse it** — do not recreate; just reference it by the correct path. If it does
+not exist, tell the user to create it: fill the manifest manually, then
+`dataos-ctl resource apply -f <secret>.yaml` and verify with
+`dataos-ctl resource get -t secret -a`. The user needs `Can Use Secret` on each.
 
-If not already generated:
+| Secret | When needed | How it's referenced |
+| --- | --- | --- |
+| Git-sync secret | Private repo holding the Vulcan project | `spec.repo.secretId: <workspace>:<secret-name>` in `deploy.yaml` |
+| Depot credential secret (cloud-specific: S3, ABFSS, GCS, Snowflake, Postgres, BigQuery, etc.) | Depot connects to the source/warehouse | Attached to the Depot; the Depot is referenced as `dataos://<depot>?purpose=rw` |
+| `vulcan-state-connection` (Postgres) | Every Vulcan data product — holds plan/interval/snapshot state | Tenant secret, usually SRE-provisioned; confirm it exists and reuse |
+| `vulcan-object-store-connection` (S3/object store) | Every Vulcan data product — query results / artifact spooling | Tenant secret, usually SRE-provisioned; confirm it exists and reuse |
 
-```bash
-vulcan create_deploy_yaml
-```
+**Reference path rules:**
 
-Walk the user through filling in every placeholder field listed in Section 4 of
-`deploy-help.md`:
+- `secretId` uses `workspace:name` (e.g. `product-sandbox:git-sync`).
+- Depot references use `dataos://<depot-name>?purpose=rw` (or `?purpose=read`).
+- If a secret already exists, run `dataos-ctl resource get -t secret -a` to get its
+  exact name/workspace and use that path — don't assume.
 
-- `name` — kebab-case, matches `config.yaml` `name:`
-- `spec.runAsUser` — DataOS username
-- `spec.engine` — e.g. `snowflake`, `postgres`, `trino`
-- `spec.repo.url` / `syncFlags` / `baseDir` / `secret`
-- `spec.depots` — e.g. `dataos://postgresDepot?purpose=rw`
-- `spec.workflow.schedule.crons` — matches freshness cadence from the spec
-- `spec.workflow.schedule.timezone` and `endOn`
-- `spec.api.replicas`
+## Push the Vulcan project to the repo
 
-Present the filled manifest to the user for review before applying.
-
----
-
-### Step 4 — Apply warehouse grants
-
-Before running `apply`, confirm the DB user in the Depot Secret has the grants
-required by the engine (Section 5 of `deploy-help.md`):
-
-- **Postgres**: `GRANT CREATE ON DATABASE/SCHEMA`, `USAGE`, `SELECT/INSERT/UPDATE/DELETE ON ALL TABLES`
-- **Snowflake**: `USAGE` on warehouse/database/schema, `SELECT`, `CREATE TABLE/VIEW`, DML as needed
-- **Lakehouse**: `depot:rw:<depot-name>`
-
----
-
-### Step 5 — Deploy
-
-```bash
-dataos-ctl resource apply -f deploy.yaml
-```
-
-Then check status and logs (Section 6 of `deploy-help.md`):
-
-```bash
-dataos-ctl resource -t vulcan -n <data-product-name> get
-dataos-ctl resource -t vulcan -n <data-product-name> logs
-```
-
-| Investigating                     | Log component                              |
-| --------------------------------- | ------------------------------------------ |
-| Model execution results           | `<name>-run-execute` `-c main`             |
-| Planning / migration / auto-apply | `<name>-plan-execute` `-c main`            |
-| API availability / query issues   | `<name>-api` `-c main`                     |
-
----
-
-### Step 6 — Verify
-
-After a successful apply, confirm:
-
-- Tables/views exist in the target warehouse (`SHOW TABLES IN SCHEMA ...`)
-- API is live: `curl https://<env-fqn>/vulcan/tenants/<tenant>/vulcan/<name>/livez -H 'Authorization: Bearer <token>'`
-- Product appears in Product Discovery with metadata, owner, inputs/outputs, and quality signals
-
----
-
-### Step 7 — Troubleshoot (if something fails)
-
-Use the **Symptom → where to look** table at the top of `deploy-help.md` to
-identify the matching section, then follow it exactly. Common issues are in
-Section 7 of the doc — match the exact error before suggesting a fix.
-
----
+- Ensure the project structure is committed (`config.yaml`, `models/`, `dq/`,
+  `macros/`, `seeds/`, `semantics/`, `tests/`).
+- Push to the branch DataOS will sync; that branch/ref must match
+  `spec.repo.syncFlags` (`--ref=<branch>`) and `spec.repo.baseDir` in `deploy.yaml`.
+- The `secretId` in `spec.repo` must point to the Git-sync secret above.
 
 ## Scope
 
-Covers **deployment only** (Vulcan resource, `type: vulcan`).
-Consumption / query access is out of scope.
+- Covers **deployment only** (`type: vulcan`). Consumption / query access is out of scope.
+- For exact commands, manifests, warehouse grants, and troubleshooting, always defer
+  to **`docs/vulcan-book/deploy-help.md`**.
