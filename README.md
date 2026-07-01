@@ -16,6 +16,60 @@ npx dataproduct-builder-skills
 npx dataproduct-builder-skills snowflake
 npx dataproduct-builder-skills postgres
 npx dataproduct-builder-skills databricks
+Need to install the following packages:
+dataproduct-builder-skills@1.1.0
+Ok to proceed? (y) y
+
+
+dataproduct-builder-skills — scaffolding skills + docs
+
+Which IDE(s) are you using? (comma-separated for multiple, e.g. 1,2)
+
+  1  Cursor
+  2  Claude Code
+  3  Codex
+  4  All
+
+Enter number(s) (1–4): 1
+
+  →  IDE(s): Cursor
+
+Which engine would you like to install examples for?
+
+  0  All engines
+  1  databricks
+  2  postgres
+  3  snowflake
+  4  spark
+  5  trino
+
+Enter number (0–5): 1
+
+  →  Engine: databricks
+
+  ✓  created  .cursor/skills/build-data-product/
+  ✓  created  .cursor/skills/design-data-product/
+  ✓  created  docs/dataos-philosophy/  (22 files)
+  ✓  created  docs/vulcan-book/  (79 files)
+  ✓  created  docs/vulcan-0.228.1.26-py3-none-any.whl
+  ✓  created  docs/vulcan-examples/databricks/  (60 files)
+
+Done!  Your project now has:
+
+  →  .cursor/skills/design-data-product/
+  →  .cursor/skills/build-data-product-workflow/
+  →  docs/vulcan-examples/databricks/
+  →  docs/vulcan-*.whl  — install: pip install "docs/vulcan-*.whl[${ENGINE}]"
+
+Ask the agent to use the skills — e.g.:
+  "design a data product for daily revenue by customer segment"
+
+npm notice
+npm notice New major version of npm available! 10.9.2 -> 11.18.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.18.0
+npm notice To update run: npm install -g npm@11.18.0
+npm notice
+shreyanegi@TMDCIN048 testtemp % 
 ```
 
 This launches an interactive prompt:
@@ -34,7 +88,6 @@ Which engine would you like to install examples for?
 
 Enter number (0–5):
 ```
-
 
 ## What gets installed
 

@@ -83,6 +83,17 @@ async function main() {
     ? ALLOWED_ENGINES.filter(e => fs.existsSync(path.join(examplesDir, e)))
     : [];
 
+  // ── CLI arg: optional engine shortcut ────────────────────────────────────
+  const cliEngine = process.argv[2] ? process.argv[2].toLowerCase() : null;
+
+  if (cliEngine && !validEngines.includes(cliEngine)) {
+    err(`Unknown engine: "${cliEngine}"`);
+    log('');
+    log(`  Available engines: ${validEngines.join(', ')}`);
+    log('');
+    process.exit(1);
+  }
+
   const { ask, close } = await createPrompt();
 
   log('');
@@ -90,7 +101,7 @@ async function main() {
   log('');
 
   // ── Step 1: IDE selection ─────────────────────────────────────────────────
-  const IDE_LIST = IDE_OPTIONS.filter(o => o.folder); // exclude "All three"
+  const IDE_LIST = IDE_OPTIONS.filter(o => o.folder);
 
   log(`${BOLD}Which IDE(s) are you using?${RESET} ${DIM}(comma-separated for multiple, e.g. 1,2)${RESET}`);
   log('');
@@ -116,27 +127,34 @@ async function main() {
   info(`IDE(s): ${BOLD}${ideLabels}${RESET}`);
   log('');
 
-  // ── Step 2: Engine selection ──────────────────────────────────────────────
-  log(`${BOLD}Which engine would you like to install examples for?${RESET}`);
-  log('');
-  log(`  ${DIM}0${RESET}  All engines`);
-  validEngines.forEach((e, i) => log(`  ${DIM}${i + 1}${RESET}  ${e}`));
-  log('');
+  // ── Step 2: Engine selection (skip if passed as CLI arg) ──────────────────
+  let engine;
+  if (cliEngine) {
+    engine = cliEngine;
+    info(`Engine: ${BOLD}${engine}${RESET} (from CLI argument)`);
+    log('');
+  } else {
+    log(`${BOLD}Which engine would you like to install examples for?${RESET}`);
+    log('');
+    log(`  ${DIM}0${RESET}  All engines`);
+    validEngines.forEach((e, i) => log(`  ${DIM}${i + 1}${RESET}  ${e}`));
+    log('');
 
-  const engAnswer = await ask(`Enter number (0–${validEngines.length}): `);
-  const engIdx    = parseInt(engAnswer, 10);
+    const engAnswer = await ask(`Enter number (0–${validEngines.length}): `);
+    const engIdx    = parseInt(engAnswer, 10);
 
-  close();
+    if (isNaN(engIdx) || engIdx < 0 || engIdx > validEngines.length) {
+      err(`Invalid selection "${engAnswer}". Please enter a number between 0 and ${validEngines.length}.`);
+      close(); log(''); process.exit(1);
+    }
 
-  if (isNaN(engIdx) || engIdx < 0 || engIdx > validEngines.length) {
-    err(`Invalid selection "${engAnswer}". Please enter a number between 0 and ${validEngines.length}.`);
-    log(''); process.exit(1);
+    engine = engIdx === 0 ? null : validEngines[engIdx - 1];
+    log('');
+    info(`Engine: ${BOLD}${engine || 'all'}${RESET}`);
+    log('');
   }
 
-  const engine = engIdx === 0 ? null : validEngines[engIdx - 1];
-  log('');
-  info(`Engine: ${BOLD}${engine || 'all'}${RESET}`);
-  log('');
+  close();
 
   // ── Step 3: Skills ────────────────────────────────────────────────────────
   const skillsSrc = path.join(packageDir, 'skills');
@@ -206,10 +224,10 @@ async function main() {
   log('');
   for (const ideFolder of ideFolders) {
     info(`${ideFolder}/skills/design-data-product/`);
-    info(`${ideFolder}/skills/build-data-product-workflow/`);
+    info(`${ideFolder}/skills/build-data-product/`);
   }
   info(`docs/vulcan-examples/${engine || '{all engines}'}/`);
-  info(`docs/vulcan-*.whl  — install: pip install "docs/vulcan-*.whl[\${ENGINE}]"`);
+  info(`docs/vulcan-*.whl  — install: pip install "docs/vulcan-*.whl[${engine || 'ENGINE'}]"`);
   log('');
   log('Ask the agent to use the skills — e.g.:');
   log(`  ${CYAN}"design a data product for daily revenue by customer segment"${RESET}`);
