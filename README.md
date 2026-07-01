@@ -15,29 +15,24 @@ npx dataproduct-builder-skills
 # Or pass the engine directly to skip the prompt
 npx dataproduct-builder-skills snowflake
 npx dataproduct-builder-skills postgres
-npx dataproduct-builder-skills bigquery
+npx dataproduct-builder-skills databricks
 ```
 
 This launches an interactive prompt:
 
 ```
-dataproduct-builder-skills — scaffolding Cursor skills + docs
+dataproduct-builder-skills — scaffolding skills + docs
 
 Which engine would you like to install examples for?
 
   0  All engines
-  1  bigquery
-  2  databricks
-  3  fabric
-  4  mssql
-  5  mysql
-  6  postgres
-  7  redshift
-  8  snowflake
-  9  spark
-  10 trino
+  1  databricks
+  2  postgres
+  3  snowflake
+  4  spark
+  5  trino
 
-Enter number (0–10):
+Enter number (0–5):
 ```
 
 

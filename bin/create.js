@@ -77,11 +77,10 @@ async function main() {
   const targetDir   = process.cwd();
   const examplesDir = path.join(packageDir, 'docs', 'vulcan-examples');
 
+  const ALLOWED_ENGINES = ['databricks', 'postgres', 'snowflake', 'spark', 'trino'];
+
   const validEngines = fs.existsSync(examplesDir)
-    ? fs.readdirSync(examplesDir, { withFileTypes: true })
-        .filter(e => e.isDirectory() && e.name !== 'extra')
-        .map(e => e.name)
-        .sort()
+    ? ALLOWED_ENGINES.filter(e => fs.existsSync(path.join(examplesDir, e)))
     : [];
 
   const { ask, close } = await createPrompt();
