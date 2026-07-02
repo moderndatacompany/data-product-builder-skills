@@ -37,7 +37,7 @@ fields — do not rely on memory.
 
 - The user wants to deploy a Vulcan Data Product on a DataOS instance.
 - The user needs to configure `config.yaml` / `deploy.yaml` for their cloud engine.
-- The user needs to know which secrets to create (or reuse) and how to reference them.
+- The user needs to set up or reuse depot and secrets.
 - A deployment is failing and needs troubleshooting.
 
 ---
@@ -57,8 +57,8 @@ dataos-ctl resource -t stack get -a
 ```
 
 Check:
-- CLI is logged in and the version is recent.
-- At least one Depot and one Compute exist.
+- CLI is logged in and version is recent.
+- At least one Compute exists.
 - The engine stack the user needs is available.
 
 If any command errors, stop and troubleshoot before continuing.
@@ -79,89 +79,149 @@ The agent cannot grant permissions. Stop and tell the user:
 > | `Can Use Secret` | Git-sync, depot credentials, state/object-store secrets |
 > | `Can Use Minerva` | Only if the product exposes a Minerva query endpoint |
 >
-> You can check your current permissions in the DataOS UI under your profile.
 > Let me know when you have confirmed or received all the permissions above."
 
 **Wait for the user to confirm before continuing.**
 
 ---
 
-### Step 3 — Check required secrets `[AGENT]` then `[USER ACTION REQUIRED]`
+### Step 3 — Depot Readiness Check `[AGENT]`
 
-**`[AGENT]`** — Run to see what secrets already exist:
+Run:
+
+```bash
+dataos-ctl resource -t depot get -a
+```
+
+Show the output and ask the user: **"Is the depot you need in this list?"**
+
+Then follow the matching branch below.
+
+---
+
+#### Branch A — Depot exists and user has `Can Use Depot`
+
+Ask the user to confirm they have `Can Use Depot` on the depot. If yes, note the depot name and proceed to Step 4.
+
+---
+
+#### Branch B — Depot exists but user does NOT have `Can Use Depot` `[USER ACTION REQUIRED]`
+
+Stop and tell the user:
+
+> "The depot **`<depot-name>`** exists but you don't have `Can Use Depot` on it.
+> Ask your **Tenant Admin** to grant you `Can Use Depot` on `<depot-name>`.
+> Let me know when that's done."
+
+**Wait for the user to confirm before continuing.**
+
+---
+
+#### Branch C — Depot does NOT exist `[AGENT]` then `[USER ACTION REQUIRED]`
+
+The agent handles creating the manifests; the user fills credentials and applies.
+
+**`[AGENT]`** — Read the relevant engine example:
+
+```
+docs/vulcan-examples/<engine>/
+```
+
+Using the depot and domain-resource examples in that folder as reference, generate two files with placeholders:
+
+1. **`depot-secret.yaml`** — the credential secret for the engine (never fill actual values; use `<your-value>` placeholders for all credentials).
+2. **`depot.yaml`** — the depot manifest referencing the secret, with the correct `spec.type` and fields for the engine.
+
+Present both files to the user.
+
+**`[USER ACTION REQUIRED]`** — Tell the user:
+
+> "I've generated the depot secret and depot manifest above.
+>
+> You need to:
+> 1. Open `depot-secret.yaml`, fill in your credentials where you see `<your-value>` placeholders. **Never share these values with the agent.**
+> 2. Apply both files yourself:
+>    ```bash
+>    dataos-ctl resource apply -f depot-secret.yaml
+>    dataos-ctl resource apply -f depot.yaml
+>    ```
+> 3. Verify the depot is live:
+>    ```bash
+>    dataos-ctl resource -t depot get -n <depot-name> -a
+>    ```
+> 4. Then ask your **Tenant Admin** to grant you `Can Use Depot` on the new depot.
+>
+> Let me know when the depot is created and permission is granted."
+
+**Wait for the user to confirm before continuing.**
+
+---
+
+### Step 4 — Check required secrets `[AGENT]` then `[USER ACTION REQUIRED]`
+
+**`[AGENT]`** — Run:
 
 ```bash
 dataos-ctl resource get -t secret -a
 ```
 
-Show the output. For each required secret below, check if it already exists:
+For each required secret, check if it already exists:
 
 | Secret | Purpose |
 |---|---|
 | Git-sync secret | Lets DataOS sync the private Git repo |
-| Depot credential secret | Engine-specific credentials (Snowflake, Postgres, S3, etc.) |
-| `vulcan-state-connection` | Holds plan/interval/snapshot state — usually SRE-provisioned |
+| `vulcan-state-connection` | Plan/interval/snapshot state — usually SRE-provisioned |
 | `vulcan-object-store-connection` | Query results / artifact spooling — usually SRE-provisioned |
 
 - If a secret **exists**: note its exact `workspace:name` — reuse it, do NOT recreate.
-- If `vulcan-state-connection` or `vulcan-object-store-connection` is missing: tell the user to contact their SRE team — these are tenant-level secrets the agent cannot create.
-- If the **Git-sync secret** is missing: move to the `[USER ACTION REQUIRED]` block below.
+- If `vulcan-state-connection` or `vulcan-object-store-connection` is **missing**: tell the user to contact their SRE team — do not attempt to create these.
+- If the **Git-sync secret** is missing: go to the `[USER ACTION REQUIRED]` block below.
 
-**`[USER ACTION REQUIRED]`** — Git-sync secret creation (only if missing):
+**`[USER ACTION REQUIRED]`** — Git-sync secret (only if missing):
 
-> "The Git-sync secret does not exist yet. You need to create it yourself — never share
-> your credentials with the agent.
+> "The Git-sync secret does not exist yet. Create it yourself — never share your credentials with the agent.
 >
-> 1. Create a file `git-sync-secret.yaml` with this template and fill in your values:
->
+> 1. Create `git-sync-secret.yaml`:
 > ```yaml
 > name: git-sync
 > version: v2alpha
 > type: secret
 > workspace: <your-workspace>
 > layer: user
-> description: "Secret for git-sync authentication"
 > secret:
 >   type: key-value
 >   data:
 >     GITSYNC_USERNAME: "<your-git-username>"
->     GITSYNC_PASSWORD: "<your-git-token-or-password>"
+>     GITSYNC_PASSWORD: "<your-git-token>"
 > ```
->
-> 2. Apply it yourself:
+> 2. Apply it:
 > ```bash
 > dataos-ctl resource apply -f git-sync-secret.yaml
 > ```
->
-> 3. Verify:
-> ```bash
-> dataos-ctl resource get -t secret -a
-> ```
+> 3. Verify: `dataos-ctl resource get -t secret -a`
 >
 > Let me know the secret name and workspace once it's created."
 
-**Wait for the user to confirm the secret exists before continuing.**
+**Wait for confirmation before continuing.**
 
 ---
 
-### Step 4 — Configure `config.yaml` for the cloud environment `[AGENT]`
+### Step 5 — Configure `config.yaml` for the cloud environment `[AGENT]`
 
-Update `config.yaml` to point at the cloud engine. Fill in:
+Update `config.yaml` to point at the cloud engine:
 
 - `name`, `display_name`, `description`, `version` — product identity.
 - `discoverable: true` — required for the product to appear in discovery.
 - `domain` and `owners` — ownership/routing metadata.
 - `model_defaults.dialect` — target engine (`postgres`, `snowflake`, `databricks`, `trino`, `spark`, etc.).
-- `gateways.default.connection` — the DataOS Depot, e.g. `type: depot`, `address: dataos://<depot-name>`.
+- `gateways.default.connection` — `type: depot`, `address: dataos://<depot-name>`.
 - `model_defaults.start` / `cron` — schedule defaults if applicable.
 - `variables` — any env-specific values (schemas, thresholds).
 
-**Check before moving on:**
+Check before moving on:
 - `DATAOS_TENANT_ID` is provided via environment / `.env`, NOT as a YAML key.
 - `dialect` matches the actual engine of the depot.
-- The depot in `gateways` is one the user confirmed `Can Use Depot` for (Step 2).
-
-Then run a local plan to confirm no errors:
+- Run `vulcan plan` locally — it must succeed before pushing.
 
 ```bash
 vulcan plan
@@ -171,7 +231,7 @@ If `vulcan plan` fails, fix the errors before continuing.
 
 ---
 
-### Step 5 — Push the Vulcan project to the Git repo `[AGENT]`
+### Step 6 — Push the Vulcan project to the Git repo `[AGENT]`
 
 Ensure all project files are committed, then push:
 
@@ -181,18 +241,16 @@ git commit -m "prepare for DataOS deployment"
 git push origin <branch>
 ```
 
-Confirm:
-- The branch pushed matches the `--ref=<branch>` value that will go in `deploy.yaml`.
-- The project root (`config.yaml`, `models/`, etc.) is at the path that will be `spec.repo.baseDir`.
+Confirm the pushed branch and `baseDir` match what will go into `deploy.yaml`.
 
 ---
 
-### Step 6 — Apply warehouse grants `[USER ACTION REQUIRED]`
+### Step 7 — Apply warehouse grants `[USER ACTION REQUIRED]`
 
-The agent has no warehouse access. Stop and tell the user:
+Stop and tell the user:
 
-> "Before deploying, the DB user in your Depot's credentials needs grants on the target
-> warehouse. Ask your **DBA or warehouse admin** to run these:
+> "Before deploying, the DB user in your Depot's credentials needs grants on the target warehouse.
+> Ask your **DBA or warehouse admin** to run the appropriate grants:
 >
 > **Postgres:**
 > ```sql
@@ -202,8 +260,7 @@ The agent has no warehouse access. Stop and tell the user:
 > GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA <schema> TO <user>;
 > ```
 >
-> **Snowflake:** `USAGE` on warehouse/database/schema, `SELECT` on tables,
-> `CREATE TABLE/VIEW`, and DML as needed.
+> **Snowflake:** `USAGE` on warehouse/database/schema, `SELECT`, `CREATE TABLE/VIEW`, DML as needed.
 >
 > **Lakehouse:** `depot:rw:<depot-name>` access.
 >
@@ -213,7 +270,7 @@ The agent has no warehouse access. Stop and tell the user:
 
 ---
 
-### Step 7 — Generate and fill `deploy.yaml` `[AGENT]`
+### Step 8 — Generate and fill `deploy.yaml` `[AGENT]`
 
 Generate the starter manifest:
 
@@ -221,27 +278,29 @@ Generate the starter manifest:
 vulcan create_deploy_yaml
 ```
 
-Then fill in every placeholder field:
+Fill in every placeholder using values confirmed in the steps above:
 
 - `name` — kebab-case, matches `config.yaml` `name:`.
-- `spec.compute` — from the `dataos-ctl resource -t compute get -a` output (Step 1).
+- `spec.compute` — from Step 1 output.
 - `spec.engine` — same as `config.yaml` dialect.
 - `spec.repo.url` — the Git repo URL.
-- `spec.repo.syncFlags` — `--ref=<branch>` matching the branch pushed in Step 5.
+- `spec.repo.syncFlags` — `--ref=<branch>` matching the branch pushed in Step 6.
 - `spec.repo.baseDir` — path to the project inside the repo.
-- `spec.repo.secretId` — `<workspace>:<git-sync-secret-name>` from Step 3.
+- `spec.repo.secret` — `<workspace>:<git-sync-secret-name>` from Step 4.
 - `spec.depots` — `dataos://<depot-name>?purpose=rw` for each depot.
-- `spec.workflow.schedule.crons` — matching the freshness cadence from the spec.
+- `spec.workflow.schedule.crons` — matching the freshness cadence from the design spec.
 - `spec.workflow.schedule.timezone` and `endOn`.
 - `spec.api.replicas` — default `1`.
+
+Reference `docs/vulcan-examples/<engine>/` for a working `domain-resource.yaml` example for this engine.
 
 Present the completed `deploy.yaml` to the user for review. Do NOT apply until the user approves.
 
 ---
 
-### Step 8 — Apply the resource `[AGENT]`
+### Step 9 — Apply the resource `[AGENT]`
 
-After user approval of the manifest:
+After user approval:
 
 ```bash
 dataos-ctl resource apply -f deploy.yaml
@@ -255,15 +314,13 @@ dataos-ctl resource -t vulcan -n <data-product-name> get
 
 ---
 
-### Step 9 — Verify deployment `[AGENT]`
-
-Check logs for each component:
+### Step 10 — Verify deployment `[AGENT]`
 
 ```bash
-# Run logs (model execution)
+# Run logs
 dataos-ctl resource -t vulcan -n <name> logs --container-group <name>-run-execute -c main
 
-# Plan logs (migration / auto-apply)
+# Plan logs
 dataos-ctl resource -t vulcan -n <name> logs --container-group <name>-plan-execute -c main
 
 # API logs
