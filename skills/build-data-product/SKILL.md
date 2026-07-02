@@ -600,6 +600,13 @@ Use the backfill start date from Section 10 of `data-product-plan.md` (Q9). For 
 
    Present the filled-in `domain-resource.yaml` to the user for review. Do NOT apply it — hand it off to the user to apply via `dataos-ctl apply -f domain-resource.yaml`.
 
+> **You're almost there — one manual step remaining.**
+> The agent has generated and pre-filled `domain-resource.yaml` above. Review the placeholders, then deploy it yourself:
+> ```
+> dataos-ctl apply -f domain-resource.yaml
+> ```
+> Once applied, DataOS will pick up your data product and run it on the schedule defined in the manifest.
+
 **Completion**: Summarize what was built (model name, entities, measures, dimensions), list files and locations, suggest next steps (more models, quality checks, BI tools).
 
 ---
