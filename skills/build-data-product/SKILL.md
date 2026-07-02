@@ -140,7 +140,7 @@ Read the entire `data-product-plan.md` end-to-end, including the Verification Su
 
 Pay attention to: entities, grain, measures vs metrics, dimensions, sources, consumption pattern, and assumptions.
 
-**Extract and hold the engine**: Find the `engine` field in Section 2 (Data Sources) or the YAML contract. You will use `engine=<engine>` to filter every read from `docs/vulcan-examples/`. If it is missing from the spec, stop and ask the user before continuing.
+**Extract and hold the engine**: Find the `engine` field in Section 2 (Data Sources) or the YAML contract. Store it as `<ENGINE>`. For ALL example lookups in this session, you MUST only read from `docs/vulcan-examples/<ENGINE>/`. Never open any other engine subfolder (e.g. if engine is `snowflake`, read only from `docs/vulcan-examples/snowflake/` — never from `postgres/`, `trino/`, etc.). If the engine is missing from the spec, stop and ask the user before continuing.
 
 **Step 2 — Verify build-specific concepts**
 
@@ -274,7 +274,7 @@ Ground every step in the docs and real examples — this is mandatory, not optio
 | Situation                                          | What to do                                                                                                                                     | When                                                                                    |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Any Vulcan concept mentioned                       | Read the relevant page(s) in `docs/vulcan-book/` and `docs/dataos-philosophy/`                                                                 | BEFORE using the concept in any output                                                  |
-| Before starting a component group                  | read from `docs/vulcan-examples/` (category: `<category>`, engine: `<engine>`)                                                                 | ONCE per group, before generating any file in it                                        |
+| Before starting a component group                  | Read files from `docs/vulcan-examples/<engine>/` only — do NOT open any other engine subfolder                                                 | ONCE per group, before generating any file in it                                        |
 | After generating a file, or when vulcan plan fails | Self-review the file against `docs/vulcan-book/` and `docs/dataos-philosophy/`, the Vulcan syntax rules below, and the group examples          | After writing each file to catch Vulcan-specific issues; and in the error recovery loop |
 | Plan the project structure                         | Derive the file manifest yourself from the spec + `VULCAN_PROJECT_LAYOUT` + examples                                                           | BEFORE generating files                                                                 |
 | Enrich metadata                                    | Derive column descriptions/tags/owner/terms yourself from the spec + docs                                                                      | After Groups A-C are written to disk (Step 2.5)                                         |
@@ -411,14 +411,14 @@ Follow `generation_order`, grouped by component type. After each group, run `vul
 - **`vars: {execution_time: <ISO-date>}`** — required for INCREMENTAL_BY_TIME_RANGE models; the date controls which weekly/daily interval the model processes during the test. The date MUST fall within the test mock data's date range or the model will return empty results
 - **Mock the direct dependency** — test inputs must mock the silver/staging model (the direct FROM clause target), not the raw seed tables
 
-**Before generating any file in a group**, read from `docs/vulcan-examples/` once to load real syntax examples for that group:
+**Before generating any file in a group**, read from `docs/vulcan-examples/<engine>/` once to load real syntax examples for that group. **Only read from this one engine folder — never from any other engine subfolder.**
 
-- Group A/B → read from `docs/vulcan-examples/` (category: `models`, engine: `<engine>`)
-- Group C → read from `docs/vulcan-examples/` (category: `semantics`, engine: `<engine>`) (files live in `models/semantics/`)
-- Group C.5 → read from `docs/vulcan-examples/` (category: `metrics`, engine: `<engine>`) (files live in `models/metrics/`)
-- Group D dq → read from `docs/vulcan-examples/` (category: `dq`, engine: `<engine>`)
-- Group D audits → read from `docs/vulcan-examples/` (category: `audits`, engine: `<engine>`)
-- Group E → read from `docs/vulcan-examples/` (category: `tests`, engine: `<engine>`)
+- Group A/B → read models files from `docs/vulcan-examples/<engine>/`
+- Group C → read semantics files from `docs/vulcan-examples/<engine>/` (files live in `models/semantics/`)
+- Group C.5 → read metrics files from `docs/vulcan-examples/<engine>/` (files live in `models/metrics/`)
+- Group D dq → read dq files from `docs/vulcan-examples/<engine>/`
+- Group D audits → read audits files from `docs/vulcan-examples/<engine>/`
+- Group E → read tests files from `docs/vulcan-examples/<engine>/`
 
 Use the found examples as your syntax reference for all files in that group. If no examples are found, note it and continue.
 

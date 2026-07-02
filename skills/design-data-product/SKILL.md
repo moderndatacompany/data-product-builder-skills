@@ -168,7 +168,7 @@ _Persona: analyst / data-aware user. Most of this batch is the assistant doing t
 | 5a  | Where is your data located at? (e.g., `snowflake`, `postgres`, `databricks`, `lakehouse`)                    | 2. Data Sources |
 | 5b  | Which engine does this data product use? (e.g., `snowflake`, `postgres`, `redshift`, `databricks`, `duckdb`) | Engine          |
 
-Do NOT proceed past Q5 without a confirmed data source (Q5a) and engine (Q5b).
+Do NOT proceed past Q5 without a confirmed data source (Q5a) and engine (Q5b). Once Q5b is confirmed, store it as `<ENGINE>`. For ALL example lookups in this session, only read from `docs/vulcan-examples/<ENGINE>/` — never from any other engine subfolder.
 
 ---
 
@@ -453,18 +453,18 @@ Read the `docs/vulcan-book/` and `docs/dataos-philosophy/` pages for every Vulca
 
 **Step 2 — Retrieve reference patterns:**
 
-Read from `docs/vulcan-examples/` filtering by `file_category` (one of: models, semantics, dq, checks, metrics, audits, tests) and `engine` to get real files of that type for the dialect. Always filter by `engine=<Q5b>`.
+Read files from `docs/vulcan-examples/<Q5b>/` only — this is the confirmed engine folder. Do NOT read from any other engine subfolder. Browse within it for the relevant category (models, semantics, dq, checks, metrics, audits, tests).
 
-- [ ] Read from `docs/vulcan-examples/` (category: `models`, engine: `<Q5b>`) — see how real models and grain are structured
-- [ ] Read from `docs/vulcan-examples/` (category: `semantics`, engine: `<Q5b>`) — see how measures/dimensions are defined
-- [ ] Read from `docs/vulcan-examples/` (category: `metrics`, engine: `<Q5b>`) — see how metrics reference measures
+- [ ] Read model files from `docs/vulcan-examples/<Q5b>/` — see how real models and grain are structured
+- [ ] Read semantics files from `docs/vulcan-examples/<Q5b>/` — see how measures/dimensions are defined
+- [ ] Read metrics files from `docs/vulcan-examples/<Q5b>/` — see how metrics reference measures
 
 If NO examples found: tell the user, and fall back to the patterns documented in `docs/vulcan-book/` and `docs/dataos-philosophy/`.
 
 **Step 2.5 — Derive quality rules**:
 
 Derive the quality rules yourself from the finalized spec — there is no tool for this. Ground the
-rule types and YAML structure in the `dq` and audits pages of `docs/vulcan-book/` and `docs/dataos-philosophy/`, and read from `docs/vulcan-examples/` (category: `dq`, engine: `<Q5b>`) and `docs/vulcan-examples/` (category: `audits`, engine: `<Q5b>`)
+rule types and YAML structure in the `dq` and audits pages of `docs/vulcan-book/` and `docs/dataos-philosophy/`, and read dq and audits files from `docs/vulcan-examples/<Q5b>/` only
 for concrete syntax. Because the model is not yet deployed, mark any numeric threshold as
 [Estimated] — these MUST be replaced with real values after deployment (re-derive from
 `vulcan evaluate` output during build).
