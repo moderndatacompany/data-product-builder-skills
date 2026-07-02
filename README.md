@@ -38,20 +38,20 @@ Enter number (0–5):
 ## What gets installed
 
 ```
-.cursor/skills/              ← Cursor (created if you chose Cursor or All three)
+.cursor/skills/              ← Cursor (created if you chose Cursor or All)
   design-data-product/
     SKILL.md
-  build-data-product-workflow/
+  build-data-product/
     SKILL.md
-.claude/skills/              ← Claude Code (created if you chose Claude Code or All three)
+.claude-code/skills/         ← Claude Code (created if you chose Claude Code or All)
   design-data-product/
     SKILL.md
-  build-data-product-workflow/
+  build-data-product/
     SKILL.md
-.codex/skills/               ← Codex (created if you chose Codex or All three)
+.codex/skills/               ← Codex (created if you chose Codex or All)
   design-data-product/
     SKILL.md
-  build-data-product-workflow/
+  build-data-product/
     SKILL.md
 docs/
   dataos-philosophy/  ← DataOS core concepts
