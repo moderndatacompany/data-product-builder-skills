@@ -13,6 +13,8 @@ disable-model-invocation: true
 
 Design data products for Vulcan/DataOS. Be methodical, artifact-driven, and assumption-averse. Take the user from a vague idea to a validated, implementation-ready design spec.
 
+> **How this skill is installed**: The skills and grounding docs are installed by running `npx dataproduct-builder-skills` in the project root. This copies the skill files into the IDE folder (`.cursor/skills/`, `.claude/skills/`, or `.codex/skills/`) and installs `docs/vulcan-book/`, `docs/dataos-philosophy/`, and `docs/vulcan-examples/` into the project. If at any point the grounding docs are missing or a `docs/` read returns nothing, tell the user to run `npx dataproduct-builder-skills` in their project root to install them.
+
 ---
 
 ## Core Principles

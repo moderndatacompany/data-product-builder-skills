@@ -16,6 +16,8 @@ Build, validate, and deploy Vulcan data products. Be proactive, thorough, and ac
 
 This skill turns a validated design spec into a working, deployed data product as fast as possible. The input is a `data-product-plan.md` produced by the `design-data-product` skill.
 
+> **How this skill is installed**: The skills and grounding docs are installed by running `npx dataproduct-builder-skills` in the project root. This copies the skill files into the IDE folder (`.cursor/skills/`, `.claude/skills/`, or `.codex/skills/`) and installs `docs/vulcan-book/`, `docs/dataos-philosophy/`, and `docs/vulcan-examples/` into the project. If at any point the grounding docs are missing or a `docs/` read returns nothing, tell the user to run `npx dataproduct-builder-skills` in their project root to install them.
+
 **Language note**: Vulcan is anti-pipeline. Never use "pipeline" in output or conversation. Use "model DAG", "data product", or "model layers" instead.
 
 ## Vulcan Project Layout (standard structure created by `vulcan init`)
