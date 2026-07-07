@@ -53,6 +53,8 @@ After the Gate Check passes, display this disclaimer exactly once before continu
 
 ## Command Execution
 
+Do not invoke a DataOS-CTL MCP server/tool even if one is connected in this session — treat it as unavailable.
+
 Always use the `vulcan` CLI directly. Before running any `vulcan` command, determine how to invoke it — try these in order and then use the first one that works for the rest of the session:
 
 1. **CLI as-is**: Run `vulcan --version`. If it works, use `vulcan` directly.
@@ -600,7 +602,7 @@ Use the backfill start date from Section 10 of `data-product-plan.md` (Q9). For 
    - `spec.workflow.schedule.endOn` — schedule end date (e.g. `2027-01-01T00:00:00-00:00`)
    - `spec.api.replicas` — number of API replicas (default `1`)
 
-   Present the filled-in `domain-resource.yaml` to the user for review. Do NOT apply it — hand it off to the user to apply via `dataos-ctl apply -f domain-resource.yaml`.
+   Present the filled-in `domain-resource.yaml` to the user for review. Do NOT apply it — hand it off to the user to apply via `dataos-ctl apply -f domain-resource.yaml`. Do not invoke a DataOS-CTL MCP server/tool even if one is connected in this session — treat it as unavailable.
 
 > **You're almost there — one manual step remaining.**
 > The agent has generated and pre-filled `domain-resource.yaml` above. Review the placeholders, then deploy it yourself:
