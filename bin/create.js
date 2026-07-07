@@ -142,32 +142,39 @@ async function main() {
   info(`IDE(s): ${BOLD}${ideLabels}${RESET}`);
   log('');
 
-  // ── Step 2: Engine selection (skip if passed as CLI arg) ──────────────────
+  // ── Step 2: Engine selection ────────────────────────────────────────────
+  // No interactive prompt — always install all engines' docs unless a specific
+  // engine is passed as a CLI arg (e.g. `npx dataproduct-builder-skills snowflake`).
   let engine;
   if (cliEngine) {
     engine = cliEngine;
     info(`Engine: ${BOLD}${engine}${RESET} (from CLI argument)`);
     log('');
   } else {
-    log(`${BOLD}Which engine would you like to install examples for?${RESET}`);
-    log('');
-    log(`  ${DIM}0${RESET}  All engines`);
-    validEngines.forEach((e, i) => log(`  ${DIM}${i + 1}${RESET}  ${e}`));
-    log('');
-
-    const engAnswer = await ask(`Enter number (0–${validEngines.length}): `);
-    const engIdx    = parseInt(engAnswer, 10);
-
-    if (isNaN(engIdx) || engIdx < 0 || engIdx > validEngines.length) {
-      err(`Invalid selection "${engAnswer}". Please enter a number between 0 and ${validEngines.length}.`);
-      close(); log(''); process.exit(1);
-    }
-
-    engine = engIdx === 0 ? null : validEngines[engIdx - 1];
-    log('');
-    info(`Engine: ${BOLD}${engine || 'all'}${RESET}`);
+    engine = null;
+    info(`Engine: ${BOLD}all${RESET} (default)`);
     log('');
   }
+  /* Previously prompted the user to pick an engine interactively:
+  log(`${BOLD}Which engine would you like to install examples for?${RESET}`);
+  log('');
+  log(`  ${DIM}0${RESET}  All engines`);
+  validEngines.forEach((e, i) => log(`  ${DIM}${i + 1}${RESET}  ${e}`));
+  log('');
+
+  const engAnswer = await ask(`Enter number (0–${validEngines.length}): `);
+  const engIdx    = parseInt(engAnswer, 10);
+
+  if (isNaN(engIdx) || engIdx < 0 || engIdx > validEngines.length) {
+    err(`Invalid selection "${engAnswer}". Please enter a number between 0 and ${validEngines.length}.`);
+    close(); log(''); process.exit(1);
+  }
+
+  engine = engIdx === 0 ? null : validEngines[engIdx - 1];
+  log('');
+  info(`Engine: ${BOLD}${engine || 'all'}${RESET}`);
+  log('');
+  */
 
   close();
 
