@@ -17,12 +17,24 @@ function info(msg) { log(`  ${CYAN}→${RESET}  ${msg}`); }
 function warn(msg) { log(`  ${YELLOW}!${RESET}  ${msg}`); }
 function err(msg)  { log(`  \x1b[31m✗${RESET}  ${msg}`); }
 
-function copyDir(src, dest) {
+// Mirrors src into dest: copies/overwrites everything from src, and also
+// deletes any dest entry that no longer exists in src. Only safe for
+// directories fully owned by this tool, so updates don't leave stale
+// files/folders behind when the source structure changes between versions.
+function syncDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
+  const srcNames = new Set(fs.readdirSync(src));
+
+  for (const entry of fs.readdirSync(dest, { withFileTypes: true })) {
+    if (!srcNames.has(entry.name)) {
+      fs.rmSync(path.join(dest, entry.name), { recursive: true, force: true });
+    }
+  }
+
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
     const s = path.join(src, entry.name);
     const d = path.join(dest, entry.name);
-    entry.isDirectory() ? copyDir(s, d) : fs.copyFileSync(s, d);
+    entry.isDirectory() ? syncDir(s, d) : fs.copyFileSync(s, d);
   }
 }
 
@@ -33,6 +45,8 @@ function countFiles(dir) {
   return n;
 }
 
+// Prompts interactively over a TTY, or replays piped/scripted stdin lines
+// in order when stdin isn't a TTY (e.g. `echo "1\n2" | npx dataproduct-builder-skills`).
 async function createPrompt() {
   const isTTY = process.stdin.isTTY;
   const lines  = [];
@@ -73,12 +87,13 @@ const IDE_OPTIONS = [
 ];
 
 async function main() {
-  const packageDir  = path.join(__dirname, '..');
-  const targetDir   = process.cwd();
+  const packageDir  = path.join(__dirname, '..'); // this npm package's own install dir (source of truth)
+  const targetDir   = process.cwd();               // the user's project (destination)
   const examplesDir = path.join(packageDir, 'dpbs-docs', 'vulcan-examples');
 
   const ALLOWED_ENGINES = ['databricks', 'postgres', 'snowflake', 'spark', 'trino'];
 
+  // Only offer engines that actually shipped examples in this package version.
   const validEngines = fs.existsSync(examplesDir)
     ? ALLOWED_ENGINES.filter(e => fs.existsSync(path.join(examplesDir, e)))
     : [];
@@ -171,7 +186,7 @@ async function main() {
         const src    = path.join(skillsSrc, skill);
         const dest   = path.join(targetDir, ideFolder, 'skills', skill);
         const existed = fs.existsSync(dest);
-        copyDir(src, dest);
+        syncDir(src, dest);
         ok(`${existed ? 'updated' : 'created'}  ${ideFolder}/skills/${skill}/`);
       }
     }
@@ -190,13 +205,22 @@ async function main() {
       const src     = path.join(docsSrc, dir);
       const dest    = path.join(docsDest, dir);
       const existed = fs.existsSync(dest);
-      copyDir(src, dest);
+      syncDir(src, dest);
       const n = countFiles(src);
       ok(`${existed ? 'updated' : 'created'}  dpbs-docs/${dir}/  (${n} file${n === 1 ? '' : 's'})`);
     }
-    // loose files at dpbs-docs/ root (e.g. .whl)
+    // loose files at dpbs-docs/ root (e.g. .whl) — first delete any dest loose file
+    // no longer present in src (e.g. a prior version's differently-named .whl),
+    // then copy the current set, so re-running never leaves an old wheel behind.
     fs.mkdirSync(docsDest, { recursive: true });
-    for (const entry of fs.readdirSync(docsSrc, { withFileTypes: true }).filter(e => !e.isDirectory())) {
+    const looseSrcEntries = fs.readdirSync(docsSrc, { withFileTypes: true }).filter(e => !e.isDirectory());
+    const looseSrcNames   = new Set(looseSrcEntries.map(e => e.name));
+    for (const entry of fs.readdirSync(docsDest, { withFileTypes: true }).filter(e => !e.isDirectory())) {
+      if (!looseSrcNames.has(entry.name)) {
+        fs.rmSync(path.join(docsDest, entry.name), { force: true });
+      }
+    }
+    for (const entry of looseSrcEntries) {
       const src     = path.join(docsSrc, entry.name);
       const dest    = path.join(docsDest, entry.name);
       const existed = fs.existsSync(dest);
@@ -207,12 +231,14 @@ async function main() {
 
   // ── Step 5: dpbs-docs/vulcan-examples (filtered or all) ────────────────────────
   if (fs.existsSync(examplesDir)) {
+    // Only touches the selected engine folder(s) — examples for engines installed
+    // in a previous run but not chosen this time are left untouched.
     const enginesToCopy = engine ? [engine] : validEngines;
     for (const eng of enginesToCopy) {
       const src     = path.join(examplesDir, eng);
       const dest    = path.join(docsDest, 'vulcan-examples', eng);
       const existed = fs.existsSync(dest);
-      copyDir(src, dest);
+      syncDir(src, dest);
       const n = countFiles(src);
       ok(`${existed ? 'updated' : 'created'}  dpbs-docs/vulcan-examples/${eng}/  (${n} file${n === 1 ? '' : 's'})`);
     }
