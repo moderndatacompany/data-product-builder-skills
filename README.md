@@ -53,12 +53,12 @@ Enter number (0–5):
     SKILL.md
   build-data-product/
     SKILL.md
-docs/
+dpbs-docs/
   dataos-philosophy/  ← DataOS core concepts
   vulcan-docs/        ← Vulcan CLI & framework reference
   vulcan-examples/
     <engine>/         ← real working data product examples for your chosen engine
-  vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install docs/vulcan-*.whl
+  vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install dpbs-docs/vulcan-*.whl
 ```
 
 ## What the skills do

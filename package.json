@@ -8,7 +8,7 @@
   "files": [
     "bin/",
     "skills/",
-    "docs/"
+    "dpbs-docs/"
   ],
   "keywords": [
     "cursor",

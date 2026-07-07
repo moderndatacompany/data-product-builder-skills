@@ -75,7 +75,7 @@ const IDE_OPTIONS = [
 async function main() {
   const packageDir  = path.join(__dirname, '..');
   const targetDir   = process.cwd();
-  const examplesDir = path.join(packageDir, 'docs', 'vulcan-examples');
+  const examplesDir = path.join(packageDir, 'dpbs-docs', 'vulcan-examples');
 
   const ALLOWED_ENGINES = ['databricks', 'postgres', 'snowflake', 'spark', 'trino'];
 
@@ -177,12 +177,12 @@ async function main() {
     }
   }
 
-  // ── Step 4: docs (non-examples) ───────────────────────────────────────────
-  const docsSrc  = path.join(packageDir, 'docs');
-  const docsDest = path.join(targetDir, 'docs');
+  // ── Step 4: dpbs-docs (non-examples) ───────────────────────────────────────────
+  const docsSrc  = path.join(packageDir, 'dpbs-docs');
+  const docsDest = path.join(targetDir, 'dpbs-docs');
 
   if (!fs.existsSync(docsSrc)) {
-    warn('docs/ directory not found in package — skipping');
+    warn('dpbs-docs/ directory not found in package — skipping');
   } else {
     for (const dir of fs.readdirSync(docsSrc, { withFileTypes: true })
         .filter(e => e.isDirectory() && e.name !== 'vulcan-examples')
@@ -192,20 +192,20 @@ async function main() {
       const existed = fs.existsSync(dest);
       copyDir(src, dest);
       const n = countFiles(src);
-      ok(`${existed ? 'updated' : 'created'}  docs/${dir}/  (${n} file${n === 1 ? '' : 's'})`);
+      ok(`${existed ? 'updated' : 'created'}  dpbs-docs/${dir}/  (${n} file${n === 1 ? '' : 's'})`);
     }
-    // loose files at docs/ root (e.g. .whl)
+    // loose files at dpbs-docs/ root (e.g. .whl)
     fs.mkdirSync(docsDest, { recursive: true });
     for (const entry of fs.readdirSync(docsSrc, { withFileTypes: true }).filter(e => !e.isDirectory())) {
       const src     = path.join(docsSrc, entry.name);
       const dest    = path.join(docsDest, entry.name);
       const existed = fs.existsSync(dest);
       fs.copyFileSync(src, dest);
-      ok(`${existed ? 'updated' : 'created'}  docs/${entry.name}`);
+      ok(`${existed ? 'updated' : 'created'}  dpbs-docs/${entry.name}`);
     }
   }
 
-  // ── Step 5: docs/vulcan-examples (filtered or all) ────────────────────────
+  // ── Step 5: dpbs-docs/vulcan-examples (filtered or all) ────────────────────────
   if (fs.existsSync(examplesDir)) {
     const enginesToCopy = engine ? [engine] : validEngines;
     for (const eng of enginesToCopy) {
@@ -214,7 +214,7 @@ async function main() {
       const existed = fs.existsSync(dest);
       copyDir(src, dest);
       const n = countFiles(src);
-      ok(`${existed ? 'updated' : 'created'}  docs/vulcan-examples/${eng}/  (${n} file${n === 1 ? '' : 's'})`);
+      ok(`${existed ? 'updated' : 'created'}  dpbs-docs/vulcan-examples/${eng}/  (${n} file${n === 1 ? '' : 's'})`);
     }
   }
 
@@ -226,8 +226,8 @@ async function main() {
     info(`${ideFolder}/skills/design-data-product/`);
     info(`${ideFolder}/skills/build-data-product/`);
   }
-  info(`docs/vulcan-examples/${engine || '{all engines}'}/`);
-  info(`docs/vulcan-*.whl  — install: pip install "docs/vulcan-*.whl[${engine || 'ENGINE'}]"`);
+  info(`dpbs-docs/vulcan-examples/${engine || '{all engines}'}/`);
+  info(`dpbs-docs/vulcan-*.whl  — install: pip install "dpbs-docs/vulcan-*.whl[${engine || 'ENGINE'}]"`);
   log('');
   log('Ask the agent to use the skills — e.g.:');
   log(`  ${CYAN}"design a data product for daily revenue by customer segment"${RESET}`);
