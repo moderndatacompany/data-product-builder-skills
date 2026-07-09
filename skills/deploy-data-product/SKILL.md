@@ -245,32 +245,7 @@ Confirm the pushed branch and `baseDir` match what will go into `deploy.yaml`.
 
 ---
 
-### Step 7 — Apply warehouse grants `[USER ACTION REQUIRED]`
-
-Stop and tell the user:
-
-> "Before deploying, the DB user in your Depot's credentials needs grants on the target warehouse.
-> Ask your **DBA or warehouse admin** to run the appropriate grants:
->
-> **Postgres:**
-> ```sql
-> GRANT CREATE ON DATABASE <db> TO <user>;
-> GRANT CREATE ON SCHEMA <schema> TO <user>;
-> GRANT USAGE ON SCHEMA <schema> TO <user>;
-> GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA <schema> TO <user>;
-> ```
->
-> **Snowflake:** `USAGE` on warehouse/database/schema, `SELECT`, `CREATE TABLE/VIEW`, DML as needed.
->
-> **Lakehouse:** `depot:rw:<depot-name>` access.
->
-> Let me know when the grants are in place."
-
-**Wait for the user to confirm before continuing.**
-
----
-
-### Step 8 — Generate and fill `deploy.yaml` `[AGENT]`
+### Step 7 — Generate and fill `deploy.yaml` `[AGENT]`
 
 Generate the starter manifest:
 
@@ -298,7 +273,7 @@ Present the completed `deploy.yaml` to the user for review. Do NOT apply until t
 
 ---
 
-### Step 9 — Apply the resource `[AGENT]`
+### Step 8 — Apply the resource `[AGENT]`
 
 After user approval:
 
@@ -314,7 +289,7 @@ dataos-ctl resource -t vulcan -n <data-product-name> get
 
 ---
 
-### Step 10 — Verify deployment `[AGENT]`
+### Step 9 — Verify deployment `[AGENT]`
 
 ```bash
 # Run logs
