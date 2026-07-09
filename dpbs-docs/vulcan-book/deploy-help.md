@@ -6,8 +6,8 @@
 
 1. Start with the **Symptom → where to look** table below and jump to the matching section.
 2. If deployment hasn't started yet, confirm **Prerequisites** (Section 3) and **Permissions** (Section 2).
-3. If `apply` succeeded but something is wrong at runtime, use **Verify & read logs** (Section 6).
-4. Match the exact error against **Common issues** (Section 7).
+3. If `apply` succeeded but something is wrong at runtime, use **Verify & read logs** (Section 5).
+4. Match the exact error against **Common issues** (Section 6).
 
 ## Symptom → where to look
 
@@ -16,12 +16,12 @@
 | ---------------------------------------------------- | -------------------------------------------------- |
 | "access denied" / cannot create or use a resource    | Section 1 (Role), Section 2 (Permissions)          |
 | CLI login fails / can't see Depot, stack, or Compute | Section 3 (Prerequisites)                          |
-| Repository does not sync                             | Section 3 (Git-sync secret), Section 7             |
-| Depot connection fails                               | Section 2, Section 5 (Warehouse grants), Section 7 |
-| Plan / Run fails                                     | Section 6 (logs), Section 7                        |
-| API not reachable                                    | Section 6 (api logs), Section 7                    |
-| Tables/views missing in warehouse                    | Section 5 (Warehouse grants), Section 6            |
-| Product not visible in discovery                     | Section 6, Section 7                               |
+| Repository does not sync                             | Section 3 (Git-sync secret), Section 6             |
+| Depot connection fails                               | Section 2, Section 6                               |
+| Plan / Run fails                                     | Section 5 (logs), Section 6                        |
+| API not reachable                                    | Section 5 (api logs), Section 6                    |
+| Tables/views missing in warehouse                    | Section 5                                          |
+| Product not visible in discovery                     | Section 5, Section 6                               |
 
 
 ## 1. Role you need
@@ -60,7 +60,6 @@ You should have all of these in place first:
 - [ ] A Git-sync Secret for repo access (if the repo is private)
 - [ ] `config.yaml` — Vulcan project configuration
 - [ ] `deploy.yaml` — the DataOS Vulcan resource definition
-- [ ] Warehouse/engine-side grants for the DB user in the Depot's Secret
 
 Verify access before deploying:
 
@@ -136,24 +135,7 @@ spec:
     logLevel: INFO
 ```
 
-## 5. Warehouse / engine-level grants
-
-The DB user referenced in the Depot's Secret needs grants in the target warehouse. (The object Vulcan creates in the warehouse is governed by the Secret's credentials, not by DataOS platform governance.)
-
-**Postgres:**
-
-```sql
-GRANT CREATE ON DATABASE my_db TO vulcan_user;
-GRANT CREATE ON SCHEMA my_schema TO vulcan_user;
-GRANT USAGE ON SCHEMA my_schema TO vulcan_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA my_schema TO vulcan_user;
-```
-
-**Snowflake** (the role IS the identity): `USAGE` on warehouse/database/schema, `SELECT` on tables, `CREATE TABLE/VIEW`, and `INSERT/UPDATE/DELETE` as needed.
-
-**Lakehouse:** `depot:rw:<lakehouse-depot-name>` for read/write.
-
-## 6. Deploy, verify & read logs
+## 5. Deploy, verify & read logs
 
 Apply the resource:
 
@@ -201,7 +183,7 @@ Then confirm:
 - The API is live: `curl https://<env-fqn>/vulcan/tenants/<tenant>/vulcan/<data-product-name>/livez -H 'Authorization: Bearer <token>'`.
 - The product appears in Product discovery with metadata, owner, inputs/outputs, and quality signals.
 
-## 7. Common issues
+## 6. Common issues
 
 
 | Issue                    | Check                                                       |
