@@ -1,3 +1,0 @@
-limitations:
-  - Snowflake cloud warehouse as data platform
-  - Seed-based staging for demo; replace with ONESOURCEPLUS when available

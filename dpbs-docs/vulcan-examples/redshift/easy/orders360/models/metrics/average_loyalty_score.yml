@@ -1,3 +1,0 @@
-kind: metric
-name: average_loyalty_score
-measure: customers.average_loyalty_score
