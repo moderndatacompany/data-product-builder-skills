@@ -60,7 +60,7 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
 1. **CLI as-is**: Run `vulcan --version`. If it works, use `vulcan` directly.
 2. **Workspace venv**: If step 1 fails, look for an existing virtual environment (`.venv/` or `venv/` in the project root) and check it — `.venv/bin/vulcan --version`. If `vulcan` resolves there, use that invocation for the rest of the session.
 3. **Auto-install from bundled wheel**: If `vulcan` is not found in steps 1–2, install it automatically using the bundled wheel:
-   1. Read `dpbs-docs/vulcan-book/ldk-setup.md` and present it to the user so they understand the setup.
+   1. Read `dpbs-docs/ldk-setup.md` and present it to the user so they understand the setup.
    2. Find the wheel file: look for `dpbs-docs/vulcan-*.whl` (glob — pick the first match).
       - If **no match** → tell the user: "The Vulcan wheel is not found under `dpbs-docs/`. Please run `npx builder-skills` first to install it, then let me know." **STOP** until confirmed.
       - If **found** → let `WHEEL=$(ls dpbs-docs/vulcan-*.whl | head -1)` and proceed.
@@ -90,7 +90,7 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
       For example, for Postgres: `.venv/bin/pip install "${WHEEL}[postgres]"`
    6. Verify: `.venv/bin/vulcan --version`. If it prints a version, use `.venv/bin/vulcan` for all subsequent commands in this session.
    7. If the install or verification still fails, **HARD STOP**:
-      > "Vulcan CLI installation failed. Please check the error above, review `dpbs-docs/vulcan-book/ldk-setup.md` for prerequisites, and let me know when it's resolved."
+      > "Vulcan CLI installation failed. Please check the error above, review `dpbs-docs/ldk-setup.md` for prerequisites, and let me know when it's resolved."
       > Do NOT continue with any `vulcan` command until the user confirms it is fixed.
 
 Once the working invocation is determined, use it consistently throughout the session.
