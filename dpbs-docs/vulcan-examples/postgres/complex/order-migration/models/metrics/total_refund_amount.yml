@@ -1,3 +1,0 @@
-kind: metric
-name: total_refund_amount
-measure: returns.total_refund_amount

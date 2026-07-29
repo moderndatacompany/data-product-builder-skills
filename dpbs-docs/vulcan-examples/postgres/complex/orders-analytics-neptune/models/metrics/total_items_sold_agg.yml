@@ -1,3 +1,0 @@
-kind: metric
-name: total_items_sold_agg
-measure: daily_sales.total_items_sold_agg

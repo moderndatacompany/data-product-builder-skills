@@ -1,3 +1,0 @@
-kind: metric
-name: avg_unit_price
-measure: order_items.avg_unit_price

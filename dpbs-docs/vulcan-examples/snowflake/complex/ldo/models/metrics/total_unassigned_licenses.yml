@@ -1,3 +1,0 @@
-kind: metric
-name: total_unassigned_licenses
-measure: consumed_licenses.total_unassigned_licenses

@@ -1,4 +1,0 @@
-kind: metric
-name: platinum_customers
-measure: customers.platinum_customers
-description: "Number of Platinum tier customers"

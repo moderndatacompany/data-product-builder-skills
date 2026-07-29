@@ -1,3 +1,0 @@
-kind: metric
-name: avg_daily_revenue_in_weeks
-measure: weekly_sales.avg_daily_revenue_in_weeks

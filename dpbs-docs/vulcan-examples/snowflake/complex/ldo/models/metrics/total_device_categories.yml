@@ -1,3 +1,0 @@
-kind: metric
-name: total_device_categories
-measure: devices.total_device_categories

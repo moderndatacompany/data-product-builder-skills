@@ -1,3 +1,0 @@
-kind: metric
-name: stale_product_count
-measure: product_profile.stale_product_count

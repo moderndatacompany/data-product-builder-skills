@@ -1,3 +1,0 @@
-kind: metric
-name: total_critical_system_updates
-measure: system_update.total_critical_system_updates

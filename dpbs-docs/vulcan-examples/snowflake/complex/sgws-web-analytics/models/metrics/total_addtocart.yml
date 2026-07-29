@@ -1,3 +1,0 @@
-kind: metric
-name: total_addtocart
-measure: web_heartbeat.total_addtocart

@@ -1,3 +1,0 @@
-kind: metric
-name: total_ordering_customers
-measure: sales_funnel.total_ordering_customers

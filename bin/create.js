@@ -26,12 +26,13 @@ function syncDir(src, dest) {
   const srcNames = new Set(fs.readdirSync(src));
 
   for (const entry of fs.readdirSync(dest, { withFileTypes: true })) {
-    if (!srcNames.has(entry.name)) {
+    if (!srcNames.has(entry.name) || entry.name === '.git') {
       fs.rmSync(path.join(dest, entry.name), { recursive: true, force: true });
     }
   }
 
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    if (entry.name === '.git') continue; // source dirs may be git submodules — never ship their gitlink
     const s = path.join(src, entry.name);
     const d = path.join(dest, entry.name);
     entry.isDirectory() ? syncDir(s, d) : fs.copyFileSync(s, d);
@@ -43,6 +44,29 @@ function countFiles(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true }))
     n += e.isDirectory() ? countFiles(path.join(dir, e.name)) : 1;
   return n;
+}
+
+// Installed folder names differ from this repo's own source folder names —
+// this repo keeps `dataos` (it's the raw dataos submodule, sparse-checked out
+// to just the vulcan docs subtree), but the docs shipped to a user's project
+// are renamed to `vulcan-docs` since that's what they actually contain.
+const DEST_NAME_OVERRIDES = { dataos: 'vulcan-docs' };
+
+// Rewrites `dpbs-docs/dataos` references inside copied skill .md files to
+// `dpbs-docs/vulcan-docs`, so the skill's instructions match the renamed
+// folder that actually exists in the target project.
+function rewritePathReferences(dir, from, to) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      rewritePathReferences(p, from, to);
+    } else if (entry.name.endsWith('.md')) {
+      const content = fs.readFileSync(p, 'utf8');
+      if (content.includes(from)) {
+        fs.writeFileSync(p, content.split(from).join(to));
+      }
+    }
+  }
 }
 
 // Prompts interactively over a TTY, or replays piped/scripted stdin lines
@@ -194,6 +218,7 @@ async function main() {
         const dest   = path.join(targetDir, ideFolder, 'skills', skill);
         const existed = fs.existsSync(dest);
         syncDir(src, dest);
+        rewritePathReferences(dest, 'dpbs-docs/dataos', 'dpbs-docs/vulcan-docs');
         ok(`${existed ? 'updated' : 'created'}  ${ideFolder}/skills/${skill}/`);
       }
     }
@@ -209,12 +234,19 @@ async function main() {
     for (const dir of fs.readdirSync(docsSrc, { withFileTypes: true })
         .filter(e => e.isDirectory() && e.name !== 'vulcan-examples')
         .map(e => e.name)) {
+      const destName = DEST_NAME_OVERRIDES[dir] || dir;
       const src     = path.join(docsSrc, dir);
-      const dest    = path.join(docsDest, dir);
+      const dest    = path.join(docsDest, destName);
       const existed = fs.existsSync(dest);
       syncDir(src, dest);
       const n = countFiles(src);
-      ok(`${existed ? 'updated' : 'created'}  dpbs-docs/${dir}/  (${n} file${n === 1 ? '' : 's'})`);
+      ok(`${existed ? 'updated' : 'created'}  dpbs-docs/${destName}/  (${n} file${n === 1 ? '' : 's'})`);
+    }
+    // Clean up a stale `dataos/` folder left by a pre-rename version of this
+    // tool, now that it's installed as `vulcan-docs/`.
+    const staleDataosDest = path.join(docsDest, 'dataos');
+    if (DEST_NAME_OVERRIDES.dataos && fs.existsSync(staleDataosDest)) {
+      fs.rmSync(staleDataosDest, { recursive: true, force: true });
     }
     // loose files at dpbs-docs/ root (e.g. .whl) — first delete any dest loose file
     // no longer present in src (e.g. a prior version's differently-named .whl),

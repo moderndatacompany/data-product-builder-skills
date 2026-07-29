@@ -1,3 +1,0 @@
-kind: metric
-name: total_page_views
-measure: web_heartbeat.total_page_views

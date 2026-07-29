@@ -1,3 +1,0 @@
-kind: metric
-name: last30days_non_proof_revenue
-measure: sales.last30days_non_proof_revenue

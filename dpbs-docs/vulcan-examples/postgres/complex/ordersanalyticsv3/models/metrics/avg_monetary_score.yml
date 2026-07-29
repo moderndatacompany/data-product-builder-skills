@@ -1,3 +1,0 @@
-kind: metric
-name: avg_monetary_score
-measure: rfm.avg_monetary_score

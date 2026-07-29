@@ -1,3 +1,0 @@
-kind: metric
-name: total_proof_invoices
-measure: sales.total_proof_invoices

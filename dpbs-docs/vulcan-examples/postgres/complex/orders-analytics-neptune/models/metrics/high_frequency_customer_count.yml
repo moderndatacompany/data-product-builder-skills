@@ -1,3 +1,0 @@
-kind: metric
-name: high_frequency_customer_count
-measure: customer_profile.high_frequency_customer_count

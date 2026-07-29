@@ -1,3 +1,0 @@
-kind: metric
-name: mttr_hours
-measure: fct_equipment_oee.mttr_hours

@@ -1,3 +1,0 @@
-kind: metric
-name: count_customers
-measure: customer.count_customers

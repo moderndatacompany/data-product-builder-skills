@@ -1,3 +1,0 @@
-kind: metric
-name: engaged_devices
-measure: events.engaged_devices

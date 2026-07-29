@@ -1,3 +1,0 @@
-kind: metric
-name: total_atc_events
-measure: adobe_checkout.total_atc_events

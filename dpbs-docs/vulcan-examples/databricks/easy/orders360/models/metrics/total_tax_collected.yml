@@ -1,8 +1,0 @@
-kind: metric
-name: total_tax_collected
-measure: orders.total_tax_collected
-ts: orders.order_date
-granularity: month
-dimensions:
-  - orders.customer_id
-description: Total tax collected

@@ -1,3 +1,0 @@
-kind: metric
-name: total_partsupp
-measure: partsupp.total_partsupp

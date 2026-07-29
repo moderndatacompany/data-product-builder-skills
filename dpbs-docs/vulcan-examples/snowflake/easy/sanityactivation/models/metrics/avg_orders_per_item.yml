@@ -1,3 +1,0 @@
-kind: metric
-name: avg_orders_per_item
-measure: full_model.avg_orders_per_item

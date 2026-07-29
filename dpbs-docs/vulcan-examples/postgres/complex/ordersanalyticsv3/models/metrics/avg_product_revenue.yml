@@ -1,3 +1,0 @@
-kind: metric
-name: avg_product_revenue
-measure: product_profile.avg_product_revenue

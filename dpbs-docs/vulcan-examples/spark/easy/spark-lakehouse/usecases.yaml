@@ -1,4 +1,0 @@
-use_cases:
-  - Data lakehouse analytics
-  - Iceberg table management
-  - Spark SQL queries via semantic layer

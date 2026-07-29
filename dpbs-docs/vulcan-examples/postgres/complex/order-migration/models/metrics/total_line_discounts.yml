@@ -1,3 +1,0 @@
-kind: metric
-name: total_line_discounts
-measure: order_items.total_line_discounts

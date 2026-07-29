@@ -1,3 +1,0 @@
-kind: metric
-name: exit_rate
-measure: web_heartbeat.exit_rate

@@ -1,5 +1,0 @@
-kind: metric
-name: approval_rate
-measure: orders.approval_rate
-ts: orders.order_date
-granularity: day
