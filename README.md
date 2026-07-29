@@ -93,6 +93,27 @@ Turns the validated design spec into a working, deployed Vulcan data product —
 
 Running `npx dataproduct-builder-skills` again safely updates existing files with the latest skill and docs content.
 
+## Testing locally without publishing (maintainers)
+
+Build a `.tgz` from your current working tree and install it into a scratch project to see exactly what a real `npx` install would produce, without publishing anything:
+
+```bash
+# from this repo's root — packs whatever is currently on disk (including
+# any locally-synced submodule content in dpbs-docs/)
+npm pack
+```
+
+This creates `dataproduct-builder-skills-<version>.tgz` in the repo root. Install it into any other folder:
+
+```bash
+mkdir -p /tmp/vulcan-test-project && cd /tmp/vulcan-test-project
+npm init -y
+npm install /path/to/builder-skillss/dataproduct-builder-skills-<version>.tgz
+./node_modules/.bin/dataproduct-builder-skills snowflake
+```
+
+Inspect `.claude/skills/`, `.cursor/skills/`, and `dpbs-docs/` in that test project to verify the output. Re-run `npm pack` and reinstall the tarball after making further changes to pick them up. `*.tgz` files are gitignored — don't commit them.
+
 ## Publishing a new version (maintainers)
 
 Follow these steps every time you want to ship an update to npm and GitHub.
