@@ -52,6 +52,11 @@ function countFiles(dir) {
 // are renamed to `vulcan-docs` since that's what they actually contain.
 const DEST_NAME_OVERRIDES = { dataos: 'vulcan-docs' };
 
+// `dataos` is sparse-checked-out to only this subpath — install its contents
+// directly under dpbs-docs/vulcan-docs/ instead of nesting the full
+// documentation/references/resources/vulcan/ path from the submodule.
+const SRC_SUBPATH_OVERRIDES = { dataos: ['documentation', 'references', 'resources', 'vulcan'] };
+
 // Rewrites `dpbs-docs/dataos` references inside copied skill .md files to
 // `dpbs-docs/vulcan-docs`, so the skill's instructions match the renamed
 // folder that actually exists in the target project.
@@ -234,8 +239,9 @@ async function main() {
     for (const dir of fs.readdirSync(docsSrc, { withFileTypes: true })
         .filter(e => e.isDirectory() && e.name !== 'vulcan-examples')
         .map(e => e.name)) {
-      const destName = DEST_NAME_OVERRIDES[dir] || dir;
-      const src     = path.join(docsSrc, dir);
+      const destName    = DEST_NAME_OVERRIDES[dir] || dir;
+      const srcSubpath  = SRC_SUBPATH_OVERRIDES[dir] || [];
+      const src     = path.join(docsSrc, dir, ...srcSubpath);
       const dest    = path.join(docsDest, destName);
       const existed = fs.existsSync(dest);
       syncDir(src, dest);
