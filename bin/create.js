@@ -57,6 +57,47 @@ const DEST_NAME_OVERRIDES = { dataos: 'vulcan-docs' };
 // documentation/references/resources/vulcan/ path from the submodule.
 const SRC_SUBPATH_OVERRIDES = { dataos: ['documentation', 'references', 'resources', 'vulcan'] };
 
+// Mirrors scripts/sync-vulcan-sources.sh's PRUNE_NAMES — a safety net so
+// vulcan-examples never ships README/*.md/csv/tsv/lockfile noise into a
+// user's project, even if a stray file ever slips into a published tarball.
+const EXAMPLES_PRUNE_NAMES = [
+  '.gitignore',
+  'README.md',
+  '*.md',
+  '*.csv',
+  '*.tsv',
+  'config.yaml',
+  'domain-resource.yaml',
+  'domain_resource.yaml',
+  'usage.yaml',
+  'package-lock.json',
+  'requirements.txt',
+  'limitations.yaml',
+  'usecases.yaml',
+];
+
+function matchesPruneName(fileName, patterns) {
+  return patterns.some(pattern =>
+    pattern.startsWith('*.')
+      ? fileName.endsWith(pattern.slice(1))
+      : fileName === pattern
+  );
+}
+
+// Recursively removes disallowed files from dir, then removes any directory
+// left empty as a result.
+function cleanDisallowedFiles(dir, patterns) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      cleanDisallowedFiles(p, patterns);
+      if (fs.readdirSync(p).length === 0) fs.rmdirSync(p);
+    } else if (matchesPruneName(entry.name, patterns)) {
+      fs.rmSync(p, { force: true });
+    }
+  }
+}
+
 // Rewrites `dpbs-docs/dataos` references inside copied skill .md files to
 // `dpbs-docs/vulcan-docs`, so the skill's instructions match the renamed
 // folder that actually exists in the target project.
@@ -284,7 +325,8 @@ async function main() {
       const dest    = path.join(docsDest, 'vulcan-examples', eng);
       const existed = fs.existsSync(dest);
       syncDir(src, dest);
-      const n = countFiles(src);
+      cleanDisallowedFiles(dest, EXAMPLES_PRUNE_NAMES);
+      const n = countFiles(dest);
       ok(`${existed ? 'updated' : 'created'}  dpbs-docs/vulcan-examples/${eng}/  (${n} file${n === 1 ? '' : 's'})`);
     }
   }
