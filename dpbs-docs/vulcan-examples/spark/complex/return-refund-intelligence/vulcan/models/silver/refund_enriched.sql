@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_silver.refund_enriched,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [refund_id],
   description 'Canonical refund fact at one row per refund event with business reason mapping, customer attributes, and product attribution.',
   tags ('silver', 'refunds', 'canonical-fact', 'enriched'),

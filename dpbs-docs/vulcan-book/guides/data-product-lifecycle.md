@@ -1,136 +1,23 @@
-# Data product lifecycle
+---
+description: >-
+  The full path from local setup to a production data product: project
+  initialization, model development, testing, semantics, planning and running,
+  data quality, API access, and monitoring.
+---
+
+# Data Product lifecycle
 
 Follow this path from setup to production. Each step builds on the previous one.
 
 {% hint style="info" %}
 **Before you start**
 
-This guide assumes you've completed the [Get Started](get-started.md) guide. You need Docker running, the Vulcan stack up, and the CLI alias configured. If `vulcan --help` doesn't work yet, finish the setup first.
+This guide assumes you've completed the [LDK](../ldk.md) guide. You need Docker running, the Vulcan stack up, and the CLI alias configured. If `vulcan --help` doesn't work yet, finish the setup first.
 {% endhint %}
 
 ***
 
-## Phase 1: setup and infrastructure
-
-Get your environment ready.
-
-### Start the full stack
-
-```bash
-make up
-```
-
-This starts the complete Vulcan stack:
-
-* Docker network `vulcan`
-* Statestore (PostgreSQL) on port 5431 - stores Vulcan's internal state
-* MinIO on ports 9000/9001 - stores query results and artifacts
-* Transpiler API on port 8100 - converts semantic queries to SQL
-* Vulcan API on port 8000 - REST API for querying
-* GraphQL on port 3000 - GraphQL interface
-* MySQL proxy on port 3306 - for BI tool connectivity
-
-### Configure CLI access
-
-Create an alias to access the Vulcan command-line interface (CLI). The alias uses an engine-specific Docker image. **Postgres is shown by default** (recommended for most users). For a different engine, select it from the tabs below.
-
-{% hint style="info" %}
-**Automatic updates**
-
-Docker image versions in this section sync with the engine configuration files. When engine image versions update, this section updates too.
-{% endhint %}
-
-{% tabs %}
-{% tab title="Postgres (Default)" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-postgres:0.228.1.19 vulcan"
-```
-
-_Image version from_ [_Postgres engine configuration_](../configurations/engines/postgres.md)
-{% endtab %}
-
-{% tab title="BigQuery" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-bigquery:0.228.1.10 vulcan"
-```
-
-_Image version from_ [_BigQuery engine configuration_](../configurations/engines/bigquery.md)
-{% endtab %}
-
-{% tab title="Databricks" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-databricks:0.228.1.19 vulcan"
-```
-
-_Image version from_ [_Databricks engine configuration_](../configurations/engines/databricks.md)
-{% endtab %}
-
-{% tab title="Fabric" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-fabric:0.228.1.6 vulcan"
-```
-
-_Image version from_ [_Fabric engine configuration_](../configurations/engines/fabric.md)
-{% endtab %}
-
-{% tab title="MSSQL" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-mssql:0.228.1.6 vulcan"
-```
-
-_Image version from_ [_MSSQL engine configuration_](../configurations/engines/mssql.md)
-{% endtab %}
-
-{% tab title="MySQL" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-mysql:0.228.1.6 vulcan"
-```
-
-_Image version from_ [_MySQL engine configuration_](../configurations/engines/mysql.md)
-{% endtab %}
-
-{% tab title="Redshift" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-redshift:0.228.1.6 vulcan"
-```
-
-_Image version from_ [_Redshift engine configuration_](../configurations/engines/redshift.md)
-{% endtab %}
-
-{% tab title="Snowflake" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-snowflake:0.228.1.19 vulcan"
-```
-
-_Image version from_ [_Snowflake engine configuration_](../configurations/engines/snowflake.md)
-{% endtab %}
-
-{% tab title="Spark" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-spark:0.228.1.19 vulcan"
-```
-
-_Image version from_ [_Spark engine configuration_](../configurations/engines/spark.md)
-{% endtab %}
-
-{% tab title="Trino" %}
-```bash
-alias vulcan="docker run -it --network=vulcan --rm -v .:/workspace tmdcio/vulcan-trino:0.228.1.19 vulcan"
-```
-
-_Image version from_ [_Trino engine configuration_](../configurations/engines/trino/README.md)
-{% endtab %}
-{% endtabs %}
-
-Verify it works:
-
-```bash
-vulcan --help
-```
-
-***
-
-## Phase 2: project initialization
+## Phase 1: project initialization
 
 Create your project structure.
 
@@ -143,16 +30,32 @@ vulcan init
 This creates:
 
 ```
-your-project/
-├── models/              # SQL/Python transformation models
-│   ├── dq/              # Data Quality rule packs (kind: dq)
-│   ├── semantics/       # Semantic models (kind: semantic)
-│   └── metrics/         # Per-metric files
-├── seeds/               # CSV files for static data
+my-project/
+├── config.yaml          # Project configuration
+├── usage.yml            # Usage/config metadata
 ├── audits/              # Data quality assertions (blocking)
-├── tests/               # Unit tests for models
+│   └── .gitkeep
+├── dq/                  # Data quality rule packs (kind: dq)
+│   └── full_model.yml
 ├── macros/              # Reusable SQL patterns
-└── config.yaml          # Project configuration
+│   ├── __init__.py
+│   └── .gitkeep
+├── models/              # SQL transformation models
+│   ├── full_model.sql
+│   ├── incremental_model.sql
+│   ├── seed_model.sql
+│   ├── metrics/
+│   │   ├── event_activity.yml
+│   │   └── .gitkeep
+│   └── semantics/
+│       ├── incremental_model.yml
+│       └── .gitkeep
+├── seeds/               # CSV files for static data
+│   ├── seed_data.csv
+│   └── .gitkeep
+└── tests/               # Unit tests for models
+    ├── test_full_model.yaml
+    └── .gitkeep
 ```
 
 ### Configure project
@@ -212,7 +115,7 @@ Most teams start with SQL for transformations, then add Python when SQL gets pai
 vulcan info
 ```
 
-Vulcan checks for syntax errors, ambiguous columns, and invalid SQL patterns. Code is validated before execution.
+Vulcan checks for syntax errors, ambiguous columns, and invalid SQL patterns. Vulcan validates code before execution.
 
 ***
 
@@ -312,7 +215,7 @@ Applying the plan:
 4. Creates/updates views (virtual layer)
 5. Updates environment references
 
-Changes are deployed to the target environment.
+Vulcan deploys changes to the target environment.
 
 ***
 
@@ -377,9 +280,9 @@ rules:
       dimension: completeness
 ```
 
-Data Quality rule packs monitor data quality over time. They're non-blocking (warnings, not failures) and track quality metrics.
+Data quality rule packs monitor data quality over time. They're non-blocking (warnings, not failures) and track quality metrics.
 
-Bad data is caught and blocked.
+Assertions catch and block bad data.
 
 ***
 
@@ -408,7 +311,7 @@ curl -X POST http://localhost:8000/api/v1/query \
 vulcan transpile --format sql "SELECT MEASURE(total_users) FROM users"
 ```
 
-Data is accessible via REST, GraphQL, Python APIs, and semantic queries.
+You can access data via REST, GraphQL, Python APIs, and semantic queries.
 
 ***
 
@@ -483,20 +386,7 @@ graph LR
 
 ## Key commands reference
 
-| Phase        | Command            | Purpose                         |
-| ------------ | ------------------ | ------------------------------- |
-| **Setup**    | `make up`          | Start full stack (infra + APIs) |
-| **Setup**    | `alias vulcan=...` | Configure CLI                   |
-| **Shutdown** | `make down`        | Stop all services               |
-| **Init**     | `vulcan init`      | Create project                  |
-| **Init**     | `vulcan info`      | Verify setup                    |
-| **Develop**  | `vulcan lint`      | Check code quality              |
-| **Test**     | `vulcan test`      | Run unit tests                  |
-| **Plan**     | `vulcan plan`      | Create & apply changes          |
-| **Run**      | `vulcan run`       | Process new data                |
-| **Query**    | `vulcan fetchdf`   | Execute SQL queries             |
-| **Semantic** | `vulcan transpile` | Convert semantic to SQL         |
-| **Debug**    | `vulcan render`    | See generated SQL               |
+<table data-search="false"><thead><tr><th>Phase</th><th>Command</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Init</strong></td><td><code>vulcan init</code></td><td>Create project</td></tr><tr><td><strong>Init</strong></td><td><code>vulcan info</code></td><td>Verify setup</td></tr><tr><td><strong>Develop</strong></td><td><code>vulcan lint</code></td><td>Check code quality</td></tr><tr><td><strong>Test</strong></td><td><code>vulcan test</code></td><td>Run unit tests</td></tr><tr><td><strong>Plan</strong></td><td><code>vulcan plan</code></td><td>Create &#x26; apply changes</td></tr><tr><td><strong>Run</strong></td><td><code>vulcan run</code></td><td>Process new data</td></tr><tr><td><strong>Query</strong></td><td><code>vulcan fetchdf</code></td><td>Execute SQL queries</td></tr><tr><td><strong>Semantic</strong></td><td><code>vulcan transpile</code></td><td>Convert semantic to SQL</td></tr><tr><td><strong>Debug</strong></td><td><code>vulcan render</code></td><td>See generated SQL</td></tr></tbody></table>
 
 ***
 
@@ -531,7 +421,7 @@ graph LR
 
 Vulcan's lifecycle:
 
-1. **Setup** → Infrastructure and project initialization
+1. **Setup** → Project initialization
 2. **Develop** → Write models, tests, semantics
 3. **Validate** → Lint, test, assertion, check
 4. **Plan** → Review and apply changes safely

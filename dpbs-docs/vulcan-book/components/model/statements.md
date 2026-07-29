@@ -1,3 +1,9 @@
+---
+description: >-
+  Pre-statements, post-statements, and on-virtual-update statements, and how
+  to set defaults for them at the project level.
+---
+
 # Statements
 
 Statements run SQL commands at specific points during model execution. Run code before your query, after it completes, or when views are created.
@@ -11,7 +17,7 @@ Statements run SQL commands at specific points during model execution. Run code 
 * Logging anomalies or errors.
 * Granting permissions on views.
 
-Define statements at the model level (for specific needs) or at the project level via `model_defaults` (for consistent behavior across all models).
+Define statements at the model level (for specific needs) or at the project level via `modelDefaults` (for consistent behavior across all models).
 
 **Statement types:**
 
@@ -27,20 +33,20 @@ Pre-statements should only prepare the main query. Avoid creating or altering ph
 
 ## Model defaults
 
-Define statements at the project level using `model_defaults` in your configuration. Use this for common behavior across all models, like session timeouts or default permissions.
+Define statements at the project level using `modelDefaults` in your configuration. Use this for common behavior across all models, like session timeouts or default permissions.
 
-**How it works**: default statements run first, then model-specific statements. If you set a default timeout in `model_defaults` and a model-specific timeout in a model, the model-specific one runs after and can override the default.
+**How it works**: default statements run first, then model-specific statements. If you set a default timeout in `modelDefaults` and a model-specific timeout in a model, the model-specific one runs after and can override the default.
 
 {% tabs %}
 {% tab title="YAML" %}
 ```yaml
-model_defaults:
+modelDefaults:
   dialect: snowflake
-  pre_statements:
+  preStatements:
     - "SET query_timeout = 300000"
-  post_statements:
+  postStatements:
     - "@IF(@runtime_stage = 'evaluating', ANALYZE @this_model)"
-  on_virtual_update:
+  onVirtualUpdate:
     - "GRANT SELECT ON @this_model TO ROLE analyst_role"
 ```
 {% endtab %}
@@ -517,4 +523,4 @@ def execute(
 | `@start_date`, `@end_date`  | Time range macros for incremental models.                             |
 | `{{ this_model }}`          | Jinja equivalent of `@this_model`.                                    |
 
-For more on macros, see the [Macro Variables](../advanced-features/macros/variables.md) documentation.
+For more on macros, see the [Macro Variables](../../advanced-features/macros/variables.md) documentation.

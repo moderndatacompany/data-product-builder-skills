@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_silver.ADOBE_HITS_NAMED,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [EVAR1_SITE_ID],
   description 'Silver layer Adobe Analytics clickstream data with enriched dimensions and user behavior tracking',
   tags ('silver', 'transformed', 'cleaned', 'fact', 'web_analytics'),

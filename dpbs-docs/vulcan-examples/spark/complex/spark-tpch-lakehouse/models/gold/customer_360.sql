@@ -2,7 +2,7 @@ MODEL (
   name mys3lh02depot.tpch_lakehouse.customer_360,
   kind FULL,
   start '2025-01-01',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (customer, analytics, gold),
   grains (c_custkey),
   physical_properties (

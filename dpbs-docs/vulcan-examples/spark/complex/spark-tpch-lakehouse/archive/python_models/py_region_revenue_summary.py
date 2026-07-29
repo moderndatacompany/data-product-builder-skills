@@ -22,7 +22,7 @@ from vulcan import ModelKindName
     ),
     grains=["r_regionkey"],
     tags=["python", "region", "summary", "gold"],
-    owner="rohitrajtmdcio",
+    owner="${DATAOS_RUN_AS_USER}",
     depends_on=[
         "mys3lh02depot.tpch_lakehouse.stg_region",
         "mys3lh02depot.tpch_lakehouse.stg_nation",

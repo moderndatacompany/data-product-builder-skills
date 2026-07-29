@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.RAW.QUALTRICS_RESPONSE_INTERMEDIATE_TABLE,
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by ARRAY(survey_id),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, RESPONSE_ID, QUESTION_ID, QUESTIONS_KEY, QUESTION_TYPE, RESPONSE_VALUE, RESPONSE),
   grains [SURVEY_ID, RESPONSE_ID, QUESTION_ID, QUESTIONS_KEY],
   description 'Intermediate response fact table performing complex transformation to match response values with question definitions, applying business logic for different question types, and enriching with complete question metadata for analytical processing',

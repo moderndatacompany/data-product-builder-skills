@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_bronze.V_D_CURR_ITEM,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Bronze layer product catalog data with brand, classification, and supplier information',
   tags ('bronze', 'raw', 'redshift', 'ingestion', 'dimension', 'product'),
   terms ('product')

@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.RAW.QUALTRICS_DEFINITION,
   kind incremental_by_partition,
   partitioned_by ARRAY(SURVEY_ID),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, PARSED_JSON),
   grains [SURVEY_ID],
   description 'Raw layer model ingesting complete Qualtrics survey definitions with parsed JSON structures containing questions, blocks, flow logic, scoring configurations, and reference lists for survey metadata enrichment',

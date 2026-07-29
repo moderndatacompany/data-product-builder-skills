@@ -2,7 +2,7 @@ MODEL (
   name QCOMMERCE_PLATFORM.GOLD.DELIVERY_ISSUE_SUMMARY,
   kind FULL,
   cron '*/15 * * * *',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [DS, CITY, ISSUE_TYPE],
   description 'Daily city-level issue breakdown summarizing operational causes of delivery problems for root-cause trending.',
   tags ('gold', 'delivery', 'issues', 'root-cause'),

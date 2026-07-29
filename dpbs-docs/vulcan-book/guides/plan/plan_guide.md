@@ -1,3 +1,9 @@
+---
+description: >-
+  Understand what `vulcan plan` does without a virtual layer, using direct
+  materialization instead of virtual-layer promotion.
+---
+
 # Plan without virtual layer
 
 What happens when you run `vulcan plan` **without a virtual layer**.
@@ -12,11 +18,11 @@ In config, this is the direct materialization mode:
 vde: false
 ```
 
-In this mode, Vulcan uses direct materialization. Models are materialized using their original unversioned names instead of being promoted through virtual-layer views.
+In this mode, Vulcan uses direct materialization. It materializes models using their original unversioned names instead of promoting them through virtual-layer views.
 
 This is useful for engines and deployment patterns where virtual-layer promotion is not supported or not desired.
 
-Companion guide: see [Vulcan Plan Guide With A Virtual Layer](vulcan_plan_vde_true.md) for `vulcan plan` with a virtual layer, versioned physical tables, and virtual-layer promotion.
+Companion guide: see [Plan with a virtual layer](plan-with-vde.md) for `vulcan plan` with a virtual layer, versioned physical tables, and virtual-layer promotion.
 
 ***
 
@@ -58,7 +64,7 @@ flowchart LR
     class B,C,D,E,F,H surface;
 ```
 
-Because there is no virtual-layer safety boundary, Vulcan forces plans into forward-only behavior in this mode. That prevents historical rewrites from being treated like reusable snapshot promotions.
+Because there is no virtual-layer safety boundary, Vulcan forces plans into forward-only behavior in this mode. That keeps Vulcan from treating historical rewrites like reusable snapshot promotions.
 
 ***
 
@@ -90,11 +96,11 @@ For planning:
 
 For materialization:
 
-1. Models are materialized under their original names.
+1. Vulcan materializes models under their original names.
 2. There is no full virtual-layer swap from old snapshot table to new snapshot table.
-3. Existing objects may be updated in place or replaced according to the model kind and engine behavior.
+3. Vulcan may update existing objects in place or replace them, depending on the model kind and engine behavior.
 4. Historical backfill semantics are more constrained.
-5. Plans are treated as forward-only.
+5. Vulcan treats plans as forward-only.
 
 The practical takeaway: running without a virtual layer is simpler operationally, but it gives up the strongest isolation and promotion properties of the virtual-layer mode.
 
@@ -131,7 +137,7 @@ Plan inputs are the same categories as the virtual-layer mode:
 
 1. Project config.
 2. Models, macros, tests, assertions, assertions, semantics, metrics, and checks.
-3. Project hooks such as `before_all` and `after_all`.
+3. Project hooks such as `beforeAll` and `afterAll`.
 4. Python dependencies when dependency inference or dependency locking is used.
 5. Applied state from state sync.
 6. CLI flags such as `--start`, `--end`, `--skip-backfill`, `--empty-backfill`, `--restate-model`, `--auto-apply`, and `--explain`.
@@ -175,8 +181,8 @@ What happens without a virtual layer:
 
 1. Vulcan records the model as added.
 2. The added model is directly affected.
-3. During apply, the model is materialized according to its kind and original naming pattern.
-4. The object is not promoted by pointing a virtual-layer view to a versioned snapshot table.
+3. During apply, Vulcan materializes the model according to its kind and original naming pattern.
+4. Vulcan does not promote the object by pointing a virtual-layer view to a versioned snapshot table.
 
 Example:
 
@@ -201,7 +207,7 @@ What happens:
 1. Vulcan records the model as removed.
 2. The applied state stops tracking it as part of the project.
 3. Exposure depends on engine and cleanup behavior.
-4. Since there is no full virtual-layer promotion boundary, removal should be treated carefully.
+4. Since there is no full virtual-layer promotion boundary, treat removal carefully.
 
 Removal is usually breaking if consumers query the model, if downstream models depend on it, or if semantics expose it.
 
@@ -227,7 +233,7 @@ Examples:
 5. Incremental configuration changed.
 6. Metadata, checks, assertions, descriptions, tags, or owner changed.
 
-Without a virtual layer, directly modified models are still detected through fingerprint comparison. The difference is that apply does not build a separate versioned physical table and then repoint a view. The model is applied to its normal object name.
+Without a virtual layer, Vulcan still detects directly modified models through fingerprint comparison. The difference is that apply does not build a separate versioned physical table and then repoint a view. Vulcan applies the model to its normal object name.
 
 Because of that, plans are forward-only in direct materialization mode.
 
@@ -252,7 +258,7 @@ What happens:
 3. The plan separates direct edits from indirect impact.
 4. The plan summary shows blast radius.
 
-This matters more without a virtual layer because the apply path has fewer promotion safeguards. You should review indirect impact carefully before applying changes.
+This matters more without a virtual layer because the apply path has fewer promotion safeguards. Review indirect impact carefully before applying changes.
 
 ***
 
@@ -271,9 +277,9 @@ Examples:
 What happens:
 
 1. Vulcan records metadata-only changes.
-2. The plan can update state and metadata surfaces.
+2. The plan updates state and metadata surfaces.
 3. No backfill is required only because metadata changed.
-4. Object data does not need to be rewritten for metadata-only changes.
+4. Vulcan does not need to rewrite object data for metadata-only changes.
 
 Metadata-only does not mean invisible. These changes can affect catalogs, APIs, lineage, documentation, and consumers who rely on descriptions or tags.
 
@@ -298,7 +304,7 @@ What to expect:
 
 1. The plan identifies the direct breaking change.
 2. Downstream models may become indirectly breaking.
-3. Historical rebuild behavior is constrained by forward-only mode.
+3. Forward-only mode constrains historical rebuild behavior.
 4. Applying the plan may update objects directly under their original names.
 
 Review breaking changes carefully. If you need full old/new isolation during promotion, use `vde: true` on a supported engine.
@@ -329,7 +335,7 @@ Non-breaking is about downstream rebuild requirements. It does not guarantee the
 
 Indirect categories tell you how far the impact travels.
 
-**Indirect breaking** means an upstream change can alter the downstream model's input contract or values enough that the downstream model should be rebuilt or treated as a new affected version.
+**Indirect breaking** means an upstream change can alter the downstream model's input contract or values enough that you should rebuild the downstream model or treat it as a new affected version.
 
 **Indirect non-breaking** means the upstream change is compatible enough that downstream rebuild is not required.
 
@@ -345,7 +351,7 @@ Forward-only means:
 
 1. The change applies going forward.
 2. Vulcan avoids treating the plan as a historical rewrite of versioned snapshots.
-3. Old processed intervals are not automatically recomputed as part of normal change deployment.
+3. Vulcan does not automatically recompute old processed intervals as part of normal change deployment.
 4. Historical correction should be explicit and bounded.
 
 This protects applied data from unexpected full history rebuilds when there is no virtual-layer indirection.
@@ -371,7 +377,7 @@ For those cases, use explicit restatement windows and review the operational imp
 
 Backfill means filling missing intervals for model data.
 
-Without a virtual layer, the concept still exists, but it is constrained by direct materialization mode and forward-only behavior.
+Without a virtual layer, the concept still exists, but direct materialization mode and forward-only behavior constrain it.
 
 Backfill can happen when:
 
@@ -417,53 +423,26 @@ Use restatement when:
 2. A bug affected an old interval.
 3. You need a controlled correction window.
 
-Without a virtual layer, restatement does not get the same benefit of building a separate snapshot version and then switching a virtual layer. It should be treated as an intentional data rewrite for the selected model and interval.
+Without a virtual layer, restatement does not get the same benefit of building a separate snapshot version and then switching a virtual layer. Treat it as an intentional data rewrite for the selected model and interval.
 
 Keep restatements bounded and explicit.
 
 ***
 
-## With vs without a virtual layer
-
-The biggest difference between the two plan modes is the virtual layer.
-
-With a virtual layer:
-
-```
-analytics.orders -> versioned physical snapshot table
-```
-
-Without a virtual layer:
-
-```
-analytics.orders is the materialized object
-```
-
-This changes the risk profile:
-
-1. A virtual layer can build first and expose later.
-2. Direct materialization mode writes according to original naming.
-3. A virtual layer can reuse already-built snapshot tables for promotion.
-4. Direct materialization mode has fewer instant promotion and rollback benefits.
-5. A virtual layer better isolates applied states.
-6. Direct materialization mode is simpler and fits engines that cannot support virtual-layer promotion.
-
-***
-
 ## Plan apply without a virtual layer
 
-When a plan is applied:
+When you apply a plan:
 
-1. Vulcan runs `before_all` hooks when configured.
+1. Vulcan runs `beforeAll` hooks when configured.
 2. It materializes added or changed models according to their model kind.
 3. It computes missing or selected intervals when applicable.
 4. It applies forward-only behavior.
 5. It updates state sync with the current plan and snapshots.
 6. It runs assertions/assertions/checks where applicable.
-7. It runs `after_all` hooks when configured.
+7. It runs `afterAll` hooks when configured.
 8. It records plan activity, backfill details, errors, and follow-on run activity.
 
-The main operational difference is that the original object name is the object being updated. There is no virtual-layer switch that keeps consumers on the old version while a separate new snapshot is prepared.
+The main operational difference is that apply updates the original object name directly. There is no virtual-layer switch that keeps consumers on the old version while Vulcan prepares a separate new snapshot.
 
 ***
 
@@ -525,28 +504,7 @@ It is a good fit for:
 4. Cases where direct object names are required by external tooling.
 5. Local examples where virtual promotion is not the topic.
 
-Do not run without a virtual layer just to avoid learning virtual environments. If the data product has downstream consumers and the engine supports the virtual-layer mode, `vde: true` gives stronger safety and promotion behavior.
-
-***
-
-## Choosing with or without a virtual layer
-
-Choose the virtual-layer mode when:
-
-1. You need safe promotion.
-2. You want applied states to share unchanged physical data safely.
-3. You want fast virtual updates.
-4. You want to validate before exposing consumers to new data.
-5. You need finalized-state workflows.
-
-Choose the no-virtual-layer mode when:
-
-1. The engine does not support virtual-layer promotion.
-2. Original table names must be used directly.
-3. You accept forward-only behavior.
-4. Operational simplicity matters more than virtual promotion.
-
-The two modes exist because Vulcan runs across different engines and deployment patterns. The virtual-layer mode is the safer abstraction. Direct materialization mode is the compatibility path when that abstraction cannot be used.
+Do not run without a virtual layer just to avoid learning virtual environments. If the data product has downstream consumers and the engine supports the virtual-layer mode, `vde: true` gives stronger safety and promotion behavior. See [Plan with a virtual layer](plan-with-vde.md) for that mode.
 
 ***
 
@@ -562,7 +520,7 @@ No. It means virtual-layer promotion is disabled. Isolation can still exist depe
 
 **"Forward-only means no data ever runs."**
 
-No. It means historical rewrite is avoided by default. New intervals and explicit restatements can still run.
+No. It means Vulcan avoids historical rewrite by default. New intervals and explicit restatements can still run.
 
 **"Backfill always means rebuild all history."**
 
@@ -570,4 +528,4 @@ No. Backfill is scoped by model, interval, and plan flags.
 
 **"Metadata-only changes are not deployed."**
 
-No. They are deployed to state and metadata surfaces, but they do not require data recomputation by themselves.
+No. Vulcan deploys them to state and metadata surfaces, but they do not require data recomputation by themselves.

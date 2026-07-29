@@ -2,7 +2,7 @@ MODEL (
   name QCOMMERCE_PLATFORM.GOLD.CUSTOMER_EXPERIENCE_KPIS,
   kind FULL,
   cron '*/15 * * * *',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [DS, CITY, CUSTOMER_TIER],
   description 'Daily customer-tier delivery experience KPIs for understanding delays, failures, and refund risk across customer segments.',
   tags ('gold', 'customer-experience', 'delivery', 'tier'),

@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_gold.PRODUCT,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [SITE_ITEM_PK_PRODUCT],
   description 'Gold layer product dimension providing alcohol product catalog with brand, classification, varietal information, and supplier details for sales analytics',
   tags ('gold', 'dimension', 'product', 'catalog', 'alcohol'),

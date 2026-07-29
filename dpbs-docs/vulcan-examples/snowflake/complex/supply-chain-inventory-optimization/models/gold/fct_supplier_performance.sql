@@ -2,7 +2,7 @@ MODEL (
   name ERP_PLATFORM.GOLD.FCT_SUPPLIER_PERFORMANCE,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [SUPPLIER_PERF_KEY],
   description 'Supplier performance scorecard with delivery, quality, and lead time metrics. Aggregation (averages, totals, weighted scores) is handled by the semantic layer.',
   tags ('gold', 'fact', 'supplier-performance', 'procurement'),

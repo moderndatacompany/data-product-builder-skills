@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_bronze.order_items_clean,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [order_item_id],
   description 'Normalized order item level detail linking refunds to products, categories, and SKUs.',
   tags ('bronze', 'order-items', 'refunds', 'products'),

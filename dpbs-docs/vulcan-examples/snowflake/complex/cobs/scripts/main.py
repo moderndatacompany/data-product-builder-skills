@@ -38,7 +38,7 @@ conn = connect(
         os.getenv("DATAOS_API_TOKEN", "dnVsY2FuLjZlODJiZmVkLWVjYjYtNDE3Mi1hMTU5LTY2NmQwNGZhMjcwNg==")
     ),
     http_scheme="https",
-    http_headers={"cluster-name": os.getenv("DATAOS_CLUSTER", "miniature")}
+    http_headers={"${TRINO_CLUSTER}": os.getenv("DATAOS_CLUSTER", "miniature")}
 )
 
 

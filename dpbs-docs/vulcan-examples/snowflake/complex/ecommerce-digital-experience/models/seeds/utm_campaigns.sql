@@ -14,7 +14,7 @@ MODEL (
     campaign_budget_usd DECIMAL(10,2)
   ),
   grain CAMPAIGN_ID,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (CAMPAIGN_ID, CAMPAIGN_NAME),
   tags ('reference-data', 'campaigns', 'marketing', 'seed-data', 'ecommerce'),
   terms ('utm_parameters', 'campaign_tracking', 'traffic_sources'),

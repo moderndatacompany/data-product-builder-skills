@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_gold.SALES,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [SALES_PK],
   description 'Gold layer sales fact table containing transactional sales data for alcohol distribution, including invoice details, quantities, revenue, and customer relationships with proof-eligible filtering',
   tags ('gold', 'fact', 'sales', 'transactional', 'alcohol_distribution'),

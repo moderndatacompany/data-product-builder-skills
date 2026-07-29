@@ -35,7 +35,7 @@ def fix_seed_structure(sql_file: Path) -> bool:
     path = path_match.group(1)
     delimiter = delimiter_match.group(1) if delimiter_match else ','
     columns_raw = columns_match.group(1).strip()
-    owner = owner_match.group(1) if owner_match else 'rohitrajtmdcio'
+    owner = owner_match.group(1) if owner_match else '${DATAOS_RUN_AS_USER}'
     description = desc_match.group(1) if desc_match else 'Reference data seed'
     tags = tags_match.group(1) if tags_match else "'seed', 'reference_data'"
     terms = terms_match.group(1) if terms_match else "'seed', 'reference'"

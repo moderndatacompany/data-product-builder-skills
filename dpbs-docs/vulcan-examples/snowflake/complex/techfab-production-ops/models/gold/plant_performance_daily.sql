@@ -2,7 +2,7 @@ MODEL (
   name MES_PLATFORM.GOLD.PLANT_PERFORMANCE_DAILY,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [PLANT_CODE, CONFIRMATION_DATE],
   description 'Gold layer daily plant performance metrics aggregating production output, quality indicators, and efficiency metrics by plant and date for executive dashboards and plant benchmarking',
   tags ('gold', 'aggregated', 'plant', 'performance', 'kpi'),

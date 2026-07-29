@@ -8,7 +8,7 @@ MODEL (
     invalidate_hard_deletes true
   ),
   start '2025-01-01',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (part, scd2, dimension),
   grains (p_partkey),
   physical_properties (

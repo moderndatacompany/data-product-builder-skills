@@ -2,7 +2,7 @@ MODEL (
   name CUSTOMER_PLATFORM.GOLD.FCT_CUSTOMER_LIFETIME_VALUE,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [CUSTOMER_ID],
   description 'Customer lifetime value calculations with segment assignment and revenue metrics for strategic account prioritization and resource allocation decisions. Derives CLV from RFM scores, order history, and customer tenure.',
   tags ('gold', 'fact', 'clv', 'customer-value', 'revenue'),

@@ -2,7 +2,7 @@ MODEL (
   name LENOVO.USDK.OS_FAMILY,
   kind FULL,
   grain OS_VERSION,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (OS_VERSION, OS_FAMILY),
   tags ('reference-data', 'dimension', 'windows', 'os-mapping', 'version-lookup', 'static-data'),
   terms ('os_mapping', 'reference_data', 'windows_versions'),

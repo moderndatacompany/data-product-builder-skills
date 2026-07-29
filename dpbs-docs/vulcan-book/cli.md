@@ -1,3 +1,10 @@
+---
+description: >-
+  Every Vulcan CLI command, its options, and example output: planning and
+  running models, auditing data quality, diffing environments, and managing
+  state.
+---
+
 # CLI commands
 
 The Vulcan CLI is your primary interface for your data pipeline. Use it to plan changes, run models, check data quality, and manage your project.
@@ -29,16 +36,18 @@ Commands:
   create_deploy_yaml      Generate a DataOS Vulcan resource deploy YAML...
   create_external_models  Create a schema file containing external model...
   create_test             Generate a unit test fixture for a given model.
-  dag                     Render the DAG as an html file.
   destroy                 The destroy command removes all project resources.
   diff                    Show the diff between the local state and the...
-  dlt_refresh             Attaches to a DLT pipeline with the option to...
   environments            Prints the list of Vulcan environments with its...
   evaluate                Evaluate a model and return a dataframe with a...
+  export                  Commands for exporting cube, metadata, or...
   fetchdf                 Run a SQL query and display the results.
   format                  Format all SQL models and audits.
+  graph                   Commands for rendering model graphs (dag, joins).
+  graphql                 Start or stop the GraphQL API server.
   import_semantic_view    Import a Snowflake Semantic View into the current...
   info                    Print information about a Vulcan project.
+  init                    Create a new Vulcan repository.
   invalidate              Invalidate the target environment, forcing its...
   janitor                 Run the janitor process on-demand.
   lint                    Run the linter for the target model(s).
@@ -47,10 +56,12 @@ Commands:
   render                  Render a model's query, optionally expanding...
   rollback                Rollback Vulcan to the previous migration.
   run                     Evaluate missing intervals for the target...
+  snapshots               Show snapshot information.
   state                   Commands for interacting with state
   table_diff              Show the diff between two tables or a selection...
   table_name              Prints the name of the physical table for the...
   test                    Run model unit tests.
+  transpile               Transpile a semantic SQL query or REST payload.
 ```
 
 ## audit
@@ -131,7 +142,7 @@ Options:
 
 ## create_external_models
 
-Generate a schema file for external models that Vulcan can reference. Use this for tables or views that live outside your Vulcan project but need to be referenced in your models.
+Generate a schema file for external models that Vulcan can reference. Use this for tables or views that live outside your Vulcan project but that your models still need to reference.
 
 ```
 Usage: vulcan create_external_models [OPTIONS]
@@ -210,14 +221,27 @@ $ vulcan create_test sales.daily_sales --query raw.raw_orders "SELECT * FROM raw
 
 </details>
 
-## dag
+## graph
+
+Commands for rendering model graphs, grouped under the `graph` command.
+
+```
+Usage: vulcan graph [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  dag    Render the DAG as an html file.
+  joins  Render the join graph as an html file.
+```
+
+### dag
 
 Generate a visual dependency graph (DAG) of your data pipeline as an HTML file. Use it to see how models connect and how data flows through your pipeline. Open the file in any browser to explore the graph interactively.
 
 ```
-Usage: vulcan dag [OPTIONS] FILE
-
-  Render the DAG as an html file.
+Usage: vulcan graph dag [OPTIONS] [FILE]
 
 Options:
   --select-model TEXT  Select specific models to include in the dag.
@@ -228,14 +252,57 @@ Options:
 <summary>Example</summary>
 
 ```
-$ vulcan dag ./dag.html
+$ vulcan graph dag ./dag.html
+```
+
+</details>
+
+### joins
+
+Render the join graph between your models as an HTML file. Use it to see how models are joined together, separately from the model dependency DAG.
+
+```
+Usage: vulcan graph joins [OPTIONS] [FILE]
+
+Options:
+  --help  Show this message and exit.
+```
+
+<details>
+<summary>Example</summary>
+
+```
+$ vulcan graph joins ./joins.html
+```
+
+</details>
+
+## graphql
+
+Start or stop the GraphQL API server via Docker Compose. Use this to expose your models and semantic layer over a GraphQL endpoint.
+
+```
+Usage: vulcan graphql [OPTIONS] {up|down}
+
+Options:
+  --no-detach  Run docker compose in the foreground (omit -d).
+  --build      Build images before starting containers. Automatically adds
+              --force-recreate.
+  --help       Show this message and exit.
+```
+
+<details>
+<summary>Example</summary>
+
+```
+$ vulcan graphql up
 ```
 
 </details>
 
 ## destroy
 
-⚠️ **Use with caution!** This command permanently removes all Vulcan-managed resources from your data warehouse, including state tables, the cache, and all project resources. It will delete all tables, views, and schemas that Vulcan manages, as well as any external resources created by other tools within those schemas. This is a destructive operation that can't be undone, so make sure you really want to do this before running it.
+⚠️ **Use with caution!** This command permanently removes all Vulcan-managed resources from your data warehouse, including state tables, the cache, and all project resources. It deletes all tables, views, and schemas that Vulcan manages, as well as any external resources created by other tools within those schemas. This is a destructive operation that can't be undone, so make sure you really want to do this before running it.
 
 ```
 Usage: vulcan destroy
@@ -286,19 +353,6 @@ Destroy completed successfully.
 
 </details>
 
-
-## dlt_refresh
-
-```
-Usage: dlt_refresh PIPELINE [OPTIONS]
-
-  Attaches to a DLT pipeline with the option to update specific or all models of the Vulcan project.
-
-Options:
-  -t, --table TEXT  The DLT tables to generate Vulcan models from. When none specified, all new missing tables will be generated.
-  -f, --force       If set it will overwrite existing models with the new generated models from the DLT tables.
-  --help            Show this message and exit.
-```
 
 ## diff
 
@@ -419,6 +473,91 @@ $ vulcan evaluate sales.daily_sales
 
 </details>
 
+## export
+
+Export cube, metadata, or semantic definitions for an environment to a file. Use this to generate artifacts that describe your project's semantic layer for downstream tools or integrations.
+
+```
+Usage: vulcan export [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  cube      Export cube definitions for an environment.
+  metadata  Export metadata for an environment.
+  semantic  Export semantic definitions for an environment.
+```
+
+### cube
+
+Export cube definitions for an environment to a file.
+
+```
+Usage: vulcan export cube [OPTIONS] FILE
+
+Options:
+  -e, --environment, --env TEXT  Environment to export (defaults to config
+                                 default_target_environment). Requires the
+                                 environment to exist in state (after plan).
+  --help                         Show this message and exit.
+```
+
+<details>
+<summary>Example</summary>
+
+```
+$ vulcan export cube ./cube.json --environment prod
+```
+
+</details>
+
+### metadata
+
+Export metadata for an environment to a file.
+
+```
+Usage: vulcan export metadata [OPTIONS] FILE
+
+Options:
+  -e, --environment, --env TEXT  Environment to export (defaults to config
+                                 default_target_environment). Requires the
+                                 environment to exist in state (after plan).
+  --help                         Show this message and exit.
+```
+
+<details>
+<summary>Example</summary>
+
+```
+$ vulcan export metadata ./metadata.json --environment prod
+```
+
+</details>
+
+### semantic
+
+Export semantic definitions for an environment to a file.
+
+```
+Usage: vulcan export semantic [OPTIONS] FILE
+
+Options:
+  -e, --environment, --env TEXT  Environment to export (defaults to config
+                                 default_target_environment). Requires the
+                                 environment to exist in state (after plan).
+  --help                         Show this message and exit.
+```
+
+<details>
+<summary>Example</summary>
+
+```
+$ vulcan export semantic ./semantic.json --environment prod
+```
+
+</details>
+
 ## fetchdf
 
 Run a raw SQL query against your data warehouse and see the results. Use it for quick data exploration or debugging queries without opening a separate database client.
@@ -504,7 +643,7 @@ $ vulcan import_semantic_view MYDB.GOLD.MY_SEMANTIC_VIEW --connection default
 
 </details>
 
-For the full import workflow including `inputs.yaml` fixes and querying via the REST API, see [Import Snowflake Semantic Views](guides/import-snowflake-semantic-views.md).
+For the full import workflow including `inputs.yaml` fixes and querying via the REST API, see [Import Snowflake Semantic Views](advanced-features/import-snowflake-semantic-views.md).
 
 ## info
 
@@ -643,7 +782,7 @@ The `migrate` command affects all Vulcan users. Contact your Vulcan administrato
 
 ## plan
 
-Create and apply a plan that compares your local project state with a target environment and determines what changes to make. Use it to deploy model changes, add new models, and backfill data. The plan shows you exactly what will happen so you can review changes before they're applied.
+Create and apply a plan that compares your local project state with a target environment and determines what changes to make. Use it to deploy model changes, add new models, and backfill data. The plan shows you exactly what will happen so you can review changes before you apply them.
 
 ```
 Usage: vulcan plan [OPTIONS] [ENVIRONMENT]
@@ -843,6 +982,17 @@ Options:
   --help                        Show this message and exit.
 ```
 
+## snapshots
+
+Show information about the snapshots currently tracked in Vulcan's state.
+
+```
+Usage: vulcan snapshots [OPTIONS]
+
+Options:
+  --help  Show this message and exit.
+```
+
 ## state
 
 Manage Vulcan's state database. Export state for backup or migration, or import state from another environment. Use these commands for disaster recovery, environment cloning, or moving state between systems.
@@ -984,3 +1134,38 @@ Options:
   --help                 Show this message and exit.
 
 ```
+
+## transpile
+
+Transpile a semantic SQL query or a REST-style semantic payload against an environment. Use it to see how a semantic query gets translated, propagating a user and security context attributes for testing row/column-level security.
+
+```
+Usage: vulcan transpile [OPTIONS] [QUERY]
+
+Options:
+  --format [sql|rest]            Input type: semantic SQL ('sql') or REST-
+                                 style semantic payload ('rest').  [required]
+  --file TEXT                    Read query or REST payload from file. Use '-'
+                                 to read from stdin.
+  --user TEXT                    User id to propagate in the X-User header
+                                 (defaults to 'cli').
+  --security-context TEXT        Security context attribute as key=value.
+                                 Repeatable (e.g. group=alpha, country=US).
+  --disable-post-processing      Disable post-processing in the Transpiler.
+  --style [pretty|compact]       SQL output style: 'pretty' (formatted with
+                                 indentation), 'compact' (unformatted but
+                                 processed).
+  -e, --environment, --env TEXT  Environment to use (default: config's
+                                 default_target_environment). Requires plan to
+                                 have been run.
+  --help                         Show this message and exit.
+```
+
+<details>
+<summary>Example</summary>
+
+```
+$ vulcan transpile "SELECT * FROM sales.daily_sales" --format sql --environment prod
+```
+
+</details>

@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_gold.product_refund_performance,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ds, city, product_category],
   description 'Daily product-category refund leakage and performance metrics for finance and operations analytics.',
   tags ('gold', 'refunds', 'products', 'leakage'),

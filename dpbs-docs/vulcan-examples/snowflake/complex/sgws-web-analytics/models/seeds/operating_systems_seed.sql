@@ -6,7 +6,7 @@ MODEL (
       delimiter = '\t'
     )
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Operating system lookup reference data from Adobe Analytics',
   tags ('seed', 'reference_data', 'adobe_analytics', 'lookup'),
   terms ('operating_systems'),

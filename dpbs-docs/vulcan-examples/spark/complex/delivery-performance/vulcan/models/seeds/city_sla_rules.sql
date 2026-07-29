@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/city_sla_rules.csv'
   ),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [city, delivery_mode],
   description 'Reference SLA rules by city and delivery mode used to evaluate promised delivery windows and delivery priority for quick-commerce operations.',
   tags ('seed', 'bronze', 'delivery', 'sla', 'reference-data'),

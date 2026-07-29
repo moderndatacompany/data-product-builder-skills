@@ -21,7 +21,7 @@ MODEL (
     last_modified_date TEXT
   ),
   grain customer_id,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags ('seed-data', 'bronze', 'customer-master'),
   description 'Customer master data containing account details, contact information, and classification for all B2B customers.'
 );

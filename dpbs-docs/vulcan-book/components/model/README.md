@@ -1,17 +1,24 @@
-# Model
+---
+description: >-
+  What a Vulcan data model is: the MODEL block, the SELECT query, naming and
+  typing conventions, comment registration, and the day-to-day workflow for
+  adding, editing, and deleting models.
+---
+
+# Data Models
 
 Models transform raw data into tables and views. Define what you want (the metadata) and how to make it (the SQL query), and Vulcan handles the rest.
 
 Models live in `.sql` and `.py` files in the `models/` directory of your project. Vulcan automatically figures out how your models relate to each other by parsing your SQL, so you don't have to manually configure dependencies. Write your SQL, and Vulcan handles the lineage.
 
-Every model has two parts:
+Every model has 2 parts:
 
 * **DDL (Data Definition Language)** - The `MODEL` block that tells Vulcan what this model is (name, schedule, how to materialize it, etc.)
 * **DML (Data Manipulation Language)** - The `SELECT` query that does the actual transformation work
 
 The DDL defines the model metadata. The DML contains the transformation logic.
 
-## Model Structure
+## Model structure
 
 You can write models in SQL or Python. Both work the same way conceptually; they just look different. Let's see both:
 
@@ -123,11 +130,11 @@ def execute(
 
 Both formats do the same thing. Choose the one you prefer.
 
-## DDL: The MODEL Block
+## DDL: the MODEL block
 
 The `MODEL` block is where you tell Vulcan about your model. It's the first thing in your file (after any comments) and uses a simple, declarative syntax.
 
-### Basic Syntax
+### Basic syntax
 
 Here's what a `MODEL` block looks like:
 
@@ -153,7 +160,7 @@ This tells Vulcan:
 * **`terms`** - Business glossary terms using dot notation
 * **`description`** - Human-readable description of the model
 
-### Common Properties
+### Common properties
 
 Here are the properties you'll use most often:
 
@@ -174,7 +181,7 @@ Here are the properties you'll use most often:
 There are more properties available beyond these common ones, including `column_descriptions`, `column_tags`, and `column_terms` for column-level metadata. Check out the [Model Properties](properties.md) reference for the complete list of all available model properties and their configurations.
 {% endhint %}
 
-## DML: The SELECT Query
+## DML: the SELECT query
 
 The `SELECT` is the transformation. Vulcan wraps it with the right DDL and DML for the model kind (`CREATE OR REPLACE`, `INSERT`, `MERGE`, and so on), but the shape of the output is entirely whatever this query returns.
 
@@ -196,15 +203,15 @@ This query:
 * Counts orders, sums revenue, finds the latest order ID
 * Returns the results ordered by date
 
-Pretty standard SQL! Vulcan will automatically figure out that this model depends on `raw.raw_orders` and build the dependency graph for you.
+Pretty standard SQL! Vulcan automatically figures out that this model depends on `raw.raw_orders` and builds the dependency graph for you.
 
 ## Conventions
 
-Vulcan tries to be smart and infer as much as possible from your SQL. This means you don't have to write a bunch of YAML config files, just write SQL and Vulcan figures it out. But to do this, your SQL needs to follow some conventions.
+Vulcan infers as much as possible from your SQL. This means you don't have to write a bunch of YAML config files, just write SQL and Vulcan figures it out. But to do this, your SQL needs to follow some conventions.
 
-### SQL Model Conventions
+### SQL model conventions
 
-#### Unique Column Names
+#### Unique column names
 
 Your final `SELECT` needs unique column names. No duplicates allowed!
 
@@ -220,7 +227,7 @@ GROUP BY order_date
 
 If you have duplicate column names, Vulcan won't know which one you mean, and that causes problems.
 
-#### Explicit Types
+#### Explicit types
 
 Cast your types explicitly. This prevents surprises and ensures your schema is consistent:
 
@@ -239,7 +246,7 @@ Vulcan uses PostgreSQL-style casting (`x::int`), but don't worry, it automatical
 
 **Why this matters:** Without explicit types, you might get `FLOAT` when you expected `INTEGER`, or `VARCHAR` when you wanted `TIMESTAMP`. Explicit casting prevents these surprises.
 
-#### Inferrable Names
+#### Inferrable names
 
 Your columns need names that Vulcan can figure out. If Vulcan can't infer a name, you need to add an alias:
 
@@ -254,9 +261,9 @@ SELECT
   SUM(total_amount) AS revenue    -- explicitly named
 ```
 
-If you forget an alias, Vulcan's formatter will add one automatically when it renders your SQL. But it's better to be explicit, you'll know what the column is called!
+If you forget an alias, Vulcan's formatter adds one automatically when it renders your SQL. But it's better to be explicit, you'll know what the column is called!
 
-#### Column Metadata
+#### Column metadata
 
 Document and categorize your columns using column-level metadata properties. There are several options:
 
@@ -312,12 +319,12 @@ See [Model Properties](properties.md#column_tags) for detailed documentation on 
 {% hint style="info" %}
 **Priority**
 
-If you use `column_descriptions` in the DDL, Vulcan will use those and ignore any inline comments in your query. DDL descriptions take priority, so if you define descriptions in both places, the DDL version wins.
+If you use `column_descriptions` in the DDL, Vulcan uses those and ignores any inline comments in your query. DDL descriptions take priority, so if you define descriptions in both places, the DDL version wins.
 {% endhint %}
 
 **Option 2: Inline Comments**
 
-If you don't specify `column_descriptions` in the DDL, Vulcan will automatically pick up comments from your query:
+If you don't specify `column_descriptions` in the DDL, Vulcan automatically picks up comments from your query:
 
 ```sql
 MODEL (
@@ -338,13 +345,13 @@ GROUP BY order_date
 
 Vulcan registers these comments as column descriptions in your database.
 
-**Table comments:** If you put a comment before the `MODEL` block, Vulcan will use it as the table description. But if you also specify `description` in the MODEL block, that takes priority.
+**Table comments:** If you put a comment before the `MODEL` block, Vulcan uses it as the table description. But if you also specify `description` in the MODEL block, that takes priority.
 
-### Python Model Conventions
+### Python model conventions
 
 Python models work a bit differently because Python doesn't have the same type inference capabilities as SQL.
 
-#### Explicit Column Definitions
+#### Explicit column definitions
 
 You **must** define your columns explicitly in the `@model` decorator:
 
@@ -363,7 +370,7 @@ You **must** define your columns explicitly in the `@model` decorator:
 
 Vulcan can't infer types from Python code the way it can from SQL, so you need to tell it explicitly.
 
-#### Explicit Dependencies
+#### Explicit dependencies
 
 Unlike SQL models (where Vulcan figures out dependencies automatically), Python models need you to list them:
 
@@ -377,7 +384,7 @@ Unlike SQL models (where Vulcan figures out dependencies automatically), Python 
 
 This is because Vulcan can't parse your Python code to find `FROM` clauses and joins. You need to tell it what this model depends on.
 
-#### Column Metadata
+#### Column metadata
 
 Python models can't use inline comments for column descriptions. Instead, specify them in the decorator using `column_descriptions`, `column_tags`, and `column_terms`:
 
@@ -409,10 +416,10 @@ Python models can't use inline comments for column descriptions. Instead, specif
 {% hint style="warning" %}
 **Column name validation**
 
-Vulcan will error if you put a column name in `column_descriptions`, `column_tags`, or `column_terms` that doesn't exist in `columns`. This prevents typos and keeps things consistent, if you describe a column, it better exist!
+Vulcan errors if you put a column name in `column_descriptions`, `column_tags`, or `column_terms` that doesn't exist in `columns`. This prevents typos and keeps things consistent, if you describe a column, it better exist!
 {% endhint %}
 
-#### Return Type
+#### Return type
 
 Your `execute` function must return a pandas DataFrame, and the columns must match what you defined in `columns`:
 
@@ -433,14 +440,14 @@ The DataFrame columns need to match your `columns` definition exactly, same name
 {% hint style="info" %}
 **Learn more**
 
-See [Python Models](types/python_models.md) for detailed information, advanced patterns, and more examples.
+See [Python Models](types/python.md) for detailed information, advanced patterns, and more examples.
 {% endhint %}
 
-## Comment Registration
+## Comment registration
 
 Vulcan registers comments (descriptions) in your database so they show up in your BI tools and data catalogs.
 
-### How Comments Get Registered
+### How comments get registered
 
 **Model-level comments:**
 
@@ -452,7 +459,7 @@ Vulcan registers comments (descriptions) in your database so they show up in you
 * Use `column_descriptions` in the DDL (recommended)
 * Or use inline comments in your SELECT query (if `column_descriptions` isn't specified)
 
-### What Gets Registered
+### What gets registered
 
 Not everything gets comments registered:
 
@@ -463,7 +470,7 @@ Not everything gets comments registered:
 
 **Note:** Some engines automatically pass comments from physical tables to views that select from them. So even if Vulcan didn't explicitly register a comment on a view, it might still show up if the engine does this automatically.
 
-### Engine Support
+### Engine support
 
 Different databases support comments differently. Some can register comments in the `CREATE` statement (one command), others need separate commands for each comment.
 
@@ -475,7 +482,7 @@ Here's what each engine supports:
 | Snowflake | Y                | Y               |
 | Spark     | Y                | Y               |
 
-If your engine doesn't support comments, Vulcan will skip registration (no errors, it just won't register them).
+If your engine doesn't support comments, Vulcan skips registration (no errors, it just doesn't register them).
 
 ## Macros
 
@@ -483,4 +490,114 @@ Macros are like variables for your SQL. They let you parameterize queries and av
 
 Macros use the `@` prefix. For example, `@this_model` refers to the current model being processed, and `@start_ds` is the start date for incremental processing.
 
-See the [macros documentation](../advanced-features/macros/) for details.
+See the [macros documentation](../../advanced-features/macros/) for details.
+
+## Working with models
+
+Add, edit, evaluate, and delete models using an Orders360 example project.
+
+### Add a model
+
+Create a file in your `models` directory:
+
+```bash
+touch models/sales/weekly_sales.sql
+```
+
+Define the model:
+
+```sql
+MODEL (
+  name sales.weekly_sales,
+  kind INCREMENTAL_BY_TIME_RANGE (
+    time_column order_date,
+    batch_size 1
+  ),
+  start '2025-01-01',
+  cron '@weekly',
+  grains (order_date),
+  tags ('silver', 'sales', 'aggregation'),
+  description 'Weekly aggregated sales metrics'
+);
+
+SELECT
+  DATE_TRUNC('week', order_date) AS order_date,
+  COUNT(DISTINCT order_id) AS total_orders,
+  SUM(total_amount) AS total_revenue,
+  AVG(total_amount) AS avg_order_value
+FROM sales.daily_sales
+WHERE order_date BETWEEN @start_ds AND @end_ds
+GROUP BY DATE_TRUNC('week', order_date)
+```
+
+Confirm Vulcan detects it, then apply it:
+
+```bash
+vulcan info
+vulcan plan
+```
+
+`vulcan plan` shows the new model and the dates it needs to backfill before asking you to confirm.
+
+### Evaluate a model
+
+`vulcan evaluate` runs a model's query without materializing it, a dry run for testing logic and previewing output:
+
+```bash
+vulcan evaluate sales.daily_sales --start=2025-01-15 --end=2025-01-15
+```
+
+Use `evaluate` to test transformations, debug queries, and check data quality before you commit to a plan.
+
+### Edit a model
+
+Change the query, then preview the impact with `vulcan plan dev` before applying to production.
+
+Vulcan classifies the change:
+
+* **Non-breaking** (e.g. adding a column): existing queries still work, and downstream models that don't use the new column aren't reprocessed.
+* **Breaking** (e.g. adding a `WHERE` filter): downstream models depending on the changed model become indirectly modified and need backfill too. Vulcan processes upstream models first.
+
+Review the diff and backfill scope in the plan output before applying. Breaking changes cost more because they cascade, so confirm you need one before making it.
+
+### Revert a change
+
+Undo an edit and apply it with `vulcan plan dev`. Vulcan detects the model is back to what production already has and offers a **Virtual Update**: no backfill, just a fast reference change, so previous data stays available and the revert completes in seconds.
+
+### Delete a model
+
+Remove the file (and any associated tests), then apply:
+
+```bash
+rm models/sales/weekly_sales.sql
+rm tests/test_weekly_sales.yaml
+vulcan plan dev
+```
+
+Vulcan applies the removal as a virtual update in dev. Then repeat `vulcan plan` against production.
+
+### Validate models
+
+Vulcan validates automatically on `plan` (unit tests, then assertions as data loads). You can also validate manually:
+
+* `vulcan evaluate <model>`: preview output without materializing
+* `vulcan test`: run unit tests in `tests/`
+* `vulcan plan dev`: preview changes before applying
+
+### Best practices
+
+1. Use descriptive names (`sales.daily_sales`, not `sales.ds`).
+2. Add column descriptions so documentation lives with the model.
+3. Use assertions to validate data quality at the model level.
+4. Test with `evaluate` before applying changes.
+5. Review plan diffs and downstream impact carefully.
+6. Develop in a dev environment; don't test in prod.
+
+## Related pages
+
+| Page | What it covers |
+| ---- | -------------- |
+| [Properties](properties.md) | The complete reference for every `MODEL` DDL property. |
+| [Types](types/README.md) | SQL, Python, and external models, and how to choose between them. |
+| [Kinds](model-kinds.md) | How each model kind loads and processes data: `FULL`, `INCREMENTAL`, `VIEW`, `SCD`, and more. |
+| [Statements](statements.md) | Pre-statements, post-statements, and on-virtual-update statements. |

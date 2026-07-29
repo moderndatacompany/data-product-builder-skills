@@ -5,7 +5,7 @@ MODEL (
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by ARRAY(survey_id),
   grains [SURVEY_ID, RESPONSE_ID, VALUES_KEY],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, RESPONSE_ID, VALUES_KEY, RESPONSE_TYPE_STATUS, RESPONSE_VALUE, RESPONSE),
   description 'Intermediate transformation merging all survey responses with status flags for data quality coverage, handling surveys with no responses, only metadata, or empty response files to ensure complete survey catalog representation',
   tags ('transformation', 'response', 'merging', 'data_quality', 'fact'),

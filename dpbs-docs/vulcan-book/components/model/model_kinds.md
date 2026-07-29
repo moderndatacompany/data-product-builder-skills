@@ -1,6 +1,436 @@
+---
+description: >-
+  INCREMENTAL, FULL, VIEW, EMBEDDED, SEED, and SCD Type 2 model kinds, and their
+  materialization strategies by engine.
+---
+
 # Kinds
 
 Model kinds determine how Vulcan loads and processes your data. Each kind fits different use cases. Some rebuild everything from scratch, others update incrementally, and some create views that compute on demand.
+
+## FULL
+
+`FULL` models are the simplest kind. They rebuild everything from scratch every time they run. No incremental logic, no time columns, no unique keys. Run the query and replace the entire table.
+
+**When to use FULL:**
+
+* Small datasets where rebuilding is fast and cheap.
+* Aggregate tables without a time dimension.
+* Tables that change completely each run (like a "current state" snapshot).
+* Development and testing.
+
+**When NOT to use FULL:**
+
+* Large datasets (slow and expensive).
+* Time-series data (use `INCREMENTAL_BY_TIME_RANGE` instead).
+* Tables that only change partially (use incremental kinds).
+
+The trade-off is simplicity vs performance. FULL fits small tables; incremental kinds save time and money on large tables.
+
+A `FULL` model kind:
+
+{% tabs %}
+{% tab title="SQL" %}
+```sql
+MODEL (
+  name vulcan_demo.full_model,
+  kind FULL,
+  start '2025-01-01',
+  grains (customer_id)
+);
+
+SELECT
+  c.customer_id,
+  c.name AS customer_name,
+  c.email,
+  COUNT(DISTINCT o.order_id) AS total_orders,
+  COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS total_spent,
+  COALESCE(SUM(oi.quantity * oi.unit_price), 0) / NULLIF(COUNT(DISTINCT o.order_id), 0) AS avg_order_value
+FROM vulcan_demo.customers AS c
+LEFT JOIN vulcan_demo.orders AS o
+  ON c.customer_id = o.customer_id
+LEFT JOIN vulcan_demo.order_items AS oi
+  ON o.order_id = oi.order_id
+GROUP BY c.customer_id, c.name, c.email
+ORDER BY total_spent DESC
+```
+{% endtab %}
+
+{% tab title="Python" %}
+```python
+from vulcan import ExecutionContext, model
+from vulcan import ModelKindName
+
+@model(
+    "vulcan_demo.full_model_py",
+    columns={
+        "product_id": "int",
+        "product_name": "string",
+        "category": "string",
+        "total_sales": "decimal(10,2)",
+    },
+    kind=dict(
+        name=ModelKindName.FULL,
+    ),
+    grains=["product_id"],
+    depends_on=["vulcan_demo.products", "vulcan_demo.order_items", "vulcan_demo.orders"],
+)
+def execute(context: ExecutionContext, **kwargs):
+    query = """
+    SELECT p.product_id, p.name AS product_name, p.category,
+           COALESCE(SUM(oi.quantity * oi.unit_price), 0) as total_sales
+    FROM vulcan_demo.products p
+    LEFT JOIN vulcan_demo.order_items oi ON p.product_id = oi.product_id
+    LEFT JOIN vulcan_demo.orders o ON oi.order_id = o.order_id
+    GROUP BY p.product_id, p.name, p.category
+    ORDER BY total_sales DESC
+    """
+    return context.fetchdf(query)
+```
+{% endtab %}
+{% endtabs %}
+
+<details>
+
+<summary>Example SQL sequence when applying this model kind</summary>
+
+Create a model with the following definition and run `vulcan plan dev`:
+
+```sql
+MODEL (
+  name demo.full_model_example,
+  kind FULL,
+  cron '@daily',
+  grains (item_id),
+);
+
+SELECT
+  item_id,
+  COUNT(DISTINCT id) AS num_orders
+FROM demo.incremental_model
+GROUP BY
+  item_id
+```
+
+Vulcan executes this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `2345651858`, is part of the table name.
+
+```sql
+CREATE TABLE IF NOT EXISTS `vulcan-public-demo`.`vulcan__demo`.`demo__full_model_example__2345651858` (`item_id` INT64, `num_orders` INT64)
+```
+
+Vulcan validates the model's query before processing data (note the `WHERE FALSE` and `LIMIT 0`).
+
+```sql
+SELECT `incremental_model`.`item_id` AS `item_id`, COUNT(DISTINCT `incremental_model`.`id`) AS `num_orders`
+FROM `vulcan-public-demo`.`vulcan__demo`.`demo__incremental_model__89556012` AS `incremental_model`
+WHERE FALSE
+GROUP BY `incremental_model`.`item_id` LIMIT 0
+```
+
+Vulcan creates a versioned table in the physical layer.
+
+```sql
+CREATE OR REPLACE TABLE `vulcan-public-demo`.`vulcan__demo`.`demo__full_model_example__2345651858` AS
+SELECT CAST(`item_id` AS INT64) AS `item_id`, CAST(`num_orders` AS INT64) AS `num_orders`
+FROM (SELECT `incremental_model`.`item_id` AS `item_id`, COUNT(DISTINCT `incremental_model`.`id`) AS `num_orders`
+FROM `vulcan-public-demo`.`vulcan__demo`.`demo__incremental_model__89556012` AS `incremental_model`
+GROUP BY `incremental_model`.`item_id`) AS `_subquery`
+```
+
+Vulcan creates a suffixed `__dev` schema based on the name of the plan environment.
+
+```sql
+CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
+```
+
+Vulcan creates a view in the virtual layer pointing to the versioned table in the physical layer.
+
+```sql
+CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`full_model_example` AS
+SELECT * FROM `vulcan-public-demo`.`vulcan__demo`.`demo__full_model_example__2345651858`
+```
+
+</details>
+
+### Materialization strategy
+
+Depending on the target engine, models of the `FULL` kind are materialized using the following strategies:
+
+| Engine     | Strategy                |
+| ---------- | ----------------------- |
+| Spark      | INSERT OVERWRITE        |
+| Databricks | INSERT OVERWRITE        |
+| Snowflake  | CREATE OR REPLACE TABLE |
+
+\| Postgres | DROP TABLE, CREATE TABLE, INSERT | | DuckDB | CREATE OR REPLACE TABLE |
+
+## VIEW
+
+Unlike the other kinds, `VIEW` models don't store data. They create a virtual table (a view) that runs your query every time someone queries it.
+
+**How it works**: when a downstream model or user queries your VIEW model, the database executes your query on the fly. No data is pre-computed or stored.
+
+**When to use VIEW:**
+
+* Simple transformations that are fast to compute.
+* When you want always-fresh data (no caching).
+* When storage is expensive but compute is cheap.
+* For lightweight transformations that don't need materialization.
+
+**When NOT to use VIEW:**
+
+* Expensive queries that run frequently (you pay the compute cost every time).
+* Complex aggregations or joins (materialize these instead).
+* Python models (VIEW isn't supported for Python; use SQL).
+
+{% hint style="info" %}
+**Default kind**
+
+`VIEW` is the default model kind. A model without a `kind` becomes a VIEW automatically.
+{% endhint %}
+
+{% hint style="warning" %}
+**Performance consideration**
+
+VIEW queries run every time they're referenced, so expensive queries get costly fast. A view referenced by many downstream models runs that expensive query for each reference. Materialize expensive views as FULL or incremental models instead.
+{% endhint %}
+
+A `VIEW` model kind:
+
+```sql
+MODEL (
+  name vulcan_demo.view_model,
+  kind VIEW,
+  grains (warehouse_performance_key)
+);
+
+SELECT
+  w.warehouse_id,
+  w.name AS warehouse_name,
+  r.region_name,
+  o.order_date,
+  CONCAT(w.warehouse_id::TEXT, '_', o.order_date::TEXT) AS warehouse_performance_key,
+  COUNT(DISTINCT o.order_id) AS total_transactions,
+  SUM(oi.quantity * oi.unit_price) AS total_sales_amount,
+  COUNT(DISTINCT o.customer_id) AS unique_customers
+FROM vulcan_demo.warehouses AS w
+LEFT JOIN vulcan_demo.regions AS r
+  ON w.region_id = r.region_id
+LEFT JOIN vulcan_demo.orders AS o
+  ON w.warehouse_id = o.warehouse_id
+LEFT JOIN vulcan_demo.order_items AS oi
+  ON o.order_id = oi.order_id
+GROUP BY w.warehouse_id, w.name, r.region_name, o.order_date
+```
+
+<details>
+
+<summary>Example SQL sequence when applying this model kind</summary>
+
+Create a model with the following definition and run `vulcan plan dev`:
+
+```sql
+MODEL (
+  name demo.example_view,
+  kind VIEW,
+  cron '@daily',
+);
+
+SELECT
+  'hello there' as a_column
+```
+
+Vulcan executes this SQL to create a versioned view in the physical layer. Note that the view's version fingerprint, `1024042926`, is part of the view name.
+
+```sql
+CREATE OR REPLACE VIEW `vulcan-public-demo`.`vulcan__demo`.`demo__example_view__1024042926`
+(`a_column`) AS SELECT 'hello there' AS `a_column`
+```
+
+Vulcan creates a suffixed `__dev` schema based on the name of the plan environment.
+
+```sql
+CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
+```
+
+Vulcan creates a view in the virtual layer pointing to the versioned view in the physical layer.
+
+```sql
+CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`example_view` AS
+SELECT * FROM `vulcan-public-demo`.`vulcan__demo`.`demo__example_view__1024042926`
+```
+
+</details>
+
+### Materialized views
+
+Turn a VIEW into a materialized view by setting `materialized: true`. Materialized views store the query results (like a table) but refresh automatically when the underlying data changes (like a view).
+
+Set it up:
+
+```sql
+MODEL (
+  name vulcan_demo.sales_summary,
+  kind VIEW (
+    materialized true
+  )
+);
+```
+
+{% hint style="info" %}
+**Engine support**
+
+Materialized views are supported on:
+
+* Databricks
+* Snowflake
+
+On other engines, this flag is ignored and you get a regular VIEW.
+{% endhint %}
+
+Vulcan recreates the materialized view only when your query changes or the view doesn't exist. This gives the performance benefits of materialized views without unnecessary refreshes.
+
+## EMBEDDED
+
+`EMBEDDED` models are reusable SQL snippets. They don't create tables or views; their query is injected directly into any downstream model that references them, as a subquery.
+
+**Why use this?** Define common logic once and reuse it everywhere instead of copying it across models (for example, a CTE that filters active customers). It's a macro for SQL.
+
+**Use it for:**
+
+* Common CTEs used across multiple models.
+* Reusable business logic (like "active customers" or "valid orders").
+* Avoiding code duplication.
+
+{% hint style="info" %}
+**Python models**
+
+Python models don't support the `EMBEDDED` kind; use a SQL model instead.
+{% endhint %}
+
+An `EMBEDDED` model kind:
+
+```sql
+MODEL (
+  name vulcan_demo.unique_customers,
+  kind EMBEDDED
+);
+
+SELECT DISTINCT
+  customer_id,
+  name AS customer_name,
+  email
+FROM vulcan_demo.customers
+```
+
+## SEED
+
+The `SEED` model kind specifies seed models that use static CSV datasets in your Vulcan project.
+
+**How it works**: point to a CSV file, define the schema, and Vulcan loads it into a table. The data reloads only when you change the model definition or update the CSV file.
+
+**Use cases:**
+
+* Reference data (countries, states, categories).
+* Lookup tables.
+* Static configuration data.
+* Test data.
+
+{% hint style="info" %}
+**Python models**
+
+Python models don't support the `SEED` kind; use a SQL model instead.
+{% endhint %}
+
+{% hint style="info" %}
+**When data reloads**
+
+Seed models load once and stay loaded unless you update the model definition or change the CSV file. There's no need to reload static data every run.
+{% endhint %}
+
+A `SEED` model kind:
+
+```sql
+MODEL (
+  name vulcan_demo.seed_model,
+  kind SEED (
+    path '../seeds/seed_data.csv'
+  ),
+  columns (
+    id INT,
+    item_id INT,
+    event_date DATE
+  ),
+  grains (id),
+  assertions (
+    UNIQUE_COMBINATION_OF_COLUMNS(columns := (id, event_date)),
+    NOT_NULL(columns := (id, item_id, event_date))
+  )
+)
+```
+
+<details>
+
+<summary>Example SQL sequence when applying this model kind</summary>
+
+Create a model with the following definition and run `vulcan plan dev`:
+
+```sql
+MODEL (
+  name demo.seed_example,
+  kind SEED (
+    path '../../seeds/seed_example.csv'
+  ),
+  columns (
+    id INT64,
+    item_id INT64,
+    event_date DATE
+  ),
+  grains (id, event_date)
+)
+```
+
+Vulcan executes this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `3038173937`, is part of the table name.
+
+```sql
+CREATE TABLE IF NOT EXISTS `vulcan-public-demo`.`vulcan__demo`.`demo__seed_example__3038173937` (`id` INT64, `item_id` INT64, `event_date` DATE)
+```
+
+Vulcan uploads the seed as a temp table in the physical layer.
+
+```sql
+vulcan-public-demo.vulcan__demo.__temp_demo__seed_example__3038173937_9kzbpld7
+```
+
+Vulcan creates a versioned table in the physical layer from the temp table.
+
+```sql
+CREATE OR REPLACE TABLE `vulcan-public-demo`.`vulcan__demo`.`demo__seed_example__3038173937` AS
+SELECT CAST(`id` AS INT64) AS `id`, CAST(`item_id` AS INT64) AS `item_id`, CAST(`event_date` AS DATE) AS `event_date`
+FROM (SELECT `id`, `item_id`, `event_date`
+FROM `vulcan-public-demo`.`vulcan__demo`.`__temp_demo__seed_example__3038173937_9kzbpld7`) AS `_subquery`
+```
+
+Vulcan drops the temp table in the physical layer.
+
+```sql
+DROP TABLE IF EXISTS `vulcan-public-demo`.`vulcan__demo`.`__temp_demo__seed_example__3038173937_9kzbpld7`
+```
+
+Vulcan creates a suffixed `__dev` schema based on the name of the plan environment.
+
+```sql
+CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
+```
+
+Vulcan creates a view in the virtual layer pointing to the versioned table in the physical layer.
+
+```sql
+CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`seed_example` AS
+SELECT * FROM `vulcan-public-demo`.`vulcan__demo`.`demo__seed_example__3038173937`
+```
+
+</details>
 
 ## INCREMENTAL
 
@@ -28,11 +458,11 @@ MODEL (
 );
 ```
 
-In addition to specifying a time column in the `MODEL` DDL, the model's query must contain a `WHERE` clause that filters the upstream records by time range. Vulcan provides special macros that represent the start and end of the time range being processed: `@start_date` / `@end_date` and `@start_ds` / `@end_ds`. See [Macros](../advanced-features/macros/variables.md) for more information.
+In addition to specifying a time column in the `MODEL` DDL, the model's query must contain a `WHERE` clause that filters the upstream records by time range. Vulcan provides special macros that represent the start and end of the time range being processed: `@start_date` / `@end_date` and `@start_ds` / `@end_ds`. See [Macros](../../advanced-features/macros/variables.md) for more information.
 
 <details>
 
-<summary>Example SQL sequence when applying this model kind (ex: BigQuery)</summary>
+<summary>Example SQL sequence when applying this model kind</summary>
 
 This example demonstrates incremental by time range models.
 
@@ -154,7 +584,7 @@ LEFT JOIN product_usage p
   AND s.customer_id = p.customer_id
 ```
 
-Vulcan will execute this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `50975949`, is part of the table name.
+Vulcan executes this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `50975949`, is part of the table name.
 
 ```sql
 CREATE TABLE IF NOT EXISTS `vulcan-public-demo`.`vulcan__demo`.`demo__incrementals_demo__50975949` (
@@ -176,7 +606,7 @@ CREATE TABLE IF NOT EXISTS `vulcan-public-demo`.`vulcan__demo`.`demo__incrementa
   PARTITION BY `transaction_date`
 ```
 
-Vulcan will validate the SQL before processing data (note the `WHERE FALSE LIMIT 0` and the placeholder timestamps).
+Vulcan validates the SQL before processing data (note the `WHERE FALSE LIMIT 0` and the placeholder timestamps).
 
 ```sql
 WITH `sales_data` AS (
@@ -238,7 +668,7 @@ WHERE FALSE
 LIMIT 0
 ```
 
-Vulcan will merge data into the empty table.
+Vulcan merges data into the empty table.
 
 ```sql
 MERGE INTO `vulcan-public-demo`.`vulcan__demo`.`demo__incrementals_demo__50975949` AS `__MERGE_TARGET__` USING (
@@ -324,13 +754,13 @@ WHEN NOT MATCHED THEN
   )
 ```
 
-Vulcan will create a suffixed `__dev` schema based on the name of the plan environment.
+Vulcan creates a suffixed `__dev` schema based on the name of the plan environment.
 
 ```sql
 CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
 ```
 
-Vulcan will create a view in the virtual layer to pointing to the versioned table in the physical layer.
+Vulcan creates a view in the virtual layer pointing to the versioned table in the physical layer.
 
 ```sql
 CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`incrementals_demo` AS
@@ -339,6 +769,8 @@ FROM `vulcan-public-demo`.`vulcan__demo`.`demo__incrementals_demo__50975949`
 ```
 
 </details>
+
+#### Timezones
 
 {% hint style="info" %}
 **Important: timezone requirements**
@@ -422,17 +854,17 @@ def execute(context: ExecutionContext, start, end, **kwargs):
 {% endtab %}
 {% endtabs %}
 
-### Time column
+#### Time column
 
 Vulcan needs to know which column in your model's output represents the timestamp or date for each record. This is your `time_column`.
 
 {% hint style="info" %}
 **Remember: UTC timezone**
 
-Your `time_column` should be in UTC timezone. See [above](model_kinds.md#timezones) for why this matters.
+Your `time_column` should be in UTC timezone. See [above](model-kinds.md#timezones) for why this matters.
 {% endhint %}
 
-The time column determines which records are overwritten during data [restatement](../../guides/plan/plan_guide.md#restatement-plans-restate-model) and provides a partition key for engines that support partitioning (such as Apache Spark). Specify the time column name in the `MODEL` DDL `kind` specification:
+The time column determines which records are overwritten during data [restatement](../../concepts/run-and-plan/plan-guide.md#restatement) and provides a partition key for engines that support partitioning (such as Apache Spark). Specify the time column name in the `MODEL` DDL `kind` specification:
 
 ```sql
 MODEL (
@@ -503,7 +935,7 @@ WHERE
   AND o.order_date BETWEEN @start_ds AND @end_ds; -- `order_date` time column filter automatically added by Vulcan
 ```
 
-### Partitioning
+#### Partitioning
 
 By default, Vulcan adds your `time_column` to the partition key. This lets database engines do partition pruning (skipping partitions that don't match your query), making queries faster.
 
@@ -524,15 +956,15 @@ MODEL (
 );
 ```
 
-### Idempotency
+#### Idempotency
 
-Make incremental by time range model queries [idempotent](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms) to prevent unexpected results during data [restatement](../../guides/plan/plan_guide.md#restatement-plans-restate-model).
+Make incremental by time range model queries [idempotent](../../concepts/architecture.md) to prevent unexpected results during data [restatement](../../concepts/run-and-plan/plan-guide.md#restatement).
 
 Idempotent means running the same query multiple times produces the same result. This prevents surprises during data restatement.
 
 **Watch out**: upstream models can affect idempotency. If you reference a FULL model (which rebuilds everything each run), your incremental model becomes non-idempotent because that upstream data changes every time. This is usually fine, but worth knowing.
 
-### Materialization strategy
+#### Materialization strategy
 
 The `INCREMENTAL_BY_TIME_RANGE` kind materializes with these strategies, by engine:
 
@@ -541,10 +973,8 @@ The `INCREMENTAL_BY_TIME_RANGE` kind materializes with these strategies, by engi
 | Spark      | INSERT OVERWRITE by time column partition |
 | Databricks | INSERT OVERWRITE by time column partition |
 | Snowflake  | DELETE by time range, then INSERT         |
-| BigQuery   | DELETE by time range, then INSERT         |
-| Redshift   | DELETE by time range, then INSERT         |
-| Postgres   | DELETE by time range, then INSERT         |
-| DuckDB     | DELETE by time range, then INSERT         |
+
+\| Postgres | DELETE by time range, then INSERT |
 
 ### INCREMENTAL\_BY\_UNIQUE\_KEY
 
@@ -564,7 +994,7 @@ This kind fits datasets with these traits:
 * There is at most one record associated with each unique key.
 * It is appropriate to upsert records, so existing records can be overwritten by new arrivals when their keys match.
 
-A [Slowly Changing Dimension](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#model-terms) (SCD) fits this description. See the [SCD Type 2](model_kinds.md#scd-type-2) model kind.
+A [Slowly Changing Dimension](../../concepts/architecture.md) (SCD) fits this description. See the [SCD Type 2](model-kinds.md#scd-type-2) model kind.
 
 Provide the name of the unique key column as part of the `MODEL` DDL:
 
@@ -662,7 +1092,7 @@ GROUP BY c.customer_id, c.name
 
 <details>
 
-<summary>Example SQL sequence when applying this model kind (ex: BigQuery)</summary>
+<summary>Example SQL sequence when applying this model kind</summary>
 
 Create a model with the following definition and run `vulcan plan dev`:
 
@@ -685,13 +1115,13 @@ WHERE
   event_date BETWEEN @start_date AND @end_date
 ```
 
-Vulcan will execute this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `1161945221`, is part of the table name.
+Vulcan executes this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `1161945221`, is part of the table name.
 
 ```sql
 CREATE TABLE IF NOT EXISTS `vulcan-public-demo`.`vulcan__demo`.`demo__incremental_by_unique_key_example__1161945221` (`id` INT64, `item_id` INT64, `event_date` DATE)
 ```
 
-Vulcan will validate the model's query before processing data (note the `FALSE LIMIT 0` in the `WHERE` statement and the placeholder dates).
+Vulcan validates the model's query before processing data (note the `FALSE LIMIT 0` in the `WHERE` statement and the placeholder dates).
 
 ```sql
 SELECT `seed_model`.`id` AS `id`, `seed_model`.`item_id` AS `item_id`, `seed_model`.`event_date` AS `event_date`
@@ -699,7 +1129,7 @@ FROM `vulcan-public-demo`.`vulcan__demo`.`demo__seed_model__2834544882` AS `seed
 WHERE (`seed_model`.`event_date` <= CAST('1970-01-01' AS DATE) AND `seed_model`.`event_date` >= CAST('1970-01-01' AS DATE)) AND FALSE LIMIT 0
 ```
 
-Vulcan will create a versioned table in the physical layer.
+Vulcan creates a versioned table in the physical layer.
 
 ```sql
 CREATE OR REPLACE TABLE `vulcan-public-demo`.`vulcan__demo`.`demo__incremental_by_unique_key_example__1161945221` AS
@@ -709,13 +1139,13 @@ FROM `vulcan-public-demo`.`vulcan__demo`.`demo__seed_model__2834544882` AS `seed
 WHERE `seed_model`.`event_date` <= CAST('2024-10-30' AS DATE) AND `seed_model`.`event_date` >= CAST('2020-01-01' AS DATE)) AS `_subquery`
 ```
 
-Vulcan will create a suffixed `__dev` schema based on the name of the plan environment.
+Vulcan creates a suffixed `__dev` schema based on the name of the plan environment.
 
 ```sql
 CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
 ```
 
-Vulcan will create a view in the virtual layer pointing to the versioned table in the physical layer.
+Vulcan creates a view in the virtual layer pointing to the versioned table in the physical layer.
 
 ```sql
 CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`incremental_by_unique_key_example` AS
@@ -724,9 +1154,9 @@ SELECT * FROM `vulcan-public-demo`.`vulcan__demo`.`demo__incremental_by_unique_k
 
 </details>
 
-**Note:** Models of the `INCREMENTAL_BY_UNIQUE_KEY` kind are inherently [non-idempotent](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms), which should be taken into consideration during data [restatement](../../guides/plan/plan_guide.md#restatement-plans-restate-model). As a result, partial data restatement is not supported for this model kind, which means that the entire table will be recreated from scratch if restated.
+**Note:** Models of the `INCREMENTAL_BY_UNIQUE_KEY` kind are inherently [non-idempotent](../../concepts/architecture.md), so keep this in mind during data [restatement](../../concepts/run-and-plan/plan-guide.md#restatement). As a result, this model kind doesn't support partial data restatement: restating it recreates the entire table from scratch.
 
-### Unique key expressions
+#### Unique key expressions
 
 You're not limited to column names. Use SQL expressions to create a key from multiple columns or to transform values. Example using `COALESCE`:
 
@@ -739,7 +1169,7 @@ MODEL (
 );
 ```
 
-### When matched expression
+#### When matched expression
 
 By default, when a key matches (source and target have the same key), Vulcan updates all columns. Sometimes you want more control: preserve certain values, or only update specific columns.
 
@@ -779,10 +1209,8 @@ MODEL (
 
 `when_matched` works only on engines that support the `MERGE` statement:
 
-* BigQuery
 * Databricks
 * Postgres
-* Redshift (requires `enable_merge: true` in connection config)
 * Snowflake
 * Spark
 
@@ -799,7 +1227,7 @@ gateways:
 
 Redshift supports only the `UPDATE` or `DELETE` actions for the `WHEN MATCHED` clause and doesn't allow multiple `WHEN MATCHED` expressions. See the [Redshift documentation](https://docs.aws.amazon.com/redshift/latest/dg/r_MERGE.html#r_MERGE-parameters).
 
-### Merge filter expression
+#### Merge filter expression
 
 MERGE operations can be slow on large tables because they typically scan the entire existing table. When you're updating a small subset of records, this is wasteful.
 
@@ -821,65 +1249,77 @@ Like `when_matched`, use `source` and `target` aliases to reference the source a
 
 If your dbt project uses `incremental_predicates`, Vulcan converts them to `merge_filter` automatically.
 
-### Materialization strategy
+#### Materialization strategy
 
 The `INCREMENTAL_BY_UNIQUE_KEY` kind materializes with these strategies, by engine:
 
-| Engine     | Strategy                            |
-| ---------- | ----------------------------------- |
-| Spark      | not supported                       |
-| Databricks | MERGE ON unique key                 |
-| Snowflake  | MERGE ON unique key                 |
-| BigQuery   | MERGE ON unique key                 |
-| Redshift   | MERGE ON unique key                 |
-| Postgres   | MERGE ON unique key                 |
-| DuckDB     | DELETE ON matched + INSERT new rows |
+| Engine     | Strategy            |
+| ---------- | ------------------- |
+| Spark      | not supported       |
+| Databricks | MERGE ON unique key |
+| Snowflake  | MERGE ON unique key |
 
-## FULL
+\| Postgres | MERGE ON unique key |
 
-`FULL` models are the simplest kind. They rebuild everything from scratch every time they run. No incremental logic, no time columns, no unique keys. Run the query and replace the entire table.
+### INCREMENTAL\_BY\_PARTITION
 
-**When to use FULL:**
+`INCREMENTAL_BY_PARTITION` models are computed incrementally by partition. A set of columns defines the model's partitioning key; a partition is the group of rows with the same partitioning key value.
 
-* Small datasets where rebuilding is fast and cheap.
-* Aggregate tables without a time dimension.
-* Tables that change completely each run (like a "current state" snapshot).
-* Development and testing.
+{% hint style="info" %}
+**Should you use this model kind?**
 
-**When NOT to use FULL:**
+Any model kind can use a partitioned **table** by specifying the [`partitioned_by` key](properties.md#partitioned_by) in the `MODEL` DDL.
 
-* Large datasets (slow and expensive).
-* Time-series data (use `INCREMENTAL_BY_TIME_RANGE` instead).
-* Tables that only change partially (use incremental kinds).
+The "partition" in `INCREMENTAL_BY_PARTITION` is about how the data is **loaded** when the model runs.
 
-The trade-off is simplicity vs performance. FULL fits small tables; incremental kinds save time and money on large tables.
+`INCREMENTAL_BY_PARTITION` models are inherently [non-idempotent](../../concepts/architecture.md), so restatements and other actions can cause data loss. This makes them more complex to manage than other model kinds.
 
-A `FULL` model kind:
+In most scenarios, an `INCREMENTAL_BY_TIME_RANGE` model meets your needs and is easier to manage. Use `INCREMENTAL_BY_PARTITION` only when the data must be loaded by partition (usually for performance reasons).
+{% endhint %}
+
+This model kind is for the scenario where data rows should be loaded and updated as a group based on their shared value for the partitioning key.
+
+It works with any SQL engine. Vulcan creates partitioned tables on engines that support explicit table partitioning (such as \[[Databricks](https://docs.databricks.com/en/sql/language-manual/sql-ref-partition.html)).
+
+Vulcan loads new rows based on their partitioning key value:
+
+* If a partitioning key in newly loaded data is not present in the model table, Vulcan inserts the new partitioning key and its data rows.
+* If a partitioning key in newly loaded data is already present in the model table, Vulcan **replaces all the partitioning key's existing data rows in the model table** with the partitioning key's data rows from the newly loaded data.
+* If a partitioning key is present in the model table but not present in the newly loaded data, Vulcan leaves the partitioning key's existing data rows unmodified in the model table.
+
+Use this kind only for datasets with these traits:
+
+* The dataset's records can be grouped by a partitioning key.
+* Each record has a partitioning key associated with it.
+* It is appropriate to upsert records, so existing records can be overwritten by new arrivals when their partitioning keys match.
+* All existing records associated with a given partitioning key can be removed or overwritten when any new record has the partitioning key value.
+
+Specify the column defining the partitioning key in the model's `MODEL` DDL `partitioned_by` key. The `MODEL` DDL for an `INCREMENTAL_BY_PARTITION` model:
 
 {% tabs %}
 {% tab title="SQL" %}
 ```sql
 MODEL (
-  name vulcan_demo.full_model,
-  kind FULL,
-  start '2025-01-01',
-  grains (customer_id)
+  name vulcan_demo.partition,
+  kind INCREMENTAL_BY_PARTITION,
+  partitioned_by ARRAY[warehouse_id, category],
+  grains (partitioned_analysis_key)
 );
 
 SELECT
-  c.customer_id,
-  c.name AS customer_name,
-  c.email,
-  COUNT(DISTINCT o.order_id) AS total_orders,
-  COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS total_spent,
-  COALESCE(SUM(oi.quantity * oi.unit_price), 0) / NULLIF(COUNT(DISTINCT o.order_id), 0) AS avg_order_value
-FROM vulcan_demo.customers AS c
-LEFT JOIN vulcan_demo.orders AS o
-  ON c.customer_id = o.customer_id
-LEFT JOIN vulcan_demo.order_items AS oi
-  ON o.order_id = oi.order_id
-GROUP BY c.customer_id, c.name, c.email
-ORDER BY total_spent DESC
+  w.warehouse_id,
+  w.name AS warehouse_name,
+  p.category,
+  o.order_date,
+  CONCAT(w.warehouse_id::TEXT, '_', p.category, '_', o.order_date::TEXT) AS partitioned_analysis_key,
+  COUNT(DISTINCT o.order_id) AS total_transactions,
+  SUM(oi.quantity * oi.unit_price) AS total_sales_amount,
+  COUNT(DISTINCT o.customer_id) AS unique_customers
+FROM vulcan_demo.orders AS o
+JOIN vulcan_demo.order_items AS oi ON o.order_id = oi.order_id
+JOIN vulcan_demo.products AS p ON oi.product_id = p.product_id
+JOIN vulcan_demo.warehouses AS w ON o.warehouse_id = w.warehouse_id
+GROUP BY w.warehouse_id, w.name, p.category, o.order_date
 ```
 {% endtab %}
 
@@ -889,378 +1329,185 @@ from vulcan import ExecutionContext, model
 from vulcan import ModelKindName
 
 @model(
-    "vulcan_demo.full_model_py",
+    "vulcan_demo.partition_py",
     columns={
-        "product_id": "int",
-        "product_name": "string",
-        "category": "string",
-        "total_sales": "decimal(10,2)",
+        "warehouse_id": "int",
+        "order_date": "date",
+        "daily_revenue": "decimal(10,2)",
     },
+    partitioned_by=["warehouse_id"],
     kind=dict(
-        name=ModelKindName.FULL,
+        name=ModelKindName.INCREMENTAL_BY_PARTITION,
     ),
-    grains=["product_id"],
-    depends_on=["vulcan_demo.products", "vulcan_demo.order_items", "vulcan_demo.orders"],
+    grains=["warehouse_id", "order_date"],
+    depends_on=["vulcan_demo.orders", "vulcan_demo.order_items"],
 )
 def execute(context: ExecutionContext, **kwargs):
     query = """
-    SELECT p.product_id, p.name AS product_name, p.category,
-           COALESCE(SUM(oi.quantity * oi.unit_price), 0) as total_sales
-    FROM vulcan_demo.products p
-    LEFT JOIN vulcan_demo.order_items oi ON p.product_id = oi.product_id
-    LEFT JOIN vulcan_demo.orders o ON oi.order_id = o.order_id
-    GROUP BY p.product_id, p.name, p.category
-    ORDER BY total_sales DESC
+    SELECT o.warehouse_id, o.order_date,
+           SUM(oi.quantity * oi.unit_price) as daily_revenue
+    FROM vulcan_demo.orders o
+    JOIN vulcan_demo.order_items oi ON o.order_id = oi.order_id
+    GROUP BY o.warehouse_id, o.order_date
     """
     return context.fetchdf(query)
 ```
 {% endtab %}
 {% endtabs %}
 
-<details>
-
-<summary>Example SQL sequence when applying this model kind (ex: BigQuery)</summary>
-
-Create a model with the following definition and run `vulcan plan dev`:
+Use multiple columns for composite partition keys:
 
 ```sql
 MODEL (
-  name demo.full_model_example,
-  kind FULL,
-  cron '@daily',
-  grains (item_id),
+  name vulcan_demo.events,
+  kind INCREMENTAL_BY_PARTITION,
+  partitioned_by (warehouse_id, category)
 );
-
-SELECT
-  item_id,
-  COUNT(DISTINCT id) AS num_orders
-FROM demo.incremental_model
-GROUP BY
-  item_id
 ```
 
-Vulcan will execute this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `2345651858`, is part of the table name.
+Some engines support expression-based partitioning. An example that partitions by month:
 
 ```sql
-CREATE TABLE IF NOT EXISTS `vulcan-public-demo`.`vulcan__demo`.`demo__full_model_example__2345651858` (`item_id` INT64, `num_orders` INT64)
+MODEL (
+  name vulcan_demo.events,
+  kind INCREMENTAL_BY_PARTITION,
+  partitioned_by DATETIME_TRUNC(order_date, MONTH)
+);
 ```
-
-Vulcan will validate the model's query before processing data (note the `WHERE FALSE` and `LIMIT 0`).
-
-```sql
-SELECT `incremental_model`.`item_id` AS `item_id`, COUNT(DISTINCT `incremental_model`.`id`) AS `num_orders`
-FROM `vulcan-public-demo`.`vulcan__demo`.`demo__incremental_model__89556012` AS `incremental_model`
-WHERE FALSE
-GROUP BY `incremental_model`.`item_id` LIMIT 0
-```
-
-Vulcan will create a versioned table in the physical layer.
-
-```sql
-CREATE OR REPLACE TABLE `vulcan-public-demo`.`vulcan__demo`.`demo__full_model_example__2345651858` AS
-SELECT CAST(`item_id` AS INT64) AS `item_id`, CAST(`num_orders` AS INT64) AS `num_orders`
-FROM (SELECT `incremental_model`.`item_id` AS `item_id`, COUNT(DISTINCT `incremental_model`.`id`) AS `num_orders`
-FROM `vulcan-public-demo`.`vulcan__demo`.`demo__incremental_model__89556012` AS `incremental_model`
-GROUP BY `incremental_model`.`item_id`) AS `_subquery`
-```
-
-Vulcan will create a suffixed `__dev` schema based on the name of the plan environment.
-
-```sql
-CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
-```
-
-Vulcan will create a view in the virtual layer pointing to the versioned table in the physical layer.
-
-```sql
-CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`full_model_example` AS
-SELECT * FROM `vulcan-public-demo`.`vulcan__demo`.`demo__full_model_example__2345651858`
-```
-
-</details>
-
-### Materialization strategy
-
-Depending on the target engine, models of the `FULL` kind are materialized using the following strategies:
-
-| Engine     | Strategy                         |
-| ---------- | -------------------------------- |
-| Spark      | INSERT OVERWRITE                 |
-| Databricks | INSERT OVERWRITE                 |
-| Snowflake  | CREATE OR REPLACE TABLE          |
-| BigQuery   | CREATE OR REPLACE TABLE          |
-| Redshift   | DROP TABLE, CREATE TABLE, INSERT |
-| Postgres   | DROP TABLE, CREATE TABLE, INSERT |
-| DuckDB     | CREATE OR REPLACE TABLE          |
-
-## VIEW
-
-Unlike the other kinds, `VIEW` models don't store data. They create a virtual table (a view) that runs your query every time someone queries it.
-
-**How it works**: when a downstream model or user queries your VIEW model, the database executes your query on the fly. No data is pre-computed or stored.
-
-**When to use VIEW:**
-
-* Simple transformations that are fast to compute.
-* When you want always-fresh data (no caching).
-* When storage is expensive but compute is cheap.
-* For lightweight transformations that don't need materialization.
-
-**When NOT to use VIEW:**
-
-* Expensive queries that run frequently (you pay the compute cost every time).
-* Complex aggregations or joins (materialize these instead).
-* Python models (VIEW isn't supported for Python; use SQL).
-
-{% hint style="info" %}
-**Default kind**
-
-`VIEW` is the default model kind. A model without a `kind` becomes a VIEW automatically.
-{% endhint %}
 
 {% hint style="warning" %}
-**Performance consideration**
+**Only full restatements supported**
 
-VIEW queries run every time they're referenced, so expensive queries get costly fast. A view referenced by many downstream models runs that expensive query for each reference. Materialize expensive views as FULL or incremental models instead.
+Partial data [restatements](../../concepts/run-and-plan/plan-guide.md#restatement) reprocess part of a table's data (usually a limited time range).
+
+Partial data restatement is not supported for `INCREMENTAL_BY_PARTITION` models. Restating an `INCREMENTAL_BY_PARTITION` model recreates its entire table from scratch.
+
+Restating `INCREMENTAL_BY_PARTITION` models may lead to data loss. Restate with care.
 {% endhint %}
 
-A `VIEW` model kind:
+#### Example
+
+A practical example that limits which partitions get updated using a CTE. This is a common pattern to avoid full restatements:
 
 ```sql
 MODEL (
-  name vulcan_demo.view_model,
-  kind VIEW,
-  grains (warehouse_performance_key)
+  name demo.incremental_by_partition_demo,
+  kind INCREMENTAL_BY_PARTITION,
+  partitioned_by user_segment,
 );
+
+-- This is the source of truth for what partitions need to be updated and will join to the product usage data
+
+-- This could be an INCREMENTAL_BY_TIME_RANGE model that reads in the user_segment values last updated in the past 30 days to reduce scope
+
+-- Use this strategy to reduce full restatements
+WITH partitions_to_update AS (
+  SELECT DISTINCT
+    user_segment
+  FROM demo.incremental_by_time_range_demo  -- upstream table tracking which user segments to update
+  WHERE last_updated_at BETWEEN DATE_SUB(@start_dt, INTERVAL 30 DAY) AND @end_dt
+),
+
+product_usage AS (
+  SELECT
+    product_id,
+    customer_id,
+    last_usage_date,
+    usage_count,
+    feature_utilization_score,
+    user_segment
+  FROM vulcan-public-demo.tcloud_raw_data.product_usage
+  WHERE user_segment IN (SELECT user_segment FROM partitions_to_update) -- partition filter applied here
+)
 
 SELECT
-  w.warehouse_id,
-  w.name AS warehouse_name,
-  r.region_name,
-  o.order_date,
-  CONCAT(w.warehouse_id::TEXT, '_', o.order_date::TEXT) AS warehouse_performance_key,
-  COUNT(DISTINCT o.order_id) AS total_transactions,
-  SUM(oi.quantity * oi.unit_price) AS total_sales_amount,
-  COUNT(DISTINCT o.customer_id) AS unique_customers
-FROM vulcan_demo.warehouses AS w
-LEFT JOIN vulcan_demo.regions AS r
-  ON w.region_id = r.region_id
-LEFT JOIN vulcan_demo.orders AS o
-  ON w.warehouse_id = o.warehouse_id
-LEFT JOIN vulcan_demo.order_items AS oi
-  ON o.order_id = oi.order_id
-GROUP BY w.warehouse_id, w.name, r.region_name, o.order_date
-```
-
-<details>
-
-<summary>Example SQL sequence when applying this model kind (ex: BigQuery)</summary>
-
-Create a model with the following definition and run `vulcan plan dev`:
-
-```sql
-MODEL (
-  name demo.example_view,
-  kind VIEW,
-  cron '@daily',
-);
-
-SELECT
-  'hello there' as a_column
-```
-
-Vulcan will execute this SQL to create a versioned view in the physical layer. Note that the view's version fingerprint, `1024042926`, is part of the view name.
-
-```sql
-CREATE OR REPLACE VIEW `vulcan-public-demo`.`vulcan__demo`.`demo__example_view__1024042926`
-(`a_column`) AS SELECT 'hello there' AS `a_column`
-```
-
-Vulcan will create a suffixed `__dev` schema based on the name of the plan environment.
-
-```sql
-CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
-```
-
-Vulcan will create a view in the virtual layer pointing to the versioned view in the physical layer.
-
-```sql
-CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`example_view` AS
-SELECT * FROM `vulcan-public-demo`.`vulcan__demo`.`demo__example_view__1024042926`
-```
-
-</details>
-
-### Materialized views
-
-Turn a VIEW into a materialized view by setting `materialized: true`. Materialized views store the query results (like a table) but refresh automatically when the underlying data changes (like a view).
-
-Set it up:
-
-```sql
-MODEL (
-  name vulcan_demo.sales_summary,
-  kind VIEW (
-    materialized true
-  )
-);
-```
-
-{% hint style="info" %}
-**Engine support**
-
-Materialized views are supported on:
-
-* BigQuery
-* Databricks
-* Snowflake
-
-On other engines, this flag is ignored and you get a regular VIEW.
-{% endhint %}
-
-Vulcan recreates the materialized view only when your query changes or the view doesn't exist. This gives the performance benefits of materialized views without unnecessary refreshes.
-
-## EMBEDDED
-
-`EMBEDDED` models are reusable SQL snippets. They don't create tables or views; their query is injected directly into any downstream model that references them, as a subquery.
-
-**Why use this?** Define common logic once and reuse it everywhere instead of copying it across models (for example, a CTE that filters active customers). It's a macro for SQL.
-
-**Use it for:**
-
-* Common CTEs used across multiple models.
-* Reusable business logic (like "active customers" or "valid orders").
-* Avoiding code duplication.
-
-{% hint style="info" %}
-**Python models**
-
-Python models don't support the `EMBEDDED` kind; use a SQL model instead.
-{% endhint %}
-
-An `EMBEDDED` model kind:
-
-```sql
-MODEL (
-  name vulcan_demo.unique_customers,
-  kind EMBEDDED
-);
-
-SELECT DISTINCT
+  product_id,
   customer_id,
-  name AS customer_name,
-  email
-FROM vulcan_demo.customers
+  last_usage_date,
+  usage_count,
+  feature_utilization_score,
+  user_segment,
+  CASE
+    WHEN usage_count > 100 AND feature_utilization_score > 0.7 THEN 'Power User'
+    WHEN usage_count > 50 THEN 'Regular User'
+    WHEN usage_count IS NULL THEN 'New User'
+    ELSE 'Light User'
+  END as user_type
+FROM product_usage
 ```
 
-## SEED
+**Note**: this model kind doesn't support partial data [restatement](../../concepts/run-and-plan/plan-guide.md#restatement). Restating it recreates the entire table from scratch, which can lead to data loss.
 
-The `SEED` model kind specifies seed models that use static CSV datasets in your Vulcan project.
+#### Materialization strategy
 
-**How it works**: point to a CSV file, define the schema, and Vulcan loads it into a table. The data reloads only when you change the model definition or update the CSV file.
+The `INCREMENTAL_BY_PARTITION` kind materializes with these strategies, by engine:
 
-**Use cases:**
+| Engine     | Strategy                                |
+| ---------- | --------------------------------------- |
+| Databricks | REPLACE WHERE by partitioning key       |
+| Spark      | INSERT OVERWRITE by partitioning key    |
+| Snowflake  | DELETE by partitioning key, then INSERT |
 
-* Reference data (countries, states, categories).
-* Lookup tables.
-* Static configuration data.
-* Test data.
+\| Postgres | DELETE by partitioning key, then INSERT |
+
+### INCREMENTAL\_UNMANAGED
+
+`INCREMENTAL_UNMANAGED` models are for append-only tables. They're "unmanaged" because Vulcan doesn't deduplicate or manage the data; it runs your query and appends the results to the table.
+
+**How it works**: every time the model runs, Vulcan executes your query and appends the results to the table. No deduplication, no updates, no deletes.
 
 {% hint style="info" %}
-**Python models**
+**Should you use this?**
 
-Python models don't support the `SEED` kind; use a SQL model instead.
+**Use it for**: Data Vault patterns, event logs, audit trails, or any scenario that needs true append-only behavior.
+
+**Don't use it for**: most other cases. `INCREMENTAL_BY_TIME_RANGE` or `INCREMENTAL_BY_UNIQUE_KEY` give you more control and are usually better choices.
 {% endhint %}
 
-{% hint style="info" %}
-**When data reloads**
+**When to use:**
 
-Seed models load once and stay loaded unless you update the model definition or change the CSV file. There's no need to reload static data every run.
-{% endhint %}
+* Data Vault hubs, links, or satellites.
+* Event logs where every event must be preserved.
+* Assertion trails.
+* Any pattern that requires true append-only semantics.
 
-A `SEED` model kind:
+Set one up:
 
 ```sql
 MODEL (
-  name vulcan_demo.seed_model,
-  kind SEED (
-    path '../seeds/seed_data.csv'
-  ),
-  columns (
-    id INT,
-    item_id INT,
-    event_date DATE
-  ),
-  grains (id),
-  assertions (
-    UNIQUE_COMBINATION_OF_COLUMNS(columns := (id, event_date)),
-    NOT_NULL(columns := (id, item_id, event_date))
-  )
-)
+  name vulcan_demo.incremental_unmanaged,
+  kind INCREMENTAL_UNMANAGED,
+  cron '@daily',
+  start '2025-01-01',
+  grains (shipment_id)
+);
+
+/* Append-only shipment event log */
+SELECT
+  s.shipment_id,
+  s.order_id,
+  s.shipped_date,
+  s.carrier,
+  o.customer_id,
+  c.name AS customer_name,
+  o.order_date,
+  (s.shipped_date - o.order_date::DATE)::INT AS days_to_ship,
+  CURRENT_TIMESTAMP AS shipment_event_timestamp
+FROM vulcan_demo.shipments AS s
+JOIN vulcan_demo.orders AS o ON s.order_id = o.order_id
+JOIN vulcan_demo.customers AS c ON o.customer_id = c.customer_id
+ORDER BY s.shipped_date DESC
 ```
 
-<details>
+**Note**: because it's unmanaged, `INCREMENTAL_UNMANAGED` doesn't support `batch_size` or `batch_concurrency`. Vulcan runs your query and appends the results, with no batching or concurrency control.
 
-<summary>Example SQL sequence when applying this model kind (ex: BigQuery)</summary>
+{% hint style="warning" %}
+**Only full restatements supported**
 
-Create a model with the following definition and run `vulcan plan dev`:
+Like `INCREMENTAL_BY_PARTITION`, [restating](../../concepts/run-and-plan/plan-guide.md#restatement) an `INCREMENTAL_UNMANAGED` model triggers a full restatement. The model is rebuilt from scratch rather than from a time slice you specify.
 
-```sql
-MODEL (
-  name demo.seed_example,
-  kind SEED (
-    path '../../seeds/seed_example.csv'
-  ),
-  columns (
-    id INT64,
-    item_id INT64,
-    event_date DATE
-  ),
-  grains (id, event_date)
-)
-```
-
-Vulcan will execute this SQL to create a versioned table in the physical layer. Note that the table's version fingerprint, `3038173937`, is part of the table name.
-
-```sql
-CREATE TABLE IF NOT EXISTS `vulcan-public-demo`.`vulcan__demo`.`demo__seed_example__3038173937` (`id` INT64, `item_id` INT64, `event_date` DATE)
-```
-
-Vulcan will upload the seed as a temp table in the physical layer.
-
-```sql
-vulcan-public-demo.vulcan__demo.__temp_demo__seed_example__3038173937_9kzbpld7
-```
-
-Vulcan will create a versioned table in the physical layer from the temp table.
-
-```sql
-CREATE OR REPLACE TABLE `vulcan-public-demo`.`vulcan__demo`.`demo__seed_example__3038173937` AS
-SELECT CAST(`id` AS INT64) AS `id`, CAST(`item_id` AS INT64) AS `item_id`, CAST(`event_date` AS DATE) AS `event_date`
-FROM (SELECT `id`, `item_id`, `event_date`
-FROM `vulcan-public-demo`.`vulcan__demo`.`__temp_demo__seed_example__3038173937_9kzbpld7`) AS `_subquery`
-```
-
-Vulcan will drop the temp table in the physical layer.
-
-```sql
-DROP TABLE IF EXISTS `vulcan-public-demo`.`vulcan__demo`.`__temp_demo__seed_example__3038173937_9kzbpld7`
-```
-
-Vulcan will create a suffixed `__dev` schema based on the name of the plan environment.
-
-```sql
-CREATE SCHEMA IF NOT EXISTS `vulcan-public-demo`.`demo__dev`
-```
-
-Vulcan will create a view in the virtual layer pointing to the versioned table in the physical layer.
-
-```sql
-CREATE OR REPLACE VIEW `vulcan-public-demo`.`demo__dev`.`seed_example` AS
-SELECT * FROM `vulcan-public-demo`.`vulcan__demo`.`demo__seed_example__3038173937`
-```
-
-</details>
+Restate these models with care.
+{% endhint %}
 
 ## SCD Type 2
 
@@ -1270,7 +1517,7 @@ Vulcan adds a `valid_from` and `valid_to` column to your model. The `valid_from`
 
 These models tell you the latest value for a given record and what the values were at any time in the past. Maintaining this history costs more storage and compute. It may not fit sources that change frequently, since the history can grow large.
 
-**Note**: partial data [restatement](../../guides/plan/plan_guide.md#restatement-plans-restate-model) is not supported for this model kind. The entire table is recreated from scratch if restated. This may lead to data loss, so data restatement is disabled for models of this kind by default.
+**Note**: this model kind doesn't support partial data [restatement](../../concepts/run-and-plan/plan-guide.md#restatement). Restating it recreates the entire table from scratch, which can lead to data loss, so Vulcan disables data restatement for models of this kind by default.
 
 Vulcan supports 2 ways to detect changes: **By Time** (recommended) and **By Column**.
 
@@ -1377,7 +1624,7 @@ FROM
   stg.current_menu_items;
 ```
 
-Vulcan will materialize this table with the following structure:
+Vulcan materializes this table with the following structure:
 
 ```sql
 TABLE db.menu_items (
@@ -1458,7 +1705,7 @@ def execute(context: ExecutionContext, **kwargs):
 {% endtab %}
 {% endtabs %}
 
-Vulcan will materialize this table with the following structure:
+Vulcan materializes this table with the following structure:
 
 ```sql
 TABLE db.menu_items (
@@ -1485,7 +1732,7 @@ MODEL (
 );
 ```
 
-Vulcan will materialize this table with the following structure:
+Vulcan materializes this table with the following structure:
 
 ```sql
 TABLE db.menu_items (
@@ -1680,25 +1927,7 @@ After running at `2020-01-03 11:00:00`, the final SCD Type 2 table:
 | valid\_from\_name         | The name of the `valid_from` column to create in the target table. Default: `valid_from`                                                                                                                                                                                                                                        | string                    |
 | valid\_to\_name           | The name of the `valid_to` column to create in the target table. Default: `valid_to`                                                                                                                                                                                                                                            | string                    |
 | invalidate\_hard\_deletes | If set to `true`, when a record is missing from the source table it will be marked as invalid. Default: `false`                                                                                                                                                                                                                 | bool                      |
-| batch\_size               | The maximum number of intervals that can be evaluated in a single backfill task. If this is `None`, all intervals will be processed as part of a single task. See [Processing Source Table with Historical Data](model_kinds.md#processing-source-table-with-historical-data) for more info on this use case. (Default: `None`) | int                       |
-
-{% hint style="info" %}
-**BigQuery data types**
-
-On BigQuery, `valid_from` and `valid_to` columns default to `DATETIME`. To use `TIMESTAMP` instead, specify it in your model definition:
-
-```sql
-MODEL (
-  name db.menu_items,
-  kind SCD_TYPE_2_BY_TIME (
-    unique_key id,
-    time_data_type TIMESTAMP
-  )
-);
-```
-
-This may work on other engines too, but it's only been tested on BigQuery.
-{% endhint %}
+| batch\_size               | The maximum number of intervals that can be evaluated in a single backfill task. If this is `None`, all intervals will be processed as part of a single task. See [Processing Source Table with Historical Data](model-kinds.md#processing-source-table-with-historical-data) for more info on this use case. (Default: `None`) | int                       |
 
 ### SCD Type 2 by time configuration options
 
@@ -1713,7 +1942,7 @@ This may work on other engines too, but it's only been tested on BigQuery.
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
 | columns                          | The name of the columns to check for changes. `*` to represent that all columns should be checked.                                                                                                                                                                             | List of strings or string |
 | execution\_time\_as\_valid\_from | By default, when the model is first loaded `valid_from` is set to `1970-01-01 00:00:00` and future new rows will have `execution_time` of when the models ran. This changes the behavior to always use `execution_time`. Default: `false`                                      | bool                      |
-| updated\_at\_name                | If sourcing from a table that includes as timestamp to use as valid\_from, set this property to that column. See [Processing Source Table with Historical Data](model_kinds.md#processing-source-table-with-historical-data) for more info on this use case. (Default: `None`) | int                       |
+| updated\_at\_name                | If sourcing from a table that includes as timestamp to use as valid\_from, set this property to that column. See [Processing Source Table with Historical Data](model-kinds.md#processing-source-table-with-historical-data) for more info on this use case. (Default: `None`) | int                       |
 
 ### Processing source table with historical data
 
@@ -1888,7 +2117,7 @@ MODEL (
 );
 ```
 
-Plan/apply this change to production. Then [restate the model](../../guides/plan/plan_guide.md#restatement-plans-restate-model).
+Plan/apply this change to production. Then [restate the model](../../concepts/run-and-plan/plan-guide.md#restatement).
 
 {% hint style="warning" %}
 **Data loss warning**
@@ -1911,292 +2140,102 @@ MODEL (
 
 ## EXTERNAL
 
-The EXTERNAL model kind specifies [external models](types/external_models.md) that store metadata about external tables. External models are special: they are not specified in `.sql` files like other model kinds. They're optional but useful for propagating column and type information for external tables queried in your Vulcan project.
+The EXTERNAL model kind specifies [external models](types/external-models.md) that store metadata about external tables. External models are special: you don't define them in `.sql` files like other model kinds. They're optional but useful for propagating column and type information for external tables queried in your Vulcan project.
 
 ## MANAGED
 
 {% hint style="warning" %}
-Managed models are still under development and the API and semantics may change as support for more engines is added.
+**Snowflake only**
+
+`MANAGED` maps to a Snowflake Dynamic Table. It isn't available on Spark, Databricks, BigQuery, Redshift, Postgres, or DuckDB. Use `FULL` or an incremental kind on those engines instead. Dynamic Tables also require Snowflake Enterprise edition or higher.
 {% endhint %}
 
-**Note**: Python models don't support the `MANAGED` model kind; use a SQL model instead.
+`MANAGED` models hand refresh scheduling to Snowflake instead of Vulcan. Vulcan creates the Dynamic Table on `vulcan plan` or `vulcan run`. Snowflake then refreshes it on the cadence set with `target_lag`. No Vulcan orchestration runs between refreshes.
 
-The `MANAGED` model kind creates models where the underlying database engine manages the data lifecycle.
+Snowflake tracks changes in upstream tables. It incrementally refreshes affected rows, similar to a materialized view. Dynamic Tables schedule their own refreshes rather than refreshing on query or a Vulcan cron.
 
-These models don't get updated with new intervals or refreshed when `vulcan run` is called. Keeping the _data_ up to date is the engine's responsibility.
+**When to use MANAGED:**
 
-Control how the engine creates the managed model with [`physical_properties`](properties.md#physical_properties). It passes engine-specific parameters the adapter uses when issuing commands to the underlying database.
+* A derived table needs to stay current without a scheduled `vulcan run`.
+* The upstream tables change frequently enough that a fixed cron either lags behind or runs more often than needed.
+* You want Snowflake to manage refresh timing and incremental computation instead of hand-rolling it with `INCREMENTAL_BY_TIME_RANGE` or `INCREMENTAL_BY_UNIQUE_KEY`.
 
-There's no standard; each vendor has a different implementation with different semantics and configuration parameters. `MANAGED` models are not as portable between database engines as other Vulcan model types. Vulcan also has limited visibility into the integrity and state of the model due to its black-box nature.
+**When NOT to use MANAGED:**
 
-Use standard Vulcan model types first. If you need Managed models, you still get other Vulcan benefits, including the ability to use them in [virtual environments](../../guides/plan/plan_guide.md#physical-tables-virtual-layer-and-environments).
+* The project targets any engine other than Snowflake, or needs to stay portable across engines.
+* You need precise control over exactly when a refresh happens (Dynamic Tables refresh on `target_lag`, not on demand).
 
-See [Managed Models](types/managed_models.md) for supported engines and available properties.
+#### Configure a managed model
 
-### INCREMENTAL\_BY\_PARTITION
+Set `kind MANAGED` and a `physical_properties` block. Both `target_lag` and `warehouse` are required.
 
-`INCREMENTAL_BY_PARTITION` models are computed incrementally by partition. A set of columns defines the model's partitioning key; a partition is the group of rows with the same partitioning key value.
-
-{% hint style="info" %}
-**Should you use this model kind?**
-
-Any model kind can use a partitioned **table** by specifying the [`partitioned_by` key](properties.md#partitioned_by) in the `MODEL` DDL.
-
-The "partition" in `INCREMENTAL_BY_PARTITION` is about how the data is **loaded** when the model runs.
-
-`INCREMENTAL_BY_PARTITION` models are inherently [non-idempotent](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms), so restatements and other actions can cause data loss. This makes them more complex to manage than other model kinds.
-
-In most scenarios, an `INCREMENTAL_BY_TIME_RANGE` model meets your needs and is easier to manage. Use `INCREMENTAL_BY_PARTITION` only when the data must be loaded by partition (usually for performance reasons).
-{% endhint %}
-
-This model kind is for the scenario where data rows should be loaded and updated as a group based on their shared value for the partitioning key.
-
-It works with any SQL engine. Vulcan creates partitioned tables on engines that support explicit table partitioning (such as [BigQuery](https://cloud.google.com/bigquery/docs/creating-partitioned-tables) and [Databricks](https://docs.databricks.com/en/sql/language-manual/sql-ref-partition.html)).
-
-New rows are loaded based on their partitioning key value:
-
-* If a partitioning key in newly loaded data is not present in the model table, the new partitioning key and its data rows are inserted.
-* If a partitioning key in newly loaded data is already present in the model table, **all the partitioning key's existing data rows in the model table are replaced** with the partitioning key's data rows in the newly loaded data.
-* If a partitioning key is present in the model table but not present in the newly loaded data, the partitioning key's existing data rows are not modified and remain in the model table.
-
-Use this kind only for datasets with these traits:
-
-* The dataset's records can be grouped by a partitioning key.
-* Each record has a partitioning key associated with it.
-* It is appropriate to upsert records, so existing records can be overwritten by new arrivals when their partitioning keys match.
-* All existing records associated with a given partitioning key can be removed or overwritten when any new record has the partitioning key value.
-
-Specify the column defining the partitioning key in the model's `MODEL` DDL `partitioned_by` key. The `MODEL` DDL for an `INCREMENTAL_BY_PARTITION` model:
-
-{% tabs %}
-{% tab title="SQL" %}
 ```sql
 MODEL (
-  name vulcan_demo.partition,
-  kind INCREMENTAL_BY_PARTITION,
-  partitioned_by ARRAY[warehouse_id, category],
-  grains (partitioned_analysis_key)
+  name vulcan_demo.daily_sales_live,
+  kind MANAGED,
+  physical_properties (
+    target_lag = '5 minutes',
+    warehouse = 'transform_wh'
+  ),
+  grains (order_date, region_id, customer_id, product_id),
+  description 'Self-refreshing daily sales fact table, refreshed by Snowflake directly instead of a Vulcan cron.'
 );
 
 SELECT
-  w.warehouse_id,
-  w.name AS warehouse_name,
-  p.category,
-  o.order_date,
-  CONCAT(w.warehouse_id::TEXT, '_', p.category, '_', o.order_date::TEXT) AS partitioned_analysis_key,
-  COUNT(DISTINCT o.order_id) AS total_transactions,
-  SUM(oi.quantity * oi.unit_price) AS total_sales_amount,
-  COUNT(DISTINCT o.customer_id) AS unique_customers
-FROM vulcan_demo.orders AS o
-JOIN vulcan_demo.order_items AS oi ON o.order_id = oi.order_id
-JOIN vulcan_demo.products AS p ON oi.product_id = p.product_id
-JOIN vulcan_demo.warehouses AS w ON o.warehouse_id = w.warehouse_id
-GROUP BY w.warehouse_id, w.name, p.category, o.order_date
-```
-{% endtab %}
-
-{% tab title="Python" %}
-```python
-from vulcan import ExecutionContext, model
-from vulcan import ModelKindName
-
-@model(
-    "vulcan_demo.partition_py",
-    columns={
-        "warehouse_id": "int",
-        "order_date": "date",
-        "daily_revenue": "decimal(10,2)",
-    },
-    partitioned_by=["warehouse_id"],
-    kind=dict(
-        name=ModelKindName.INCREMENTAL_BY_PARTITION,
-    ),
-    grains=["warehouse_id", "order_date"],
-    depends_on=["vulcan_demo.orders", "vulcan_demo.order_items"],
-)
-def execute(context: ExecutionContext, **kwargs):
-    query = """
-    SELECT o.warehouse_id, o.order_date,
-           SUM(oi.quantity * oi.unit_price) as daily_revenue
-    FROM vulcan_demo.orders o
-    JOIN vulcan_demo.order_items oi ON o.order_id = oi.order_id
-    GROUP BY o.warehouse_id, o.order_date
-    """
-    return context.fetchdf(query)
-```
-{% endtab %}
-{% endtabs %}
-
-Use multiple columns for composite partition keys:
-
-```sql
-MODEL (
-  name vulcan_demo.events,
-  kind INCREMENTAL_BY_PARTITION,
-  partitioned_by (warehouse_id, category)
-);
-```
-
-Some engines support expression-based partitioning. A BigQuery example that partitions by month:
-
-```sql
-MODEL (
-  name vulcan_demo.events,
-  kind INCREMENTAL_BY_PARTITION,
-  partitioned_by DATETIME_TRUNC(order_date, MONTH)
-);
-```
-
-{% hint style="warning" %}
-**Only full restatements supported**
-
-Partial data [restatements](../../guides/plan/plan_guide.md#restatement-plans) reprocess part of a table's data (usually a limited time range).
-
-Partial data restatement is not supported for `INCREMENTAL_BY_PARTITION` models. Restating an `INCREMENTAL_BY_PARTITION` model recreates its entire table from scratch.
-
-Restating `INCREMENTAL_BY_PARTITION` models may lead to data loss. Restate with care.
-{% endhint %}
-
-### Example
-
-A practical example that limits which partitions get updated using a CTE. This is a common pattern to avoid full restatements:
-
-```sql
-MODEL (
-  name demo.incremental_by_partition_demo,
-  kind INCREMENTAL_BY_PARTITION,
-  partitioned_by user_segment,
-);
-
--- This is the source of truth for what partitions need to be updated and will join to the product usage data
-
--- This could be an INCREMENTAL_BY_TIME_RANGE model that reads in the user_segment values last updated in the past 30 days to reduce scope
-
--- Use this strategy to reduce full restatements
-WITH partitions_to_update AS (
-  SELECT DISTINCT
-    user_segment
-  FROM demo.incremental_by_time_range_demo  -- upstream table tracking which user segments to update
-  WHERE last_updated_at BETWEEN DATE_SUB(@start_dt, INTERVAL 30 DAY) AND @end_dt
-),
-
-product_usage AS (
-  SELECT
-    product_id,
-    customer_id,
-    last_usage_date,
-    usage_count,
-    feature_utilization_score,
-    user_segment
-  FROM vulcan-public-demo.tcloud_raw_data.product_usage
-  WHERE user_segment IN (SELECT user_segment FROM partitions_to_update) -- partition filter applied here
-)
-
-SELECT
-  product_id,
-  customer_id,
-  last_usage_date,
-  usage_count,
-  feature_utilization_score,
-  user_segment,
-  CASE
-    WHEN usage_count > 100 AND feature_utilization_score > 0.7 THEN 'Power User'
-    WHEN usage_count > 50 THEN 'Regular User'
-    WHEN usage_count IS NULL THEN 'New User'
-    ELSE 'Light User'
-  END as user_type
-FROM product_usage
-```
-
-**Note**: partial data [restatement](../../guides/plan/plan_guide.md#restatement-plans-restate-model) is not supported for this model kind. The entire table is recreated from scratch if restated. This may lead to data loss.
-
-### Materialization strategy
-
-The `INCREMENTAL_BY_PARTITION` kind materializes with these strategies, by engine:
-
-| Engine     | Strategy                                |
-| ---------- | --------------------------------------- |
-| Databricks | REPLACE WHERE by partitioning key       |
-| Spark      | INSERT OVERWRITE by partitioning key    |
-| Snowflake  | DELETE by partitioning key, then INSERT |
-| BigQuery   | DELETE by partitioning key, then INSERT |
-| Redshift   | DELETE by partitioning key, then INSERT |
-| Postgres   | DELETE by partitioning key, then INSERT |
-| DuckDB     | DELETE by partitioning key, then INSERT |
-
-### INCREMENTAL\_UNMANAGED
-
-`INCREMENTAL_UNMANAGED` models are for append-only tables. They're "unmanaged" because Vulcan doesn't deduplicate or manage the data; it runs your query and appends the results to the table.
-
-**How it works**: every time the model runs, Vulcan executes your query and appends the results to the table. No deduplication, no updates, no deletes.
-
-{% hint style="info" %}
-**Should you use this?**
-
-**Use it for**: Data Vault patterns, event logs, audit trails, or any scenario that needs true append-only behavior.
-
-**Don't use it for**: most other cases. `INCREMENTAL_BY_TIME_RANGE` or `INCREMENTAL_BY_UNIQUE_KEY` give you more control and are usually better choices.
-{% endhint %}
-
-**When to use:**
-
-* Data Vault hubs, links, or satellites.
-* Event logs where every event must be preserved.
-* Assertion trails.
-* Any pattern that requires true append-only semantics.
-
-Set one up:
-
-```sql
-MODEL (
-  name vulcan_demo.incremental_unmanaged,
-  kind INCREMENTAL_UNMANAGED,
-  cron '@daily',
-  start '2025-01-01',
-  grains (shipment_id)
-);
-
-/* Append-only shipment event log */
-SELECT
-  s.shipment_id,
-  s.order_id,
-  s.shipped_date,
-  s.carrier,
+  o.order_date::DATE AS order_date,
+  c.region_id,
+  r.region_name,
   o.customer_id,
-  c.name AS customer_name,
-  o.order_date,
-  (s.shipped_date - o.order_date::DATE)::INT AS days_to_ship,
-  CURRENT_TIMESTAMP AS shipment_event_timestamp
-FROM vulcan_demo.shipments AS s
-JOIN vulcan_demo.orders AS o ON s.order_id = o.order_id
+  oi.product_id,
+  COUNT(DISTINCT o.order_id) AS total_orders,
+  SUM(oi.quantity) AS total_items_sold,
+  SUM(oi.quantity * oi.unit_price) AS total_revenue
+FROM vulcan_demo.orders AS o
 JOIN vulcan_demo.customers AS c ON o.customer_id = c.customer_id
-ORDER BY s.shipped_date DESC
+LEFT JOIN vulcan_demo.regions AS r ON c.region_id = r.region_id
+JOIN vulcan_demo.order_items AS oi ON o.order_id = oi.order_id
+GROUP BY o.order_date::DATE, c.region_id, r.region_name, o.customer_id, oi.product_id
+​le.
 ```
 
-**Note**: because it's unmanaged, `INCREMENTAL_UNMANAGED` doesn't support `batch_size` or `batch_concurrency`. Vulcan runs your query and appends the results, with no batching or concurrency control.
+The query is a plain, portable `SELECT`. It matches a `FULL` model's query. Only `kind MANAGED` and `physical_properties` create a Dynamic Table.
 
-{% hint style="warning" %}
-**Only full restatements supported**
+* `target_lag` sets the maximum staleness Snowflake allows before it triggers a refresh (for example, `'5 minutes'`, `'1 hour'`, or `DOWNSTREAM` to inherit lag from a consuming Dynamic Table).
+* `warehouse` sets which Snowflake warehouse performs the refresh. It's billed separately from the warehouse Vulcan itself connects with.
 
-Like `INCREMENTAL_BY_PARTITION`, [restating](../../guides/plan/plan_guide.md#restatement-plans) an `INCREMENTAL_UNMANAGED` model triggers a full restatement. The model is rebuilt from scratch rather than from a time slice you specify.
+{% hint style="info" %}
+**Python models**
 
-Restate these models with care.
+Python models don't support the `MANAGED` kind; use a SQL model instead.
 {% endhint %}
 
-## semantic
+#### Verify refreshes
+
+Snowflake owns the schedule. Check the Dynamic Table's state in Snowflake, not Vulcan's run history.
+
+```sql
+SHOW DYNAMIC TABLES LIKE 'DAILY_SALES_LIVE' IN SCHEMA vulcan_demo;
+
+SELECT *
+FROM TABLE(INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY())
+WHERE NAME = 'DAILY_SALES_LIVE'
+ORDER BY REFRESH_START_TIME DESC;
+```
+
+## SEMANTIC
 
 Wraps a Vulcan model with business-friendly dimensions, measures, segments, and joins. Defined in standalone YAML files under `models/semantics/` (one model per file).
 
-See [Semantic Models](types/models.md) for the full reference.
+See [Semantic Models](../semantic-models.md) for the full reference.
 
-## metric
+## METRIC
 
 Time-series analytical definition. Pairs a measure from a semantic model with a time column and a default granularity, plus optional grouping dimensions and pre-built segments. Defined in standalone YAML files under `models/metrics/` (one metric per file).
 
-See [Business Metrics](../semantics/business_metrics.md) for the full reference.
+See [Business Metrics](../business-metrics.md) for the full reference.
 
-## dq
+## DQ
 
-Non-blocking data-quality rule pack: column profiles and validation rules attached to a single Vulcan model. Unlike [assertions](../assertions.md) (which block model execution on failure), DQ rules emit warnings and feed into the Activity API for trend monitoring. Defined in standalone YAML files under `dq/` (one pack per file).
+Non-blocking data-quality rule pack: column profiles and validation rules attached to a single Vulcan model. Unlike [assertions](../../quality/assertions.md) (which block model execution on failure), DQ rules emit warnings and feed into the Activity API for trend monitoring. Defined in standalone YAML files under `dq/` (one pack per file).
 
-See [Data Quality](../data-quality.md) for the full reference.
+See [Data Quality](../../quality/data-quality.md) for the full reference.

@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_bronze.SEARCH_ENGINES,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [SEARCH_ENGINE_ID],
   description 'Bronze layer Adobe Analytics clickstream data with enriched dimensions and user behavior tracking',
   tags ('bronze', 'raw', 'redshift', 'ingestion', 'fact', 'web_analytics'),

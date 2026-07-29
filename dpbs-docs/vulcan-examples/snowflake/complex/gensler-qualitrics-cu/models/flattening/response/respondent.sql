@@ -5,7 +5,7 @@ MODEL (
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by ARRAY(survey_id),
   grains [SURVEY_ID, RESPONSE_ID],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, RESPONSE_ID, STATUS, FINISHED, PROGRESS, START_DATE, END_DATE, DURATION),
   description 'Respondent metadata dimension capturing survey completion status, temporal metrics including duration and timestamps, distribution channel information, and progress tracking for each response submission without question-level details',
   tags ('dimension', 'respondent', 'metadata', 'completion', 'temporal'),

@@ -10,7 +10,7 @@ MODEL (
     PRIORITY_WEIGHT FLOAT
   ),
   grains [CITY, DELIVERY_MODE],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Reference SLA rules by city and delivery mode used to evaluate promised delivery windows and delivery priority for quick-commerce operations.',
   tags ('seed', 'bronze', 'delivery', 'sla', 'reference-data'),
   terms ('city_sla_rules', 'delivery_sla', 'priority_weight'),

@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_gold.daily_refund_kpis,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ds, city],
   columns (
     ds DATE,

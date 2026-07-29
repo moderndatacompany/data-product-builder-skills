@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_gold.CUSTOMER,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [CUSTOMER_ID],
   description 'Gold layer customer dimension providing business-ready customer master data for alcohol distribution analytics, including customer demographics, site information, sales classifications, and digital engagement indicators',
   tags ('gold', 'dimension', 'customer', 'master_data', 'alcohol_distribution'),

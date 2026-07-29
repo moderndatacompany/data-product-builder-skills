@@ -2,7 +2,7 @@ MODEL (
   name mys3lh02depot.tpch_lakehouse.supplier_performance,
   kind FULL,
   start '2025-01-01',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (supplier, analytics, gold),
   grains (s_suppkey),
   physical_properties (

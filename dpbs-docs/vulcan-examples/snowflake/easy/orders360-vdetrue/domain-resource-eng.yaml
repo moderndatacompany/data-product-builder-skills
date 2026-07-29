@@ -11,7 +11,7 @@ tags:
   - vde_enabled
   - sales
 spec:
-  runAsUser: "shreyanegitmdcio"
+  runAsUser: "${DATAOS_RUN_AS_USER}"
   compute: engineering-compute
   engine: snowflake
   repo:

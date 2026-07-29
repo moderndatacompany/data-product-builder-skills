@@ -19,7 +19,7 @@ from vulcan import ExecutionContext, ModelKindName, model
     kind=dict(name=ModelKindName.FULL),
     grains=["ds", "city", "refund_severity_band"],
     tags=["python", "gold", "refunds", "severity", "monitoring"],
-    owner="shreyasikarwartmdcio",
+    owner="${DATAOS_RUN_AS_USER}",
     depends_on=[
         "qcommerce_returns_silver.refund_enriched",
     ],

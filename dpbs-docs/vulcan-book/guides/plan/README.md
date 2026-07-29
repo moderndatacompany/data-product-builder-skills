@@ -1,30 +1,25 @@
 ---
-description: Understand what `vulcan plan` does before you apply changes.
+description: Understand what `vulcan plan` and `vulcan run` do before you use them.
 ---
 
-# Plan
+# Run and plan
 
-`vulcan plan` is the deployment step for project changes.
+`vulcan plan` and `vulcan run` are the two commands that move a project from local files to fresh, deployed data. They answer different questions, and confusing them is the most common mistake in daily Vulcan use.
 
-Use it when you changed models, semantics, metadata, tests, checks, or configuration. Vulcan compares your local project with applied state, shows impact, and prepares the next safe version of the data product.
+```text
+Changed the project shape? Use plan.
+Refreshing data on an applied shape? Use run.
+```
+
+## Plan: apply project changes
+
+Use `vulcan plan` when you changed models, semantics, metadata, tests, checks, or configuration. Vulcan compares your local project with applied state, shows impact, and prepares the next safe version of the data product.
 
 ```bash
 vulcan plan
 ```
 
-`vulcan plan` does not just run data. It reviews what changed, classifies the impact, and decides what must be built before the next version is exposed.
-
-## Plan modes
-
-Vulcan supports two planning modes. The right one depends on whether your project uses a virtual layer.
-
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Without a virtual layer</strong><br>Models are written directly with their original names.</td><td><a href="plan_guide.md">plan_guide.md</a></td></tr><tr><td><strong>With a virtual layer</strong><br>Consumer-facing names stay stable while Vulcan manages versioned physical snapshots behind them.</td><td><a href="vulcan_plan_vde_true.md">vulcan_plan_vde_true.md</a></td></tr></tbody></table>
-
-***
-
-## What `vulcan plan` does
-
-When you run `vulcan plan`, Vulcan:
+`vulcan plan` does not just run data. It reviews what changed, classifies the impact, and decides what must be built before the next version is exposed:
 
 1. Loads your project files and configuration.
 2. Builds the dependency graph.
@@ -33,119 +28,37 @@ When you run `vulcan plan`, Vulcan:
 5. Computes intervals that need backfill or restatement.
 6. Shows the plan before anything is applied.
 
-If you apply the plan, Vulcan updates the target state using the selected deployment mode.
+Vulcan supports two planning modes, depending on whether your project uses a virtual layer:
 
-***
+* **[Plan without a virtual layer](plan-guide.md)** - models are written directly with their original names.
+* **[Plan with a virtual layer](plan-with-vde.md)** - consumer-facing names stay stable while Vulcan manages versioned physical snapshots behind them.
 
-## When to use `vulcan plan`
+## Run: refresh applied data
 
-Use `vulcan plan` when:
-
-1. You changed SQL or Python model logic.
-2. You added or removed models.
-3. You changed semantics, metrics, assertions, or checks.
-4. You updated model metadata or data product configuration.
-5. You need to review blast radius before deployment.
-
-Use [`vulcan run`](../run_and_scheduling.md) when the shape is already applied and you only need to process new data.
-
-Simple rule:
-
-```
-Changed the project shape? Use plan.
-Refreshing data on an applied shape? Use run.
-```
-
-***
-
-## What the plan output tells you
-
-The plan helps you answer a few key questions:
-
-1. Which models changed directly?
-2. Which downstream models are affected indirectly?
-3. Are the changes breaking, non-breaking, or metadata-only?
-4. Which intervals need data to be built?
-5. Can Vulcan reuse existing state, or must it compute new data first?
-
-This makes `vulcan plan` the safest way to move local changes into an applied state.
-
-***
-
-## Typical plan flow
-
-Most plans follow this path:
-
-```
-1. Read local project
-2. Read applied state
-3. Compare snapshots and metadata
-4. Classify impact
-5. Compute backfill or restatement scope
-6. Show the plan
-7. Apply after confirmation
-```
-
-If you apply the plan, Vulcan may also:
-
-1. Materialize changed models.
-2. Backfill required intervals.
-3. Update consumer-facing objects.
-4. Record plan activity and follow-on execution state.
-
-***
-
-## Common plan actions
-
-Create a plan:
+Use `vulcan run` when the shape is already applied and you only need to process new or missing data. It does not redesign the data product and does not pick up new local code changes; it only works with the version that has already been applied.
 
 ```bash
-vulcan plan
+vulcan run
 ```
 
-Plan a bounded interval:
+See **[Run and scheduling](run-and-scheduling.md)** for how `vulcan run` finds missing intervals, respects schedules and signals, and runs scheduled refreshes in production.
 
-```bash
-vulcan plan --start 2026-05-01 --end 2026-05-31
-```
+## Choosing the right command
 
-Restate a historical window:
+| Question | Use `vulcan plan` | Use `vulcan run` |
+|---|---|---|
+| Did the model SQL or Python change? | Yes | No |
+| Did a metric, semantic model, check, or metadata change? | Yes | No |
+| Do you need Vulcan to review what changed? | Yes | No |
+| Do you only need to process new data? | No | Yes |
+| Do you want scheduled refreshes? | No | Yes |
 
-```bash
-vulcan plan --restate-model analytics.orders --start 2026-05-01 --end 2026-05-07
-```
+Use `vulcan plan` first when the project changed. Then use `vulcan run` after the new shape is applied and you want ongoing scheduled execution.
 
-Apply without interactive prompts:
+For the broader workflow, see [Data product lifecycle](../data-product-lifecycle.md).
 
-```bash
-vulcan plan --no-prompts --auto-apply
-```
+## Choose a page
 
-Explain the plan:
-
-```bash
-vulcan plan --explain
-```
-
-***
-
-## Choosing the right next step
-
-Use `vulcan plan` first when the project changed.
-
-Then use `vulcan run` after the new shape is applied and you want ongoing scheduled execution.
-
-For the broader workflow, see [Data Product Lifecycle](../data-product-lifecycle.md).
-
-{% hint style="info" %}
-If you are new to Vulcan, start with [Get Started](../get-started.md), then return here before your first deployment.
-{% endhint %}
-
-***
-
-## Related guides
-
-* [Plan without Virtual Layer](plan_guide.md)
-* [Plan with Virtual Layer](vulcan_plan_vde_true.md)
-* [Run and Scheduling](../run_and_scheduling.md)
-* [Data Product Lifecycle](../data-product-lifecycle.md)
+* **[Plan without a virtual layer](plan-guide.md)**
+* **[Plan with a virtual layer](plan-with-vde.md)**
+* **[Run and scheduling](run-and-scheduling.md)**

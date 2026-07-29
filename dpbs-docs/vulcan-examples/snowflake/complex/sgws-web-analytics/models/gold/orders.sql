@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_gold.ORDERS,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ORDER_PK],
   description 'Gold layer orders fact table containing order transaction details with status tracking, rejection handling, pricing information, and integration keys for digital order matching',
   tags ('gold', 'fact', 'orders', 'transactional', 'digital_integration'),

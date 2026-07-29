@@ -1,8 +1,14 @@
+---
+description: >-
+  Understand what `vulcan run` does to refresh already-applied data:
+  missing intervals, schedules, signals, and run activity.
+---
+
 # Vulcan run guide
 
-Use `vulcan run` to refresh data after a plan is applied.
+Use `vulcan run` to refresh data after you apply a plan.
 
-First, decide what the data product should look like with `vulcan plan`. After that shape is approved and applied, `vulcan run` keeps the data fresh.
+First, decide what the data product should look like with `vulcan plan`. Once you approve and apply that shape, `vulcan run` keeps the data fresh.
 
 ```bash
 vulcan run
@@ -25,7 +31,7 @@ The report design says:
 3. Which checks must pass.
 4. How often data should be refreshed.
 
-That design is applied with `vulcan plan`.
+You apply that design with `vulcan plan`.
 
 Every day after that, new sales arrive. The report does not need to be redesigned. It only needs the next day of data.
 
@@ -83,7 +89,7 @@ Vulcan does not ask, “What local files changed?” That question belongs to `v
 
 `vulcan run` processes data for the models that are already applied.
 
-It can:
+It does:
 
 1. Process new daily, hourly, weekly, or monthly data.
 2. Catch up after a failed or delayed run.
@@ -226,7 +232,7 @@ Use this carefully. It can make Vulcan run data earlier than the normal schedule
 
 A signal is a readiness check.
 
-It can answer questions like:
+It answers questions like:
 
 1. Has the source file arrived?
 2. Is the upstream table updated?
@@ -243,7 +249,7 @@ Missing interval
   -> run only when all checks say yes
 ```
 
-This helps prevent incomplete data from being processed too early.
+This keeps Vulcan from processing incomplete data too early.
 
 ---
 
@@ -261,7 +267,7 @@ raw orders
 
 Vulcan runs upstream models before downstream models.
 
-If you ask Vulcan to run `customer revenue`, it normally includes the upstream models too. This helps prevent the final model from using stale or missing parent data.
+If you ask Vulcan to run `customer revenue`, it normally includes the upstream models too. This keeps the final model from using stale or missing parent data.
 
 ---
 
@@ -289,7 +295,7 @@ Use `--no-auto-upstream` carefully. If upstream data is missing, the selected mo
 
 Sometimes Vulcan has many missing intervals to process.
 
-Instead of running each one separately, Vulcan can group ready intervals into batches.
+Instead of running each interval separately, Vulcan groups ready intervals into batches.
 
 Example:
 
@@ -312,16 +318,16 @@ Batching helps Vulcan run efficiently while still respecting dependencies and ga
 
 ## Assertions and quality checks
 
-After data runs, Vulcan can check whether the result looks trustworthy.
+After data runs, Vulcan checks whether the result looks trustworthy.
 
-Assertions and assertions can answer questions like:
+Assertions and assertions answer questions like:
 
 1. Are there null IDs?
 2. Are there negative amounts?
 3. Is the row count too low?
 4. Are key values unique?
 
-Data quality checks can record quality posture after successful execution.
+Data quality checks record quality posture after successful execution.
 
 The simple difference:
 
@@ -482,7 +488,7 @@ No. Schedules, signals, dependencies, and selected model filters can delay or sk
 
 **"`--select-model` only runs that one model."**
 
-Not by default. Vulcan includes upstream dependencies unless `--no-auto-upstream` is used.
+Not by default. Vulcan includes upstream dependencies unless you use `--no-auto-upstream`.
 
 **"Nothing to do means failure."**
 

@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_gold.refund_issue_summary,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ds, city, issue_group],
   description 'Daily refund issue-group summary for operational root-cause and finance leakage analysis.',
   tags ('gold', 'refunds', 'issues', 'root-cause'),

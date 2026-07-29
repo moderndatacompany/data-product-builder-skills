@@ -1,73 +1,36 @@
 ---
 description: >-
-  Install Vulcan, configure the Engine, initialize the project, and understand
-  the generated structure.
+  Set up the Local Development Kit: Python virtual environment, Vulcan, and
+  engine.
 ---
 
-# LDK Setup
+# LDK setup
 
-Use this page to set up your machine before you configure or build the project.
+The Local Development Kit (LDK) is the local toolkit you author and test data products with. Setting it up means installing Python, creating an isolated environment, installing Vulcan, and pointing it at an engine. Do this once.
 
 {% hint style="info" %}
-Vulcan requires **Python 3.10**. Versions outside the `>=3.9, <3.11` range are not supported.
+Vulcan requires **Python 3.10**.
 {% endhint %}
 
-{% stepper %}
-{% step %}
-### Install Python 3.10
+## 1. Install Python 3.10
 
-Check whether Python 3.10 is already available:
+Check first:
 
 ```sh
 python3.10 --version
 ```
 
-If the command is not found, install Python 3.10 from [python.org/downloads](https://www.python.org/downloads/) or via your system's package manager:
+If it is not present, install it from [python.org/downloads](https://www.python.org/downloads/release/python-3100/).
 
-{% tabs %}
-{% tab title="macOS (Homebrew)" %}
-```bash
-brew install python@3.10
-```
-{% endtab %}
+## 2. Create a virtual environment
 
-{% tab title="Ubuntu / Debian" %}
-```shellscript
-sudo apt update && sudo apt install python3.10 python3.10-venv
-```
-{% endtab %}
-
-{% tab title="Windows" %}
-Download the installer from [python.org/downloads](https://www.python.org/downloads/) and follow the setup wizard. Make sure to check **Add Python to PATH** during installation.
-{% endtab %}
-{% endtabs %}
-{% endstep %}
-
-{% step %}
-### Docker for local services (optional)
-
-Install Docker if you want Vulcan to start local services for development. This is required for the local Postgres setup and the Spark Docker setup.
-
-```bash
-docker --version
-docker compose version
-```
-
-If Docker is not installed, install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-{% endstep %}
-
-{% step %}
-### Create a virtual environment
-
-Always install Vulcan inside an isolated virtual environment to avoid dependency conflicts with other Python projects on your machine.
-
-**Create the environment**
+Always install Vulcan inside an isolated environment so it does not conflict with other Python projects.
 
 ```sh
 python3.10 -m venv .venv
 ```
 
-**Activate the environment**
+Activate it:
 
 {% tabs %}
 {% tab title="macOS / Linux" %}
@@ -77,130 +40,136 @@ source .venv/bin/activate
 {% endtab %}
 
 {% tab title="Windows" %}
-```shellscript
+```bash
 .venv\Scripts\activate
 ```
 {% endtab %}
 {% endtabs %}
 
-You should see `(.venv)` prepended to your terminal prompt, confirming the environment is active.
-{% endstep %}
+## 3. Install Vulcan
 
-{% step %}
-### Upgrade pip
+Vulcan ships as a Python wheel.
 
-```sh
-python3.10 -m pip install --upgrade pip
-```
-{% endstep %}
-
-{% step %}
-### Install Vulcan
-
-{% file src="../.gitbook/assets/vulcan-0.228.1.25-py3-none-any.whl" %}
+{% file src="../../.gitbook/assets/vulcan-0.228.1.26-py3-none-any.whl" %}
 
 Download and place the Vulcan `.whl` file in your working directory (or use its full path), then install:
 
 ```sh
-pip install "./vulcan-0.228.1.25-py3-none-any.whl"
+pip install "./vulcan-0.228.1.26-py3-none-any.whl"
 ```
 
-This installs the **core** library, which includes the DuckDB engine for local experimentation.
-
-#### Install with engine extras
-
-If your workflow targets a specific warehouse or execution engine, install the matching extra. Always wrap the path in quotes so your shell does not interpret the brackets:
+If you target a specific engine, install the matching extra. Quote the path so your shell does not interpret the brackets:
 
 {% tabs %}
 {% tab title="Postgres" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[postgres]"
+pip install "./vulcan-0.228.1.26-py3-none-any.whl[postgres]"
 ```
 {% endtab %}
 
 {% tab title="Snowflake" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[snowflake]"
+pip install "./vulcan-0.228.1.26-py3-none-any.whl[snowflake]"
 ```
 {% endtab %}
 
 {% tab title="Databricks" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[databricks]"
+pip install "./vulcan-0.228.1.26-py3-none-any.whl[databricks]"
 ```
 {% endtab %}
 
 {% tab title="Spark" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[spark]"
+pip install "./vulcan-0.228.1.26-py3-none-any.whl[spark]"
 ```
 {% endtab %}
 
 {% tab title="Trino" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[trino]"
+pip install "./vulcan-0.228.1.26-py3-none-any.whl[trino]"
 ```
 {% endtab %}
 {% endtabs %}
-{% endstep %}
 
-{% step %}
-### Verify the installation
+Verify:
 
 ```sh
 vulcan --version
 ```
 
-```sh
-python3.10 -c "from vulcan import Context; print('Vulcan OK')"
+## 4. Initialize the project
+
+```bash
+vulcan init
 ```
 
-If both commands succeed, your Python environment is ready.
-{% endstep %}
+The initializer scaffolds the project structure:
 
-{% step %}
-### Set up your engine
+<table data-search="false"><thead><tr><th>Folder / file</th><th>What goes here</th></tr></thead><tbody><tr><td><code>config.yaml</code></td><td>Project configuration: connections, model defaults, linting.</td></tr><tr><td><code>models/</code></td><td>SQL and Python model files. Each produces a table or view.</td></tr><tr><td><code>dq/</code></td><td>Data quality rule packs (<code>kind: dq</code>). Non-blocking; monitor quality over time.</td></tr><tr><td><code>models/semantics/</code></td><td>Semantic models (<code>kind: semantic</code>). Business-friendly wrappers over physical models.</td></tr><tr><td><code>models/metrics/</code></td><td>Metric definitions (<code>kind: metric</code>). Time-series analytical definitions.</td></tr><tr><td><code>seeds/</code></td><td>CSV files loaded as static tables.</td></tr><tr><td><code>audits/</code></td><td>SQL audit files. They run at materialization and block execution if they return rows.</td></tr><tr><td><code>tests/</code></td><td>YAML unit tests. Run with <code>vulcan test</code> before touching the warehouse.</td></tr><tr><td><code>macros/</code></td><td>Reusable SQL snippets and Jinja macros.</td></tr></tbody></table>
 
-Choose the tab for your engine. If you already have a warehouse or engine instance, use it and add its connection details to `config.yaml`. If you do not have one, use the local setup only where this guide provides one.
+## 5. Set up your engine
+
+To connect Vulcan locally, use an existing engine instance or spin one up via Docker, then add its connection to `config.yaml`. For the full connection reference per engine, see [Connect engine](https://v2.dataos.info/build/productize/connect-engine).
 
 {% tabs %}
 {% tab title="Postgres" %}
-**Option 1: Use an existing Postgres instance**
+Use an existing Postgres instance if you already have one. You need the host, port, database, user, and password. See the [Postgres connection options](https://v2.dataos.info/build/productize/connect-engine/postgres#connection-options) for all supported fields.
 
-Use an existing Postgres instance if you already have one. You need the host, port, database, user, and password. See the [Postgres connection options](../stage-2-productize/connect-to-engine/postgres.md#connection-options) for all supported fields.
+Set your password as an environment variable:
 
-**Option 2: Start Postgres locally with Docker**
+{% tabs %}
+{% tab title="Mac/Linux" %}
+```bash
+export POSTGRES_PASSWORD='your_password'
+```
+{% endtab %}
 
-If you do not have Postgres locally, run it with Docker Compose.
+{% tab title="Windows" %}
+```powershell
+$env:POSTGRES_PASSWORD = 'your_password'
+```
+{% endtab %}
+{% endtabs %}
 
-Create the Docker network once:
+Update the connection details in `config.yaml`(sample):
+
+```yaml
+gateways:
+  default:
+    connection:
+      type: postgres
+      host: your_psql_host
+      port: 5433
+      database: warehouse
+      user: vulcan
+      password: "{{ env_var(POSTGRES_PASSWORD) }}"
+```
+
+**OR**
+
+<details>
+
+<summary><strong>Start Postgres locally with Docker</strong></summary>
+
+Create the network once:
 
 ```bash
 docker network create vulcan
 ```
 
-If Docker says the network already exists, continue.
-
 Save this as `docker/docker-compose.warehouse.yml`:
 
 ```yaml
-# Central Warehouse - PostgreSQL for project data
-# Access: postgresql://vulcan:vulcan@localhost:5433/warehouse
-
-x-images:
-  postgres: &postgres_image "postgres:17-alpine"
-
 volumes:
   warehouse:
     driver: local
-
 networks:
   vulcan:
     external: true
-
 services:
   warehouse:
-    image: *postgres_image
+    image: postgres:17-alpine
     environment:
       POSTGRES_DB: warehouse
       POSTGRES_USER: vulcan
@@ -210,53 +179,23 @@ services:
       - "5433:5432"
     volumes:
       - warehouse:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U vulcan -d warehouse"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
     networks:
       - vulcan
 ```
 
-Start Postgres:
+Start it:
 
 ```bash
 docker compose -f docker/docker-compose.warehouse.yml up -d
 ```
 
-Use this connection in `config.yaml`:
+</details>
 
-```yaml
-gateways:
-  default:
-    connection:
-      type: postgres
-      host: localhost
-      port: 5433
-      database: warehouse
-      user: vulcan
-      password: vulcan
-    state_connection:
-      type: duckdb
-      database: ./.state/vulcan.db
-
-default_gateway: default
-
-model_defaults:
-  dialect: postgres
-```
+Full reference: [Connect engine → Postgres](https://v2.dataos.info/build/productize/connect-engine/postgres).
 {% endtab %}
 
 {% tab title="Snowflake" %}
-**Option 1: Use an existing Snowflake warehouse**
-
 Use an existing Snowflake account and warehouse. No local Docker service is needed for Snowflake.
-
-**Option 2: Create a Snowflake warehouse**
-
-If you do not have Snowflake available yet, create a Snowflake account and warehouse in Snowflake. This guide does not start Snowflake with Docker.
 
 Set your password as an environment variable:
 
@@ -274,7 +213,7 @@ $env:SNOWFLAKE_PASSWORD = 'your_password'
 {% endtab %}
 {% endtabs %}
 
-Use this connection in `config.yaml`:
+Update the connection details in `config.yaml`(sample):
 
 ```yaml
 gateways:
@@ -287,29 +226,16 @@ gateways:
       warehouse: your_warehouse
       database: your_database
       role: your_role
-    state_connection:
-      type: duckdb
-      database: ./.state/vulcan.db
 
-default_gateway: default
-
-model_defaults:
-  dialect: snowflake
 ```
 
-
+Full reference: [Connect engine → Snowflake](https://v2.dataos.info/build/productize/connect-engine/snowflake).
 {% endtab %}
 
 {% tab title="Databricks" %}
-**Option 1: Use an existing Databricks workspace**
+Use an existing workspace with SQL warehouse or cluster access. No local Docker service is needed for Databricks.
 
-Use an existing Databricks workspace with SQL warehouse or cluster access. No local Docker service is needed for Databricks.
-
-**Option 2: Create Databricks compute**
-
-If you do not have Databricks available yet, create a workspace and SQL warehouse or cluster in Databricks. This guide does not start Databricks with Docker.
-
-Set your access token as an environment variable:
+Set the access token as an environment variable, then:
 
 {% tabs %}
 {% tab title="Mac/Linux" %}
@@ -325,40 +251,67 @@ $env:DATABRICKS_TOKEN = 'your_token'
 {% endtab %}
 {% endtabs %}
 
-Use this connection in `config.yaml`:
+Update the connection details in `config.yaml`(sample):
 
 ```yaml
 gateways:
   default:
     connection:
       type: databricks
-      server_hostname: your-workspace.azuredatabricks.net
-      http_path: /sql/1.0/warehouses/your_warehouse_id
-      access_token: "{{ env_var('DATABRICKS_TOKEN') }}"
+      serverHostname: your-workspace.azuredatabricks.net
+      httpPath: /sql/1.0/warehouses/your_warehouse_id
+      accessToken: "{{ env_var('DATABRICKS_TOKEN') }}"
       catalog: your_catalog
-    state_connection:
-      type: duckdb
-      database: ./.state/vulcan.db
 
-default_gateway: default
-
-model_defaults:
-  dialect: databricks
 ```
+
+Full reference: [Connect engine → Databricks](https://v2.dataos.info/build/productize/connect-engine/databricks).
 {% endtab %}
 
 {% tab title="Spark" %}
-**Option 1: Use an existing Spark cluster**
+Use an existing Spark cluster and update `spark.master` in `config.yaml` to point to your cluster.
 
-If you already have a Spark cluster, use the `vulcan-cli` service below and update `spark.master` in `config.yaml` to point to your cluster.
-
-**Option 2: Start Spark locally with Docker**
-
-Spark uses a dedicated Docker Compose setup in this guide. It runs a Spark standalone cluster, MinIO, an Iceberg REST catalog, and a Linux-based `vulcan-cli` container. This avoids Windows Hadoop or `winutils.exe` issues because the Spark driver runs inside Linux.
-
-Place `vulcan-0.228.1.25-py3-none-any.whl` in your project root, then save this as `docker/docker-compose.spark.yml`:
+Update the connection details in `config.yaml`(sample):
 
 {% code overflow="wrap" %}
+```yaml
+gateways:
+  default:
+    connection:
+      type: spark
+      config:
+        spark.master: spark://spark-master:7077
+        spark.app.name: vulcan
+        spark.sql.catalog.local: org.apache.iceberg.spark.SparkCatalog
+        spark.sql.catalog.local.type: rest
+        spark.sql.catalog.local.uri: http://iceberg-rest:8181
+        spark.sql.catalog.local.warehouse: s3://warehouse/
+        spark.sql.catalog.local.io-impl: org.apache.iceberg.aws.s3.S3FileIO
+        spark.sql.catalog.local.s3.endpoint: http://minio:9000
+        spark.sql.catalog.local.s3.path-style-access: "true"
+        spark.hadoop.fs.s3a.access.key: admin
+        spark.hadoop.fs.s3a.secret.key: password
+        spark.hadoop.fs.s3a.endpoint: http://minio:9000
+        spark.hadoop.fs.s3a.path.style.access: "true"
+
+modelDefaults:
+  dialect: spark2
+```
+{% endcode %}
+
+**OR**
+
+<details>
+
+<summary><strong>Start Spark locally with Docker</strong></summary>
+
+Start a local Spark standalone cluster with MinIO and an Iceberg REST catalog.
+
+This avoids Windows Hadoop or `winutils.exe` issues because the Spark driver runs inside Linux.
+
+Place `vulcan-0.228.1.26-py3-none-any.whl` in your project root, then save this as `docker/docker-compose.spark.yml`:
+
+{% code overflow="wrap" expandable="true" %}
 ```yaml
 services:
   # Spark standalone cluster for running Spark executors in containers.
@@ -469,50 +422,13 @@ Verify Vulcan through the CLI container:
 docker compose -f docker/docker-compose.spark.yml run --rm vulcan-cli vulcan --version
 ```
 
-Use this connection in `config.yaml`:
+</details>
 
-{% code overflow="wrap" %}
-```yaml
-gateways:
-  default:
-    connection:
-      type: spark
-      config:
-        spark.master: spark://spark-master:7077
-        spark.app.name: vulcan
-        spark.sql.catalog.local: org.apache.iceberg.spark.SparkCatalog
-        spark.sql.catalog.local.type: rest
-        spark.sql.catalog.local.uri: http://iceberg-rest:8181
-        spark.sql.catalog.local.warehouse: s3://warehouse/
-        spark.sql.catalog.local.io-impl: org.apache.iceberg.aws.s3.S3FileIO
-        spark.sql.catalog.local.s3.endpoint: http://minio:9000
-        spark.sql.catalog.local.s3.path-style-access: "true"
-        spark.hadoop.fs.s3a.access.key: admin
-        spark.hadoop.fs.s3a.secret.key: password
-        spark.hadoop.fs.s3a.endpoint: http://minio:9000
-        spark.hadoop.fs.s3a.path.style.access: "true"
-    state_connection:
-      type: duckdb
-      database: ./.state/vulcan.db
-
-default_gateway: default
-
-model_defaults:
-  dialect: spark2
-```
-{% endcode %}
+Full reference: [Connect engine → Spark](https://v2.dataos.info/build/productize/connect-engine/spark).
 {% endtab %}
 
 {% tab title="Trino" %}
-**Option 1: Use an existing Trino cluster**
-
-Use an existing Trino cluster with a configured catalog. No local Docker service is needed for Trino in this guide.
-
-**Option 2: Create a Trino cluster**
-
-If you do not have Trino available yet, create a Trino cluster and catalog outside this guide. This guide does not start Trino with Docker.
-
-Set your password only if your Trino cluster requires password authentication:
+Use an existing Trino cluster with a configured catalog. No local Docker service is needed for Trino. Set the password only if your cluster requires it, then:
 
 {% tabs %}
 {% tab title="Mac/Linux" %}
@@ -528,7 +444,7 @@ $env:TRINO_PASSWORD = 'your_password'
 {% endtab %}
 {% endtabs %}
 
-Use this connection in `config.yaml`:
+Update the connection details in `config.yaml`(sample):
 
 ```yaml
 gateways:
@@ -539,116 +455,36 @@ gateways:
       port: 8080
       user: your_user
       catalog: your_catalog
-      http_scheme: https
+      httpScheme: https
       password: "{{ env_var('TRINO_PASSWORD') }}"
-    state_connection:
-      type: duckdb
-      database: ./.state/vulcan.db
 
-default_gateway: default
-
-model_defaults:
+modelDefaults:
   dialect: trino
 ```
 
-
-{% endtab %}
-{% endtabs %}
-{% endstep %}
-
-{% step %}
-### Initialize the Vulcan project
-
-Run the initializer from your activated virtual environment:
-
-```bash
-vulcan init
-```
-
-The initializer creates the starter project structure for models, seeds, tests, quality checks, macros, and semantic definitions:
-
-```
-my-vulcan-project/
-├── config.yaml
-├── usage.yaml
-├── audits/
-├── dq/
-│   └── full_model.yml
-├── macros/
-│   └── __init__.py
-├── models/
-│   ├── full_model.sql
-│   ├── incremental_model.sql
-│   ├── seed_model.sql
-│   ├── metrics/
-│   │   └── event_activity.yml
-│   └── semantics/
-│       └── incremental_model.yml
-├── seeds/
-│   └── seed_data.csv
-└── tests/
-    └── test_full_model.yaml
-```
-
-<details>
-
-<summary><strong>Understanding the project structure</strong></summary>
-
-| Folder / File       | What goes here                                                                                                |
-| ------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `models/`           | Your SQL and Python model files. Each file produces a table or view in the warehouse.                         |
-| `models/dq/`        | Data quality rule packs (`kind: dq`). Non-blocking; monitor quality over time.                                |
-| `models/semantics/` | Semantic model definitions (`kind: semantic`). Business-friendly wrappers over physical models.               |
-| `models/metrics/`   | Business metric definitions (`kind: metric`). Time-series analytical definitions.                             |
-| `seeds/`            | CSV files that Vulcan loads as static tables. Useful for reference data (categories, regions, lookup tables). |
-| `audits/`           | SQL assertion files. These run automatically at materialization and block execution if they return rows.      |
-| `tests/`            | YAML unit tests. Run with `vulcan test` to verify model logic before touching the warehouse.                  |
-| `macros/`           | Reusable SQL snippets and Jinja macros used across models.                                                    |
-| `config.yaml`       | The project configuration. Covers connections, model defaults, linting, and more.                             |
-
-</details>
-{% endstep %}
-
-{% step %}
-### Verify and run
-
-For every engine except Spark:
-
-{% tabs %}
-{% tab title="Mac/Linux" %}
-```bash
-vulcan info
-vulcan plan
-```
-{% endtab %}
-
-{% tab title="Windows" %}
-```powershell
-vulcan info
-vulcan plan
-```
+Full reference: [Connect engine → Trino](https://v2.dataos.info/build/productize/connect-engine/trino).
 {% endtab %}
 {% endtabs %}
 
-This checks your project structure and configuration. A successful output confirms the project is ready to configure and build.
-{% endstep %}
-{% endstepper %}
+## 6. Verify
 
-***
+```bash
+vulcan info # check if the connection is successful
+```
 
-### Troubleshooting
+A successful `vulcan info` confirms the project is ready to configure and build.
+
+## Troubleshooting
 
 <details>
 
-<summary><code>ERROR: ... is not a supported wheel on this platform</code></summary>
+<summary><code>... is not a supported wheel on this platform</code></summary>
 
-Your Python version is outside the supported range (`>=3.9, <3.11`). Recreate the virtual environment using Python 3.10:
+Vulcan only support with Python 3.10, so recreate the environment with Python 3.10:
 
 ```sh
-deactivate
-rm -rf .venv
-python3.10 -m venv .venv
-source .venv/bin/activate
+deactivate && rm -rf .venv
+python3.10 -m venv .venv && source .venv/bin/activate
 ```
 
 </details>
@@ -657,11 +493,7 @@ source .venv/bin/activate
 
 <summary><code>zsh: no matches found</code></summary>
 
-Your shell is interpreting the `[engine]` brackets. Always quote the wheel path when using extras.
-
-```sh
-pip install "./vulcan-...whl[snowflake]"
-```
+Your shell is interpreting the `[engine]` brackets. Quote the wheel path: `pip install "./vulcan-...whl[snowflake]"`.
 
 </details>
 
@@ -669,20 +501,6 @@ pip install "./vulcan-...whl[snowflake]"
 
 <summary>Dependency conflicts</summary>
 
-Install into a fresh virtual environment, not the system Python. Avoid using `pip install` outside an activated `.venv`.
+Install into a fresh virtual environment, never the system Python. To overwrite an existing install, use `pip install --force-reinstall "./vulcan-<version>-py3-none-any.whl"`.
 
 </details>
-
-<details>
-
-<summary>Reinstall or upgrade</summary>
-
-Use `--force-reinstall` to overwrite an existing Vulcan installation:
-
-```sh
-pip install --force-reinstall "./vulcan-<version>-py3-none-any.whl"
-```
-
-</details>
-
-***

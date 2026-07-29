@@ -1,3 +1,9 @@
+---
+description: >-
+  The `@model` decorator, execution context, dependencies, blueprinting, and
+  DataFrame examples for Python models.
+---
+
 # Python models
 
 Use Python models when SQL does not fit: machine learning, calling external APIs, or complex business logic that is hard to express in SQL.
@@ -14,14 +20,12 @@ Vulcan supports Python models. Your function must return a Pandas, Spark, Bigfra
 {% hint style="info" %}
 **Unsupported model kinds**
 
-Python models do not support these [model kinds](../model_kinds.md). Use a SQL model instead:
+Python models do not support these [model kinds](../model-kinds.md). Use a SQL model instead:
 
 ```
 - `VIEW` - Views need to be SQL
 
 - `SEED` - Seed models load CSV files (SQL only)
-
-- `MANAGED` - Managed models require SQL
 
 - `EMBEDDED` - Embedded models inject SQL subqueries
 ```
@@ -126,7 +130,7 @@ In standard Vulcan execution flows (for example, local Docker or cloned-project 
 
 The `@model` decorator accepts the same properties as SQL models. Use Python syntax instead of SQL DDL. `name`, `kind`, `cron`, `grains`, and the rest work the same way.
 
-Python model `kind`s are specified with a Python dictionary containing the kind's name and arguments. All model kind arguments are listed in the [models configuration reference page](../properties.md).
+You specify Python model `kind`s with a Python dictionary containing the kind's name and arguments. Find all model kind arguments in the [models configuration reference page](../properties.md).
 
 ```python
 from vulcan import ModelKindName
@@ -140,7 +144,7 @@ from vulcan import ModelKindName
 )
 ```
 
-All model kind properties are documented in the [model configuration reference](../properties.md).
+The [model configuration reference](../properties.md) documents all model kind properties.
 
 Supported `kind` dictionary `name` values are:
 
@@ -154,12 +158,11 @@ Supported `kind` dictionary `name` values are:
 * `ModelKindName.SCD_TYPE_2_BY_COLUMN`
 * `ModelKindName.EMBEDDED`
 * `ModelKindName.CUSTOM`
-* `ModelKindName.MANAGED`
 * `ModelKindName.EXTERNAL`
 
 ## Execution context
 
-Python models can do anything you want, but all models should be [idempotent](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms). Python models can fetch data from upstream models or data outside of Vulcan.
+Python models can do anything you want, but all models should be [idempotent](../../../concepts/architecture.md). Python models can fetch data from upstream models or data outside of Vulcan.
 
 **Fetching data:** use `context.fetchdf()` to run SQL queries and get DataFrames:
 
@@ -174,7 +177,7 @@ table = context.resolve_table("vulcan_demo.products")
 df = context.fetchdf(f"SELECT * FROM {table}")
 ```
 
-**Best practice:** make your models [idempotent](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms). Running them multiple times should produce the same result. This makes debugging and restatements much easier.
+**Best practice:** make your models [idempotent](../../../concepts/architecture.md). Running them multiple times should produce the same result. This makes debugging and restatements much easier.
 
 ```python
 df = context.fetchdf("SELECT * FROM vulcan_demo.products")
@@ -194,7 +197,7 @@ Pass SQL strings, SQLGlot expressions, or macro calls as lists to `pre_statement
 Be careful with pre-statements that create or alter physical tables. If multiple models run concurrently, you can get conflicts. Stick to session settings, UDFs, and temporary objects in pre-statements.
 {% endhint %}
 
-**Project-level defaults:** you can define pre/post-statements in `model_defaults` for consistent behavior across all models. Default statements run first, then model-specific ones. Learn more in the [model configuration reference](../../../configurations/options/model_defaults.md).
+**Project-level defaults:** you can define pre/post-statements in `modelDefaults` for consistent behavior across all models. Default statements run first, then model-specific ones. Learn more in the [model configuration reference](../../../configurations/model-defaults.md).
 
 ```python
 @model(
@@ -226,7 +229,7 @@ def execute(
 
 The previous example's `post_statements` called user-defined Vulcan macro `@CREATE_INDEX(@this_model, id)`.
 
-We could define the `CREATE_INDEX` macro in the project's `macros` directory like this. The macro creates a table index on a single column, conditional on the [runtime stage](../../advanced-features/macros/variables.md#runtime-variables) being `creating` (table creation time).
+You can define the `CREATE_INDEX` macro in the project's `macros` directory like this. The macro creates a table index on a single column, conditional on the [runtime stage](../../../advanced-features/macros/variables.md#runtime-variables) being `creating` (table creation time).
 
 ```python
 @macro()
@@ -269,13 +272,13 @@ def execute(
 
 ## Optional on-virtual-update statements
 
-On-virtual-update statements run when views are created or updated in the virtual layer. This happens after your model's physical table is created and the view pointing to it is set up.
+On-virtual-update statements run when Vulcan creates or updates views in the virtual layer. This happens after Vulcan creates your model's physical table and sets up the view pointing to it.
 
 **Common use case:** granting permissions on views so users can query them.
 
 You can set `on_virtual_update` in the `@model` decorator to a list of SQL strings, SQLGlot expressions, or macro calls.
 
-**Project-level defaults:** you can define on-virtual-update statements at the project level using `model_defaults` in your configuration. These apply to all models in your project (including Python models) and merge with any model-specific statements. Default statements run first, followed by model-specific statements. Learn more in the [model configuration reference](../../../configurations/options/model_defaults.md).
+**Project-level defaults:** you can define on-virtual-update statements at the project level using `modelDefaults` in your configuration. These apply to all models in your project (including Python models) and merge with any model-specific statements. Default statements run first, followed by model-specific statements. Learn more in the [model configuration reference](../../../configurations/model-defaults.md).
 
 ```python
 @model(
@@ -308,7 +311,7 @@ These statements run at the virtual layer, so table names resolve to view names,
 
 ## Dependencies
 
-To fetch data from an upstream model, first get the table name using `context`'s `resolve_table` method. This returns the appropriate table name for the current runtime [environment](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms):
+To fetch data from an upstream model, first get the table name using `context`'s `resolve_table` method. This returns the appropriate table name for the current runtime [environment](../../../concepts/architecture.md#virtual-data-environments-vde):
 
 ```python
 table = context.resolve_table("vulcan_demo.products")
@@ -317,7 +320,7 @@ df = context.fetchdf(f"SELECT * FROM {table}")
 
 The `resolve_table` method automatically adds the referenced model to the Python model's dependencies.
 
-The only other way to set dependencies in Python models is to define them explicitly in the `@model` decorator with the keyword `depends_on`. Dependencies defined in the model decorator take precedence over any dynamic references inside the function.
+The only other way to set dependencies in Python models is to define them explicitly in the `@model` decorator with the keyword `depends_on`. Dependencies you define in the model decorator take precedence over any dynamic references inside the function.
 
 ```python
 @model(
@@ -358,7 +361,7 @@ def execute(
     return context.fetchdf(query)
 ```
 
-You can use [global variables](../../../configurations/options/variables.md) or [blueprint variables](python_models.md#python-model-blueprinting) in `resolve_table` calls:
+You can use [global variables](../../../configurations/variables.md) or [blueprint variables](python.md#python-model-blueprinting) in `resolve_table` calls:
 
 ```python
 @model(
@@ -396,7 +399,7 @@ def execute(
 
 ## User-defined variables
 
-[User-defined global variables](../../../configurations/options/variables.md) can be accessed from within the Python model with the `context.var` method.
+You can access [user-defined global variables](../../../configurations/variables.md) from within the Python model with the `context.var` method.
 
 For example, this model accesses the user-defined variables `var` and `var_with_default`. It specifies a default value of `default_value` if `variable_with_default` resolves to a missing value.
 
@@ -438,17 +441,17 @@ def execute(
 
 Make sure the argument has a default value if the variable might be missing.
 
-Arguments must be specified explicitly: variables cannot be accessed using `kwargs`.
+Specify arguments explicitly: you cannot access variables using `kwargs`.
 
 ## Python model blueprinting
 
-Python models can serve as templates for creating multiple models. This is called blueprinting: you define one model template, and Vulcan creates multiple models from it.
+Python models can serve as templates for creating multiple models. This is called blueprinting: you define 1 model template, and Vulcan creates multiple models from it.
 
-**How it works:** parameterize the model name with a variable (using `@{variable}` syntax) and provide a list of mappings in `blueprints`. Vulcan creates one model for each mapping.
+**How it works:** parameterize the model name with a variable (using `@{variable}` syntax) and provide a list of mappings in `blueprints`. Vulcan creates 1 model for each mapping.
 
 **Use case:** when you have similar models that differ only by a few parameters (such as different schemas, regions, or customers).
 
-This example creates two models:
+This example creates 2 models:
 
 ```python
 import typing as t
@@ -486,7 +489,7 @@ def entrypoint(
     )
 ```
 
-**Important:** notice the `@{customer}` syntax in the model name. The curly braces tell Vulcan to treat the variable value as a SQL identifier (not a string literal). Learn more about this syntax [here](../../advanced-features/macros/built_in.md#embedding-variables-in-strings).
+**Important:** notice the `@{customer}` syntax in the model name. The curly braces tell Vulcan to treat the variable value as a SQL identifier (not a string literal). Learn more about this syntax [here](../../../advanced-features/macros/built-in.md#embedding-variables-in-strings).
 
 **Dynamic blueprints:** you can generate blueprints dynamically using macros. Use this when your blueprint list comes from external sources (such as CSV files or API calls):
 
@@ -498,7 +501,7 @@ def entrypoint(
 )
 ```
 
-For example, the definition of `gen_blueprints` may look like this:
+For example, the definition of `gen_blueprints` looks like this:
 
 ```python
 from vulcan import macro
@@ -511,7 +514,7 @@ def gen_blueprints(evaluator):
     )
 ```
 
-It's also possible to use the `@EACH` macro, combined with a global list variable (`@values`):
+You can also use the `@EACH` macro, combined with a global list variable (`@values`):
 
 ```python
 
@@ -552,7 +555,7 @@ Python models support macro variables in model properties, but there is a gotcha
 
 ```
 
-This is necessary because cron expressions often use `@` for aliases (such as `@daily`, `@hourly`), which can conflict with Vulcan's macro syntax.
+This is necessary because cron expressions often use `@` for aliases (such as `@daily`, `@hourly`), which conflicts with Vulcan's macro syntax.
 
 ## Examples
 
@@ -721,7 +724,7 @@ def execute(
     return df
 ```
 
-### Bigframe
+<!-- ### Bigframe
 
 If you use BigQuery, use the [Bigframe](https://cloud.google.com/bigquery/docs/use-bigquery-dataframes#pandas-examples) DataFrame API. Bigframe looks like Pandas but runs everything in BigQuery.
 
@@ -773,7 +776,7 @@ def execute(
     )
 
     return df.assign(bucket=df["views"].apply(remote_get_bucket))
-```
+``` -->
 
 ### Batching
 

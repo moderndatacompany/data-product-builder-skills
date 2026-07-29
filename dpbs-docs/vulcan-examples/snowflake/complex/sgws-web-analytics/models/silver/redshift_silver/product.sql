@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_silver.PRODUCT,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Silver layer product catalog data with brand, classification, and supplier information',
   tags ('silver', 'transformed', 'cleaned', 'dimension', 'product'),
   terms ('product')

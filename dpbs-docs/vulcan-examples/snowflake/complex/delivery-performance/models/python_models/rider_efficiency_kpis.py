@@ -19,7 +19,7 @@ from vulcan import ExecutionContext, ModelKindName, model
     kind=dict(name=ModelKindName.FULL),
     grains=["DS", "CITY", "RIDER_ID"],
     tags=["python", "gold", "rider", "efficiency", "delivery"],
-    owner="shreyasikarwartmdcio",
+    owner="${DATAOS_RUN_AS_USER}",
     depends_on=[
         "QCOMMERCE_PLATFORM.SILVER.ORDER_FULFILLMENT_ENRICHED",
     ],

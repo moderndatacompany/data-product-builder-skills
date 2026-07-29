@@ -2,7 +2,7 @@ MODEL (
   name LENOVO.USDK.FLATTENED_MAIN_BASE_TABLE,
   kind FULL,
   partitioned_by EVENT_DATE,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (EVENT_DATE, ANONYMOUS_DEVICE_IDV1, DEVICE_TYPE, MANUFACTURER, GEO, MODEL, OS_VERSION, PRODUCT_VERSION, HW_IN_USE_YEARS, ACTION, ROLLUP_TYPE),
   tags ('silver', 'device-engagement', 'analytics', 'time-series', 'rollup-aggregations', 'lenovo', 'usdk', 'flattened'),
   terms ('device_engagement', 'user_analytics', 'time_series_data'),

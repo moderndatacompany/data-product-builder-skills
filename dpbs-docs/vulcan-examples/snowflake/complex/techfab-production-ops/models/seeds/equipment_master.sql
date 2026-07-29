@@ -15,7 +15,7 @@ MODEL (
     installation_status VARCHAR(20)
   ),
   grain EQUIPMENT_ID,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (EQUIPMENT_ID, EQUIPMENT_NAME, EQUIPMENT_TYPE, PLANT_CODE, WORK_CENTER, INSTALLATION_STATUS),
   tags ('reference-data', 'dimension', 'master-data', 'equipment', 'asset', 'seed-data', 'manufacturing', 'oee'),
   terms ('reference_data', 'equipment_dimension', 'asset_master', 'manufacturing_asset'),

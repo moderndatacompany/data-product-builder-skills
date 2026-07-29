@@ -2,7 +2,7 @@ MODEL (
   name MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [EQUIPMENT_ID, METRIC_DATE],
   description 'Gold layer equipment OEE (Overall Equipment Effectiveness) metrics calculating availability, performance, and quality components by equipment and date for predictive maintenance and asset optimization',
   tags ('gold', 'aggregated', 'equipment', 'oee', 'maintenance', 'kpi'),

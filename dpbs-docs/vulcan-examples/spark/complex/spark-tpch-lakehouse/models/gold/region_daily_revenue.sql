@@ -3,7 +3,7 @@ MODEL (
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by (r_regionkey),
   start '2025-01-01',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (region, incremental, partition, revenue),
   grains (region_date_key),
   physical_properties (

@@ -2,7 +2,7 @@ MODEL (
   name CUSTOMER_PLATFORM.GOLD.FCT_CUSTOMER_RFM,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [CUSTOMER_ID],
   description 'RFM score calculations with recency, frequency, monetary metrics and segment assignment for customer prioritization and targeted marketing campaigns. Combines customer master, sales order history, and RFM segment rules to classify each customer.',
   tags ('gold', 'fact', 'rfm', 'customer-scoring', 'segmentation'),

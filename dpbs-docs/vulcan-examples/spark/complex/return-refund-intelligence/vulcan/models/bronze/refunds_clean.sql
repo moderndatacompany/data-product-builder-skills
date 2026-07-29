@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_bronze.refunds_clean,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [refund_id],
   description 'Standardized refund events at one row per refund request for return and refund intelligence use cases.',
   tags ('bronze', 'refunds', 'returns', 'events'),

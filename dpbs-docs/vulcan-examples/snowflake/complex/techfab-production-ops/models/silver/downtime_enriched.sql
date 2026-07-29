@@ -2,7 +2,7 @@ MODEL (
   name MES_PLATFORM.SILVER.DOWNTIME_ENRICHED,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [downtime_id],
   description 'Silver layer enriched downtime events data joining downtime with plant and equipment master data, calculating MTTR/MTBF metrics and categorizing by root cause for maintenance analytics',
   tags ('silver', 'fact', 'downtime', 'maintenance', 'enriched'),

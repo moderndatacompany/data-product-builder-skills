@@ -11,7 +11,7 @@ from typing import List, Tuple, Dict
 # Configuration
 MODELS_DIR = Path(__file__).parent / "models" / "seeds"
 SEEDS_DIR = Path(__file__).parent / "seeds"
-OWNER = "rohitrajtmdcio"
+OWNER = "${DATAOS_RUN_AS_USER}"
 
 # Type inference based on column name patterns and sample data
 def infer_column_type(col_name: str, sample_values: List[str]) -> str:

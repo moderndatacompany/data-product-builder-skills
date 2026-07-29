@@ -8,7 +8,7 @@ MODEL (
     updated_at_as_valid_from true
   ),
   start '2025-01-01',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (nation, scd2, dimension),
   grains (n_nationkey),
   physical_properties (

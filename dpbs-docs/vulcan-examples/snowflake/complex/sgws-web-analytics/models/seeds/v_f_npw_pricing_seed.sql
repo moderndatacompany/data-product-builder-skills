@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/v_f_npw_pricing.csv'
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Product pricing reference data',
   tags ('seed', 'reference_data', 'lookup'),
   terms ('v_f_npw_pricing'),

@@ -1,3 +1,9 @@
+---
+description: >-
+  General, storage, engine, and behavior properties for the `MODEL` block, plus
+  kind-specific incremental properties and model naming.
+---
+
 # Properties
 
 The `MODEL` DDL statement has properties that control how your model behaves. Configure scheduling, storage, validation, and more.
@@ -49,7 +55,7 @@ This page is a complete reference for all available properties: what each one do
 
 \| `ignored_rules` | Linter rules to ignore | `str` | `array` | N |
 
-**Note**: required unless [name inference](properties.md#model-naming) is enabled.
+**Note**: required unless you enable [name inference](properties.md#model-naming).
 
 ***
 
@@ -102,7 +108,7 @@ Use the fully qualified `catalog.schema.model` format. Names are unambiguous, ga
 {% hint style="info" %}
 **When do you need the catalog?**
 
-If you omit the catalog, Vulcan writes to the **default catalog** configured in your [gateway connection](../../configurations/README.md) (for example, the `catalog` property in your Databricks or Trino config).
+If you omit the catalog, Vulcan writes to the **default catalog** configured in your [gateway connection](../../configurations/) (for example, the `catalog` property in your Databricks or Trino config).
 
 You **must** specify the catalog when:
 
@@ -146,7 +152,7 @@ MODEL (
 
 The `kind` property determines how your model is computed and stored. Rebuild everything each run, update incrementally, or create a view: decide here.
 
-For details on each kind and when to use them, see the [Model Kinds](model_kinds.md) documentation.
+For details on each kind and when to use them, see the [Model Kinds](model-kinds.md) documentation.
 
 {% tabs %}
 {% tab title="SQL" %}
@@ -515,7 +521,7 @@ MODEL (
 
 ### column\_descriptions
 
-Document your columns. Add descriptions for each column; they're registered as column comments in your database.
+Document your columns. Add descriptions for each column; Vulcan registers them as column comments in your database.
 
 **Why document columns?** When someone queries your table in a BI tool, they see what each column means. It's inline documentation that travels with your data.
 
@@ -555,7 +561,7 @@ MODEL (
 {% hint style="warning" %}
 **Priority**
 
-If `column_descriptions` is present, [inline column comments](./#column-descriptions) are not registered.
+If `column_descriptions` is present, [inline column comments](#column_descriptions) are not registered.
 {% endhint %}
 
 ### column\_tags
@@ -719,11 +725,11 @@ def execute(context, **kwargs) -> pd.DataFrame:
 **Python models**
 {% endhint %}
 
-Required for [Python models](types/python_models.md). Vulcan can't infer column types from Python code; define your schema explicitly.
+Required for [Python models](types/python.md). Vulcan can't infer column types from Python code; define your schema explicitly.
 
 ### dialect
 
-Specifies the SQL dialect your model uses. Defaults to whatever you set in `model_defaults`.
+Specifies the SQL dialect your model uses. Defaults to whatever you set in `modelDefaults`.
 
 {% tabs %}
 {% tab title="SQL" %}
@@ -813,7 +819,7 @@ MODEL (
 
 ### assertions
 
-Attach [assertions](.././assertions.md) directly to your model. These validations run after each model evaluation and block models if they fail.
+Attach [assertions](../../quality/assertions.md) directly to your model. These validations run after each model evaluation and block models if they fail.
 
 **Why use assertions?** They catch bad data before it flows downstream. If revenue can't be negative, assert it. If customer IDs must be unique, assert it. Fail fast, fix fast.
 
@@ -858,7 +864,7 @@ Explicitly declare model dependencies. Vulcan infers dependencies from SQL queri
 * Hidden dependencies (like a macro that references another model).
 * External dependencies that aren't in your SQL.
 
-**Note**: dependencies you declare here are added to the ones Vulcan infers; they don't replace them.
+**Note**: Vulcan adds the dependencies you declare here to the ones it infers; they don't replace them.
 
 {% tabs %}
 {% tab title="SQL" %}
@@ -928,7 +934,7 @@ These properties control how your data is physically stored in the database. The
 
 Defines the partition key for your table. Partitioning splits your table into chunks based on column values, which makes queries faster (the engine can skip irrelevant partitions).
 
-**Supported engines**: Spark, BigQuery, Databricks, and others that support table partitioning.
+**Supported engines**: Spark, Databricks, and others that support table partitioning.
 
 **Why partition?** If you query the last 7 days and your table is partitioned by date, the engine scans 7 partitions instead of the entire table.
 
@@ -941,7 +947,7 @@ MODEL (
   partitioned_by event_date,
 );
 
--- Partition with transformation (BigQuery)
+-- Partition with transformation 
 MODEL (
   name sales.events,
   partitioned_by TIMESTAMP_TRUNC(event_ts, DAY),
@@ -973,7 +979,7 @@ MODEL (
 
 ### clustered\_by
 
-Sets clustering columns for engines that support it (like BigQuery). Clustering organizes data within partitions based on column values, making range queries and filters faster.
+Sets clustering columns for engines that support it. Clustering organizes data within partitions based on column values, making range queries and filters faster.
 
 **How it works**: data is physically stored sorted by the clustering columns. When you filter on those columns, the engine skips reading irrelevant data blocks.
 
@@ -1073,8 +1079,8 @@ Pass engine-specific properties directly to the physical table/view creation. Se
 
 **Use cases:**
 
-* Set table retention (BigQuery: `partition_expiration_days`).
-* Add labels or tags (BigQuery, Snowflake).
+* Set table retention.
+* Add labels or tags (Snowflake).
 * Configure table type (Snowflake: `TRANSIENT` tables).
 * Any other engine-specific table settings.
 
@@ -1418,19 +1424,19 @@ MODEL (
 
 These properties go inside the `kind` definition for incremental models. They control how incremental models behave: schema changes, restatements, and batch processing.
 
-For the full picture on incremental models, see the [Model Kinds](model_kinds.md) documentation.
+For the full picture on incremental models, see the [Model Kinds](model-kinds.md) documentation.
 
 ### Common incremental properties
 
 These properties work with every incremental model kind. They control how Vulcan picks intervals, handles schema changes, and writes results:
 
-| Property                | Description                                                                                   |  Type  | Default |
-| ----------------------- | --------------------------------------------------------------------------------------------- | :----: | :-----: |
-| `forward_only`          | All changes should be [forward-only](../../guides/incremental_by_time.md#forward-only-models) | `bool` | `false` |
-| `on_destructive_change` | Behavior for destructive schema changes                                                       |  `str` | `error` |
-| `on_additive_change`    | Behavior for additive schema changes                                                          |  `str` | `allow` |
-| `disable_restatement`   | Disable [data restatement](../../guides/plan/plan_guide.md#restatement-plans-restate-model)   | `bool` | `false` |
-| `auto_restatement_cron` | Cron expression for automatic restatement                                                     |  `str` |    -    |
+| Property                | Description                               |  Type  | Default |
+| ----------------------- | ----------------------------------------- | :----: | :-----: |
+| `forward_only`          | All changes should be forward-only        | `bool` | `false` |
+| `on_destructive_change` | Behavior for destructive schema changes   |  `str` | `error` |
+| `on_additive_change`    | Behavior for additive schema changes      |  `str` | `allow` |
+| `disable_restatement`   | Disable data restatement                  | `bool` | `false` |
+| `auto_restatement_cron` | Cron expression for automatic restatement |  `str` |    -    |
 
 **Values for `on_destructive_change` / `on_additive_change`:**
 
@@ -1480,7 +1486,7 @@ MODEL (
 
 Properties for models that update incrementally based on a time column. These control how time-based incremental processing works.
 
-For the full guide on `INCREMENTAL_BY_TIME_RANGE` models, see the [Model Kinds documentation](model_kinds.md#incremental_by_time_range).
+For the full guide on `INCREMENTAL_BY_TIME_RANGE` models, see the [Model Kinds documentation](model-kinds.md#incremental_by_time_range).
 
 | Property                     | Description                                            |  Type | Required |
 | ---------------------------- | ------------------------------------------------------ | :---: | :------: |
@@ -1559,7 +1565,7 @@ Your `time_column` should be in UTC. This ensures Vulcan's scheduler and time ma
 
 Properties for models that update based on unique keys (upsert operations). These control MERGE behavior and key handling.
 
-For details on `INCREMENTAL_BY_UNIQUE_KEY` models, see the [Model Kinds documentation](model_kinds.md#incremental_by_unique_key).
+For details on `INCREMENTAL_BY_UNIQUE_KEY` models, see the [Model Kinds documentation](model-kinds.md#incremental_by_unique_key).
 
 | Property         | Description                                               |       Type       | Required |
 | ---------------- | --------------------------------------------------------- | :--------------: | :------: |
@@ -1641,11 +1647,11 @@ MODEL (
 
 ### INCREMENTAL\_BY\_PARTITION
 
-Properties for models that update by partition. This kind uses the `partitioned_by` property (from the General Properties section) as its partition key.
+Properties for models that update by partition. This kind uses the `partitioned_by` property (from the general properties section) as its partition key.
 
 **Note**: there are no additional kind-specific properties; use `partitioned_by` to define your partition columns.
 
-For details on `INCREMENTAL_BY_PARTITION` models, see the [Model Kinds documentation](model_kinds.md#incremental_by_partition).
+For details on `INCREMENTAL_BY_PARTITION` models, see the [Model Kinds documentation](model-kinds.md#incremental_by_partition).
 
 {% tabs %}
 {% tab title="SQL" %}
@@ -1684,13 +1690,13 @@ GROUP BY event_date, event_type;
 
 ***
 
-### SCD\_TYPE\_2
+## SCD\_TYPE\_2
 
 Properties for Slowly Changing Dimension Type 2 models, which track historical changes to your data.
 
-For the complete guide on SCD Type 2 models, see the [Model Kinds documentation](model_kinds.md#scd-type-2).
+For the complete guide on SCD Type 2 models, see the [Model Kinds](model-kinds.md#scd-type-2).
 
-#### Common SCD Type 2 properties
+### Common SCD Type 2 properties
 
 | Property                  | Description                                |   Type  |          Required         |
 | ------------------------- | ------------------------------------------ | :-----: | :-----------------------: |
@@ -1699,7 +1705,7 @@ For the complete guide on SCD Type 2 models, see the [Model Kinds documentation]
 | `valid_to_name`           | Column for valid to date                   |  `str`  |  N (default: `valid_to`)  |
 | `invalidate_hard_deletes` | Mark missing records as invalid            |  `bool` |    N (default: `true`)    |
 
-#### SCD\_TYPE\_2\_BY\_TIME
+### SCD\_TYPE\_2\_BY\_TIME
 
 Properties for SCD Type 2 models that detect changes using an `updated_at` timestamp column. This is the recommended approach when your source table has update timestamps.
 
@@ -1756,7 +1762,7 @@ FROM raw.customers;
 {% endtab %}
 {% endtabs %}
 
-#### SCD\_TYPE\_2\_BY\_COLUMN
+### SCD\_TYPE\_2\_BY\_COLUMN
 
 Properties for SCD Type 2 models that detect changes by comparing column values. Use this when your source table doesn't have an `updated_at` column.
 
@@ -1828,18 +1834,18 @@ MODEL (
 
 By default, you specify the `name` property in every model. If you organize your models in a directory structure that matches your schema names, you can turn on automatic name inference.
 
-**How it works**: with `infer_names: true`, a model at `models/sales/daily_sales.sql` automatically gets the name `sales.daily_sales`. The directory structure becomes your schema, and the filename becomes your model name.
+**How it works**: with `inferNames: true`, a model at `models/sales/daily_sales.sql` automatically gets the name `sales.daily_sales`. The directory structure becomes your schema, and the filename becomes your model name.
 
 Turn it on in your config:
 
 ```yaml
-model_defaults:
+modelDefaults:
   dialect: snowflake
   
 # Enable name inference
-infer_names: true
+inferNames: true
 ```
 
 **When to use**: when your project structure matches your schema structure, this saves you from typing `name` in every model.
 
-Learn more in the [configuration guide](../../configurations/README.md#model-defaults).
+Learn more in the [configuration guide](../../configurations/#model-defaults).

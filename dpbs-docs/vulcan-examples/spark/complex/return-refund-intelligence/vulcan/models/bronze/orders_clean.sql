@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_bronze.orders_clean,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [order_id],
   description 'Cleaned order master for refund analytics, enriched with customer attributes for downstream finance and support reporting.',
   tags ('bronze', 'orders', 'refunds', 'customer'),

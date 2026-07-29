@@ -1,3 +1,10 @@
+---
+description: >-
+  Signals add custom readiness checks before a scheduled model runs, so a
+  model waits for late-arriving or upstream data before it processes an
+  interval.
+---
+
 # Signals
 
 Vulcan's built-in scheduler knows when to run your models based on their `cron` schedules. For a model set to run `@daily`, it checks whether a day has passed since the last run and evaluates the model when needed.
@@ -28,7 +35,7 @@ The scheduler looks at candidate intervals, groups them into batches (controlled
 {% hint style="info" %}
 **One model, multiple signals**
 
-Specify multiple signals for a single model. Vulcan requires that **all** signal functions agree an interval is ready before evaluating it. It works like an AND gate: every signal must give the green light.
+Specify multiple signals for a single model. Vulcan requires that **all** signal functions agree an interval is ready before evaluating it. It works like an AND gate: every signal must confirm the interval is ready.
 {% endhint %}
 
 ## Defining a signal
@@ -60,7 +67,7 @@ def random_signal(batch: DatetimeRanges, threshold: float) -> t.Union[bool, Date
     return random.random() > threshold
 ```
 
-This signal takes a `threshold` argument (passed from your model definition) and returns `True` if a random number exceeds that threshold. The function signature includes `threshold: float`; Vulcan extracts this from your model definition and passes it to the function. Type inference works the same way as [Vulcan macros](./macros/built_in.md#typed-macros).
+This signal takes a `threshold` argument (passed from your model definition) and returns `True` if a random number exceeds that threshold. The function signature includes `threshold: float`; Vulcan extracts this from your model definition and passes it to the function. Type inference works the same way as [Vulcan macros](macros/built-in.md#typed-macros).
 
 Add the signal to the `signals` key in your `MODEL` block:
 

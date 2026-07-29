@@ -5,7 +5,7 @@ MODEL (
   ),
   start '2025-01-01',
   cron '@daily',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (customer, incremental, snapshot),
   grains (c_custkey),
   physical_properties (

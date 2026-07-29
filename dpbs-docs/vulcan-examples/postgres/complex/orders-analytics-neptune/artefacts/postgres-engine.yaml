@@ -30,7 +30,7 @@ spec:
           {{- end }}
           {{- end }}
           securityContext:
-            runAsUser: 1000
+            runAsUser: ${DATAOS_RUN_AS_USER}
             runAsGroup: 1000
             fsGroup: 1000
           volumeMounts:
@@ -100,7 +100,7 @@ spec:
           imagePullPolicy: IfNotPresent
           name:  "{{.Name}}{{.Stamp}}-ic"
           securityContext:
-            runAsUser: 1000
+            runAsUser: ${DATAOS_RUN_AS_USER}
             runAsGroup: 1000
             fsGroup: 1000
           volumeMounts:

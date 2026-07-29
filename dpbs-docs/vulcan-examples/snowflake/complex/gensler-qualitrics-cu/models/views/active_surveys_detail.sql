@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.ANALYTICS.QUALTRICS_ACTIVE_SURVEYS_DETAIL,
   kind FULL,
   grains [SURVEY_ID],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, SURVEY_NAME, IS_ACTIVE, TOTAL_RESPONSE_COUNT, LIVE_RESPONSE_COUNT, ACTIVITY_LEVEL, DAYS_SINCE_ACCESSED),
   description 'Active surveys detail dimension providing filtered view of currently active surveys with enriched metrics, structural analysis, and activity-based classification for operational monitoring and reporting',
   tags ('dimension', 'filtered', 'active_surveys', 'operational', 'production'),

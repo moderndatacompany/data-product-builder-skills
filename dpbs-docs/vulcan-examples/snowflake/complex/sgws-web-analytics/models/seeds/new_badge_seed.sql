@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/new_badge.csv'
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Product badge classification reference data',
   tags ('seed', 'reference_data', 'lookup'),
   terms ('new_badge'),

@@ -2,7 +2,7 @@ MODEL (
   name ECOMMERCE_PLATFORM.GOLD.FCT_CONVERSION_FUNNEL,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [SESSION_ID],
   description 'Session-level conversion funnel data tracking whether each session progressed through cart, checkout, and purchase stages. Aggregation (total sessions, conversion rates, revenue metrics) is handled by the semantic layer.',
   tags ('gold', 'fact', 'conversion', 'funnel-analysis', 'ecommerce'),

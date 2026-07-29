@@ -1,7 +1,7 @@
 MODEL (
   name s3depot.qcommerce_delivery_bronze.shipments_clean,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [shipment_id],
   description 'Standardized shipment attempt records with delivery duration and delivery outcome flags.',
   tags ('bronze', 'shipments', 'delivery', 'attempts'),

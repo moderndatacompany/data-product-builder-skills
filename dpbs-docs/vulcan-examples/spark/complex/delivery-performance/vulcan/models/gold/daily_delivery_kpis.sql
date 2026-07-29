@@ -1,7 +1,7 @@
 MODEL (
   name s3depot.qcommerce_delivery_gold.daily_delivery_kpis,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ds, city],
   description 'Daily city-level delivery performance KPIs used as the primary semantic hub for operations monitoring.',
   tags ('gold', 'delivery', 'daily-kpi', 'city'),

@@ -1,6 +1,13 @@
+---
+description: >-
+  Write a custom materialization in Python when built-in model kinds don't
+  fit, using the CustomMaterialization and CustomKind classes, then package
+  and share it across projects.
+---
+
 # Custom materializations
 
-Vulcan ships with [model kinds](../model/model_kinds.md) that cover the most common ways to evaluate and materialize transformations. Custom materializations cover the rest.
+Vulcan ships with [model kinds](../models/data-models/model-kinds.md) that cover the most common ways to evaluate and materialize transformations. Custom materializations cover the rest.
 
 If a built-in kind doesn't fit your use case, write a custom materialization in Python to control how your models materialize.
 
@@ -35,9 +42,9 @@ You can also:
 
 * Override other methods from `MaterializableStrategy` or `EngineAdapter` classes.
 * Execute arbitrary SQL through the engine adapter.
-* Run Python processing with Pandas or other libraries. For most cases, put that logic in a [Python model](../model/types/python_models.md) instead.
+* Run Python processing with Pandas or other libraries. For most cases, put that logic in a [Python model](../models/data-models/types/python.md) instead.
 
-Vulcan loads any Python files in your project's `materializations/` directory. Or, package your materialization as a [Python package](custom_materializations.md#python-packaging) and install it like any other dependency.
+Vulcan loads any Python files in your project's `materializations/` directory. Or, package your materialization as a [Python package](custom-materializations.md#python-packaging) and install it like any other dependency.
 
 ## Creating a custom materialization
 
@@ -386,7 +393,7 @@ When Vulcan loads your materialization, it inspects the type signature for gener
 
 Two benefits:
 
-* **Early validation**: `primary_key` validation runs at load time, not evaluation time. Issues are caught before you create a plan.
+* **Early validation**: `primary_key` validation runs at load time, not evaluation time. Vulcan catches issues before you create a plan.
 * **Type safety**: `model.kind` resolves to your custom kind object, giving you access to extra properties without additional validation.
 
 ## Sharing custom materializations

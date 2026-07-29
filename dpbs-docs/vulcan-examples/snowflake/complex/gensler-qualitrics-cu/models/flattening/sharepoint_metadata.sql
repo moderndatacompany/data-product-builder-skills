@@ -7,7 +7,7 @@ MODEL (
     path '../../seeds/sharepoint_metadata.csv'
   ),
   grains [SURVEYID],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEYID, TITLE, MODIFIED, CREATED, AUTHOR, SURVEYSTATUS),
   description 'Seed model ingesting SharePoint survey metadata from CSV file containing survey properties, ownership, status tracking, and business classification fields for enriching survey analytics with external metadata',
   columns (

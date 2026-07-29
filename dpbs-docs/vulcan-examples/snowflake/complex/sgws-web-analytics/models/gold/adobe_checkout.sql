@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_gold.ADOBE_CHECKOUT,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [uuid],
   description 'Gold layer e-commerce checkout funnel fact table joining Add-to-Cart (ATC) events with Checkout completion events, tracking digital cart behavior, product selections, list types, and revenue attribution for web and mobile app channels',
   tags ('gold', 'fact', 'ecommerce', 'checkout_funnel', 'digital', 'adobe_analytics'),

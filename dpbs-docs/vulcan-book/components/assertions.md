@@ -1,8 +1,13 @@
+---
+description: >-
+  Audits and assertions: built-in and user-defined rules that block bad rows.
+---
+
 # Assertions
 
 An assertion attaches an [audit](#terminology-audits-and-assertions) (a validation rule) to a model and declares the model must pass it. Assertions run after every model execution and halt your models if the audit finds bad data.
 
-Unlike [tests](./tests.md) (which you run manually to verify logic), assertions run automatically whenever you apply a [plan](../guides/plan/plan_guide.md). They catch data quality issues early, whether they come from external vendors, upstream teams, or your own model changes.
+Unlike [unit tests](./tests.md) (which you run manually to verify logic), assertions run automatically whenever you apply a [plan](../concepts/run-and-plan/plan-guide.md). They catch data quality issues early, whether they come from external vendors, upstream teams, or your own model changes.
 
 Assertions are blocking. When an assertion's audit fails, Vulcan stops everything: no plan application, no run execution. This prevents bad data from propagating through your entire pipeline.
 
@@ -43,12 +48,12 @@ You might see code using `audits` instead of `assertions` as the model property 
 
 ## How assertions work
 
-When an assertion fails, Vulcan stops everything. No ifs, ands, or buts. This is by design, it's better to catch problems early than to let bad data flow downstream and cause bigger issues.
+When an assertion fails, Vulcan stops everything, no exceptions. This is by design: catching problems early is better than letting bad data flow downstream and cause bigger issues.
 
 Here's what happens when you run a model:
 
 1. **Evaluate the model** - Vulcan runs your model SQL (inserts new data, rebuilds the table, etc.)
-2. **Run the audit query** - Vulcan executes each attached audit's SQL against the newly updated table. For incremental models, this only checks the intervals you're processing (keeps things fast!)
+2. **Run the audit query** - Vulcan executes each attached audit's SQL against the newly updated table. For incremental models, this only checks the intervals you're processing (this keeps it fast)
 3. **Check the results** - If an audit query returns any rows, the assertion fails and everything stops
 
 **Why this matters:** Audits query for bad data. If an audit finds bad data (returns rows), that's a problem. If it finds nothing (returns zero rows), you're good to go.
@@ -68,7 +73,7 @@ Here's what happens when you run a model:
 
 * Vulcan evaluates and audits models directly against the production environment
 * If an assertion fails, the run stops, but the invalid data _is already in production_
-* The blocking prevents this bad data from being used to build downstream models
+* The blocking stops this bad data from feeding downstream models
 * This is like deploying directly, faster, but riskier
 
 **Which should you use?** For production changes, use `plan`. It's safer and gives you a chance to fix issues before they hit production. Use `run` when you're confident or doing quick iterations.
@@ -79,8 +84,8 @@ When an assertion fails, fix it in this order:
 
 1. **Find the root cause** - Look at the audit query results. What data failed? Check upstream models and data sources.
 2. **Fix the source** - This depends on where the problem came from:
-   * **External data source?** Fix it at the source, then run a [restatement plan](../guides/plan/plan_guide.md#restatement-plans) on the first Vulcan model that ingests it. This will restate all downstream models automatically.
-   * **Vulcan model?** Update the model's logic, then apply the change with a `plan`. Vulcan will automatically re-evaluate all downstream models.
+   * **External data source?** Fix it at the source, then run a [restatement plan](../concepts/run-and-plan/plan-guide.md#restatement) on the first Vulcan model that ingests it. This restates all downstream models automatically.
+   * **Vulcan model?** Update the model's logic, then apply the change with a `plan`. Vulcan automatically re-evaluates all downstream models.
 
 The key is fixing the root cause, not just the symptom. If bad data is coming from upstream, fixing it downstream won't help long-term.
 
@@ -88,7 +93,7 @@ The key is fixing the root cause, not just the symptom. If bad data is coming fr
 
 You can write your own audits. They're SQL queries that should return zero rows. If they return rows, the audit found bad data and any assertion that attaches it fails.
 
-Audits live in `.sql` files in an `audits/` directory in your project. You can put multiple audits in one file (organize them however makes sense) or define them inline in your model files.
+Audits live in `.sql` files in an `audits/` directory in your project. You can put multiple audits in 1 file (organize them however makes sense) or define them inline in your model files.
 
 ### Your first audit
 
@@ -126,7 +131,7 @@ This audit runs every time the `sushi.items` model runs.
 
 ### Generic audits
 
-Audits can be parameterized, so one audit definition covers every model that follows the same shape. The same `not_null_columns` audit, for example, can apply to `customers`, `orders`, and `events` without three copies of the SQL.
+Audits can be parameterized, so 1 audit definition covers every model that follows the same shape. The same `not_null_columns` audit, for example, can apply to `customers`, `orders`, and `events` without 3 copies of the SQL.
 
 Consider this audit that checks if a column exceeds a threshold:
 
@@ -138,7 +143,7 @@ SELECT * FROM @this_model
 WHERE @column >= @threshold;
 ```
 
-This uses [macros](./advanced-features/macros/) to make it flexible:
+This uses [macros](../advanced-features/macros/README.md) to make it flexible:
 
 * `@this_model` is a special macro that refers to the model being audited (and handles incremental models correctly)
 * `@column` and `@threshold` are parameters you'll specify when you attach the audit
@@ -180,7 +185,7 @@ If someone uses the audit without specifying parameters, it uses these defaults.
 You can also attach audits to every model by default using model defaults:
 
 ```sql
-model_defaults:
+modelDefaults:
   assertions:
     - assert_positive_order_ids
 
@@ -190,7 +195,7 @@ model_defaults:
 This attaches these audits to all models by default.
 
 {% hint style="info" %}
-In `model_defaults`, you can use either `audits` or `assertions` as the property name, both work for backward compatibility.
+In `modelDefaults`, you can use either `audits` or `assertions` as the property name: both work for backward compatibility.
 {% endhint %}
 
 ### Naming
@@ -212,7 +217,7 @@ It's easier to just avoid keywords in the first place, but if you need them, quo
 
 ### Inline audits
 
-You can also define audits right in your model file. This is useful when an audit is specific to one model:
+You can also define audits right in your model file. This is useful when an audit is specific to 1 model:
 
 ```sql
 MODEL (
@@ -235,11 +240,11 @@ You can define multiple audits in the same file. Just make sure they're defined 
 
 ## Built-in audits
 
-Vulcan comes with a suite of built-in audits that cover most common use cases. These are ready to attach as assertions, with no SQL to write yourself.
+Vulcan includes built-in audits that cover most common use cases. You can attach them as assertions without writing any SQL.
 
 All built-in audits are blocking (they stop execution when they fail), and they're grouped by what they check:
 
-### Generic audits
+### Generic audits (built-in)
 
 #### `forall`
 
@@ -257,7 +262,7 @@ MODEL (
 );
 ```
 
-This checks that all rows have a `price` greater than 0 AND a `name` with at least one character. You can add as many criteria as you want, they all need to pass.
+This checks that all rows have a `price` greater than 0 AND a `name` with at least 1 character. You can add as many criteria as you want; they all need to pass.
 
 ### Row count and NULL value audits
 
@@ -295,7 +300,7 @@ This checks that `id`, `customer_id`, and `waiter_id` are never NULL. If any of 
 
 #### `at_least_one`
 
-Sometimes you just need at least one non-NULL value, not all of them. This is useful for optional fields that should have some data:
+Sometimes you just need at least 1 non-NULL value, not all of them. This is useful for optional fields that should have some data:
 
 ```sql
 MODEL (
@@ -306,7 +311,7 @@ MODEL (
 );
 ```
 
-This ensures the `zip` column has at least one non-NULL value. Maybe most customers don't have zip codes, but at least some should.
+This ensures the `zip` column has at least 1 non-NULL value. Maybe most customers don't have zip codes, but at least some should.
 
 #### `not_null_proportion`
 
@@ -340,7 +345,7 @@ MODEL (
 );
 ```
 
-This ensures `customer_id` has at least two different non-NULL values. If every row has the same customer ID, that's suspicious.
+This ensures `customer_id` has at least 2 different non-NULL values. If every row has the same customer ID, that's suspicious.
 
 #### `unique_values`
 
@@ -385,15 +390,15 @@ MODEL (
 );
 ```
 
-This ensures that `name` is one of the three allowed values. Anything else fails the assertion.
+This ensures that `name` is 1 of the 3 allowed values. Anything else fails the assertion.
 
 {% hint style="info" %}
-Rows with `NULL` values will pass this assertion in most databases. If you want to reject NULLs, combine this with a `not_null` assertion.
+Rows with `NULL` values pass this assertion in most databases. If you want to reject NULLs, combine this with a `not_null` assertion.
 {% endhint %}
 
 #### `not_accepted_values`
 
-The opposite, make sure certain values are NOT present:
+The opposite: make sure certain values aren't present:
 
 ```sql
 MODEL (
@@ -472,14 +477,14 @@ MODEL (
 );
 ```
 
-This ensures that each row's price range \[min\_price, max\_price] doesn't overlap with any other row's range. Perfect for ensuring pricing tiers don't conflict.
+This ensures that each row's price range \[min\_price, max\_price] doesn't overlap with any other row's range. This is useful for ensuring pricing tiers don't conflict.
 
 ### Character data audits
 
 These audits check string formats and patterns.
 
 {% hint style="warning" %}
-Different databases may behave differently with character sets or languages. Test your assertions!
+Different databases can behave differently with character sets or languages. Test your assertions.
 {% endhint %}
 
 #### `not_empty_string`
@@ -600,11 +605,11 @@ MODEL (
 );
 ```
 
-This ensures `http_method` is one of: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `HEAD`, `OPTIONS`, `TRACE`, `CONNECT`.
+This ensures `http_method` is 1 of: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `HEAD`, `OPTIONS`, `TRACE`, `CONNECT`.
 
 #### `match_regex_pattern_list`
 
-Check that values match at least one regex pattern:
+Check that values match at least 1 regex pattern:
 
 ```sql
 MODEL (
@@ -615,11 +620,11 @@ MODEL (
 );
 ```
 
-This ensures all `todo` values match at least one pattern: either start with a digit (`^\d.*`) or end with an exclamation mark (`.*!$`).
+This ensures all `todo` values match at least 1 pattern: either start with a digit (`^\d.*`) or end with an exclamation mark (`.*!$`).
 
 #### `not_match_regex_pattern_list`
 
-The opposite, make sure values don't match any pattern:
+The opposite: make sure values don't match any pattern:
 
 ```sql
 MODEL (
@@ -634,7 +639,7 @@ This ensures no `todo` values start with `!` or end with a digit.
 
 #### `match_like_pattern_list`
 
-Check that values match at least one SQL LIKE pattern:
+Check that values match at least 1 SQL LIKE pattern:
 
 ```sql
 MODEL (
@@ -745,7 +750,7 @@ The z-score is calculated as: `ABS(([row value] - [column mean]) / NULLIF([colum
 
 #### `kl_divergence`
 
-Check how different two distributions are. Useful for comparing current data to a reference:
+Check how different 2 distributions are. Useful for comparing current data to a reference:
 
 ```sql
 MODEL (
@@ -758,11 +763,11 @@ MODEL (
 
 This ensures the [symmetrised Kullback-Leibler divergence](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence#Symmetrised_divergence) (also called "Jeffreys divergence" or "Population Stability Index") between `age` and `reference_age` is less than or equal to 0.1.
 
-Lower values mean the distributions are more similar. This is great for detecting when your data distribution has shifted significantly from a known good reference.
+Lower values mean the distributions are more similar. This helps you detect when your data distribution has shifted significantly from a known good reference.
 
 #### `chi_square`
 
-Check the relationship between two categorical columns:
+Check the relationship between 2 categorical columns:
 
 ```sql
 MODEL (
@@ -786,7 +791,7 @@ from scipy.stats import chi2
 chi2.ppf(0.95, 1)
 ```
 
-This is useful for detecting when the relationship between two categorical variables has changed unexpectedly.
+This is useful for detecting when the relationship between 2 categorical variables has changed unexpectedly.
 
 ## Running audits
 
@@ -845,13 +850,13 @@ WHERE ds BETWEEN @start_ds AND @end_ds AND
 vulcan -p project audit --start 2022-01-01 --end 2022-01-02 --verbose
 ```
 
-This will show you the exact query and the rows that failed. Once you see what data is causing the failure, you can either fix the data or adjust the audit.
+This shows you the exact query and the rows that failed. Once you see what data is causing the failure, you can either fix the data or adjust the audit.
 
 ### Audit too strict
 
 **Problem:** An audit is failing during normal operation, even though the data is actually fine.
 
-**Solution:** Review your thresholds. Maybe your `accepted_range` is too narrow, or your `number_of_rows` threshold is too high. Statistical audits especially need tuning, start with wide ranges and tighten them as you learn what's normal.
+**Solution:** Review your thresholds. Maybe your `accepted_range` is too narrow, or your `number_of_rows` threshold is too high. Statistical audits especially need tuning: start with wide ranges and tighten them as you learn what's normal.
 
 ### Performance issues
 
@@ -861,15 +866,15 @@ This will show you the exact query and the rows that failed. Once you see what d
 
 * Make sure your audit queries use indexes on the columns they're checking
 * For incremental models, audits only run on processed intervals (which helps), but you can also add date filters to your audit queries
-* Consider if you really need all those audits, sometimes less is more
+* Consider whether you really need all those audits: fewer, well-chosen audits often work just as well
 
 ### Understanding audit results
 
 When an audit fails, Vulcan shows you:
 
 * Which audit failed
-* Which model it was attached to
-* The exact query that was run
-* How many rows were returned (when it expected 0)
+* Which model the audit was attached to
+* The exact query Vulcan ran
+* How many rows the query returned (when it expected 0)
 
 Use this information to understand what went wrong. The query results tell you exactly what data failed the check.

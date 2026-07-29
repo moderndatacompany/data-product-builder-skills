@@ -1,6 +1,13 @@
+---
+description: >-
+  Business metric YAML structure: required and optional properties,
+  dimensions, segments, cross-model metrics, time granularity, forbidden
+  legacy keys, reserved names, and validation rules.
+---
+
 # Business metrics
 
-Business metrics are time-series analytical definitions that combine a measure, a time dimension, and optional grouping dimensions into a single queryable unit. They sit on top of [semantic models](../model/types/models.md) and are the primary interface for dashboards, reports, and APIs.
+Business metrics are time-series analytical definitions that combine a measure, a time dimension, and optional grouping dimensions into a single queryable unit. They sit on top of [semantic models](semantic-models.md) and are the primary interface for dashboards, reports, and APIs.
 
 ***
 
@@ -50,7 +57,7 @@ ai_context: {...}                           # Optional, see models.md#ai-context
 
 ## Required properties
 
-Every metric must define these four fields:
+Every metric must define these 4 fields:
 
 ### name
 
@@ -84,6 +91,20 @@ ts: subscriptions.start_date
 Vulcan rejects metrics where `measure` and `ts` point to the same reference.
 {% endhint %}
 
+{% hint style="warning" %}
+**ts must resolve to a strict timestamp column**
+
+The physical column behind `ts` must be `TIMESTAMP`, `TIMESTAMPTZ`, `TIMESTAMPNTZ`, `TIMESTAMPLTZ`, `DATETIME`, or `DATETIME2`. `DATE`, `TIME`, and `INTERVAL` columns are rejected outright, each with a hint suggesting the cast to add:
+
+| Column type | Rejection reason                                    | Suggested fix                                          |
+| ----------- | ---------------------------------------------------- | -------------------------------------------------------- |
+| `DATE`      | Time dimensions require `TIMESTAMP`.                  | `CAST(<column> AS TIMESTAMP) AS <column>`                |
+| `TIME`      | Time-of-day only; a full timestamp is needed.         | `CAST(CONCAT(date_column, ' ', <column>) AS TIMESTAMP)`  |
+| `INTERVAL`  | A duration, not a point in time.                      | Replace with a point-in-time timestamp column.           |
+
+Semantic model dimensions are plain column references (no `expression` field), so the cast has to happen upstream, in the physical model's SELECT, not in the metric or the semantic model.
+{% endhint %}
+
 ### granularity
 
 The default time bucket for aggregation. Must be one of:
@@ -103,7 +124,7 @@ The default time bucket for aggregation. Must be one of:
 granularity: month
 ```
 
-The default granularity is what is used when a consumer queries the metric without specifying one. Consumers can always override it at query time.
+The default granularity applies when a consumer queries the metric without specifying one. Consumers can always override it at query time.
 
 ***
 
@@ -111,13 +132,14 @@ The default granularity is what is used when a consumer queries the metric witho
 
 | Property      | Type                                     | Description                                                                                                                 |
 | ------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `dimensions`  | List                                     | Grouping dimensions (bare reference, or named slice with `name` + `ref`). See [Dimensions](business_metrics.md#dimensions). |
+| `dimensions`  | List                                     | Grouping dimensions (bare reference, or named slice with `name` + `ref`). See [Dimensions](business-metrics.md#dimensions). |
 | `segments`    | List of `<semantic_name>.<segment_name>` | Predefined filters from semantic models. **Qualified-ref strings only**; no named form.                                     |
+| `join_path`   | `connected` \| `directed`                | Per-metric override of the project's `metric_join_path` setting for cross-model reachability. See [Join path mode](business-metrics.md#join-path-mode-connected-vs-directed). |
 | `description` | String                                   | Human-readable explanation of the metric.                                                                                   |
 | `owner`       | String                                   | Team or person responsible for the metric.                                                                                  |
-| `tags`        | List of strings                          | Categorization labels for discovery. See [Naming rules](../model/types/models.md#naming-rules) for the allowed pattern.     |
-| `terms`       | List of strings                          | Business glossary references (e.g. `glossary.revenue`). See [Naming rules](../model/types/models.md#naming-rules).          |
-| `ai_context`  | Object                                   | Hints for AI/LLM consumers (`instructions`, `synonyms`, `examples`). See [AI context](../model/types/models.md#ai-context). |
+| `tags`        | List of strings                          | Categorization labels for discovery. See [Naming rules](semantic-models.md#naming-rules) for the allowed pattern.     |
+| `terms`       | List of strings                          | Business glossary references (e.g. `glossary.revenue`). See [Naming rules](semantic-models.md#naming-rules).          |
+| `ai_context`  | Object                                   | Hints for AI/LLM consumers (`instructions`, `synonyms`, `examples`). See [AI context](semantic-models.md#ai-context). |
 
 Example:
 
@@ -188,7 +210,7 @@ The dimension's `name` is **auto-derived** from the field part after the `.` (so
 {% hint style="warning" %}
 **Shorthand name collisions fail validation**
 
-If two shorthand entries derive the **same** name from **different** refs, validation fails. Example:
+If 2 shorthand entries derive the **same** name from **different** refs, validation fails. Example:
 
 ```yaml
 dimensions:
@@ -196,7 +218,7 @@ dimensions:
   - shipping.country      # also derives "country" -> ERROR
 ```
 
-Switch one (or both) to the [object form](business_metrics.md#named-slice) and give them distinct `name`s:
+Switch one (or both) to the [object form](business-metrics.md#named-slice) and give them distinct `name`s:
 
 ```yaml
 dimensions:
@@ -209,7 +231,7 @@ dimensions:
 
 ### Named slice
 
-Use the named form when you want to expose a dimension under a different label than the underlying column, disambiguate two columns that would derive the same shorthand name, or override the semantic-field's documentation/tags/terms/AI hints for this metric:
+Use the named form when you want to expose a dimension under a different label than the underlying column, disambiguate 2 columns that would derive the same shorthand name, or override the semantic-field's documentation/tags/terms/AI hints for this metric:
 
 ```yaml
 dimensions:
@@ -241,7 +263,7 @@ dimensions:
 
 | Field         | Required | Description                                                                                                                                                                                |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `name`        | Yes      | The label consumers use in queries. Lowercase identifier (see [Naming rules](../model/types/models.md#naming-rules)). Must be unique across this metric's `dimensions` **and** `segments`. |
+| `name`        | Yes      | The label consumers use in queries. Lowercase identifier (see [Naming rules](semantic-models.md#naming-rules)). Must be unique across this metric's `dimensions` **and** `segments`. |
 | `ref`         | Yes      | The actual semantic reference (`<semantic_name>.<column>`). Both halves must be valid identifiers.                                                                                         |
 | `description` | No       | Human-readable explanation. **Overrides** the description on the underlying semantic field for this metric.                                                                                |
 | `tags`        | No       | List of categorization labels. **Overrides** the underlying field's tags for this metric.                                                                                                  |
@@ -278,7 +300,7 @@ segments:
   - subscriptions.high_value_accounts
 ```
 
-The segments `active_subscriptions` and `high_value_accounts` must be defined in the `subscriptions` semantic model. When the metric is queried, these filters are applied automatically.
+The segments `active_subscriptions` and `high_value_accounts` must be defined in the `subscriptions` semantic model. Vulcan applies these filters automatically when someone queries the metric.
 
 ### Segment rules
 
@@ -317,12 +339,41 @@ dimensions:
 description: User retention by signup cohort and plan type
 ```
 
-This metric uses the `active_users` measure and `signup_date` time from the `users` model, but groups by `plan_type` from the `subscriptions` model. The `users` semantic model must have a join defined to `subscriptions` for this to work.
+This metric uses the `active_users` measure and `signup_date` time from the `users` model, but groups by `plan_type` from the `subscriptions` model. The `users` semantic model must define a join (in either direction) to `subscriptions` for this to work.
 
 {% hint style="warning" %}
 **Joins are required for cross-model references**
 
-If a metric references multiple semantic models, those models must be connected through joins. Vulcan validates this and will raise an error if a join path doesn't exist.
+If a metric references multiple semantic models, those models must be connected through joins. Vulcan validates this and raises an error if a join path doesn't exist.
+{% endhint %}
+
+### Join path mode: `connected` vs `directed`
+
+`measure` always anchors the metric to one semantic model. Every other model referenced by `ts`, `dimensions`, or `segments` is checked for reachability from that anchor, in one of two modes:
+
+| Mode | Behavior |
+| ---- | -------- |
+| `connected` (default) | Any join path between the anchor and the referenced model counts, regardless of which model declared the join or its direction. |
+| `directed` | A join must exist that follows outgoing `joins:` edges starting from the anchor model. A reference reachable only by walking a join backwards (or through a model that joins *into* the anchor) fails validation. |
+
+The effective mode comes from, in order of precedence: the metric's own `join_path:` key, then the project's `metric_join_path:` setting in `config.yaml`, then the built-in default of `connected`.
+
+```yaml
+kind: metric
+name: cohort_retention
+measure: users.active_users
+ts: users.signup_date
+granularity: month
+join_path: directed   # override the project default for this metric only
+
+dimensions:
+  - subscriptions.plan_type
+```
+
+If a `directed` check fails, the error names the anchor and the unreachable model and suggests three fixes: declare a join from the anchor toward the target, move the measure onto the target model instead, or relax the check with `join_path: connected` on the metric (or `metric_join_path: connected` project-wide).
+
+{% hint style="info" %}
+`metric_join_path` also controls export: `directed` populates the `join_map` in exported metadata/BI artifacts, while `connected` leaves it empty. See the project `config.yaml` reference for the `metric_join_path` setting.
 {% endhint %}
 
 ***
@@ -345,7 +396,7 @@ You do not need separate metric definitions for daily, weekly, and monthly views
 
 ### Minimal
 
-The smallest valid metric is the four required fields:
+The smallest valid metric is the 4 required fields:
 
 ```yaml
 # models/metrics/churn_analysis.yml
@@ -423,7 +474,7 @@ terms:
 
 ## Forbidden legacy keys
 
-Two keys from earlier versions of the metric spec are **explicitly rejected** and will cause validation to fail:
+Two keys from earlier versions of the metric spec are **explicitly rejected** and cause validation to fail:
 
 | Legacy key | Use instead  | Notes                                                              |
 | ---------- | ------------ | ------------------------------------------------------------------ |
@@ -436,7 +487,7 @@ If you are migrating an older project, do a global replace before running `vulca
 
 ## Reserved names
 
-The following names cannot be used as a dimension `name` (object form) or as the auto-derived `name` of a segment on a metric:
+You cannot use the following names as a dimension `name` (object form) or as the auto-derived `name` of a segment on a metric:
 
 * `measure`
 * `time`
@@ -450,25 +501,25 @@ They are reserved as adjunct keys on the metric envelope. Pick a different name 
 
 Vulcan validates metric definitions automatically when you create a plan. It checks that:
 
-* `measure` references a valid measure on a semantic model
-* `ts` references a valid time/date column
-* `granularity` is a recognized granularity value (see [granularity table](business_metrics.md#granularity))
+* `measure`, `ts`, and each dimension/segment `ref` resolve to a **declared semantic field** (a dimension, measure, or segment name) on their semantic model — not necessarily a raw physical column
+* `ts` additionally resolves to a physical column of a strict timestamp type (`TIMESTAMP`, `TIMESTAMPTZ`, `TIMESTAMPNTZ`, `TIMESTAMPLTZ`, `DATETIME`, `DATETIME2`); `DATE`, `TIME`, and `INTERVAL` are rejected with a cast hint
+* `granularity` is a recognized granularity value (see [granularity table](business-metrics.md#granularity))
 * Every qualified reference (`measure`, `ts`, and each dimension/segment `ref`) is a valid `<semantic_name>.<field>` where both halves are valid identifiers
-* **All qualified refs used by the metric are unique.** You cannot use the same `<semantic_name>.<field>` as both `measure` and `ts`, or as two dimensions, and so on.
+* **All qualified refs used by the metric are unique.** You cannot use the same `<semantic_name>.<field>` as both `measure` and `ts`, or as 2 dimensions, and so on.
 * **All names are unique across `dimensions` and `segments`** (dimension `name`s plus auto-derived segment `name`s, considered as one combined set)
-* Dimension references point to real columns
 * Named slices include both `name` and `ref`
 * Segment entries are qualified-reference strings (not objects) and their auto-derived `<semantic_name>_<segment_name>` matches the lowercase identifier pattern
-* Cross-model references have valid join paths between the involved models
+* Every semantic model referenced by the metric (beyond the `measure`'s own model) is reachable from the `measure`'s anchor model through the join graph, per the effective `connected`/`directed` [join path mode](business-metrics.md#join-path-mode-connected-vs-directed)
+* `join_path`, if set, is `connected` or `directed`
 * Forbidden legacy keys (`time`, `slices`) are not present
 * Reserved names (`measure`, `time`, `ts`) are not used as a dimension or auto-derived segment `name`
-* All identifier names match the [naming rules](../model/types/models.md#naming-rules)
+* All identifier names match the [naming rules](semantic-models.md#naming-rules)
 * No unknown keys appear inside `ai_context` (Pydantic `extra="forbid"`)
 
 ***
 
 ## Next steps
 
-* Learn about [Semantic Models](../model/types/models.md): the source of measures, segments, and joins that metrics build on.
+* Learn about [Semantic Models](semantic-models.md): the source of measures, segments, and joins that metrics build on.
 * See the [Semantics Overview](./) for the complete picture
 * Explore metric definitions in your project's `models/metrics/` directory

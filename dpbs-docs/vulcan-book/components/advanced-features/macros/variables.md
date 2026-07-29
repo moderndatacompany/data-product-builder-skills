@@ -1,3 +1,10 @@
+---
+description: >-
+  Reference for Vulcan's predefined macro variables: temporal variables like
+  @execution_ds, runtime variables like @runtime_stage and @this_model, and
+  beforeAll/afterAll variables.
+---
+
 # Variables
 
 Macro variables are placeholders that Vulcan replaces with actual values when it renders your SQL. They make your queries dynamic: instead of hardcoding values, use variables that change based on context.
@@ -5,7 +12,7 @@ Macro variables are placeholders that Vulcan replaces with actual values when it
 Instead of writing `WHERE date > '2023-01-01'` and updating it every day, write `WHERE date > @execution_ds` to use today's date automatically.
 
 {% hint style="info" %}
-This page covers Vulcan's built-in macro variables, the ones that come pre-configured and ready to use. To create your own custom variables, see the [Vulcan macros page](built_in.md#user-defined-variables) or [Jinja macros page](jinja.md#user-defined-variables).
+This page covers Vulcan's built-in macro variables, the ones that come pre-configured and ready to use. To create your own custom variables, see the [Vulcan macros page](built-in.md#user-defined-variables) or [Jinja macros page](jinja.md#user-defined-variables).
 {% endhint %}
 
 ## A quick example
@@ -57,7 +64,7 @@ Vulcan uses Python's [datetime module](https://docs.python.org/3/library/datetim
 
 All time-related predefined variables use [UTC time zone](https://en.wikipedia.org/wiki/Coordinated_Universal_Time). Handle other timezones in your query logic.
 
-See [timezones and incremental models](../../model/model_kinds.md#timezones).
+See [timezones and incremental models](../../models/data-models/model-kinds.md#timezones).
 {% endhint %}
 
 **Prefixes** indicate the time period the variable represents:
@@ -148,10 +155,10 @@ Beyond time, Vulcan provides variables that give you information about the curre
     * **`'auditing'`**: an audit is being run.
     * **`'testing'`**: model is being evaluated in a unit test context.
 
-    See [pre/post-statements](../../model/types/sql_models.md#optional-prepost-statements).
-* **`@gateway`**: the name of the current [gateway](../../../configurations/#gateways) (your database connection).
-* **`@this_model`**: the physical table name that the model's view selects from. Use it to create [generic assertions](../../assertions.md#generic-assertions). In [on\_virtual\_update statements](../../model/types/sql_models.md#optional-on-virtual-update-statements), it contains the qualified view name instead.
-* **`@model_kind_name`**: the name of the current model kind (such as `'FULL'` or `'INCREMENTAL_BY_TIME_RANGE'`). Use it to control [physical properties in model defaults](../../../configurations/options/model_defaults.md) based on the model kind.
+    See [pre/post-statements](../../models/data-models/types/sql.md#optional-prepost-statements).
+* **`@gateway`**: the name of the current [gateway](../../configurations/README.md#gateways) (your database connection).
+* **`@this_model`**: the physical table name that the model's view selects from. Use it to create [generic assertions](../../quality/assertions.md#generic-audits-built-in). In [on\_virtual\_update statements](../../models/data-models/types/sql.md#optional-on-virtual-update-statements), it contains the qualified view name instead.
+* **`@model_kind_name`**: the name of the current model kind (such as `'FULL'` or `'INCREMENTAL_BY_TIME_RANGE'`). Use it to control [physical properties in model defaults](../../configurations/model-defaults.md) based on the model kind.
 
 {% hint style="info" %}
 **Embedding variables in strings**
@@ -165,15 +172,15 @@ The curly brace syntax tells Vulcan to treat the rendered value as a SQL identif
 
 Use `@{variable}` to interpolate a value into an identifier name like `@{schema}_table`. Use `@variable` for plain value substitution.
 
-See the [Vulcan macros documentation](built_in.md#embedding-variables-in-strings).
+See the [Vulcan macros documentation](built-in.md#embedding-variables-in-strings).
 {% endhint %}
 
 #### Before all and after all variables
 
-These variables are available in [`before_all` and `after_all` statements](../../../configurations/options/execution_hooks.md) and in any macros called within those statements:
+These variables are available in [`beforeAll` and `afterAll` statements](../../configurations/execution-hooks.md) and in any macros called within those statements:
 
-* **`@this_env`**: the name of the current [environment](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms).
-* **`@schemas`**: a list of schema names in the [virtual layer](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms) for the current environment.
-* **`@views`**: a list of view names in the [virtual layer](/broken/pages/QU5rZQh0Ejzn9VWgzeyD#execution-terms) for the current environment.
+* **`@this_env`**: the name of the current [environment](../../concepts/architecture.md#virtual-data-environments-vde).
+* **`@schemas`**: a list of schema names in the [virtual layer](../../concepts/architecture.md#virtual-data-environments-vde) for the current environment.
+* **`@views`**: a list of view names in the [virtual layer](../../concepts/architecture.md#virtual-data-environments-vde) for the current environment.
 
 Use them for setup or cleanup operations that depend on the environment context.

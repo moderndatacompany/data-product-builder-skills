@@ -14,7 +14,7 @@ MODEL (
     established_date DATE
   ),
   grain PLANT_CODE,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (PLANT_CODE, PLANT_NAME, REGION, OPERATING_SHIFTS),
   tags ('reference-data', 'dimension', 'master-data', 'plant', 'location', 'seed-data', 'manufacturing'),
   terms ('reference_data', 'plant_dimension', 'master_data', 'manufacturing_location'),

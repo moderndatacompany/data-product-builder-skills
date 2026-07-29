@@ -2,7 +2,7 @@ MODEL (
   name LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS,
   kind FULL,
   grain REPORTING_TIME,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (CONTEXT, EVENT, REPORTING_TIME),
   tags ('bronze', 'consumer-analytics', 'events', 'lenovo', 'usdk', 'json-parsing', 'raw-data'),
   terms ('consumer_analytics', 'event_tracking', 'device_telemetry'),

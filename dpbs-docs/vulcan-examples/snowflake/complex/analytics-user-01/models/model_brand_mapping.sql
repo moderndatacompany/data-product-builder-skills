@@ -17,7 +17,7 @@ MODEL (
     processed_date DATE
   ),
   grain MTM,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (MTM, PRODUCT_SEGMENT, FORM_FACTOR, CATEGORY, BRAND, GEN),
   tags ('reference-data', 'dimension', 'lenovo-products', 'hardware-mapping', 'seed-data', 'master-data', 'product-catalog'),
   terms ('product_dimension', 'reference_data', 'hardware_catalog'),

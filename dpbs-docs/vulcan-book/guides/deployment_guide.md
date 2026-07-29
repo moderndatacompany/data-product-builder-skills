@@ -1,3 +1,9 @@
+---
+description: >-
+  Deploy a Vulcan Data Product into a DataOS environment: prerequisites,
+  configuration files, deployment steps, and runtime entries.
+---
+
 # Deployment steps
 
 Deploy Vulcan data products in a DataOS environment.
@@ -22,7 +28,7 @@ ds login
 
 ### 2. Depot (data source connection)
 
-Configure a depot to connect to your data warehouse (e.g., Snowflake, BigQuery, Databricks).
+Configure a depot to connect to your data warehouse (e.g., Snowflake, Databricks).
 
 **List available depots:**
 
@@ -36,7 +42,7 @@ The depot needs read/write permissions for your data warehouse schema.
 
 ### 3. Engine stack
 
-An engine stack defines the execution environment for Vulcan operations (e.g., Snowflake, BigQuery, Spark).
+An engine stack defines the execution environment for Vulcan operations (e.g., Snowflake, Spark).
 
 **List available stacks:**
 
@@ -47,13 +53,10 @@ ds resource -t stack get -a
 **Supported engines:**
 
 * `snowflake`
-* `bigquery`
 * `databricks`
 * `postgres`
-* `redshift`
 * `trino`
-* `mysql`
-* `mssql`
+
 
 ### 4. Compute resource
 
@@ -119,15 +122,15 @@ This file holds Vulcan-specific runtime configuration: model defaults, gateways,
 
 ```yaml
 name: <data-product-name>
-display_name: <Data Product Title>
+displayName: <Data Product Title>
 description: <Description .... >
 
 # Catalog metadata
 discoverable: true
 version: 0.1.0
-alignment: consumer_aligned
+alignment: consumerAligned
 
-# Environment behaviour
+# Environment behavior
 vde: false   # set to true to enable Virtual Data Environments; not supported on spark/trino gateways
 
 tags:
@@ -173,8 +176,8 @@ references:
 #### Model defaults
 
 ```yaml
-model_defaults:
-  dialect: <engine-dialect>          # Database dialect eg. snowflake, bigquery
+modelDefaults:
+  dialect: <engine-dialect>          # Database dialect eg. snowflake
   start: '2025-01-01'        # Start date for time-based models
   cron: '<cron>'             # Default scheduling cadence @daily
 ```
@@ -194,34 +197,34 @@ gateways:
 ```yaml
 users:
   - username: <username1>
-    github_username: <gh-username1>
+    githubUsername: <gh-username1>
     email: <username1@email.id>
     type: OWNER
   - username: <username2>
-    github_username: <gh-username2>
+    githubUsername: <gh-username2>
     email: <username2@email.id>
     type: OWNER
 ```
 
-`type: OWNER` marks the user as a data product owner. List one entry per owner. `github_username` drives PR/CI bot interactions; leave it out for users who don't have a GitHub account.
+`type: OWNER` marks the user as a data product owner. List one entry per owner. `githubUsername` drives PR/CI bot interactions; leave it out for users who don't have a GitHub account.
 
 #### Complete config.yaml example
 
 <details>
 
-<summary>📋 Click to see complete config.yaml example</summary>
+<summary>Click to see the complete config.yaml example</summary>
 
 ```yaml
 name: user-engagement
-display_name: User Engagement Analytics
+displayName: User Engagement Analytics
 description: User Engagement Analytics delivers insights into user engagement patterns.
 
 # Catalog metadata
 discoverable: true
 version: 0.1.0
-alignment: consumer_aligned
+alignment: consumerAligned
 
-# Environment behaviour
+# Environment behavior
 vde: false   # set to true to enable Virtual Data Environments; not supported on spark/trino gateways
 
 tags:
@@ -234,7 +237,7 @@ terms:
   - glossary.analytics_platform
   - glossary.user_engagement
 
-model_defaults:
+modelDefaults:
   dialect: snowflake
   start: '2025-01-01'
   cron: '@daily'
@@ -245,20 +248,20 @@ gateways:
       type: depot
       address: dataos://snowflakevulcan2
 
-notification_targets:
+notificationTargets:
   - type: console
-    notify_on:
+    notifyOn:
       - apply_failure
       - run_failure
       - dq_failure
 
 users:
   - username: <owner-username-1>
-    github_username: <owner-gh-username-1>
+    githubUsername: <owner-gh-username-1>
     email: <owner-email-1@example.com>
     type: OWNER
   - username: <owner-username-2>
-    github_username: <owner-gh-username-2>
+    githubUsername: <owner-gh-username-2>
     email: <owner-email-2@example.com>
     type: OWNER
 ```
@@ -298,7 +301,7 @@ tags:
 spec:
   runAsUser: "<dataos-username>"     # DataOS user identity
   compute: <compute-name>            # Compute cluster name eg. cyclone-compute
-  engine: <engine-name>              # Execution engine eg. snowflake, bigquery
+  engine: <engine-name>              # Execution engine eg. snowflake
 ```
 
 #### Repository configuration
@@ -310,7 +313,7 @@ spec:
       - '--ref=<branch-name>'                # Git branch eg. main
       - '--submodules=off'
     baseDir: <path-to-project-in-repo>       # Path to project folder
-    secret: <workspace>:<secret>          # Git credentials secret eg. engineering:git-sync-name
+    secretId: <workspace>:<secret>        # Git credentials secret eg. engineering:git-sync-name
 ```
 
 #### Depot references
@@ -378,7 +381,7 @@ spec:
 
 <details>
 
-<summary>📋 Click to see complete domain-resource.yaml example</summary>
+<summary>Click to see complete domain-resource.yaml example</summary>
 
 ```yaml
 version: v1alpha
@@ -398,7 +401,7 @@ spec:
       - '--ref=main'
       - '--submodules=off'
     baseDir: vulcan-examples/customer-usecase/usdk
-    secret: engineering:git-sync
+    secretId: engineering:git-sync
   depots:
     - dataos://snowflakevulcan2?purpose=rw
   workflow:
@@ -591,15 +594,7 @@ That split changes where you go to debug:
 | Task failed inside a UDF, OOM on a worker, shuffle fetch failures               | Spark cluster, executor logs                          | Spark master UI at `http://<spark-master>:8080`, then drill into the application then executors |
 | Driver-side stack trace that points into executor code                          | Both: DataOS shows the symptom, Spark shows the cause | Start in DataOS, follow the executor ID in the trace to the Spark UI                            |
 
-A common pattern: a `vulcan run` in DataOS fails with a multi-line Java stack trace. The top frames are driver-side and visible in `*-run-execute` logs. The root cause sits in an executor and is only retrievable from the Spark UI. Don't re-run the DataOS pod when the answer is in the executor logs.
-
-For the symmetric "is my driver Spark version the same as my cluster's?" question, see [Verifying Spark version alignment](../configurations/engines/spark.md#verifying-spark-version-alignment). A version skew is the most common reason a Spark-backed run pod fails at startup, and it surfaces as `java.io.InvalidClassException` in the `*-run-execute` logs.
-
-{% hint style="info" %}
-**Sidecars don't apply to Spark workloads**
-
-The `sc-1` (GraphQL) and `sc-2` (MySQL) sidecars are part of the `api` pod, not `run`. Spark workloads don't add new container groups to DataOS. The driver still runs inside the existing `*-run-execute` container.
-{% endhint %}
+A common pattern: a `vulcan run` in DataOS fails with a multi-line Java stack trace. The top frames are driver-side and visible in `*-run-execute` logs. The root cause sits in an executor and can be retrievable from the Spark UI. Don't re-run the DataOS pod when the answer is in the executor logs.
 
 ***
 

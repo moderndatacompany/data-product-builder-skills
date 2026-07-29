@@ -9,7 +9,7 @@ from typing import Dict, List, Tuple
 
 # Configuration
 MODELS_DIR = Path(__file__).parent / "models"
-OWNER = "rohitrajtmdcio"
+OWNER = "${DATAOS_RUN_AS_USER}"
 
 # Metadata templates by layer
 LAYER_METADATA = {

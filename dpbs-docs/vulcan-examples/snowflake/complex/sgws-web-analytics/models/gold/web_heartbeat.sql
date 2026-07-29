@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_gold.WEB_HEARTBEAT,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [uuid],
   description 'Gold layer comprehensive web analytics fact table capturing all Adobe Analytics hits with enriched dimensions, device tracking, session management, product interactions, list recommendations, and customer journey metrics for digital platform analysis',
   tags ('gold', 'fact', 'web_analytics', 'digital', 'adobe_analytics', 'clickstream'),

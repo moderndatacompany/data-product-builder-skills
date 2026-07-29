@@ -1,3 +1,10 @@
+---
+description: >-
+  Configure beforeAll and afterAll execution hooks to run SQL, macros, or
+  statement files at the start and end of vulcan plan and vulcan run, with use
+  cases and comparison to model-level pre/post stat
+---
+
 # Execution hooks
 
 Run SQL statements, SQL files, or macros automatically at the start and end of `vulcan plan` and `vulcan run` commands. Automate setup and cleanup tasks: create temporary tables, grant permissions, log pipeline runs, clean up after execution.
@@ -6,35 +13,35 @@ Run SQL statements, SQL files, or macros automatically at the start and end of `
 
 Two hooks run at different times:
 
-| Hook         | When it runs                   | Common use cases                                              |
-|--------------|--------------------------------|---------------------------------------------------------------|
-| `before_all` | Before any model is processed  | Setup tables, initialize logging, validate prerequisites      |
-| `after_all`  | After all models are processed | Grant privileges, cleanup, send notifications, update metadata |
+| Hook        | When it runs                   | Common use cases                                               |
+| ----------- | ------------------------------ | -------------------------------------------------------------- |
+| `beforeAll` | Before any model is processed  | Setup tables, initialize logging, validate prerequisites       |
+| `afterAll`  | After all models are processed | Grant privileges, cleanup, send notifications, update metadata |
 
-The `before_all` hook runs once at the beginning, before Vulcan processes any models. Use it for setup tasks. The `after_all` hook runs once at the end, after all models are processed. Use it for cleanup or post-processing.
+The `beforeAll` hook runs once at the beginning, before Vulcan processes any models. Use it for setup tasks. The `afterAll` hook runs once at the end, after Vulcan processes all models. Use it for cleanup or post-processing.
 
 Each hook entry can take one of these forms:
 
-| Form              | Example                                  | Use when                                                  |
-|-------------------|------------------------------------------|-----------------------------------------------------------|
-| Inline SQL string | `CREATE SCHEMA IF NOT EXISTS analytics`  | The statement is short and easy to read in `config.yaml`. |
-| Macro call        | `"@grant_select_privileges()"`           | The hook needs runtime context or reusable Python logic.  |
-| File object       | `{file: ./statements/select_1.txt}`      | You want to make the file reference explicit.             |
-| File path string  | `./statements/select_3.sql`              | The hook should run SQL from a file.                      |
+| Form              | Example                                 | Use when                                                  |
+| ----------------- | --------------------------------------- | --------------------------------------------------------- |
+| Inline SQL string | `CREATE SCHEMA IF NOT EXISTS analytics` | The statement is short and easy to read in `config.yaml`. |
+| Macro call        | `"@grant_select_privileges()"`          | The hook needs runtime context or reusable Python logic.  |
+| File object       | `{file: ./statements/select_1.txt}`     | You want to make the file reference explicit.             |
+| File path string  | `./statements/select_3.sql`             | The hook should run SQL from a file.                      |
 
 ## Basic configuration
 
 {% tabs %}
 {% tab title="YAML" %}
 ```yaml
-before_all:
+beforeAll:
   - CREATE TABLE IF NOT EXISTS audit_log (model VARCHAR, started_at TIMESTAMP)
 
   - INSERT INTO audit_log VALUES ('pipeline', CURRENT_TIMESTAMP)
 
   - file: ./statements/select_1.txt
 
-after_all:
+afterAll:
   - "@grant_select_privileges()"
 
   - UPDATE audit_log SET completed_at = CURRENT_TIMESTAMP WHERE model = 'pipeline'
@@ -59,25 +66,24 @@ config = Config(
 )
 ```
 {% endtab %}
-
 {% endtabs %}
 
 ## File-backed statements
 
 Use file-backed hooks when setup or cleanup SQL is too long for `config.yaml`, or when multiple environments share the same statement file.
 
-```yaml title="config.yaml"
-before_all:
+```yaml
+beforeAll:
   - file: ./statements/select_1.txt
   - file: ./statements/select_2.sql
 
-after_all:
+afterAll:
   - ./statements/select_3.sql
 ```
 
 Statement files can use `.txt` or `.sql` extensions and may contain multiple SQL statements:
 
-```sql title="statements/select_1.txt"
+```sql
 select 1;
 select 2;
 select 3;
@@ -90,7 +96,7 @@ select 9;
 select 10;
 ```
 
-File paths are resolved relative to the project root. Keep long setup scripts in a folder such as `statements/` so `config.yaml` stays readable.
+Vulcan resolves file paths relative to the project root. Keep long setup scripts in a folder such as `statements/` so `config.yaml` stays readable.
 
 ## Using macros in hooks
 
@@ -100,22 +106,22 @@ Hooks execute Vulcan macros using the `@macro_name()` syntax. Macros have access
 
 Macros invoked in hooks have access to:
 
-| Property             | Type        | Description                                              |
-|----------------------|-------------|----------------------------------------------------------|
-| `evaluator.views`    | `list[str]` | All view names created in the virtual layer              |
-| `evaluator.schemas`  | `list[str]` | All schema names used by models                          |
-| `evaluator.this_env` | `str`       | Current environment name (for example, `prod`, `dev`)    |
-| `evaluator.gateway`  | `str`       | Current gateway name                                     |
+| Property             | Type        | Description                                           |
+| -------------------- | ----------- | ----------------------------------------------------- |
+| `evaluator.views`    | `list[str]` | All view names created in the virtual layer           |
+| `evaluator.schemas`  | `list[str]` | All schema names used by models                       |
+| `evaluator.this_env` | `str`       | Current environment name (for example, `prod`, `dev`) |
+| `evaluator.gateway`  | `str`       | Current gateway name                                  |
 
----
+***
 
 ## Use cases
 
 ### 1. Granting privileges on views
 
-Creating many views and granting permissions model-by-model gets tedious. Use `after_all` to grant access to all views at once:
+Creating many views and granting permissions model-by-model gets tedious. Use `afterAll` to grant access to all views at once:
 
-```python title="macros/privileges.py"
+```python
 from vulcan.core.macros import macro
 
 @macro()
@@ -130,23 +136,23 @@ def grant_select_privileges(evaluator):
     ]
 ```
 
-```yaml title="config.yaml"
-after_all:
+```yaml
+afterAll:
   - "@grant_select_privileges()"
 ```
 
 {% hint style="success" %}
 **Preventing name replacement**
 
-The `/* sqlglot.meta replace=false */` comment tells Vulcan not to replace the view name with the physical table name during SQL rendering. Without it, Vulcan may swap in the underlying table name, which breaks your `GRANT` statement.
+The `/* sqlglot.meta replace=false */` comment tells Vulcan not to replace the view name with the physical table name during SQL rendering. Without it, Vulcan swaps in the underlying table name, which breaks your `GRANT` statement.
 {% endhint %}
 
 ### 2. Environment-specific execution
 
 Use different behavior in different environments. Grant certain permissions only in production. Run cleanup tasks only in development. The `@IF` macro conditionally executes statements based on the current environment:
 
-```yaml title="config.yaml"
-after_all:
+```yaml
+afterAll:
   # Only grant schema usage in production
   - "@IF(@this_env = 'prod', @grant_schema_usage())"
   
@@ -154,7 +160,7 @@ after_all:
   - "@IF(@this_env != 'prod', @cleanup_dev_tables())"
 ```
 
-```python title="macros/privileges.py"
+```python
 from vulcan.core.macros import macro
 
 @macro()
@@ -179,10 +185,10 @@ def cleanup_dev_tables(evaluator):
 
 ### 3. Pipeline audit logging
 
-Track when your pipeline runs and how long it takes. Log the start time in `before_all` and the completion time in `after_all`:
+Track when your pipeline runs and how long it takes. Log the start time in `beforeAll` and the completion time in `afterAll`:
 
-```yaml title="config.yaml"
-before_all:
+```yaml
+beforeAll:
   - |
     CREATE TABLE IF NOT EXISTS pipeline_audit (
       run_id VARCHAR,
@@ -193,11 +199,11 @@ before_all:
     )
   - "@log_pipeline_start()"
 
-after_all:
+afterAll:
   - "@log_pipeline_end()"
 ```
 
-```python title="macros/audit.py"
+```python
 from vulcan.core.macros import macro
 import uuid
 
@@ -225,10 +231,10 @@ def log_pipeline_end(evaluator):
 
 ### 4. Schema and database setup
 
-Before models run, make sure all schemas they depend on exist. Instead of creating them manually or remembering the order, let `before_all` handle it:
+Before models run, make sure all schemas they depend on exist. Instead of creating them manually or remembering the order, let `beforeAll` handle it:
 
-```yaml title="config.yaml"
-before_all:
+```yaml
+beforeAll:
   - CREATE SCHEMA IF NOT EXISTS staging
 
   - CREATE SCHEMA IF NOT EXISTS analytics
@@ -238,7 +244,7 @@ before_all:
   - "@setup_external_tables()"
 ```
 
-```python title="macros/setup.py"
+```python
 from vulcan.core.macros import macro
 
 @macro()
@@ -260,14 +266,14 @@ def setup_external_tables(evaluator):
 
 ### 5. Data quality gates
 
-Validate source data before processing. Use `before_all` to run validation checks. If checks fail, the pipeline stops before processing bad data:
+Validate source data before processing. Use `beforeAll` to run validation checks. If checks fail, the pipeline stops before processing bad data:
 
-```yaml title="config.yaml"
-before_all:
+```yaml
+beforeAll:
   - "@validate_source_data()"
 ```
 
-```python title="macros/validation.py"
+```python
 from vulcan.core.macros import macro
 
 @macro()
@@ -290,14 +296,14 @@ def validate_source_data(evaluator):
 
 ### 6. Refresh materialized views
 
-If materialized views depend on your Vulcan models, refresh them after models update. Let `after_all` handle it:
+If materialized views depend on your Vulcan models, refresh them after models update. Let `afterAll` handle it:
 
-```yaml title="config.yaml"
-after_all:
+```yaml
+afterAll:
   - "@refresh_materialized_views()"
 ```
 
-```python title="macros/refresh.py"
+```python
 from vulcan.core.macros import macro
 
 @macro()
@@ -317,14 +323,14 @@ def refresh_materialized_views(evaluator):
 
 ### 7. Notification integration
 
-Notify your team when the pipeline finishes. Use `after_all` to send notifications. This example logs to a table. Extend it to call an external API or send emails:
+Notify your team when the pipeline finishes. Use `afterAll` to send notifications. This example logs to a table. Extend it to call an external API or send emails:
 
-```yaml title="config.yaml"
-after_all:
+```yaml
+afterAll:
   - "@notify_completion()"
 ```
 
-```python title="macros/notify.py"
+```python
 from vulcan.core.macros import macro
 import os
 
@@ -355,16 +361,16 @@ def notify_completion(evaluator):
     ]
 ```
 
----
+***
 
 ## Execution order
 
 ```mermaid
 %%{init: {"theme":"base","themeVariables":{"fontFamily":"PP Neue Montreal, Inter, Helvetica Neue, Arial, sans-serif","fontSize":"14px","primaryColor":"#EDE9E5","primaryTextColor":"#242422","primaryBorderColor":"#242422","lineColor":"#242422","secondaryColor":"#D6CDC6","tertiaryColor":"#FFFFFF","clusterBkg":"#EDE9E5","clusterBorder":"#54DED1","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","padding":12,"nodeSpacing":40,"rankSpacing":50}}}%%
 graph LR
-    A[Start] --> B[before_all]
+    A[Start] --> B[beforeAll]
     B --> C[Process Models]
-    C --> D[after_all]
+    C --> D[afterAll]
     D --> E[Complete]
 
     classDef primary-teal fill:#54DED1,color:#202F36,stroke:#009293,stroke-width:1.5px,font-weight:600;
@@ -395,13 +401,13 @@ Test in development first. Always test hooks in a development environment before
 
 When should you use execution hooks versus model-level hooks? The difference:
 
-| Feature   | `before_all` / `after_all`        | Model `pre_statements` / `post_statements` |
-|-----------|-----------------------------------|---------------------------------------------|
-| Scope     | Entire pipeline                   | Single model                                |
-| Runs      | Once per plan/run                 | Once per model execution                    |
-| Access to | All views, schemas, environment   | Model-specific context                      |
-| Use for   | Global setup, cleanup, privileges | Model-specific operations                   |
+| Feature   | `beforeAll` / `afterAll`        | Model `pre_statements` / `post_statements` |
+| --------- | --------------------------------- | ------------------------------------------ |
+| Scope     | Entire pipeline                   | Single model                               |
+| Runs      | Once per plan/run                 | Once per model execution                   |
+| Access to | All views, schemas, environment   | Model-specific context                     |
+| Use for   | Global setup, cleanup, privileges | Model-specific operations                  |
 
-Use execution hooks (`before_all`/`after_all`) for operations that apply to your entire pipeline: setting up assertion tables, granting permissions on all views, sending completion notifications.
+Use execution hooks (`beforeAll`/`afterAll`) for operations that apply to your entire pipeline: setting up assertion tables, granting permissions on all views, sending completion notifications.
 
 Use model-level hooks (`pre_statements`/`post_statements`) for operations specific to individual models: creating temporary tables that only one model needs, running model-specific validations.

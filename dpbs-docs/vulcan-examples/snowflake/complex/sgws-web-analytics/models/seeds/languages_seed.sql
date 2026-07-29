@@ -6,7 +6,7 @@ MODEL (
       delimiter = '\t'
     )
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Language code lookup reference data',
   tags ('seed', 'reference_data', 'adobe_analytics', 'lookup'),
   terms ('languages'),

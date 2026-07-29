@@ -1,3 +1,8 @@
+---
+description: >-
+  DQ checks (`kind: dq`): rules, dimensions, and profiling.
+---
+
 # Data quality
 
 A **DQ check** (a declarative quality rule pack) monitors your data quality over time without blocking your models. It warns you when something looks off but doesn't stop execution.
@@ -13,7 +18,7 @@ Unlike [assertions](./assertions.md), which block model execution when their aud
 * Support complex statistical analysis
 * Integrate with Activity API for monitoring and alerting
 
-## Data Quality vs assertions vs profiles
+## Data quality vs assertions vs profiles
 
 Assertions, Data Quality rule packs, and profiles all watch your data, but they answer different questions. Pick the wrong one and you'll either block a run that should have shipped or let bad rows reach production.
 
@@ -56,7 +61,7 @@ A layered approach to data quality:
 
 Assertions stop bad data at the door. Data Quality rule packs watch for problems but don't interfere. Profiles observe patterns and help you understand what's normal.
 
-## When to use Data Quality
+## When to use data quality
 
 **Use Data Quality rule packs for:**
 
@@ -122,7 +127,7 @@ rules:
 
 ## Quick start
 
-### Your first Data Quality rule pack
+### Your first data quality rule pack
 
 Create your first rule pack. It's simpler than you might think.
 
@@ -278,7 +283,7 @@ rules:
 
 This compares the current value to the previous run and alerts you if it changes too much. Use it to catch sudden drops or spikes.
 
-## Data Quality configuration
+## Data quality configuration
 
 ### File structure
 
@@ -304,7 +309,7 @@ project/
 * The file name doesn't matter (Vulcan reads all files in `dq/`)
 * Convention: name files after the model they target (e.g. `subscriptions.yml` for `hello.subscriptions`)
 
-### Basic Data Quality syntax
+### Basic data quality syntax
 
 A rule pack has a pack-level header followed by a list of `rules:`.
 
@@ -384,7 +389,7 @@ All rule metadata is **flat**: keys sit directly under the rule expression, not 
 | `warn_only`     | `true` to downgrade any failure to a warning.                                                                                           |
 | `fail query`    | SQL `SELECT` returning bad rows. Only used with `failed rows`.                                                                          |
 | `samples limit` | Number of failed sample rows to capture (default `5`).                                                                                  |
-| `tags`          | List of tags for filtering and organisation, e.g. `[critical, daily]`.                                                                  |
+| `tags`          | List of tags for filtering and organization, e.g. `[critical, daily]`.                                                                  |
 | `owner`         | Team or person responsible.                                                                                                             |
 | `severity`      | `error` (default) or `warning`.                                                                                                         |
 
@@ -411,9 +416,9 @@ rules:
       description: "Events exist in the run window"
 ```
 
-### Data Quality dimensions
+### Data quality dimensions
 
-Rules are classified by the `dimension:` field. Vulcan supports 8 standard dimensions (based on ODPS v3.1). Each dimension focuses on a different aspect of data quality:
+The `dimension:` field classifies rules. Vulcan supports 8 standard dimensions (based on ODPS v3.1). Each dimension focuses on a different aspect of data quality:
 
 #### 1. Completeness
 
@@ -523,7 +528,7 @@ rules:
 
 ### Filtering rules
 
-You can apply a SQL predicate at two levels.
+You can apply a SQL predicate at 2 levels.
 
 **Pack-level filter:** applied to every rule in the file.
 
@@ -576,7 +581,7 @@ rules:
 
 * `description`: human-readable explanation.
 * `severity`: `error` (default) or `warning`.
-* `tags`: list of tags for filtering and organisation, e.g. find every `critical` rule.
+* `tags`: list of tags for filtering and organization, e.g. find every `critical` rule.
 * `owner`: team or person responsible.
 
 ## Built-in rule types
@@ -778,7 +783,7 @@ These detect when your data distribution changes unexpectedly.
 
 #### ML-based anomaly detection
 
-Anomaly detection rules learn what "normal" looks like from previous runs of the same rule, then flag the next value when it falls outside that range. There's no model to train and no thresholds to set, you just declare the metric to watch:
+Anomaly detection rules learn what "normal" looks like from previous runs of the same rule, then flag the next value when it falls outside that range. There's no model to train and no thresholds to set. You just declare the metric to watch:
 
 ```yaml
 rules:
@@ -855,7 +860,7 @@ This catches sudden changes that might indicate a problem or an opportunity.
 
 Unlike rules (which validate), profiles **observe and track** data characteristics. They're like a data scientist watching your tables and taking notes.
 
-Profiling is enabled in a `kind: dq` rule pack via the top-level `profiles:` list. Add the columns you want to track alongside (or instead of) the rules for the same model:
+You enable profiling in a `kind: dq` rule pack via the top-level `profiles:` list. Add the columns you want to track alongside (or instead of) the rules for the same model:
 
 ```yaml
 # dq/customers.yml
@@ -904,7 +909,7 @@ Profiles track how things change over time so you can spot trends and drift.
 
 ### Profile storage
 
-Profiles are stored in the `_check_profiles` table, which you can query like any other table:
+Vulcan stores profiles in the `_check_profiles` table, which you can query like any other table:
 
 | Column         | Meaning                                                                                                       |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -1202,7 +1207,7 @@ This finds rows where revenue is more than 3 standard deviations from the mean (
 
 ### Rule pack organization
 
-Organize your Data Quality rule packs in a way that makes sense for your team. Here are two common approaches:
+Organize your Data Quality rule packs in a way that makes sense for your team. Here are 2 common approaches:
 
 **By domain:**
 
@@ -1358,7 +1363,7 @@ rules:
       dimension: timeliness
 ```
 
-Three layers, each with a clear job: assertions stop bad rows, Data Quality rules raise non-blocking warnings, and profiles record what "normal" looks like. The two monitoring layers share the same `kind: dq` file, so a single file describes everything Vulcan should watch for one model.
+3 layers, each with a clear job: assertions stop bad rows, Data Quality rules raise non-blocking warnings, and profiles record what "normal" looks like. The two monitoring layers share the same `kind: dq` file, so a single file describes everything Vulcan should watch for one model.
 
 ## Troubleshooting
 
@@ -1391,7 +1396,7 @@ LIMIT 10;
 
 This shows you actual rows that failed for debugging.
 
-### Performance Issues
+### Performance issues
 
 #### Slow rule queries
 
@@ -1439,7 +1444,7 @@ CREATE INDEX idx_orders_order_date ON analytics.orders(order_date);
 
 Indexes help queries run faster, especially for `failed rows` rules that filter on specific columns.
 
-### False Positives
+### False positives
 
 #### Threshold too strict
 
@@ -1489,7 +1494,7 @@ Anomaly detection learns what's normal and adapts to variance, which reduces fal
 
 Data Quality rule packs give you a way to monitor data quality over time without blocking your models. Here's what we covered:
 
-### Core Concepts
+### Core concepts
 
 **1. Data Quality Rule Packs**
 

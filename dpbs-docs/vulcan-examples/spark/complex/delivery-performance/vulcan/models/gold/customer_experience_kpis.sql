@@ -1,7 +1,7 @@
 MODEL (
   name s3depot.qcommerce_delivery_gold.customer_experience_kpis,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ds, city, customer_tier],
   description 'Daily customer-tier delivery experience KPIs for understanding delays, failures, and refund risk across customer segments.',
   tags ('gold', 'customer-experience', 'delivery', 'tier'),

@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.FINAL.QUALTRICS_SURVEY_LIST,
   kind FULL,
   grains [SURVEY_ID],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, SURVEY_NAME, CREATION_DATE, LAST_MODIFIED_DATE, IS_ACTIVE, TOTAL_RESPONSE_COUNT, LIVE_RESPONSE_COUNT, SURVEY_STATUS_CATEGORY),
   description 'Survey catalog dimension providing comprehensive survey metadata including ownership, language settings, activity status, aggregated response statistics, data quality metrics, and business health indicators for enterprise survey management and analytics',
   tags ('dimension', 'catalog', 'survey', 'metadata', 'aggregate_stats', 'data_quality', 'validated'),

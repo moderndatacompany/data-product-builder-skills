@@ -1,4 +1,11 @@
-# Advance Features
+---
+description: >-
+  Advanced features that extend Vulcan beyond standard model definitions:
+  macros, signals, custom materializations, and importing Snowflake semantic
+  views.
+---
+
+# Advanced features
 
 Advanced features help you extend Vulcan beyond standard model definitions.
 
@@ -26,7 +33,7 @@ These features add flexibility, but they also add maintenance overhead. Use them
 
 ## Choose a feature
 
-<table data-view="cards"><thead><tr><th></th><th data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Macros</strong><br>Use variables, built-ins, and templating to generate reusable SQL.</td><td><a href="macros/">macros</a></td></tr><tr><td><strong>Signals</strong><br>Add custom readiness checks before scheduled models run.</td><td><a href="signals.md">signals.md</a></td></tr><tr><td><strong>Custom materializations</strong><br>Define custom insert and lifecycle behavior for special execution patterns.</td><td><a href="custom_materializations.md">custom_materializations.md</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Macros</strong><br>Use variables, built-ins, and templating to generate reusable SQL.</td><td><a href="macros/">macros</a></td></tr><tr><td><strong>Signals</strong><br>Add custom readiness checks before scheduled models run.</td><td><a href="signals.md">signals.md</a></td></tr><tr><td><strong>Custom materializations</strong><br>Define custom insert and lifecycle behavior for special execution patterns.</td><td><a href="custom-materializations.md">custom-materializations.md</a></td></tr><tr><td><strong>Import Snowflake semantic views</strong><br>Import a Snowflake-native semantic view into a Vulcan project instead of writing YAML by hand.</td><td><a href="import-snowflake-semantic-views.md">import-snowflake-semantic-views.md</a></td></tr></tbody></table>
 
 ## When to use each feature
 

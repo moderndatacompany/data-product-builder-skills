@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/raw_orders.csv'
   ),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [order_id],
   description 'Raw order seed input for return and refund intelligence.',
   tags ('seed', 'ext-raw', 'orders', 'refunds'),

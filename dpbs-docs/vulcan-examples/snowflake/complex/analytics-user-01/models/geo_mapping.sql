@@ -17,7 +17,7 @@ MODEL (
     additional2 VARCHAR
   ),
   grain COUNTRY_CODE,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (COUNTRY_CODE, COUNTRY_NAME, REGION, SUB_REGION),
   tags ('reference-data', 'dimension', 'geography', 'iso-codes', 'seed-data', 'master-data'),
   terms ('reference_data', 'geographic_dimension', 'master_data'),

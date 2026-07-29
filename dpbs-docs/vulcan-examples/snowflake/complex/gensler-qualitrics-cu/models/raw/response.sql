@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.RAW.QUALTRICS_RESPONSE,
   kind incremental_by_partition,
   partitioned_by ARRAY(survey_id),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, RESPONSE_ID, VALUES_PARSED, LABELS_PARSED),
   grains [SURVEY_ID, RESPONSE_ID],
   description 'Raw layer model ingesting Qualtrics survey response data with both coded values and human-readable labels, including displayed field metadata for complete response capture and downstream transformation',

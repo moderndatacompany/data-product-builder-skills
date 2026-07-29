@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE,
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by ARRAY(survey_id),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, RESPONSE_ID, QUESTION_ID, QUESTIONS_KEY, QUESTION_TYPE, RESPONSE_VALUE, RESPONSE),
   grains [SURVEY_ID, RESPONSE_ID, QUESTION_ID, QUESTIONS_KEY],
   description 'Final analytical response fact table providing clean, production-ready survey response data enriched with complete question metadata, human-readable labels, and standardized variable names for enterprise analytics and reporting',

@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/raw_orders.csv'
   ),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [order_id],
   description 'Raw quick-commerce order events sourced from the bundled seed CSV. Acts as the single source of truth for downstream delivery analytics in this self-contained Spark example.',
   tags ('seed', 'bronze', 'orders', 'raw'),

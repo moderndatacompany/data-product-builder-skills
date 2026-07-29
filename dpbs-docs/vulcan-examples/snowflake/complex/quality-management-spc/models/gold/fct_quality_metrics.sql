@@ -2,7 +2,7 @@ MODEL (
   name QMS_PLATFORM.GOLD.FCT_QUALITY_METRICS,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [INSPECTION_ID],
   description 'Inspection-level quality data with pass/fail status, defect details, and scrap cost. Aggregation (totals, defect rates, first pass yield, cost of quality) is handled by the semantic layer.',
   tags ('gold', 'fact', 'quality-metrics', 'inspections'),

@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/v_d_site.csv'
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Distribution site location reference data',
   tags ('seed', 'reference_data', 'dimension', 'master_data'),
   terms ('v_d_site'),

@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.ANALYTICS.QUALTRICS_RESPONDENTS_DIMENSION,
   kind VIEW,
   grains [SURVEY_ID, RESPONSE_ID],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, RESPONSE_ID, RESPONSE_TYPE_STATUS, RESPONSE_STATUS, SURVEY_NAME, SURVEY_TYPE),
   description 'Respondent dimension table providing unique respondent records enriched with survey context, simplified response status classification, and comprehensive metadata for analytical segmentation and respondent-level reporting',
   tags ('dimension', 'respondent', 'analytical', 'clean', 'production'),

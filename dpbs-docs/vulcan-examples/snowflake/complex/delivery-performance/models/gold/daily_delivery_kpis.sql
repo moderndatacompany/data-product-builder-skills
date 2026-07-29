@@ -4,7 +4,7 @@ MODEL (
     time_column DS
   ),
   cron '*/15 * * * *',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [DS, CITY],
   description 'Daily city-level delivery performance KPIs used as the primary semantic hub for operations monitoring.',
   tags ('gold', 'delivery', 'daily-kpi', 'city'),

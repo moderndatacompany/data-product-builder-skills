@@ -1,7 +1,7 @@
 MODEL (
   name s3depot.qcommerce_delivery_bronze.orders_clean,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [order_id],
   description 'Cleaned order master combining external order events with customer attributes for downstream delivery analytics.',
   tags ('bronze', 'orders', 'delivery', 'customer'),

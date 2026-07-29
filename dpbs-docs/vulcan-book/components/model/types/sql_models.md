@@ -1,8 +1,14 @@
+---
+description: >-
+  SQL-based model definition, blueprinting, automatic dependencies,
+  transpilation, and casting conventions.
+---
+
 # SQL models
 
 SQL models are the most common type of model you write. Define them using SQL directly, or use Python to generate SQL dynamically.
 
-SQL models work with every supported engine (Postgres, Snowflake, Spark, Trino, BigQuery, Databricks, Redshift, MSSQL, Fabric). Most transformations in a project end up as SQL models, with Python reserved for the few cases that do not fit SQL.
+SQL models work with every supported engine (Postgres, Snowflake, Spark, Trino, Databricks). Most transformations in a project end up as SQL models, with Python reserved for the few cases that do not fit SQL.
 
 ## SQL-based definition
 
@@ -105,19 +111,19 @@ GROUP BY order_date;
 UNCACHE TABLE countries;
 ```
 
-**Project-level defaults:** you can define pre/post-statements in `model_defaults` for consistent behavior across all models. Default statements run first, then model-specific ones. Learn more in the [model configuration reference](../../../configurations/options/model_defaults.md).
+**Project-level defaults:** you can define pre/post-statements in `modelDefaults` for consistent behavior across all models. Default statements run first, then model-specific ones. Learn more in the [model configuration reference](../../../configurations/model-defaults.md).
 
 {% hint style="warning" %}
 **Statements run twice**
 {% endhint %}
 
-Pre/post-statements are evaluated twice: when a model's table is created and when its query logic is evaluated. Executing statements more than once can have unintended side-effects. You can [conditionally execute](../../advanced-features/macros/built_in.md#prepost-statements) them based on Vulcan's [runtime stage](../../advanced-features/macros/variables.md#runtime-variables).
+Pre/post-statements are evaluated twice: when a model's table is created and when its query logic is evaluated. Executing statements more than once can have unintended side-effects. You can [conditionally execute](../../../advanced-features/macros/built-in.md#prepost-statements) them based on Vulcan's [runtime stage](../../../advanced-features/macros/variables.md#runtime-variables).
 
 ```
 **Solution:** Use conditional execution with `@IF` and `@runtime_stage` to control when statements run. For example, only run a post-statement when the query is actually being evaluated:
 ```
 
-You can condition the post-statement to only run after the model query is evaluated using the [`@IF` macro operator](../../advanced-features/macros/built_in.md#if) and [`@runtime_stage` macro variable](../../advanced-features/macros/variables.md#runtime-variables):
+You can condition the post-statement to only run after the model query is evaluated using the [`@IF` macro operator](../../../advanced-features/macros/built-in.md#if) and [`@runtime_stage` macro variable](../../../advanced-features/macros/variables.md#runtime-variables):
 
 ```sql
 MODEL (
@@ -147,7 +153,7 @@ On-virtual-update statements run when views are created or updated in the virtua
 
 **Common use case:** granting permissions on views so users can query them.
 
-**Project-level defaults:** you can define on-virtual-update statements at the project level using `model_defaults` in your configuration. These apply to all models in your project and merge with any model-specific statements. Default statements run first, then model-specific statements. Learn more in the [model configuration reference](../../../configurations/options/model_defaults.md).
+**Project-level defaults:** you can define on-virtual-update statements at the project level using `modelDefaults` in your configuration. These apply to all models in your project and merge with any model-specific statements. Default statements run first, then model-specific statements. Learn more in the [model configuration reference](../../../configurations/model-defaults.md).
 
 **Syntax:** wrap these statements in `ON_VIRTUAL_UPDATE_BEGIN;` ... `ON_VIRTUAL_UPDATE_END;` blocks:
 
@@ -171,7 +177,7 @@ JINJA_END;
 ON_VIRTUAL_UPDATE_END;
 ```
 
-**Jinja support:** you can use [Jinja expressions](../../advanced-features/macros/jinja.md) in these statements. Wrap them in `JINJA_STATEMENT_BEGIN;` ... `JINJA_END;` blocks (as shown in the example above).
+**Jinja support:** you can use [Jinja expressions](../../../advanced-features/macros/jinja.md) in these statements. Wrap them in `JINJA_STATEMENT_BEGIN;` ... `JINJA_END;` blocks (as shown in the example above).
 
 {% hint style="info" %}
 **Virtual layer resolution**
@@ -196,7 +202,7 @@ SQL models can serve as templates for creating multiple models. This is called b
 
 **Use case:** when you have similar models that differ only by parameters (such as different regions, schemas, or customers).
 
-This example creates four models from one template:
+This example creates 4 models from 1 template:
 
 ```sql
 MODEL (
@@ -218,7 +224,7 @@ FROM vulcan_demo.fct_daily_sales
   LOWER(region_name) = LOWER(@region)
 ```
 
-Vulcan creates these four models from that template:
+Vulcan creates these 4 models from that template:
 
 ```sql
 -- This uses the first variable mapping
@@ -248,7 +254,7 @@ WHERE
 
 **Important syntax:** notice `@{region}` in the model name. The curly braces tell Vulcan to treat the variable value as a SQL identifier (not a string literal).
 
-You can see the different behavior in the `WHERE` clause. `@region` (without braces) resolves to the string literal `'north'` (with single quotes) because the blueprint value is quoted. Learn more about the curly brace syntax [here](../../advanced-features/macros/built_in.md#embedding-variables-in-strings).
+You can see the different behavior in the `WHERE` clause. `@region` (without braces) resolves to the string literal `'north'` (with single quotes) because the blueprint value is quoted. Learn more about the curly brace syntax [here](../../../advanced-features/macros/built-in.md#embedding-variables-in-strings).
 
 **Dynamic blueprints:** you can generate blueprints using macros. Use this when your blueprint list comes from external sources (CSV files, APIs, and so on):
 
@@ -301,7 +307,7 @@ You can also define SQL models using Python. This is useful when:
 
 **How it works:** you write Python code that generates SQL, and Vulcan executes it. You still get SQL models (they run SQL queries), but you write them in Python.
 
-For the complete guide on Python-based SQL models, including the `@model` decorator, execution context, and examples, see the [Python Models](python_models.md) page.
+For the complete guide on Python-based SQL models, including the `@model` decorator, execution context, and examples, see the [Python Models](python.md) page.
 
 ## Automatic dependencies
 
@@ -319,7 +325,7 @@ GROUP BY order_date
 
 Vulcan makes sure `raw.raw_orders` runs before this model.
 
-**External dependencies:** if you reference tables that are not Vulcan models, Vulcan can handle them too, either implicitly (through execution order) or via [signals](../../advanced-features/signals.md).
+**External dependencies:** if you reference tables that are not Vulcan models, Vulcan can handle them too, either implicitly (through execution order) or via [signals](../../../advanced-features/signals.md).
 
 **Manual dependencies:** sometimes you need to add extra dependencies manually (a hidden dependency or a macro that references another model). Use the `depends_on` property in your `MODEL` DDL for that.
 
@@ -346,7 +352,7 @@ SELECT
 
 Avoid `SELECT *` when possible. It is convenient but dangerous: if an upstream source adds or removes columns, your model's output changes unexpectedly.
 
-**Best practice:** list every column you need explicitly. If you query external sources, use [`create_external_models`](../../../cli.md#create_external_models) to capture their schema, or define them as [external models](../model_kinds.md#external).
+**Best practice:** list every column you need explicitly. If you query external sources, use [`create_external_models`](../../../cli.md#create_external_models) to capture their schema, or define them as [external models](../model-kinds.md#external).
 
 **Why avoid `SELECT *` on external sources:** it prevents Vulcan from optimizing queries and determining column-level lineage. Define external models instead.
 
@@ -358,7 +364,7 @@ SQL model files must be UTF-8 encoded. Other encodings can cause parsing errors 
 
 Vulcan uses [SQLGlot](https://github.com/tobymao/sqlglot) to parse and transpile SQL. This gives you:
 
-**Write in any dialect, run on any engine:** write PostgreSQL-style SQL, and Vulcan converts it to BigQuery. Or write Snowflake SQL and run it on Spark.
+**Write in any dialect, run on any engine:** write PostgreSQL-style SQL, and Vulcan converts it to Snowflake. Or write Snowflake SQL and run it on Spark.
 
 **Use advanced syntax:** you can use features from one dialect even if your engine does not support them. For example, `x::int` (PostgreSQL syntax) works even on engines that only support `CAST(x AS INT)`. SQLGlot handles the conversion.
 
@@ -370,8 +376,8 @@ Standard SQL does not handle the things real pipelines need every day: date rang
 
 **Macro variables:** incremental models get automatic time variables. `@start_date`, `@end_date`, `@start_ds`, `@end_ds` resolve to the interval Vulcan is currently processing, so you do not hard-code dates.
 
-**Custom macros:** Vulcan ships [its own macro syntax](../../advanced-features/macros/) and supports [Jinja](https://jinja.palletsprojects.com/en/3.1.x/). Use them for repeated CTEs, conditional joins, or any block of SQL you would otherwise copy and paste across models.
+**Custom macros:** Vulcan ships [its own macro syntax](../../../advanced-features/macros/) and supports [Jinja](https://jinja.palletsprojects.com/en/3.1.x/). Use them for repeated CTEs, conditional joins, or any block of SQL you would otherwise copy and paste across models.
 
-**Why bother:** the repeated SQL lives in one place. When the business rule changes, you edit one macro instead of grepping for the pattern across thirty models.
+**Why bother:** the repeated SQL lives in one place. When the business rule changes, you edit 1 macro instead of grepping for the pattern across 30 models.
 
-Learn more about macros in the [Macros documentation](../../advanced-features/macros/).
+Learn more about macros in the [Macros documentation](../../../advanced-features/macros/).

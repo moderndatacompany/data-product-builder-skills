@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/v_td_store.csv'
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Retail store location reference data',
   tags ('seed', 'reference_data', 'dimension', 'master_data'),
   terms ('v_td_store'),

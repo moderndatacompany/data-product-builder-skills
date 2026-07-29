@@ -1,8 +1,15 @@
+---
+description: >-
+  Configure the Vulcan linter: built-in and custom rules, Data Product-level
+  rules, enabling rules via config.yaml, excluding models, and warn vs.
+  error rule violation behavior.
+---
+
 # Linter
 
 Linting checks your model definitions against your team's best practices and catches common mistakes before they cause problems.
 
-When you create a Vulcan plan, each model's code is checked against the linting rules you have configured. If any rules are violated, Vulcan tells you so you can fix the issues before deploying.
+When you create a Vulcan plan, Vulcan checks each model's code against the linting rules you have configured. If any rules are violated, Vulcan tells you so you can fix the issues before deploying.
 
 Vulcan includes built-in rules that catch common SQL mistakes and enforce good practices. You can also write custom rules that match your team's specific requirements. This maintains code quality and catches issues early, when they are easier to fix.
 
@@ -12,7 +19,7 @@ Linting rules are pattern detectors. Each rule looks for a specific pattern (or 
 
 Some rules check that a pattern is not present, such as the `NoSelectStar` rule that prevents `SELECT *` in your outermost query. Other rules check that a pattern is present, such as making sure every model has an `owner` field specified. Both types keep your code consistent and maintainable.
 
-Rules are written in Python. Each rule is a Python class that inherits from Vulcan's `Rule` base class. You define the logic for detecting the pattern, and Vulcan handles the rest.
+You write rules in Python. Each rule is a Python class that inherits from Vulcan's `Rule` base class. You define the logic for detecting the pattern, and Vulcan handles the rest.
 
 When you create a custom rule, implement four things:
 
@@ -64,12 +71,20 @@ class NoSelectStar(Rule):
 
 All of Vulcan's built-in linting rules:
 
+**Model-level rules** run once per model:
+
 | Name                         | Check type  | Explanation                                                                                                             |
 | ---------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `ambiguousorinvalidcolumn`   | Correctness | Vulcan found duplicate columns or was unable to determine whether a column is duplicated or not                         |
 | `invalidselectstarexpansion` | Correctness | The query's top-level selection may be `SELECT *`, but only if Vulcan can expand the `SELECT *` into individual columns |
 | `noselectstar`               | Stylistic   | The query's top-level selection may not be `SELECT *`, even if Vulcan can expand the `SELECT *` into individual columns |
 | `nomissingaudits`            | Governance  | Vulcan did not find any `audits` in the model's configuration to test data quality.                                     |
+
+**Data Product-level rules** run once per Data Product during `lint_models`, not per model:
+
+| Name                       | Check type  | Explanation                                                                                                                      |
+| -------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `nomissingdataosusername`  | Governance  | Every `config.users[].username` must be a valid DataOS user in the current tenant. The rule fails if any username is unrecognized. |
 
 ### User-defined rules
 
@@ -93,6 +108,55 @@ class NoMissingOwner(Rule):
 ```
 
 Put your custom rules in the `linter/` directory of your project. Vulcan automatically finds and loads any classes that inherit from `Rule` in that directory.
+
+### Project-level rules
+
+Project-level rules run once per project during `lint_models`, not once per model. They validate project-wide configuration rather than individual model code.
+
+The `noMissingDataOSUsername` rule is a built-in project-level governance rule. It checks that every username listed in `config.users` is a recognized DataOS user in the current tenant. This prevents mis-typed or removed usernames from silently becoming model owners.
+
+```bash
+$ vulcan lint
+
+Project-level linter errors:
+ - nomissingdataosusername: Username "jenn" in config.users is not a valid DataOS user in this tenant.
+
+Error: Linter detected errors in the code. Please fix them before proceeding.
+```
+
+Because it is a project-level rule, it does not appear per model in the linter output. It's reported once for the whole project. Enable it the same way as any other rule:
+
+{% tabs %}
+{% tab title="YAML" %}
+```yaml
+linter:
+  enabled: true
+  rules:
+    - nomissingdataosusername
+```
+{% endtab %}
+
+{% tab title="Python" %}
+```python
+from vulcan.core.config import Config, LinterConfig
+
+config = Config(
+    linter=LinterConfig(
+        enabled=True,
+        rules=["nomissingdataosusername"],
+    )
+)
+```
+{% endtab %}
+{% endtabs %}
+
+To include it with all other rules, use `"ALL"`:
+
+```yaml
+linter:
+  enabled: true
+  rules: "ALL"
+```
 
 Vulcan runs every configured rule automatically when:
 
@@ -125,7 +189,7 @@ Use `vulcan lint --help` for more information.
 
 ## Applying linting rules
 
-Specify which linting rules a project should apply in the project's [configuration file](../README.md).
+Specify which linting rules to apply in your project's [configuration file](../README.md).
 
 List which rules to run under the `linter` key. Globally turn linting on or off with the `enabled` key (defaults to `false`, so you need to turn it on).
 
@@ -187,7 +251,7 @@ config = Config(
 {% endtab %}
 {% endtabs %}
 
-Sometimes you want almost everything, but one or two rules do not fit your workflow. Use `"ALL"` and exclude specific rules with `ignored_rules`:
+Sometimes you want almost everything, but one or two rules do not fit your workflow. Use `"ALL"` and exclude specific rules with `ignoredRules`:
 
 {% tabs %}
 {% tab title="YAML" %}
@@ -195,7 +259,7 @@ Sometimes you want almost everything, but one or two rules do not fit your workf
 linter:
   enabled: True
   rules: "ALL" # apply all built-in and user-defined rules and error if violated
-  ignored_rules: ["noselectstar"] # but don't run the `noselectstar` rule
+  ignoredRules: ["noselectstar"] # but don't run the `noselectstar` rule
 ```
 {% endtab %}
 
@@ -231,9 +295,9 @@ MODEL(
 
 ### Rule violation behavior
 
-By default, when a rule is violated, Vulcan treats it as an error and stops execution. This makes sure you fix issues before they reach production.
+By default, if a model violates a rule, Vulcan treats it as an error and stops execution. This makes sure you fix issues before they reach production.
 
-Sometimes you want a rule to be a suggestion rather than a hard requirement. For style preferences that are nice to have but not critical, put the rule in `warn_rules` instead of `rules`. Violations are still reported, but they do not stop execution:
+Sometimes you want a rule to be a suggestion rather than a hard requirement. For style preferences that are nice to have but not critical, put the rule in `warnRules` instead of `rules`. Vulcan still reports violations, but they do not stop execution:
 
 {% tabs %}
 {% tab title="YAML" %}
@@ -243,7 +307,7 @@ linter:
   # error if `ambiguousorinvalidcolumn` rule violated
   rules: ["ambiguousorinvalidcolumn"]
   # but only warn if "invalidselectstarexpansion" is violated
-  warn_rules: ["invalidselectstarexpansion"]
+  warnRules: ["invalidselectstarexpansion"]
 ```
 {% endtab %}
 
@@ -264,4 +328,4 @@ config = Config(
 {% endtab %}
 {% endtabs %}
 
-Vulcan raises an error if the same rule appears in more than one of the `rules`, `warn_rules`, and `ignored_rules` keys, since they should be mutually exclusive.
+Vulcan raises an error if the same rule appears in more than one of the `rules`, `warnRules`, and `ignoredRules` keys, since they should be mutually exclusive.

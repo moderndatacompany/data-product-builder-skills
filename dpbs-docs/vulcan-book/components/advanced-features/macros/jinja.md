@@ -1,3 +1,9 @@
+---
+description: >-
+  Use Jinja templating in Vulcan SQL models: predefined and user-defined
+  variables, for loops and if statements, and user-defined macro functions.
+---
+
 # Jinja
 
 Vulcan supports macros from the [Jinja](https://jinja.palletsprojects.com/en/3.1.x/) templating system. If you're already familiar with Jinja from dbt or other tools, use it here.
@@ -80,7 +86,7 @@ Beyond predefined variables, create your own. Vulcan supports global variables (
 
 ### Global variables
 
-Global variables are defined in your project configuration file and usable in any model. See the [Vulcan macros documentation](./built_in.md#global-variables) for setup.
+Global variables are defined in your project configuration file and usable in any model. See the [Vulcan macros documentation](built-in.md#global-variables) for setup.
 
 Access them with the `{{ var() }}` function. Pass the variable name (in single quotes) as the first argument and an optional default value as the second:
 
@@ -110,7 +116,7 @@ If `missing_var` isn't defined, Vulcan uses `0` as the fallback value.
 
 ### Gateway variables
 
-Gateway variables work like global variables but are defined in a specific gateway's configuration. They take precedence over global variables with the same name. See the [Vulcan macros documentation](./built_in.md#gateway-variables).
+Gateway variables work like global variables but are defined in a specific gateway's configuration. They take precedence over global variables with the same name. See the [Vulcan macros documentation](built-in.md#gateway-variables).
 
 Access them like global variables, with `{{ var() }}`.
 
@@ -198,7 +204,7 @@ A few things to notice:
 
 - When used in an identifier name like `vehicle_{{ vehicle_type }}`, no quotes needed.
 
-- The trailing comma after the `CASE WHEN` line is removed automatically by Vulcan's semantic understanding.
+- Vulcan's semantic understanding automatically removes the trailing comma after the `CASE WHEN` line.
 
 This renders to:
 
@@ -272,7 +278,7 @@ text
 {% endmacro %}
 ```
 
-Call it in your model with `{{ print_text() }}`. It gets replaced with `text`.
+Call it in your model with `{{ print_text() }}`. Vulcan replaces it with `text`.
 
 Functions can take arguments:
 
@@ -332,6 +338,6 @@ The double quotes tell Vulcan "this is a string literal, not a column name." Use
 
 ## Mixing macro systems
 
-Vulcan supports both Jinja and [Vulcan macros](./built_in.md). Pick one system per model. Mixing them can cause confusing behavior or errors.
+Vulcan supports both Jinja and [Vulcan macros](built-in.md). Pick one system per model. Mixing them can cause confusing behavior or errors.
 
 Use [predefined Vulcan macro variables](./variables.md) in Jinja queries, but when passing them as arguments to a Jinja macro function, use the Jinja syntax `{{ start_ds }}` instead of the Vulcan `@start_ds` syntax. Add quotes as needed.

@@ -1,7 +1,7 @@
 MODEL (
   name qcommerce_returns_gold.customer_refund_experience,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ds, customer_tier],
   description 'Customer-tier refund experience and refund-rate monitoring for finance and support analytics.',
   tags ('gold', 'refunds', 'customer-experience', 'tier'),

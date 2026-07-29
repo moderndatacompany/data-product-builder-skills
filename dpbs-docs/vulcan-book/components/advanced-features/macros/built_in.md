@@ -1,6 +1,13 @@
+---
+description: >-
+  Reference for Vulcan's native macro system: user-defined variables,
+  built-in macro operators for SQL clauses and control flow, and Python
+  macro functions.
+---
+
 # Built-in
 
-## Macro systems: two approaches
+## Macro systems: 2 approaches
 
 Vulcan macros work differently than templating systems like [Jinja](https://jinja.palletsprojects.com/en/3.1.x/). Templating systems do string substitution: they scan your code, find special characters, and replace them with other text. That's it.
 
@@ -22,11 +29,11 @@ After processing all non-SQL text, Vulcan uses the substituted values to modify 
 
 Vulcan does this in 5 steps:
 
-1. Parse the text with the appropriate sqlglot SQL dialect (e.g., Postgres, BigQuery, etc.). During the parsing, it detects the special macro symbol `@` to differentiate non-SQL from SQL text. The parser builds a semantic representation of the SQL code's structure, capturing non-SQL text as "placeholder" values to use in subsequent steps.
+1. Parse the text with the appropriate sqlglot SQL dialect (e.g., Postgres, etc.). During the parsing, it detects the special macro symbol `@` to differentiate non-SQL from SQL text. The parser builds a semantic representation of the SQL code's structure, capturing non-SQL text as "placeholder" values to use in subsequent steps.
 2. Examine the placeholder values to classify them as one of the following types:
-   * Creation of user-defined macro variables with the `@DEF` operator (see more about [user-defined macro variables](built_in.md#user-defined-variables))
-   * Macro variables: [Vulcan pre-defined](variables.md), [user-defined local](built_in.md#local-variables), and [user-defined global](built_in.md#global-variables)
-   * Macro functions, both [Vulcan's](built_in.md#macro-operators) and [user-defined](built_in.md#user-defined-macro-functions)
+   * Creation of user-defined macro variables with the `@DEF` operator (see more about [user-defined macro variables](built-in.md#user-defined-variables))
+   * Macro variables: [Vulcan pre-defined](variables.md), [user-defined local](built-in.md#local-variables), and [user-defined global](built-in.md#global-variables)
+   * Macro functions, both [Vulcan's](built-in.md#macro-operators) and [user-defined](built-in.md#user-defined-macro-functions)
 3. Substitute macro variable values where they are detected. In most cases, this is direct string substitution as with a templating system.
 4. Execute any macro functions and substitute the returned values.
 5. Modify the semantic representation of the SQL query with the substituted variable values from (3) and functions from (4).
@@ -35,7 +42,7 @@ Vulcan does this in 5 steps:
 
 Vulcan always incorporates macro variable values into the semantic representation of a SQL query (step 5 above). To do that, it infers the role each macro variable value plays in the query.
 
-For context, two commonly used types of string in SQL are:
+For context, 2 commonly used types of string in SQL are:
 
 * String literals, which represent text values and are surrounded by single quotes, such as `'the_string'`
 * Identifiers, which reference database objects like column, table, alias, and function names
@@ -43,7 +50,7 @@ For context, two commonly used types of string in SQL are:
 
 In a normal query, Vulcan can determine the role of a given string. It's harder when a macro variable is embedded directly into a string, especially in the `MODEL` block (rather than the query itself).
 
-For example, consider a project that defines a [gateway variable](built_in.md#gateway-variables) named `gateway_var`. The project includes a model that references `@gateway_var` as part of the schema in the model's `name`, which is a SQL _identifier_.
+For example, consider a project that defines a [gateway variable](built-in.md#gateway-variables) named `gateway_var`. The project includes a model that references `@gateway_var` as part of the schema in the model's `name`, which is a SQL _identifier_.
 
 Initial attempt:
 
@@ -87,7 +94,7 @@ SELECT @{my_variable} AS the_column; -- renders to SELECT col AS the_column
 
 ## User-defined variables
 
-Vulcan supports 4 kinds of user-defined macro variables: [global](built_in.md#global-variables), [gateway](built_in.md#gateway-variables), [blueprint](built_in.md#blueprint-variables), and [local](built_in.md#local-variables).
+Vulcan supports 4 kinds of user-defined macro variables: [global](built-in.md#global-variables), [gateway](built-in.md#gateway-variables), [blueprint](built-in.md#blueprint-variables), and [local](built-in.md#local-variables).
 
 How they're organized:
 
@@ -98,7 +105,7 @@ If variables share a name across levels, the most specific one wins. Local varia
 
 ### Global variables
 
-Global variables live in your project configuration file under the [`variables` key](../../../configurations/options/variables.md). Use them for values shared across multiple models.
+Global variables live in your project configuration file under the [`variables` key](../../configurations/variables.md). Use them for values shared across multiple models.
 
 You can store numbers (`int`, `float`), booleans (`bool`), strings (`str`), or lists and dictionaries containing these types.
 
@@ -166,7 +173,7 @@ FROM table
 WHERE some_value = @VAR('missing_var', 0)
 ```
 
-A similar API is available for [Python macro functions](built_in.md#accessing-global-variable-values) via the `evaluator.var` method and [Python models](../../model/types/python_models.md#user-defined-variables) via the `context.var` method.
+A similar API is available for [Python macro functions](built-in.md#accessing-global-variable-values) via the `evaluator.var` method and [Python models](../../models/data-models/types/python.md#user-defined-variables) via the `context.var` method.
 
 ### Gateway variables
 
@@ -201,15 +208,15 @@ config = Config(
 {% endtab %}
 {% endtabs %}
 
-Access them in models the same way as [global variables](built_in.md#global-variables).
+Access them in models the same way as [global variables](built-in.md#global-variables).
 
 Gateway-specific variable values take precedence over variables with the same name in the root `variables` key.
 
 ### Blueprint variables
 
-Blueprint macro variables are defined in a model. They take precedence over [global](built_in.md#global-variables) or [gateway-specific](built_in.md#gateway-variables) variables with the same name.
+Blueprint macro variables are defined in a model. They take precedence over [global](built-in.md#global-variables) or [gateway-specific](built-in.md#gateway-variables) variables with the same name.
 
-Define blueprint variables as a property of the `MODEL` statement. They are the mechanism for [creating model templates](../../model/types/sql_models.md):
+Define blueprint variables as a property of the `MODEL` statement. They are the mechanism for [creating model templates](../../models/data-models/types/sql.md):
 
 ```sql
 MODEL (
@@ -244,13 +251,13 @@ FROM customer2.some_source
 */
 ```
 
-Note the regular `@field_a` and curly brace syntax `@{field_b}` macro variable references in the model query. Both render as identifiers. `field_c`, a string in the blueprints, renders as a string literal with regular macro syntax `@field_c`; use curly braces `@{field_c}` to render it as an identifier. See [above](built_in.md#embedding-variables-in-strings).
+Note the regular `@field_a` and curly brace syntax `@{field_b}` macro variable references in the model query. Both render as identifiers. `field_c`, a string in the blueprints, renders as a string literal with regular macro syntax `@field_c`; use curly braces `@{field_c}` to render it as an identifier. See [above](built-in.md#embedding-variables-in-strings).
 
 Access blueprint variables with the syntax shown above or with the `@BLUEPRINT_VAR()` macro function, which supports default values for undefined variables (similar to `@VAR()`).
 
 ### Local variables
 
-Local macro variables are defined in a model. They take precedence over [global](built_in.md#global-variables), [blueprint](built_in.md#blueprint-variables), or [gateway-specific](built_in.md#gateway-variables) variables with the same name.
+Local macro variables are defined in a model. They take precedence over [global](built-in.md#global-variables), [blueprint](built-in.md#blueprint-variables), or [gateway-specific](built-in.md#gateway-variables) variables with the same name.
 
 Define local macro variables with the `@DEF` macro operator. Set the macro variable `macro_var` to `1`:
 
@@ -264,7 +271,7 @@ Vulcan has 3 requirements for using the `@DEF` operator:
 2. All `@DEF` uses must come after the `MODEL` statement and before the SQL query.
 3. Each `@DEF` use must end with a semi-colon `;`.
 
-Consider the model `vulcan_example.full_model` from the [Vulcan quickstart guide](../../../guides/get-started.md):
+Consider the model `vulcan_example.full_model` from the [Vulcan quickstart guide](../../ldk.md):
 
 ```sql
 MODEL (
@@ -408,7 +415,7 @@ The loop runs once for each item in the list, substituting the item for `number`
 
 The Vulcan `@EACH` operator implements the equivalent of a `for` loop in Vulcan macros.
 
-`@EACH` gets its name from performing an action "for each" item in the collection. It is equivalent to the Python loop above; the two loop components are specified differently.
+`@EACH` gets its name from performing an action "for each" item in the collection. It is equivalent to the Python loop above; the 2 loop components are specified differently.
 
 </details>
 
@@ -529,7 +536,7 @@ This syntax works regardless of whether the array values are quoted or not.
 
 Place macro values at the end of a column name with `column_@x`. To put the variable anywhere else in the identifier, use curly braces `@{}`. For example: `@{x}_column` or `my_@{x}_column`.
 
-See [above](built_in.md#embedding-variables-in-strings) for more on embedding macros in strings.
+See [above](built-in.md#embedding-variables-in-strings) for more on embedding macros in strings.
 {% endhint %}
 
 ### @IF
@@ -604,7 +611,7 @@ SELECT
 FROM table
 ```
 
-[Macro rendering](built_in.md#vulcan-macro-approach) happens before the `@IF` condition is evaluated. Vulcan doesn't evaluate `my_column > @my_value` until it has first substituted the number `@my_value` represents.
+[Macro rendering](built-in.md#how-vulcan-macros-work) happens before the `@IF` condition is evaluated. Vulcan doesn't evaluate `my_column > @my_value` until it has first substituted the number `@my_value` represents.
 
 Your macro might do things besides returning a value, such as printing a message or executing a statement (the macro "has side effects"). Side effect code always runs during the rendering step. To prevent this, condition the side effects on the evaluation stage in your macro code.
 
@@ -649,7 +656,7 @@ NOTE: you can also alter a column's type when `@runtime_stage = 'creating'`, but
 
 `@EVAL` evaluates its arguments with SQLGlot's SQL executor.
 
-Use it to execute mathematical or other calculations in SQL code. It behaves like the first argument of the [`@IF` operator](built_in.md#if) but isn't limited to logical conditions.
+Use it to execute mathematical or other calculations in SQL code. It behaves like the first argument of the [`@IF` operator](built-in.md#if) but isn't limited to logical conditions.
 
 A query adding 5 to a macro variable:
 
@@ -675,11 +682,11 @@ FROM table
 
 ### @FILTER
 
-`@FILTER` subsets an input array to items meeting the logical condition in the anonymous function. Its output can be consumed by other macro operators such as [`@EACH`](built_in.md#each) or [`@REDUCE`](built_in.md#reduce).
+`@FILTER` subsets an input array to items meeting the logical condition in the anonymous function. Its output can be consumed by other macro operators such as [`@EACH`](built-in.md#each) or [`@REDUCE`](built-in.md#reduce).
 
 The user-specified anonymous function must evaluate to `TRUE` or `FALSE`. `@FILTER` applies the function to each item in the array and includes the item in the output array only if it meets the condition.
 
-Write the anonymous function _in SQL_. It's evaluated with [SQLGlot's](https://github.com/tobymao/sqlglot) SQL executor and supports standard SQL equality and comparison operators. See [`@IF`](built_in.md#if) above for supported operators.
+Write the anonymous function _in SQL_. It's evaluated with [SQLGlot's](https://github.com/tobymao/sqlglot) SQL executor and supports standard SQL equality and comparison operators. See [`@IF`](built-in.md#if) above for supported operators.
 
 A `@FILTER` call:
 
@@ -756,7 +763,7 @@ If the column data types are known, the resulting query `CAST`s columns to their
 
 **NOTE**: the `exclude` argument used to be named `except_`. `except_` is still supported but discouraged. It will be deprecated.
 
-Like all Vulcan macro functions, omitting an argument in `@STAR` requires passing subsequent arguments with their name and the special `:=` keyword operator. Omit the `alias` argument with `@STAR(foo, exclude := [c])`. See [below](built_in.md#positional-and-keyword-arguments) for macro function arguments.
+Like all Vulcan macro functions, omitting an argument in `@STAR` requires passing subsequent arguments with their name and the special `:=` keyword operator. Omit the `alias` argument with `@STAR(foo, exclude := [c])`. See [below](built-in.md#positional-and-keyword-arguments) for macro function arguments.
 
 A `@STAR` example:
 
@@ -853,7 +860,7 @@ SELECT
 FROM "foo" AS "foo"
 ```
 
-By default, the `MD5` function is used. Change this by setting the `hash_function` argument:
+Vulcan uses the `MD5` function by default. Change this by setting the `hash_function` argument:
 
 ```sql
 SELECT
@@ -889,7 +896,7 @@ SELECT
 FROM foo
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 SELECT
@@ -909,7 +916,7 @@ SELECT
 FROM foo
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 SELECT
@@ -929,7 +936,7 @@ SELECT
 FROM foo
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 SELECT
@@ -956,7 +963,7 @@ The expression:
 @UNION('distinct', foo, bar)
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 SELECT
@@ -976,7 +983,7 @@ If the union type is omitted, `'ALL'` is the default. So the expression:
 @UNION(foo, bar)
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 SELECT
@@ -1002,7 +1009,7 @@ This renders the same as above. If the condition is `FALSE`:
 @UNION(1 > 2, 'all', foo, bar)
 ```
 
-Only the first table would be selected:
+Only the first table is selected:
 
 ```sql
 SELECT
@@ -1013,7 +1020,7 @@ FROM foo
 
 ### @HAVERSINE\_DISTANCE
 
-`@HAVERSINE_DISTANCE` returns the [haversine distance](https://en.wikipedia.org/wiki/Haversine_formula) between two geographic points.
+`@HAVERSINE_DISTANCE` returns the [haversine distance](https://en.wikipedia.org/wiki/Haversine_formula) between 2 geographic points.
 
 It supports these arguments, in this order:
 
@@ -1033,7 +1040,7 @@ SELECT
 FROM rides
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 SELECT
@@ -1059,7 +1066,7 @@ It supports these arguments, in this order:
 * `quote` (optional): whether to quote the resulting aliases. Defaults to true.
 * `distinct` (optional): whether to apply a `DISTINCT` clause for the aggregation function. Defaults to false.
 
-Like all Vulcan macro functions, omitting an argument in `@PIVOT` requires passing subsequent arguments with their name and the special `:=` keyword operator. Omit the `agg` argument with `@PIVOT(status, ['cancelled', 'completed'], cmp := '<')`. See [below](built_in.md#positional-and-keyword-arguments) for macro function arguments.
+Like all Vulcan macro functions, omitting an argument in `@PIVOT` requires passing subsequent arguments with their name and the special `:=` keyword operator. Omit the `agg` argument with `@PIVOT(status, ['cancelled', 'completed'], cmp := '<')`. See [below](built-in.md#positional-and-keyword-arguments) for macro function arguments.
 
 The query:
 
@@ -1071,7 +1078,7 @@ FROM rides
 GROUP BY 1
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 SELECT
@@ -1102,7 +1109,7 @@ with raw_data as (
 select * from raw_data
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 WITH "raw_data" AS (
@@ -1119,7 +1126,7 @@ FROM "raw_data" AS "raw_data"
 
 ### @DATE\_SPINE
 
-`@DATE_SPINE` returns the SQL required to build a date spine. The spine includes the start\_date (if aligned to the datepart) AND the end\_date. This differs from the [`date_spine`](https://github.com/dbt-labs/dbt-utils?tab=readme-ov-file#date_spine-source) macro in `dbt-utils`, which does NOT include the end\_date. Use it to join unique, hard-coded date ranges with other tables and views so people don't have to constantly adjust date ranges in `where` clauses across many SQL models.
+`@DATE_SPINE` returns the SQL required to build a date spine. The spine includes the start\_date (if aligned to the datepart) AND the end\_date. This differs from the [`date_spine`](https://github.com/dbt-labs/dbt-utils?tab=readme-ov-file#date_spine-source) macro in `dbt-utils`, which does NOT include the end\_date. Use it to join unique, hard-coded date ranges with other tables and views so you don't have to constantly adjust date ranges in `where` clauses across many SQL models.
 
 It supports these arguments, in this order:
 
@@ -1137,7 +1144,7 @@ WITH discount_promotion_dates AS (
 SELECT * FROM discount_promotion_dates
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 WITH "discount_promotion_dates" AS (
@@ -1153,8 +1160,8 @@ FROM "discount_promotion_dates" AS "discount_promotion_dates"
 
 Note: this is DuckDB SQL; other dialects are transpiled accordingly.
 
-* Recursive CTEs (common table expressions) are used for `Redshift`, `MySQL`, and `MSSQL`.
-* For `MSSQL` specifically, the recursion limit is approximately 100. Add an `OPTION (MAXRECURSION 0)` clause after the date spine macro logic to remove the limit. This applies for long date ranges.
+* Recursive CTEs (common table expressions) are used for different engiens.
+* For some engines specifically, the recursion limit is limited. Add an `OPTION (MAXRECURSION 0)` clause after the date spine macro logic to remove the limit. This applies for long date ranges.
 
 ### @RESOLVE\_TEMPLATE
 
@@ -1176,7 +1183,7 @@ The `template` can contain these placeholders, which are substituted:
 * `@{schema_name}`: the name of the physical schema Vulcan uses for the model version table, for example `vulcan__landing`.
 * `@{table_name}`: the name of the physical table Vulcan uses for the model version, for example `landing__customers__2517971505`.
 
-Note the curly brace syntax `@{}` in the template placeholders. See [above](built_in.md#embedding-variables-in-strings).
+Note the curly brace syntax `@{}` in the template placeholders. See [above](built-in.md#embedding-variables-in-strings).
 
 Use `@resolve_template` in a `MODEL` block:
 
@@ -1210,7 +1217,7 @@ For example, the following expression:
 @AND(TRUE, NULL)
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 TRUE
@@ -1226,7 +1233,7 @@ For example, the following expression:
 @OR(TRUE, NULL)
 ```
 
-would be rendered as:
+renders to:
 
 ```sql
 TRUE
@@ -1254,7 +1261,7 @@ If the argument is `TRUE`, the clause code is generated; if `FALSE`, it isn't. W
 
 Each SQL clause operator may be used only once in a query. Common table expressions or subqueries may contain their own single use of the operator.
 
-Revisit the example model from the [User-defined Variables](built_in.md#user-defined-variables) section above.
+Revisit the example model from the [User-defined variables](built-in.md#user-defined-variables) section above.
 
 As written, the model always includes the `WHERE` clause. Make its presence dynamic with the `@WHERE` macro operator:
 
@@ -1291,7 +1298,7 @@ GROUP BY item_id
 
 If the `@WHERE` argument were `FALSE`, the `WHERE` clause would be omitted from the query.
 
-These operators aren't useful with hard-coded values. Instead, the argument can be code executable by the SQLGlot SQL executor.
+These operators aren't useful with hard-coded values. Instead, the argument can be code that the SQLGlot SQL executor runs.
 
 The `WHERE` clause is included in this query because 1 is less than 2:
 
@@ -1493,25 +1500,25 @@ Vulcan supports macro functions in 2 languages:
 
 #### Setup
 
-Python macro functions should be placed in `.py` files in the Vulcan project's `macros` directory. Multiple functions can be defined in one `.py` file, or they can be distributed across multiple files.
+Place Python macro functions in `.py` files in the Vulcan project's `macros` directory. You can define multiple functions in one `.py` file, or distribute them across multiple files.
 
-An empty `__init__.py` file must be present in the Vulcan project's `macros` directory. It will be created automatically when the project scaffold is created with `vulcan init`.
+An empty `__init__.py` file must be present in the Vulcan project's `macros` directory. `vulcan init` creates it automatically when it scaffolds the project.
 
 Each `.py` file containing a macro definition must import Vulcan's `macro` decorator with `from vulcan import macro`.
 
-Python macros are defined as regular python functions adorned with the Vulcan `@macro()` decorator. The first argument to the function must be `evaluator`, which provides the macro evaluation context in which the macro function will run.
+Python macros are defined as regular Python functions adorned with the Vulcan `@macro()` decorator. The first argument to the function must be `evaluator`, which provides the macro evaluation context in which the macro function runs.
 
 #### Inputs and outputs
 
-Python macros parse all arguments passed to the macro call with SQLGlot before they are used in the function body. Therefore, unless [argument type annotations are provided](built_in.md#argument-data-types) in the function definition, the macro function code must process SQLGlot expressions and may need to extract the expression's attributes/contents for use.
+Python macros parse all arguments passed to the macro call with SQLGlot before they are used in the function body. Therefore, unless [argument type annotations are provided](built-in.md#argument-data-types) in the function definition, the macro function code must process SQLGlot expressions and may need to extract the expression's attributes/contents for use.
 
-Python macro functions may return values of either `string` or SQLGlot `expression` types. Vulcan will automatically parse returned strings into a SQLGlot expression after the function is executed so they can be incorporated into the model query's semantic representation.
+Python macro functions can return values of either `string` or SQLGlot `expression` types. Vulcan automatically parses returned strings into a SQLGlot expression after the function executes, so it can incorporate them into the model query's semantic representation.
 
-Macro functions may [return a list of strings or expressions](built_in.md#returning-more-than-one-value) that all play the same role in the query (e.g., specifying column definitions). For example, a list containing multiple `CASE WHEN` statements would be incorporated into the query properly, but a list containing both `CASE WHEN` statements and a `WHERE` clause would not.
+Macro functions can [return a list of strings or expressions](built-in.md#returning-more-than-one-value) that all play the same role in the query (e.g., specifying column definitions). For example, Vulcan incorporates a list containing multiple `CASE WHEN` statements into the query properly, but not a list containing both `CASE WHEN` statements and a `WHERE` clause.
 
 #### Macro function basics
 
-This example demonstrates the core requirements for defining a python macro - it takes no user-supplied arguments and returns the string `text`.
+This example demonstrates the core requirements for defining a Python macro: it takes no user-supplied arguments and returns the string `text`.
 
 ```python
 from vulcan import macro
@@ -1521,7 +1528,7 @@ def print_text(evaluator):
   return 'text'
 ```
 
-We could use this in a Vulcan SQL model like this:
+Use this in a Vulcan SQL model like this:
 
 ```sql
 SELECT
@@ -1529,7 +1536,7 @@ SELECT
 FROM table
 ```
 
-After processing, it will render to this:
+After processing, it renders to this:
 
 ```sql
 SELECT
@@ -1539,7 +1546,7 @@ FROM table
 
 Note that the python function returned a string `'text'`, but the rendered query uses `text` as a column name. That is due to the function's returned text being parsed as SQL code by SQLGlot and integrated into the query's semantic representation.
 
-The rendered query will treat `text` as a string if we double-quote the single-quoted value in the function definition as `"'text'"`:
+The rendered query treats `text` as a string if you double-quote the single-quoted value in the function definition as `"'text'"`:
 
 ```python
 from vulcan import macro
@@ -1549,7 +1556,7 @@ def print_text(evaluator):
     return "'text'"
 ```
 
-When run in the same model query as before, this will render to:
+When run in the same model query as before, this renders to:
 
 ```sql
 SELECT
@@ -1559,11 +1566,11 @@ FROM table
 
 #### Argument data types
 
-Most macro functions provide arguments so users can supply custom values when the function is called. The data type of the argument plays a key role in how the macro code processes its value, and providing type annotations in the macro definition ensures that the macro code receives the data type it expects. This section provides a brief description of Vulcan macro type annotation - find additional information [below](built_in.md#typed-macros).
+Most macro functions provide arguments so users can supply custom values when the function is called. The data type of the argument plays a key role in how the macro code processes its value, and providing type annotations in the macro definition ensures that the macro code receives the data type it expects. This section provides a brief description of Vulcan macro type annotation. Find more information [below](built-in.md#typed-macros).
 
-As [mentioned above](built_in.md#inputs-and-outputs), argument values passed to the macro call are parsed by SQLGlot before they become available to the function code. If an argument does not have a type annotation in the macro function definition, its value will always be a SQLGlot expression in the function body. Therefore, the macro function code must operate directly on the expression (and may need to extract information from it before usage).
+As [mentioned above](built-in.md#inputs-and-outputs), argument values passed to the macro call are parsed by SQLGlot before they become available to the function code. If an argument doesn't have a type annotation in the macro function definition, its value is always a SQLGlot expression in the function body. Therefore, the macro function code must operate directly on the expression (and may need to extract information from it before usage).
 
-If an argument does have a type annotation in the macro function definition, the value passed to the macro call will be coerced to that type after parsing by SQLGlot and before the values are used in the function body. Essentially, Vulcan will extract the relevant information of the annotated data type from the expression for you (if possible).
+If an argument does have a type annotation in the macro function definition, the value passed to the macro call is coerced to that type after parsing by SQLGlot and before the values are used in the function body. Essentially, Vulcan extracts the relevant information of the annotated data type from the expression for you (if possible).
 
 For example, this macro function determines whether an argument's value is any of the integers 1, 2, or 3:
 
@@ -1575,7 +1582,7 @@ def arg_in_123(evaluator, my_arg):
     return my_arg in [1,2,3]
 ```
 
-When this macro is called, it will return `FALSE` even if an integer was passed in the call. Consider this macro call:
+When this macro is called, it returns `FALSE` even if an integer was passed in the call. Consider this macro call:
 
 ```sql
 SELECT
@@ -1587,7 +1594,7 @@ It returns `SELECT FALSE` because:
 1. The passed value `1` is parsed by SQLGlot into a SQLGlot expression before the function code executes and
 2. There is no matching SQLGlot expression in `[1,2,3]`
 
-However, the macro will treat the argument like a normal Python function does if we annotate `my_arg` with the integer `int` type in the function definition:
+However, the macro treats the argument like a normal Python function does if you annotate `my_arg` with the integer `int` type in the function definition:
 
 ```python
 from vulcan import macro
@@ -1597,15 +1604,15 @@ def arg_in_123(evaluator, my_arg: int): # Type annotation `my_arg: int`
     return my_arg in [1,2,3]
 ```
 
-Now the macro call will return `SELECT TRUE` because the value is coerced to a Python integer before the function code executes and `1` is in `[1,2,3]`.
+Now the macro call returns `SELECT TRUE` because the value is coerced to a Python integer before the function code executes and `1` is in `[1,2,3]`.
 
-If an argument has a default value, the value is not parsed by SQLGlot before the function code executes. Therefore, take care to ensure that the default's data type matches that of a user-supplied argument by adding a type annotation, making the default value a SQLGlot expression, or making the default value `None`.
+If an argument has a default value, the value isn't parsed by SQLGlot before the function code executes. Therefore, take care to ensure that the default's data type matches that of a user-supplied argument by adding a type annotation, making the default value a SQLGlot expression, or making the default value `None`.
 
 #### Positional and keyword arguments
 
-In a macro call, the arguments may be provided by position if none are skipped.
+In a macro call, you can provide arguments by position if none are skipped.
 
-For example, consider the `add_args()` function - it has three arguments with default values provided in the function definition:
+For example, consider the `add_args()` function, which has 3 arguments with default values provided in the function definition:
 
 ```python
 from vulcan import macro
@@ -1622,15 +1629,15 @@ def add_args(
 
 An `@add_args` call providing values for all arguments accepts positional arguments like this: `@add_args(5, 6, 7)` (which returns 5 + 6 + 7 = `18`). A call omitting and using the default value for the final `argument_3` can also use positional arguments: `@add_args(5, 6)` (which returns 5 + 6 + 3 = `14`).
 
-However, skipping an argument requires specifying the names of subsequent arguments (i.e., using "keyword arguments"). For example, skipping the second argument above by just omitting it - `@add_args(5, , 7)` - results in an error.
+However, skipping an argument requires specifying the names of subsequent arguments (i.e., using "keyword arguments"). For example, skipping the second argument above by just omitting it, as in `@add_args(5, , 7)`, results in an error.
 
 Unlike Python, Vulcan keyword arguments must use the special operator `:=`. To skip and use the default value for the second argument above, the call must name the third argument: `@add_args(5, argument_3 := 8)` (which returns 5 + 2 + 8 = `15`).
 
 #### Variable-length arguments
 
-The `add_args()` macro defined in the [previous section](built_in.md#positional-and-keyword-arguments) accepts only three arguments and requires that all three have a value. This greatly limits the macro's flexibility because users may want to add any number of values together.
+The `add_args()` macro defined in the [previous section](built-in.md#positional-and-keyword-arguments) accepts only 3 arguments and requires that all 3 have a value. This limits the macro's flexibility: what if you need to add more than 3 values?
 
-The macro can be improved by allowing users to provide any number of arguments at call time. We use Python's "variable-length arguments" to accomplish this:
+Improve the macro by allowing users to provide any number of arguments at call time. Use Python's "variable-length arguments" to accomplish this:
 
 ```python
 from vulcan import macro
@@ -1640,7 +1647,7 @@ def add_args(evaluator, *args: int): # Variable-length arguments of integer type
     return sum(args)
 ```
 
-This macro can be called with one or more arguments. For example:
+You can call this macro with one or more arguments. For example:
 
 * `@add_args(1)` returns 1
 * `@add_args(1, 2)` returns 3
@@ -1650,19 +1657,19 @@ This macro can be called with one or more arguments. For example:
 
 Macro functions are a convenient way to tidy model code by creating multiple outputs from one function call. Python macro functions do this by returning a list of strings or SQLGlot expressions.
 
-For example, we might want to create indicator variables from the values in a string column. We can do that by passing in the name of column and a list of values for which it should create indicators, which we then interpolate into `CASE WHEN` statements.
+For example, say you want to create indicator variables from the values in a string column. Do that by passing in the name of the column and a list of values to create indicators for, which you then interpolate into `CASE WHEN` statements.
 
 Because Vulcan parses the input objects, they become SQLGLot expressions in the function body. Therefore, the function code **cannot** treat the input list as a regular Python list.
 
-Two things will happen to the input Python list before the function code is executed:
+Two things happen to the input Python list before the function code executes:
 
-1. Each of its entries will be parsed by SQLGlot. Different inputs are parsed into different SQLGlot expressions:
+1. SQLGlot parses each of its entries. Different inputs are parsed into different SQLGlot expressions:
    * Numbers are parsed into [`Literal` expressions](https://sqlglot.com/sqlglot/expressions.html#Literal)
    * Quoted strings are parsed into [`Literal` expressions](https://sqlglot.com/sqlglot/expressions.html#Literal)
    * Unquoted strings are parsed into [`Column` expressions](https://sqlglot.com/sqlglot/expressions.html#Column)
-2. The parsed entries will be contained in a SQLGlot [`Array` expression](https://sqlglot.com/sqlglot/expressions.html#Array), the SQL entity analogous to a Python list
+2. The parsed entries end up in a SQLGlot [`Array` expression](https://sqlglot.com/sqlglot/expressions.html#Array), the SQL entity analogous to a Python list
 
-Because the input `Array` expression named `values` is not a Python list, we cannot iterate over it directly - instead, we iterate over its `expressions` attribute with `values.expressions`:
+Because the input `Array` expression named `values` is not a Python list, you can't iterate over it directly: instead, iterate over its `expressions` attribute with `values.expressions`:
 
 ```python
 from vulcan import macro
@@ -1677,7 +1684,7 @@ def make_indicators(evaluator, string_column, values):
     return cases
 ```
 
-We call this function in a model query to create `CASE WHEN` statements for the `vehicle` column values `truck` and `bus` like this:
+Call this function in a model query to create `CASE WHEN` statements for the `vehicle` column values `truck` and `bus` like this:
 
 ```sql
 SELECT
@@ -1694,13 +1701,13 @@ SELECT
 FROM table
 ```
 
-Note that in the call `@make_indicators(vehicle, [truck, bus])` none of the three values is quoted.
+Note that in the call `@make_indicators(vehicle, [truck, bus])` none of the 3 values is quoted.
 
-Because they are unquoted, SQLGlot will parse them all as `Column` expressions. In the places we used single quotes when building the string (`'{value}'`), they will be single-quoted in the output. In the places we did not quote them (`{string_column} =` and `{string_column}_{value}`), they will not.
+Because they are unquoted, SQLGlot parses them all as `Column` expressions. In the places you used single quotes when building the string (`'{value}'`), they're single-quoted in the output. In the places you didn't quote them (`{string_column} =` and `{string_column}_{value}`), they aren't.
 
 #### Accessing predefined and local variable values
 
-[Pre-defined variables](variables.md#predefined-variables) and [user-defined local variables](built_in.md#local-variables) can be accessed within the macro's body via the `evaluator.locals` attribute.
+You can access [pre-defined variables](variables.md#predefined-variables) and [user-defined local variables](built-in.md#local-variables) within the macro's body via the `evaluator.locals` attribute.
 
 The first argument to every macro function, the macro evaluation context `evaluator`, contains macro variable values in its `locals` attribute. `evaluator.locals` is a dictionary whose key:value pairs are macro variables names and the associated values.
 
@@ -1714,7 +1721,7 @@ def get_execution_epoch(evaluator):
     return evaluator.locals['execution_epoch']
 ```
 
-The function would return the `execution_epoch` value when called in a model query:
+The function returns the `execution_epoch` value when called in a model query:
 
 ```sql
 SELECT
@@ -1722,7 +1729,7 @@ SELECT
 FROM table
 ```
 
-The same approach works for user-defined local macro variables, where the key `"execution_epoch"` would be replaced with the name of the user-defined variable to be accessed.
+The same approach works for user-defined local macro variables: replace the key `"execution_epoch"` with the name of the user-defined variable you want to access.
 
 One downside of that approach to accessing user-defined local variables is that the name of the variable is hard-coded into the function. A more flexible approach is to pass the name of the local macro variable as a function argument:
 
@@ -1734,7 +1741,7 @@ def get_macro_var(evaluator, macro_var):
     return evaluator.locals[macro_var]
 ```
 
-We could define a local macro variable `my_macro_var` with a value of 1 and pass it to the `get_macro_var` function like this:
+Define a local macro variable `my_macro_var` with a value of 1 and pass it to the `get_macro_var` function like this:
 
 ```sql
 MODEL (...);
@@ -1746,7 +1753,7 @@ SELECT
 FROM table
 ```
 
-The model query would render to:
+The model query renders to:
 
 ```sql
 SELECT
@@ -1756,9 +1763,9 @@ FROM table
 
 #### Accessing global variable values
 
-[User-defined global variables](built_in.md#global-variables) can be accessed within the macro's body using the `evaluator.var` method.
+You can access [user-defined global variables](built-in.md#global-variables) within the macro's body using the `evaluator.var` method.
 
-If a global variable is not defined, the method will return a Python `None` value. You may provide a different default value as the method's second argument.
+If a global variable isn't defined, the method returns a Python `None` value. You can provide a different default value as the method's second argument.
 
 For example:
 
@@ -1774,9 +1781,9 @@ def some_macro(evaluator):
 
 #### Accessing model, physical table, and virtual layer view names
 
-All Vulcan models have a name in their `MODEL` specification. We refer to that as the model's "unresolved" name because it may not correspond to any specific object in the SQL engine.
+All Vulcan models have a name in their `MODEL` specification. Vulcan refers to that as the model's "unresolved" name because it may not correspond to any specific object in the SQL engine.
 
-When Vulcan renders and executes a model, it converts the model name into three forms at different stages:
+When Vulcan renders and executes a model, it converts the model name into 3 forms at different stages:
 
 1. The _fully qualified_ name
    * If the model name is of the form `schema.table`, Vulcan determines the correct catalog and adds it, like `catalog.schema.table`
@@ -1786,7 +1793,7 @@ When Vulcan renders and executes a model, it converts the model name into three 
 3. The _resolved_ virtual layer view name
    * The qualified name of the model's virtual layer view in the environment where the model is being executed
 
-You can access any of these three forms in a Python macro through properties of the `evaluation` context object.
+You can access any of these 3 forms in a Python macro through properties of the `evaluation` context object.
 
 Access the unresolved, fully-qualified name through the `this_model_fqn` property.
 
@@ -1833,7 +1840,7 @@ def some_macro(evaluator):
 
 #### Accessing model schemas
 
-Model schemas can be accessed within a Python macro function through its evaluation context's `column_to_types()` method, if the column types can be statically determined. For instance, a schema of an [external model](../../model/types/external_models.md) can be accessed only after the `vulcan create_external_models` command has been executed.
+You can access model schemas within a Python macro function through its evaluation context's `column_to_types()` method, if the column types can be statically determined. For instance, you can access an [external model's](../../models/data-models/types/external-models.md) schema only after running the `vulcan create_external_models` command.
 
 This macro function renames the columns of an upstream model by adding a prefix to them:
 
@@ -1858,7 +1865,7 @@ def prefix_columns(evaluator, model_name, prefix: str):
     return renamed_projections
 ```
 
-This can then be used in a SQL model like this:
+Use this in a SQL model like this:
 
 ```sql
 MODEL (
@@ -1882,13 +1889,13 @@ Accessing the schema of an upstream model can be useful for various reasons. For
 
 Using `columns_to_types`, a single macro can apply the same transformation to every column that matches some condition, so you don't end up with one near-duplicate macro per model.
 
-Note: there may be models whose schema is not available when the project is being loaded, in which case a special placeholder column will be returned, aptly named: `__schema_unavailable_at_load__`. In some cases, the macro's implementation will need to account for this placeholder in order to avoid issues due to the schema being unavailable.
+Note: some models' schemas may not be available when the project loads, in which case Vulcan returns a special placeholder column named `__schema_unavailable_at_load__`. In some cases, the macro's implementation needs to account for this placeholder to avoid issues caused by the unavailable schema.
 
 #### Accessing snapshots
 
-After a Vulcan project has been successfully loaded, its snapshots can be accessed in Python macro functions and Python models that generate SQL through the `get_snapshot` method of `MacroEvaluator`.
+After Vulcan successfully loads a project, you can access its snapshots in Python macro functions and Python models that generate SQL through the `get_snapshot` method of `MacroEvaluator`.
 
-This enables the inspection of physical table names or the processed intervals for certain snapshots at runtime, as shown in the example below:
+This lets you inspect physical table names or the processed intervals for certain snapshots at runtime, as shown in the example below:
 
 ```python
 from vulcan.core.macros import macro
@@ -1916,7 +1923,7 @@ def between_where(evaluator, column_name: SQL, low_val: SQL, high_val: SQL):
     return f"{column_name} BETWEEN {low_val} AND {high_val}"
 ```
 
-The function could then be called in a query:
+Call the function in a query:
 
 ```sql
 SELECT
@@ -1925,7 +1932,7 @@ FROM table
 WHERE @between_where(a, 1, 3)
 ```
 
-And it would render to:
+It renders to:
 
 ```sql
 SELECT
@@ -1934,7 +1941,7 @@ FROM table
 WHERE a BETWEEN 1 and 3
 ```
 
-Alternatively, the function could return a [SQLGLot expression](https://github.com/tobymao/sqlglot/blob/main/sqlglot/expressions.py) equivalent to that string by using SQLGlot's expression methods for building semantic representations:
+Alternatively, the function can return a [SQLGlot expression](https://github.com/tobymao/sqlglot/blob/main/sqlglot/expressions.py) equivalent to that string by using SQLGlot's expression methods for building semantic representations:
 
 ```python
 from vulcan import macro
@@ -1950,11 +1957,11 @@ Column expressions are sub-classes of the [Condition class](https://sqlglot.com/
 
 #### Macro pre/post-statements
 
-Macro functions may be used to generate pre/post-statements in a model.
+You can use macro functions to generate pre/post-statements in a model.
 
-By default, when you first add the pre/post-statement macro functions to a model, Vulcan will treat those models as directly modified and require a backfill in the next plan. Vulcan will also treat edits to or removals of pre/post-statement macros as a breaking change.
+By default, when you first add pre/post-statement macro functions to a model, Vulcan treats those models as directly modified and requires a backfill in the next plan. Vulcan also treats edits to or removals of pre/post-statement macros as a breaking change.
 
-If your macro does not affect the data returned by a model and you do not want its addition/editing/removal to trigger a backfill, you can specify in the macro definition that it only affects the model's metadata. Vulcan will still detect changes and create new snapshots for a model when you add/edit/remove the macro, but it will not view the change as breaking and require a backfill.
+If your macro doesn't affect the data returned by a model and you don't want its addition, editing, or removal to trigger a backfill, specify in the macro definition that it only affects the model's metadata. Vulcan still detects changes and creates new snapshots for a model when you add, edit, or remove the macro, but it doesn't view the change as breaking or require a backfill.
 
 Specify that a macro only affects a model's metadata by setting the `@macro()` decorator's `metadata_only` argument to `True`. For example:
 
@@ -1976,7 +1983,7 @@ Typed macros are macros that declare their argument types using Python type hint
 2. **Errors caught earlier.** A wrong argument type fails at parse time, with a message that points at the call site, instead of throwing somewhere deep inside the macro body.
 3. **Better IDE support.** Autocomplete and inline docs show the actual parameter types, not `Any`.
 
-#### Defining a Typed Macro
+#### Defining a typed macro
 
 Typed macros in Vulcan use Python's type hints. Here's a simple example of a typed macro that repeats a string a given number of times:
 
@@ -1988,11 +1995,11 @@ def repeat_string(evaluator, text: str, count: int):
     return text * count
 ```
 
-This macro takes two arguments: `text` of type `str` and `count` of type `int`, and it returns a string.
+This macro takes 2 arguments: `text` of type `str` and `count` of type `int`, and it returns a string.
 
-Without type hints, the inputs are two SQLGlot `exp.Literal` objects you would need to manually convert to Python `str` and `int` types. With type hints, you can work with them as string and integer types directly.
+Without type hints, the inputs are 2 SQLGlot `exp.Literal` objects you'd need to manually convert to Python `str` and `int` types. With type hints, you can work with them as string and integer types directly.
 
-Let's try to use the macro in a Vulcan model:
+Try using the macro in a Vulcan model:
 
 ```sql
 SELECT
@@ -2015,11 +2022,11 @@ SELECT
 FROM some_table;
 ```
 
-The problem is a mismatch between our macro's Python return type `str` and the type expected by the parsed SQL query.
+The problem is a mismatch between the macro's Python return type `str` and the type expected by the parsed SQL query.
 
-Recall that Vulcan macros work by modifying the query's semantic representation. In that representation, a SQLGlot string literal type is expected. Vulcan will do its best to return the type expected by the query's semantic representation, but that is not possible in all scenarios.
+Recall that Vulcan macros work by modifying the query's semantic representation. In that representation, a SQLGlot string literal type is expected. Vulcan does its best to return the type expected by the query's semantic representation, but that isn't possible in all scenarios.
 
-Therefore, we must explicitly convert the output with SQLGlot's `exp.Literal.string()` method:
+Therefore, you must explicitly convert the output with SQLGlot's `exp.Literal.string()` method:
 
 ```python
 from vulcan import macro
@@ -2029,7 +2036,7 @@ def repeat_string(evaluator, text: str, count: int):
     return exp.Literal.string(text * count)
 ```
 
-Now the query will render with a valid single-quoted string literal:
+Now the query renders with a valid single-quoted string literal:
 
 ```sql
 SELECT
@@ -2039,7 +2046,7 @@ FROM "some_table" AS "some_table"
 
 Typed macros coerce the **inputs** to a macro function, but the macro code is responsible for coercing the **output** to the type expected by the query's semantic representation.
 
-#### Supported Types
+#### Supported types
 
 Vulcan supports common Python types for typed macros including:
 
@@ -2091,7 +2098,7 @@ def my_macro(evaluator, table: exp.Table) -> exp.Column:
 
 In using assert this way, you still get the benefits of reducing/removing the boilerplate needed to coerce types; but you **also** get guarantees about the type of the input. This is a useful pattern and is user-defined, so you can use it as you see fit. It ultimately allows you to keep the macro definition clean and focused on the core business logic.
 
-#### Advanced Typed Macros
+#### Advanced typed macros
 
 You can create more complex macros using advanced Python features like generics. For example, a macro that accepts a list of integers and returns their sum:
 

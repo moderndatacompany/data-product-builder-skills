@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/hit_data_with_headers.csv'
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Adobe Analytics clickstream raw hit data seed',
   tags ('seed', 'reference_data', 'lookup'),
   terms ('hit_data'),

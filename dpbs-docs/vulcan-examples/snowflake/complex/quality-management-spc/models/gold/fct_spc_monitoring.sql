@@ -2,7 +2,7 @@ MODEL (
   name QMS_PLATFORM.GOLD.FCT_SPC_MONITORING,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [MEASUREMENT_ID],
   description 'Individual SPC measurement records with control and specification limits plus violation flags. Aggregation (averages, standard deviation, capability indices, violation counts, stability scores) is handled by the semantic layer.',
   tags ('gold', 'fact', 'spc', 'process-control'),

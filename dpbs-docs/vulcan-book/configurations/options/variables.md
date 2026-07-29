@@ -1,3 +1,10 @@
+---
+description: >-
+  Configure Vulcan variables and environment overrides: .env files, the
+  env_var() function, VULCAN__ configuration overrides, and dynamic values
+  like the user() function.
+---
+
 # Variables
 
 Store sensitive information like passwords and API keys without hardcoding them in your configuration files. Use environment variables, `.env` files, or configuration overrides to change settings dynamically.
@@ -43,7 +50,7 @@ vulcan plan
 ```
 
 {% hint style="info" %}
-The `--dotenv` flag must be placed **before** the subcommand (e.g., `plan`, `run`).
+Place the `--dotenv` flag **before** the subcommand (e.g., `plan`, `run`).
 {% endhint %}
 
 ### Accessing variables in configuration
@@ -124,7 +131,7 @@ Use the `{{ user() }}` function to set configuration based on the current user:
 {% tab title="YAML" %}
 ```yaml
 # Each user gets their own dev environment
-default_target_environment: dev_{{ user() }}
+defaultTargetEnvironment: dev_{{ user() }}
 ```
 {% endtab %}
 

@@ -15,7 +15,7 @@ MODEL (
     engagement_strategy VARCHAR(200)
   ),
   grain SEGMENT_ID,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SEGMENT_ID, SEGMENT_NAME),
   tags ('reference-data', 'dimension', 'rfm', 'segmentation-rules', 'seed-data', 'customer-analytics'),
   terms ('rfm_model', 'customer_segments', 'segmentation_thresholds'),

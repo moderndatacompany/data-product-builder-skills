@@ -1,3 +1,10 @@
+---
+description: >-
+  What happens when `vulcan plan` runs with a virtual layer: snapshot
+  fingerprints, the context diff, breaking vs. non-breaking changes,
+  backfill, restatement, and virtual-layer promotion.
+---
+
 # Vulcan plan guide with a virtual layer
 
 What happens when you run `vulcan plan` **with a virtual layer**.
@@ -10,7 +17,7 @@ vde: true
 
 In this mode, Vulcan keeps physical data in versioned snapshot tables and exposes stable consumer-facing views through the virtual layer. A plan decides which snapshots are new, which can be reused, which intervals need to run, and when the virtual layer should point applied state at a different snapshot version.
 
-Companion guide: see [Plan](./plan_guide.md) for `vulcan plan` without a virtual layer, where models use their original unversioned names.
+Companion guide: see [Plan without a virtual layer](./plan-guide.md) for `vulcan plan` without a virtual layer, where models use their original unversioned names.
 
 ---
 
@@ -89,7 +96,7 @@ The virtual layer separates three concerns that are usually tangled together in 
 2. **Physical data**: the warehouse table that stores the result for one snapshot version.
 3. **Consumer exposure**: the stable name consumers query, such as `analytics.orders`.
 
-This separation is useful because consumers should not see partially built data. Vulcan can build new physical tables first, validate them, and only then update the virtual layer. If the same snapshot has already been built elsewhere, Vulcan can reuse it instead of recomputing it.
+This separation is useful because consumers should not see partially built data. Vulcan builds new physical tables first, validates them, and only then updates the virtual layer. If the same snapshot has already been built elsewhere, Vulcan can reuse it instead of recomputing it.
 
 Use `vulcan plan` with a virtual layer when you want:
 
@@ -104,13 +111,13 @@ Use `vulcan plan` with a virtual layer when you want:
 
 ## What `vulcan plan` reads
 
-At the beginning of a plan, Vulcan loads the project and the applied state.
+At the beginning of a plan, Vulcan loads the Data Product and the applied state.
 
-Project inputs include:
+Data Product inputs include:
 
 1. `config.yaml` or `config.yml`.
 2. SQL models, Python models, seeds, assertions, tests, macros, hooks, semantic models, metrics, and checks.
-3. Project-level config such as `before_all`, `after_all`, `domain`, `version`, `discoverable`, `alignment`, dependency information, and virtual-layer settings.
+3. Data Product level config such as `beforeAll`, `afterAll`, `domain`, `version`, `discoverable`, `alignment`, dependency information, and virtual-layer settings.
 4. CLI flags such as `--start`, `--end`, `--restate-model`, `--skip-backfill`, `--empty-backfill`, `--forward-only`, `--auto-apply`, and `--explain`.
 
 State inputs include:
@@ -176,7 +183,7 @@ It detects:
 2. **Removed**: applied state has a snapshot, local project no longer has that model name.
 3. **Modified**: local and applied snapshots have the same model name but different fingerprints.
 4. **Requirement changes**: Python dependency set changed.
-5. **State statement changes**: `before_all`, `after_all`, data product identity fields, or Python payload changed.
+5. **State statement changes**: `beforeAll`, `afterAll`, data product identity fields, or Python payload changed.
 6. **Virtual-layer config changes**: for example, gateway-managed virtual layer changed.
 7. **New or unfinalized state**: applied state needs creation or finalization.
 
@@ -198,12 +205,12 @@ applied state does not have customer_lifetime_value
 What happens:
 
 1. Vulcan creates a new snapshot for the model.
-2. The added snapshot is treated as directly affected.
+2. Vulcan treats the added snapshot as directly affected.
 3. For materialized models, Vulcan computes the intervals that need to exist.
 4. During apply, Vulcan creates and fills the physical snapshot table when backfill is required.
 5. The virtual layer exposes the model after the snapshot is ready.
 
-Added models are categorized as breaking for planning purposes because they introduce a new version that must be built before applied state can point to it. In practice, adding a model usually does not break existing consumers unless existing downstream models or semantic surfaces change.
+Vulcan categorizes added models as breaking for planning purposes because they introduce a new version that must be built before applied state can point to it. In practice, adding a model usually does not break existing consumers unless existing downstream models or semantic surfaces change.
 
 ---
 
@@ -215,8 +222,8 @@ What happens:
 
 1. Vulcan records the snapshot as removed in the plan.
 2. Applied state stops promoting that snapshot.
-3. The virtual-layer object for that model is removed or no longer points to a promoted snapshot.
-4. Physical snapshot cleanup is handled later by retention and janitor behavior, not by immediately deleting every historical table during plan.
+3. Vulcan removes the virtual-layer object for that model, or the object no longer points to a promoted snapshot.
+4. Retention and janitor behavior handle physical snapshot cleanup later, instead of deleting every historical table immediately during plan.
 
 Removal is usually breaking for consumers if they query that model, use it through semantics, depend on it downstream, or rely on its checks/assertions.
 
@@ -241,11 +248,11 @@ Common direct changes:
 5. Columns changed.
 6. Assertions, assertions, checks, descriptions, tags, terms, or semantic metadata changed.
 
-Direct modifications are split into data changes and metadata-only changes.
+Vulcan splits direct modifications into data changes and metadata-only changes.
 
 If the data hash changed, Vulcan assumes the model's output may change. The plan must decide whether this is breaking, non-breaking, or forward-only.
 
-If only the metadata hash changed, Vulcan can avoid data rebuilds. Examples include description, owner, tags, and documentation metadata that do not alter rows, columns, or values.
+If only the metadata hash changed, Vulcan avoids data rebuilds. Examples include description, owner, tags, and documentation metadata that do not alter rows, columns, or values.
 
 ---
 
@@ -267,7 +274,7 @@ If `clean.orders` changes, then `marts.customer_revenue` and `semantic.customer_
 What happens:
 
 1. Vulcan walks the DAG from directly modified snapshots.
-2. Downstream snapshots whose parent data hash changed are marked indirectly modified.
+2. Vulcan marks downstream snapshots whose parent data hash changed as indirectly modified.
 3. The direct change category determines whether downstream snapshots need rebuild.
 4. The plan records indirect impact separately from direct impact so users can see blast radius.
 
@@ -289,9 +296,9 @@ Typical metadata-only changes:
 What happens:
 
 1. Vulcan records the metadata change.
-2. The plan can update state and metadata surfaces.
+2. The plan updates state and metadata surfaces.
 3. No historical data backfill is required only because metadata changed.
-4. The virtual layer may still be updated if state metadata or promoted snapshot metadata needs to be refreshed.
+4. Vulcan may still update the virtual layer if state metadata or promoted snapshot metadata needs to be refreshed.
 
 Metadata-only changes are important because they are visible to users, catalogs, APIs, and governance, even though they do not require compute.
 
@@ -315,11 +322,11 @@ What happens with a virtual layer:
 
 1. Vulcan creates a new snapshot version for the directly changed model.
 2. Downstream models that depend on changed data may become indirectly breaking.
-3. Missing intervals are computed for the new snapshot versions.
+3. Vulcan computes missing intervals for the new snapshot versions.
 4. Backfill runs before applied state points to the new versions.
-5. After successful backfill, the virtual layer is updated to point consumers to the new snapshot tables.
+5. After successful backfill, Vulcan updates the virtual layer to point consumers to the new snapshot tables.
 
-The key benefit is that consumers can keep reading the old snapshot while the new one is being built.
+The key benefit is that consumers can keep reading the old snapshot while Vulcan builds the new one.
 
 ---
 
@@ -366,7 +373,7 @@ This is how Vulcan avoids rebuilding the whole DAG for every edit.
 
 ## Forward-only changes
 
-Forward-only means the change is applied from a point in time forward without rewriting historical intervals.
+Forward-only means Vulcan applies the change from a point in time forward without rewriting historical intervals.
 
 Use forward-only when:
 
@@ -378,8 +385,8 @@ Use forward-only when:
 Important behavior:
 
 1. `--forward-only` changes versioning behavior.
-2. `--effective-from` can define when the new logic starts.
-3. Historical intervals are not rebuilt unless restated separately.
+2. `--effective-from` defines when the new logic starts.
+3. Vulcan does not rebuild historical intervals unless you restate them separately.
 4. Destructive and additive schema changes may require explicit allowance depending on model settings.
 
 With a virtual layer, forward-only still benefits from isolated consumer-facing views. You can preview forward-only behavior, and applied state can switch virtual-layer references according to the plan.
@@ -471,25 +478,25 @@ After successful plan:
   analytics.orders -> orders snapshot B
 ```
 
-This is the core safety mechanism. Consumers keep querying the stable model name, while Vulcan controls which physical version is exposed.
+This is the core safety mechanism. Consumers keep querying the stable model name, while Vulcan controls which physical version it exposes.
 
 ---
 
 ## Plan apply with a virtual layer
 
-When a plan is applied:
+When you apply a plan:
 
-1. Vulcan runs `before_all` hooks for the plan context when configured.
+1. Vulcan runs `beforeAll` hooks for the plan context when configured.
 2. It creates missing schemas and physical tables.
 3. It backfills missing intervals for selected snapshots.
 4. It runs assertions/assertions for evaluated models where configured.
 5. It updates state with promoted snapshots.
 6. It updates virtual-layer views.
-7. It runs `after_all` hooks when configured.
+7. It runs `afterAll` hooks when configured.
 8. It records plan activity and follow-on run activity.
 9. It emits metrics such as affected model counts, virtual updates, and backfill activity when observability is configured.
 
-If apply fails before the virtual layer is updated, consumers continue using the previous promoted snapshot versions.
+If apply fails before Vulcan updates the virtual layer, consumers continue using the previous promoted snapshot versions.
 
 ---
 

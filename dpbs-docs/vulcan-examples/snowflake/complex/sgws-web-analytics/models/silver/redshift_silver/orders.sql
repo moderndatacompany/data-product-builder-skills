@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_silver.ORDERS,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ORDER_PK],
   description 'Silver layer order transaction fact table with order status and fulfillment tracking',
   tags ('silver', 'transformed', 'cleaned', 'fact', 'orders'),

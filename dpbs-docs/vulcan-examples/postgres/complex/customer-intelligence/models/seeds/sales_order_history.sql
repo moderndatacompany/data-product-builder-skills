@@ -21,7 +21,7 @@ MODEL (
     created_at TEXT
   ),
   grain order_id,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags ('seed-data', 'bronze', 'sales-orders'),
   description 'Sales order history containing all B2B customer orders with pricing, status, and delivery information.'
 );

@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/v_d_curr_corp_item.csv'
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Product catalog seed data with item details and classifications',
   tags ('seed', 'reference_data', 'dimension', 'master_data'),
   terms ('v_d_curr_corp_item'),

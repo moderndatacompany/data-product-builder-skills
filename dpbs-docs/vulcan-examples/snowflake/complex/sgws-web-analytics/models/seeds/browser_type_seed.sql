@@ -6,7 +6,7 @@ MODEL (
       delimiter = '\t'
     )
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Browser lookup reference data from Adobe Analytics',
   tags ('seed', 'reference_data', 'adobe_analytics', 'lookup'),
   terms ('browser_type'),

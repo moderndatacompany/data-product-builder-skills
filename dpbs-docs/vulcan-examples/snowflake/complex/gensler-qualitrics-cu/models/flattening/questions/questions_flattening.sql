@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001,
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by ARRAY(survey_id),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, QUESTION_ID, QUESTIONS_KEY, QUESTION_TYPE, SELECTOR, QUESTION_TEXT, CHOICES),
   grains [SURVEY_ID, QUESTION_ID, QUESTIONS_KEY],
   description 'Comprehensive question transformation processing complex nested survey structures into flattened question metadata including choices, sub-questions, dynamic references, scoring logic, flow control, and validation rules for complete question catalog',

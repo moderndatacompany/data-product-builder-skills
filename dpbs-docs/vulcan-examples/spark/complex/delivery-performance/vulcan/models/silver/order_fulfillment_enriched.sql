@@ -1,7 +1,7 @@
 MODEL (
   name s3depot.qcommerce_delivery_silver.order_fulfillment_enriched,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [order_id],
   description 'Canonical order-level fulfillment fact combining orders, latest shipment attempt, and SLA rules to derive delivery performance business logic.',
   tags ('silver', 'delivery', 'fulfillment', 'canonical-fact'),

@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/refund_reason_mapping.csv'
   ),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [raw_refund_reason],
   description 'Business mapping that groups raw refund reasons into reusable issue categories for finance and operations reporting.',
   tags ('seed', 'bronze', 'refunds', 'reference-data'),

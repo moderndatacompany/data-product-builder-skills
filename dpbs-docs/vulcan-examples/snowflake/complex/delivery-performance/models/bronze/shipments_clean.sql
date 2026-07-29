@@ -2,7 +2,7 @@ MODEL (
   name QCOMMERCE_PLATFORM.BRONZE.SHIPMENTS_CLEAN,
   kind FULL,
   cron '*/15 * * * *',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [SHIPMENT_ID],
   description 'Standardized shipment attempt records with delivery duration and delivery outcome flags.',
   tags ('bronze', 'shipments', 'delivery', 'attempts'),

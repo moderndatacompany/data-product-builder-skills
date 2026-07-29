@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_silver.CUSTOMER,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Silver layer customer data with demographics, site information, and sales classifications',
   tags ('silver', 'transformed', 'cleaned', 'dimension', 'customer'),
   terms ('customer')

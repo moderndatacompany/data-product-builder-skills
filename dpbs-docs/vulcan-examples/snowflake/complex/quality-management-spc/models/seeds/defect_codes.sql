@@ -12,7 +12,7 @@ MODEL (
     standard_cost_usd DECIMAL(10,2)
   ),
   grain DEFECT_CODE,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (DEFECT_CODE, DEFECT_NAME, DEFECT_CATEGORY, SEVERITY, DESCRIPTION, STANDARD_COST_USD),
   tags ('reference-data', 'defect-codes', 'quality', 'seed-data'),
   terms ('defect-classification', 'defect-codes', 'quality-taxonomy'),

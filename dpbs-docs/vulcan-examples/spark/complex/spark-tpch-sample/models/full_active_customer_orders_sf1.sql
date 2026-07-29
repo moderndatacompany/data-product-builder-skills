@@ -2,7 +2,7 @@ MODEL (
   name lhs3ny001depot.tpch_sparkv3.full_active_customer_orders_sf1,
   kind FULL,
   start '2025-01-01',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (customer, orders, active, gold),
   grains (c_custkey),
   physical_properties (

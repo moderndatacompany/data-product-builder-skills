@@ -1,12 +1,18 @@
-# Tests
+---
+description: >-
+  Unit tests: YAML fixtures for inputs and outputs, testing incremental
+  models and CTEs, and running tests with the CLI.
+---
 
-Tests are your safety net for data transformations. Like unit tests in software, you write tests to verify that your models transform data correctly. Tests catch problems before they reach production.
+# Unit tests
 
-Tests are executable documentation. They show how your model should behave with specific inputs, and they fail if something changes unexpectedly. Unlike [assertions](./assertions.md) (which check data quality at runtime), tests verify the logic of your models against predefined inputs and expected outputs.
+Unit tests are your safety net for data transformations. You write them to verify that your models transform data correctly, catching problems before they reach production.
+
+Unit tests are executable documentation. They show how your model should behave with specific inputs, and they fail if something changes unexpectedly. Unlike [assertions](./assertions.md) (which check data quality at runtime), unit tests verify the logic of your models against predefined inputs and expected outputs.
 
 ## Why testing matters
 
-Small errors in data models can cascade into big problems downstream. Why testing is worth your time:
+Small errors in data models cascade into big problems downstream. Why testing is worth your time:
 
 * **Catch breaking changes**: refactor with confidence. Tests flag unintended behavior changes.
 * **Document expected behavior**: tests serve as executable specifications (better than comments that get outdated).
@@ -14,13 +20,13 @@ Small errors in data models can cascade into big problems downstream. Why testin
 * **Calculation correctness**: verify that aggregations, joins, and calculations produce the expected results for known inputs.
 * **Confidence in changes**: make updates knowing you catch regressions before they hit production.
 
-Tests run on demand (such as in CI/CD pipelines) or automatically when you create a new [plan](../guides/plan/plan_guide.md).
+Tests run on demand (such as in CI/CD pipelines) or automatically when you create a new [plan](../concepts/run-and-plan/plan-guide.md).
 
 ## Creating tests
 
 Tests live in YAML files in the `tests/` folder of your project. The filename must start with `test` and end with `.yaml` or `.yml`. You can put multiple tests in one file.
 
-At minimum, a test needs three things:
+At minimum, a test needs 3 things:
 
 * **model**: which model you are testing.
 * **inputs**: mock data for upstream dependencies (what goes in).
@@ -92,7 +98,7 @@ test_daily_sales_aggregation:
           last_order_id: "O003"
 ```
 
-This test gives the model three orders (two on March 15, one on March 16) and checks that:
+This test gives the model 3 orders (2 on March 15, 1 on March 16) and checks that:
 
 * Orders are correctly grouped by date
 * `total_orders` counts distinct orders per day (should be 2 for March 15, 1 for March 16)
@@ -183,7 +189,7 @@ test_full_model_basic:
           avg_order_value: null  # Division by zero handled
 ```
 
-The test provides mock data for all three upstream tables. It verifies that the model:
+The test provides mock data for all 3 upstream tables. It verifies that the model:
 
 * Joins customers with orders and order items
 * Counts distinct orders per customer
@@ -399,7 +405,7 @@ This keeps your test files clean and makes it easy to reuse test data across mul
 
 ## Omitting columns
 
-For wide tables, you do not need to specify every column. Omit columns (they are treated as `NULL`) or use partial matching to only test the columns you care about:
+For wide tables, you do not need to specify every column. Omit columns (Vulcan treats them as `NULL`) or use partial matching to only test the columns you care about:
 
 ```yaml
 outputs:
@@ -518,13 +524,13 @@ This creates a test file with actual data from your warehouse, which makes it ea
 
 ### Preserving fixtures
 
-When a test fails, you may want to inspect the actual data that was created. Use `--preserve-fixtures` to keep test fixtures:
+When a test fails, inspect the actual data it created. Use `--preserve-fixtures` to keep test fixtures:
 
 ```bash
 vulcan test --preserve-fixtures
 ```
 
-Fixtures are created as views in a schema named `vulcan_test_<random_ID>`. Query these views directly to see what data was produced for debugging.
+Vulcan creates fixtures as views in a schema named `vulcan_test_<random_ID>`. Query these views directly to see what data they produced for debugging.
 
 ### Type mismatches
 
@@ -583,9 +589,6 @@ An optional description that explains what the test validates. This helps your t
 
 The name of the schema that contains the test fixtures (the views created for this test). If not specified, Vulcan creates a temporary schema.
 
-### `<test_name>.gateway`
-
-The gateway whose `test_connection` runs this test. If not specified, the default gateway is used. Useful when you need to test against a specific database or engine.
 
 ### `<test_name>.inputs`
 
@@ -681,7 +684,7 @@ The expected outputs from your model. This is what you assert should be true.
 
 ### `<test_name>.outputs.partial`
 
-When `true`, only test the columns you specify. Extra columns in the output are ignored. Useful for wide tables where you only care about a few columns.
+When `true`, only test the columns you specify. Vulcan ignores extra columns in the output. Useful for wide tables where you only care about a few columns.
 
 ### `<test_name>.outputs.query`
 

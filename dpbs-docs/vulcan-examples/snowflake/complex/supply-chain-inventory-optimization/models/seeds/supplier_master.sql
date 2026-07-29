@@ -14,7 +14,7 @@ MODEL (
     active_status VARCHAR(20)
   ),
   grain SUPPLIER_ID,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SUPPLIER_ID, SUPPLIER_NAME, SUPPLIER_CATEGORY, COUNTRY, LEAD_TIME_DAYS, PAYMENT_TERMS, SUPPLIER_RATING, ACTIVE_STATUS),
   tags ('reference-data', 'suppliers', 'procurement', 'seed-data'),
   terms ('supplier-directory', 'vendor-master', 'supplier-catalog'),

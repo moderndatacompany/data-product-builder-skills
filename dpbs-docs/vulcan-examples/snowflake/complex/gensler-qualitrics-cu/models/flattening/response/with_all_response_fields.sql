@@ -5,7 +5,7 @@ MODEL (
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by ARRAY(SURVEY_ID),
   grains [SURVEY_ID, QUESTION_ID, QUESTIONS_KEY],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, QUESTION_ID, QUESTIONS_KEY, QUESTION_TYPE, QUESTION_TEXT, SELECTOR, CHOICES),
   description 'Enriched question dimension merging question metadata with discovered response variables including custom embedded data fields not present in survey definitions for complete field catalog and response schema validation',
   tags ('dimension', 'enriched', 'question', 'response_schema', 'reference'),

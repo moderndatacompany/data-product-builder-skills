@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_silver.SALES,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Silver layer sales transaction fact table with revenue, quantities, and invoice details',
   tags ('silver', 'transformed', 'cleaned', 'fact', 'sales'),
   terms ('sales'),

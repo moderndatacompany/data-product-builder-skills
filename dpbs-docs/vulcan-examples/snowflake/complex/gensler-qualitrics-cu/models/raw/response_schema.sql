@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.RAW.QUALTRICS_RESPONSE_SCHEMA,
   kind incremental_by_partition,
   partitioned_by ARRAY(SURVEY_ID),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, PARSED_JSON),
   grains [SURVEY_ID],
   description 'Raw layer model capturing Qualtrics response schema metadata with parsed JSON structures defining field names, data types, descriptions, and embedded data configurations for response data validation and transformation',

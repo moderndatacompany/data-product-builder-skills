@@ -4,7 +4,7 @@ MODEL (
     time_column SESSION_DATE
   ),
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [SESSION_ID],
   description 'Session-level metrics including duration, page views, bounce rate, and conversion flags for user engagement analysis and experience optimization. Aggregates clickstream events to session-level with UTM attribution and device segmentation.',
   tags ('gold', 'fact', 'sessions', 'engagement', 'ecommerce'),

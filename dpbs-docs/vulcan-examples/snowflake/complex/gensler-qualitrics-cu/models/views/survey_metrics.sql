@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.ANALYTICS.QUALTRICS_SURVEY_METRICS,
   kind FULL,
   grains [SURVEY_ID],
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, SURVEY_NAME, IS_ACTIVE, TOTAL_RESPONSE_COUNT, LIVE_RESPONSE_COUNT, TOTAL_QUESTIONS, LIVE_RESPONSE_PERCENTAGE),
   description 'Survey metrics aggregate delivering comprehensive survey analytics with response statistics across multiple types, question and block counts, temporal lifecycle metrics, and performance indicators including live response percentages for monitoring survey effectiveness',
   tags ('aggregate', 'metric', 'survey_analytics', 'kpi', 'production'),

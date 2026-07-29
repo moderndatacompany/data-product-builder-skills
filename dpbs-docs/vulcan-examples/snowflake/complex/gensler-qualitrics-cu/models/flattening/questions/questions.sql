@@ -4,7 +4,7 @@ MODEL (
   name GENSLER.FINAL.QUALTRICS_DEFINITION_FLATTENED,
   kind INCREMENTAL_BY_PARTITION,
   partitioned_by ARRAY(survey_id),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   profiles (SURVEY_ID, QUESTION_ID, QUESTIONS_KEY, QUESTION_TYPE, QUESTION_TEXT, CHOICE_LABEL),
   grains [SURVEY_ID, QUESTION_ID, QUESTIONS_KEY],
   tags ('dimension', 'question', 'clean', 'analytical', 'scd_type1'),

@@ -2,7 +2,7 @@ MODEL (
   name MES_PLATFORM.SILVER.PRODUCTION_ENRICHED,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [confirmation_id],
   description 'Silver layer enriched production data joining production output with plant and equipment master data, calculating quality metrics and performance indicators for operational analytics',
   tags ('silver', 'fact', 'production', 'enriched', 'quality_metrics'),

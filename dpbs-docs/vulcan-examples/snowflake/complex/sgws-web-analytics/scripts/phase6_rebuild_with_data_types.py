@@ -133,7 +133,7 @@ def rebuild_seed_with_correct_types(sql_file: Path) -> bool:
     
     name = name_match.group(1)
     rel_path = path_match.group(1)
-    owner = owner_match.group(1) if owner_match else 'rohitrajtmdcio'
+    owner = owner_match.group(1) if owner_match else '${DATAOS_RUN_AS_USER}'
     description = desc_match.group(1) if desc_match else 'Reference data seed'
     tags = tags_match.group(1) if tags_match else "'seed', 'reference_data'"
     terms = terms_match.group(1) if terms_match else "'seed', 'reference'"

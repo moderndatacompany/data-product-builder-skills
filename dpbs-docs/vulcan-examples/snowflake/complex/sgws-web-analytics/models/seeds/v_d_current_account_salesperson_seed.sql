@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/v_d_current_account_salesperson.csv'
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Historical sales transaction seed data for testing and development',
   tags ('seed', 'reference_data', 'transactional', 'testing'),
   terms ('v_d_current_account_salesperson'),

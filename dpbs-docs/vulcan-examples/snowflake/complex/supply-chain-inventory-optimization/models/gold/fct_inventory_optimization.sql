@@ -2,7 +2,7 @@ MODEL (
   name ERP_PLATFORM.GOLD.FCT_INVENTORY_OPTIMIZATION,
   kind FULL,
   cron '@daily',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [INVENTORY_OPT_KEY],
   description 'Inventory optimization analytics with ABC classification, turnover ratios, stockout risk scoring. Aggregation (totals, averages, weighted metrics) is handled by the semantic layer.',
   tags ('gold', 'fact', 'inventory-optimization', 'abc-analysis'),

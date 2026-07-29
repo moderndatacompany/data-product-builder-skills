@@ -2,7 +2,7 @@ MODEL (
   name QCOMMERCE_PLATFORM.SILVER.ORDER_FULFILLMENT_ENRICHED,
   kind FULL,
   cron '*/15 * * * *',
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ORDER_ID],
   description 'Canonical order-level fulfillment fact combining orders, latest shipment attempt, and SLA rules to derive delivery performance business logic.',
   tags ('silver', 'delivery', 'fulfillment', 'canonical-fact'),

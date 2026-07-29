@@ -8,7 +8,7 @@ MODEL (
     forward_only false
   ),
   start '2025-01-01',
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   tags (orders, incremental, daily, metrics),
   grains (o_orderdate),
   physical_properties (

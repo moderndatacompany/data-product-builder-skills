@@ -19,7 +19,7 @@ from vulcan import ExecutionContext, ModelKindName, model
     kind=dict(name=ModelKindName.FULL),
     grains=["ds", "city", "rider_id"],
     tags=["python", "gold", "rider", "efficiency", "delivery"],
-    owner="shreyasikarwartmdcio",
+    owner="${DATAOS_RUN_AS_USER}",
     depends_on=[
         "s3depot.qcommerce_delivery_silver.order_fulfillment_enriched",
     ],

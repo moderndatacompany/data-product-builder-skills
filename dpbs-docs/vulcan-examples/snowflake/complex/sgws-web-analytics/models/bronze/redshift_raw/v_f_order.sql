@@ -1,7 +1,7 @@
 MODEL (
   name web_analytics_bronze.V_F_ORDER,
   kind FULL,
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Bronze layer order transaction fact table with order status and fulfillment tracking',
   tags ('bronze', 'raw', 'redshift', 'ingestion', 'fact', 'orders'),
   terms ('orders')

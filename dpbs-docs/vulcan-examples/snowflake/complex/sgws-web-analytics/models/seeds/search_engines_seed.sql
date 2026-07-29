@@ -6,7 +6,7 @@ MODEL (
       delimiter = '\t'
     )
   ),
-  owner 'rohitrajtmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   description 'Reference data seed for SEARCH_ENGINES',
   tags ('seed', 'reference_data', 'lookup'),
   terms ('search_engines'),

@@ -1,24 +1,31 @@
-# Plugins auth extension guide
+---
+description: >-
+  The plugins/ folder auth extension: configuring the afterAuthorize hook,
+  AuthExtensionContext and SecurityContext, the resolve_user_groups example, and
+  how policies and mask_expression use resolved g
+---
 
-This guide explains the `plugins/` folder used by Vulcan data products, what the auth extension imports contain, and how the extension is used for OSI GA policies and masking.
+# Plugins and auth
+
+This guide explains the `plugins/` folder used by Vulcan data products, what the auth extension imports contain, and how Vulcan uses the extension for policies and masking.
 
 ## What is the `plugins/` folder?
 
 The `plugins/` folder is where a data product defines small Python extension hooks that Vulcan loads at runtime.
 
-For OSI GA, the main use case is auth enrichment. After Heimdall authorizes a request, Vulcan can call a configured auth extension function to convert Heimdall user tags into policy groups.
+The main use case of this is, auth enrichment. After DataOS authorizes a request, Vulcan calls the configured auth extension function to convert DataOS user tags into policy groups.
 
 Semantic model policies then use those policy groups to decide:
 
-- Which rows a user can access.
-- Which dimensions should be masked.
-- Which group-specific rules should apply.
+* Which rows a user can access.
+* Which dimensions to mask.
+* Which group-specific rules apply.
 
 ## Required files
 
 Create these files in the data product project:
 
-```text
+```
 plugins/
   __init__.py
   auth_ext.py
@@ -30,17 +37,17 @@ plugins/
 
 ## Configure the hook
 
-In `config.yaml`, configure the hook using the root-level `after_authorize` field:
+In `config.yaml`, configure the hook using the root-level `afterAuthorize` field:
 
 ```yaml
-after_authorize: "plugins.auth_ext:resolve_user_groups"
+afterAuthorize: "plugins.auth_ext:resolve_user_groups"
 ```
 
 This path means:
 
-- `plugins` is the Python package.
-- `auth_ext` is the Python module.
-- `resolve_user_groups` is the function Vulcan should call.
+* `plugins` is the Python package.
+* `auth_ext` is the Python module.
+* `resolve_user_groups` is the function Vulcan calls.
 
 ## Import library
 
@@ -50,7 +57,7 @@ The auth extension imports these types:
 from schema.auth import AuthExtensionContext, SecurityContext
 ```
 
-`AuthExtensionContext` is the input object passed to the hook. It contains authorization information returned after Heimdall processes the request.
+`AuthExtensionContext` is the input object passed to the hook. It contains authorization information returned after DataOS processes the request.
 
 In the example below, the hook reads:
 
@@ -58,9 +65,9 @@ In the example below, the hook reads:
 ctx.user_tags
 ```
 
-`ctx.user_tags` contains Heimdall role tags such as:
+`ctx.user_tags` contains DataOS role tags such as:
 
-```text
+```
 roles:id:operator
 roles:id:developer
 ```
@@ -94,10 +101,10 @@ POLICY_GROUP_PRIORITY = ("operator", "developer")
 
 async def resolve_user_groups(ctx: AuthExtensionContext) -> SecurityContext:
     """
-    Derive policy groups from Heimdall role tags.
+    Derive policy groups from DataOS role tags.
 
     Args:
-        ctx: Authorization extension context returned after Heimdall authorization.
+        ctx: Authorization extension context returned after DataOS authorization.
 
     Returns:
         Security context containing the primary group and all role groups.
@@ -124,7 +131,7 @@ The hook starts with the role tag prefix:
 ROLE_ID_TAG_PREFIX = "roles:id:"
 ```
 
-Only tags that start with this prefix are treated as policy roles.
+The hook treats only tags that start with this prefix as policy roles.
 
 This block extracts the role names:
 
@@ -138,12 +145,12 @@ groups = [
 
 For example:
 
-```text
+```
 roles:id:operator -> operator
 roles:id:developer -> developer
 ```
 
-`POLICY_GROUP_PRIORITY` decides which group should become the primary group when a user has multiple roles:
+`POLICY_GROUP_PRIORITY` decides which group becomes the primary group when a user has multiple roles:
 
 ```python
 POLICY_GROUP_PRIORITY = ("operator", "developer")
@@ -158,7 +165,7 @@ group = next(
 )
 ```
 
-If the user has both `operator` and `developer`, `operator` is selected first because it appears first in `POLICY_GROUP_PRIORITY`.
+If the user has both `operator` and `developer`, the hook selects `operator` first because it appears first in `POLICY_GROUP_PRIORITY`.
 
 Finally, the hook returns the security context:
 
@@ -189,13 +196,13 @@ policies:
 
 In this example:
 
-- A user with `group="developer"` gets full access.
-- A user with `group="operator"` can query the model, but `email` and `customer_name` are masked.
-- A user with `group="operator"` cannot see rows where `customer_segment = Churned`.
+* A user with `group="developer"` gets full access.
+* A user with `group="operator"` can query the model, but `email` and `customer_name` are masked.
+* A user with `group="operator"` cannot see rows where `customer_segment = Churned`.
 
 ## Masked dimensions
 
-Columns listed in a policy `mask` should define a `mask_expression` in the semantic model dimensions.
+For each column listed in a policy's `mask`, define a `mask_expression` in the semantic model dimensions.
 
 Example:
 
@@ -217,5 +224,3 @@ dimensions:
 ```
 
 `mask_expression` controls what restricted users see instead of the raw value.
-
-

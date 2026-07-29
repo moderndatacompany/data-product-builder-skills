@@ -3,7 +3,7 @@ MODEL (
   kind SEED (
     path '../../seeds/raw_shipments.csv'
   ),
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [shipment_id],
   description 'Raw shipment attempt events sourced from the bundled seed CSV. Acts as the single source of truth for the shipments_clean bronze model in this self-contained Spark example.',
   tags ('seed', 'bronze', 'shipments', 'raw'),

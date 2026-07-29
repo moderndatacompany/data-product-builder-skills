@@ -1,4 +1,11 @@
-# Import Snowflake Semantic Views
+---
+description: >-
+  Import a Snowflake semantic view into a Vulcan project: configure the
+  Snowflake gateway, run import_semantic_view and create_external_models, fix
+  inputs.yaml, then plan and query the result over REST.
+---
+
+# Import Snowflake semantic views
 
 If you have a semantic view defined natively in Snowflake, you can import it into a Vulcan project instead of writing `kind: semantic` YAML by hand. Vulcan reads the view definition directly from Snowflake, translates it to the Vulcan semantic format, and writes one YAML file per table under `models/snowflake_semantic/`. The result is a standard Vulcan semantic layer with dimensions, measures, segments, joins, and REST/GraphQL/MySQL-wire endpoints.
 
@@ -8,9 +15,9 @@ This guide covers the full workflow from a blank directory to a running REST API
 
 ## Prerequisites
 
-- Vulcan installed with the Snowflake engine extra (`vulcan-<version>-py3-none-any.whl[snowflake]`)
-- A Snowflake connection configured in your `config.yaml`
-- A Snowflake Semantic View created in Snowflake (requires Snowflake Enterprise edition or higher)
+* Vulcan installed with the Snowflake engine extra (`vulcan-<version>-py3-none-any.whl[snowflake]`)
+* A Snowflake connection configured in your `config.yaml`
+* A Snowflake Semantic View created in Snowflake (requires Snowflake Enterprise edition or higher)
 
 ***
 
@@ -43,19 +50,19 @@ gateways:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
       user: "{{ env_var('SNOWFLAKE_USER') }}"
       authenticator: snowflake_jwt
-      private_key_path: ./snowflake_key.p8
-      private_key_passphrase: "{{ env_var('SNOWFLAKE_KEY_PASSPHRASE') }}"
+      privateKeyPath: ./snowflake_key.p8
+      privateKeyPassphrase: "{{ env_var('SNOWFLAKE_KEY_PASSPHRASE') }}"
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
       database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
-    state_connection:
+    stateConnection:
       type: duckdb
       database: ./.state/vulcan.db
 
-model_defaults:
+modelDefaults:
   dialect: snowflake
 ```
 
-For password-based authentication or key-pair setup instructions, see [Set up authentication](../technical-manuals/snowflake-engine.md#32-set-up-authentication).
+For password-based authentication or key-pair setup instructions, see Set up authentication in your Snowflake account.
 
 ***
 
@@ -100,7 +107,7 @@ This writes `inputs.yaml` to the project root. Each entry lists a source table w
 
 ## Fix inputs.yaml
 
-The generated `inputs.yaml` has two issues that must be corrected before `vulcan plan` will succeed.
+The generated `inputs.yaml` has 2 issues that must be corrected before `vulcan plan` will succeed.
 
 **Before:**
 
@@ -125,11 +132,11 @@ The generated `inputs.yaml` has two issues that must be corrected before `vulcan
 
 Apply these fixes to every entry in the file:
 
-| Fix | Why |
-|---|---|
-| Remove the quotes around the table name | Quoted identifiers break table resolution during planning |
-| Add `dialect: snowflake` | Ensures the correct SQL transpilation dialect for each external table |
-| Add `grain: [<primary_key>]` | Required for join inference; use the primary key column of each table |
+| Fix                                     | Why                                                                   |
+| --------------------------------------- | --------------------------------------------------------------------- |
+| Remove the quotes around the table name | Quoted identifiers break table resolution during planning             |
+| Add `dialect: snowflake`                | Ensures the correct SQL transpilation dialect for each external table |
+| Add `grain: [<primary_key>]`            | Required for join inference; use the primary key column of each table |
 
 {% hint style="warning" %}
 **Known limitation:** The extra quotes around table names in the generated `inputs.yaml` are a known issue being tracked for a future release. Until it is resolved, unquote each table name manually before running `vulcan plan`.
@@ -197,7 +204,7 @@ curl -X POST http://localhost:8000/api/v1/query/semantic/rest \
 Snowflake stores unquoted identifiers in UPPERCASE. Measure names, dimension names, and segment names in API queries must match the UPPERCASE identifiers in the imported YAML files exactly.
 {% endhint %}
 
-For the full REST, GraphQL, and MySQL wire protocol reference, see [Vulcan API Guide](vulcan_api_guide.md).
+For the full REST, GraphQL, and MySQL wire protocol reference, see the Vulcan API Guide.
 
 ***
 
@@ -225,8 +232,8 @@ Then reapply the `inputs.yaml` fixes (dialect, grain, and unquote) and run `vulc
 
 ## Related links
 
-- [`import_semantic_view`](../cli.md#import_semantic_view): full CLI reference and options
-- [`create_external_models`](../cli.md#create_external_models): generates `inputs.yaml` from the connected warehouse
-- [Snowflake Engine Manual](../technical-manuals/snowflake-engine.md): identifier casing rules, permissions, and troubleshooting
-- [Semantic Models](../components/semantics/README.md): editing and extending the generated YAML files
-- [Vulcan API Guide](vulcan_api_guide.md): REST, GraphQL, and MySQL wire protocol query reference
+* [`import_semantic_view`](../cli.md#import_semantic_view): full CLI reference and options
+* [`create_external_models`](../cli.md#create_external_models): generates `inputs.yaml` from the connected warehouse
+* Snowflake Engine Manual: identifier casing rules, permissions, and troubleshooting
+* [Semantic Models](../models/semantic-models/): editing and extending the generated YAML files
+* Vulcan API Guide: REST, GraphQL, and MySQL wire protocol query reference

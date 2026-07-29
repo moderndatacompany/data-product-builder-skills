@@ -1,7 +1,7 @@
 MODEL (
   name s3depot.qcommerce_delivery_gold.delivery_issue_summary,
   kind FULL,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ds, city, issue_type],
   description 'Daily city-level issue breakdown summarizing operational causes of delivery problems for root-cause trending.',
   tags ('gold', 'delivery', 'issues', 'root-cause'),

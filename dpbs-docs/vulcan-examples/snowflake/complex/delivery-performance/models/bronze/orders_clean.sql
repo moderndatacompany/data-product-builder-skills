@@ -1,7 +1,7 @@
 MODEL (
   name QCOMMERCE_PLATFORM.BRONZE.ORDERS_CLEAN,
   kind VIEW,
-  owner 'shreyasikarwartmdcio',
+  owner '${DATAOS_RUN_AS_USER}',
   grains [ORDER_ID],
   description 'Cleaned order master combining external order events with customer attributes for downstream delivery analytics.',
   tags ('bronze', 'orders', 'delivery', 'customer'),
