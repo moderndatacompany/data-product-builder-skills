@@ -6,8 +6,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 MODE="dry-run"
-WORK_ROOT="${TMPDIR:-/tmp}/vulcan-sync"
-UPSTREAM_ROOT_DIR="${UPSTREAM_ROOT_DIR:-${REPO_ROOT}/dpbs-docs/upstream}"
+WORK_ROOT=""
+CLEANUP_WORK_ROOT="true"
+BITBUCKET_URL="${BITBUCKET_URL:-git@bitbucket.org:rubik_/vulcan-examples.git}"
+GITHUB_URL="${GITHUB_URL:-git@github.com:moderndatacompany/dataos.git}"
+BITBUCKET_BRANCH="${BITBUCKET_BRANCH:-main}"
+GITHUB_BRANCH="${GITHUB_BRANCH:-main}"
 
 ALLOWED_ENGINES=(databricks postgres snowflake spark trino)
 PRESERVE_LOCAL_EXCLUDES=(--exclude="limitations.yaml" --exclude="usecases.yaml")
@@ -29,11 +33,11 @@ usage() {
   cat <<'EOF'
 Usage: scripts/sync-vulcan-sources.sh [--dry-run|--apply] [--work-root PATH]
 
-Syncs upstream Vulcan sources into this repository from git submodules.
+Syncs upstream Vulcan sources into this repository from temporary clones.
 
 Operations:
-  1. Initializes upstream git submodules under dpbs-docs/upstream
-  2. Syncs submodule metadata to the configured paths
+  1. Clones or refreshes upstream repositories in a temp workspace
+  2. Removes the temp workspace automatically when the run finishes
   3. Mirrors allowed engines into dpbs-docs/vulcan-examples
   4. Removes unwanted example content automatically
   5. Applies mapped vulcan-book updates via scripts/sync-vulcan-book.mjs
@@ -41,9 +45,7 @@ Operations:
 Options:
   --dry-run            Show what would change without writing files (default)
   --apply              Apply the sync to the working tree
-  --work-root PATH     Override temp workspace root
-  --upstream-root-dir PATH
-                      Override the submodule root directory
+  --work-root PATH     Override temp workspace root and keep it after the run
   -h, --help           Show this help
 EOF
 }
@@ -128,22 +130,32 @@ cleanup_examples_target() {
   fi
 }
 
-ensure_submodule_repo() {
-  local repo_dir="$1"
-  local repo_name="$2"
+cleanup_workspace() {
+  if [[ "${CLEANUP_WORK_ROOT}" == "true" && -n "${WORK_ROOT}" && -d "${WORK_ROOT}" ]]; then
+    rm -rf "${WORK_ROOT}"
+  fi
+}
 
-  git -C "${REPO_ROOT}" submodule sync -- "${repo_dir}" >/dev/null
+prepare_repo() {
+  local repo_url="$1"
+  local repo_branch="$2"
+  local repo_dir="$3"
+  local repo_label="$4"
 
-  if [[ ! -d "${repo_dir}/.git" && ! -f "${repo_dir}/.git" ]]; then
+  if [[ ! -d "${repo_dir}/.git" ]]; then
     log ""
-    log "Initializing submodule ${repo_name}"
-    git -C "${REPO_ROOT}" submodule update --init --recursive -- "${repo_dir}"
+    log "Cloning ${repo_label} into ${repo_dir}"
+    git clone --depth 1 --branch "${repo_branch}" "${repo_url}" "${repo_dir}"
+    return
   fi
 
-  if [[ ! -d "${repo_dir}/.git" && ! -f "${repo_dir}/.git" ]]; then
-    printf '%s\n' "Missing submodule checkout after init: ${repo_name} (${repo_dir})" >&2
-    exit 1
-  fi
+  log ""
+  log "Refreshing ${repo_label} in ${repo_dir}"
+  git -C "${repo_dir}" remote set-url origin "${repo_url}"
+  git -C "${repo_dir}" fetch --depth 1 origin "${repo_branch}"
+  git -C "${repo_dir}" checkout -B "${repo_branch}" "origin/${repo_branch}"
+  git -C "${repo_dir}" reset --hard "origin/${repo_branch}"
+  git -C "${repo_dir}" clean -fd
 }
 
 while [[ $# -gt 0 ]]; do
@@ -158,10 +170,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     --work-root)
       WORK_ROOT="$2"
-      shift 2
-      ;;
-    --upstream-root-dir)
-      UPSTREAM_ROOT_DIR="$2"
+      CLEANUP_WORK_ROOT="false"
       shift 2
       ;;
     -h|--help)
@@ -176,19 +185,26 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-BITBUCKET_DIR="${UPSTREAM_ROOT_DIR}/vulcan-examples"
-GITHUB_DIR="${UPSTREAM_ROOT_DIR}/dataos"
+if [[ -z "${WORK_ROOT}" ]]; then
+  WORK_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/vulcan-sync.XXXXXX")"
+fi
+
+trap cleanup_workspace EXIT
+
+SOURCE_ROOT_DIR="${WORK_ROOT}/sources"
+BITBUCKET_DIR="${SOURCE_ROOT_DIR}/vulcan-examples"
+GITHUB_DIR="${SOURCE_ROOT_DIR}/dataos"
 STAGE_DIR="${WORK_ROOT}/stage"
 STAGE_EXAMPLES_DIR="${STAGE_DIR}/vulcan-examples"
 
-mkdir -p "${WORK_ROOT}" "${STAGE_EXAMPLES_DIR}"
+mkdir -p "${SOURCE_ROOT_DIR}" "${STAGE_EXAMPLES_DIR}"
 
 log "Mode: ${MODE}"
 log "Workspace: ${WORK_ROOT}"
-log "Upstream root: ${UPSTREAM_ROOT_DIR}"
+log "Source cache: ${SOURCE_ROOT_DIR}"
 
-ensure_submodule_repo "${BITBUCKET_DIR}" "dpbs-docs/upstream/vulcan-examples"
-ensure_submodule_repo "${GITHUB_DIR}" "dpbs-docs/upstream/dataos"
+prepare_repo "${BITBUCKET_URL}" "${BITBUCKET_BRANCH}" "${BITBUCKET_DIR}" "vulcan-examples"
+prepare_repo "${GITHUB_URL}" "${GITHUB_BRANCH}" "${GITHUB_DIR}" "dataos"
 
 BOOK_SOURCE_DIR="${GITHUB_DIR}/documentation/references/resources/vulcan"
 

@@ -1,6 +1,0 @@
-[submodule "dpbs-docs/upstream/vulcan-examples"]
-	path = dpbs-docs/upstream/vulcan-examples
-	url = git@bitbucket.org:rubik_/vulcan-examples.git
-[submodule "dpbs-docs/upstream/dataos"]
-	path = dpbs-docs/upstream/dataos
-	url = git@github.com:moderndatacompany/dataos.git
