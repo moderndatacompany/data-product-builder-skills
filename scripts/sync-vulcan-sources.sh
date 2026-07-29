@@ -22,7 +22,8 @@ Syncs the Vulcan submodules in place under dpbs-docs:
                                in bin/create.js, not here)
 
 Operations:
-  1. Initializes/updates both submodules to their pinned commits
+  1. Initializes/force-updates both submodules to their pinned commits,
+     restoring full content even if a prior run left it pruned
   2. Restricts dpbs-docs/dataos's working tree to
      documentation/references/resources/vulcan via sparse-checkout
 
@@ -68,9 +69,19 @@ log ""
 log "Syncing submodule metadata"
 git -C "${REPO_ROOT}" submodule sync --recursive
 
-log ""
-log "Updating submodules (dataos, vulcan-examples)"
-git -C "${REPO_ROOT}" submodule update --init --recursive -- "${DATAOS_DIR}" "${EXAMPLES_DIR}"
+update_submodules() {
+  log ""
+  if [[ "${MODE}" != "apply" ]]; then
+    log "[dry-run] would update submodules (dataos, vulcan-examples) to their pinned commits, restoring full content"
+    return
+  fi
+
+  log "Updating submodules (dataos, vulcan-examples)"
+  # --force always re-checks-out the pinned commit's full tree, even if it's
+  # already checked out — so any local pruning (e.g. from an older version of
+  # this script) gets restored instead of being left stale.
+  git -C "${REPO_ROOT}" submodule update --init --recursive --force -- "${DATAOS_DIR}" "${EXAMPLES_DIR}"
+}
 
 configure_dataos_sparse_checkout() {
   log ""
@@ -89,6 +100,7 @@ configure_dataos_sparse_checkout() {
   )
 }
 
+update_submodules
 configure_dataos_sparse_checkout
 
 log ""
