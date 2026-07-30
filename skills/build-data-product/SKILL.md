@@ -108,9 +108,11 @@ Check if the project directory contains `config.yaml`, `models/`, `models/semant
      > Do NOT proceed until the user provides the engine name.
   3. **Once the engine is known** → run:
      ```
-     vulcan init <engine_name>
+     vulcan init <engine_name> --template empty
      ```
-     For example: `vulcan init postgres` or `vulcan init snowflake`.
+     For example: `vulcan init postgres --template empty` or `vulcan init snowflake --template empty`.
+
+     **Always pass `--template empty`** — without it, `vulcan init` prompts interactively (DEFAULT vs EMPTY) and, if DEFAULT is picked, drops demo scaffolding that references a non-existent example model (e.g. `models/full_model.sql`, `models/incremental_model.sql`, `models/seed_model.sql`, `models/semantics/incremental_model.yml`, `models/metrics/*_activity.yml`, `dq/full_model.yml`, `tests/test_full_model.yaml`). Left in place, those fail the very first `vulcan plan` with `Relation does not exist` / `depends_on not found`. `--template empty` skips the prompt and creates only `config.yaml` and the empty project directories — no demo files to clean up.
 
   After init completes, **STOP** and tell the user:
 
@@ -119,7 +121,7 @@ Check if the project directory contains `config.yaml`, `models/`, `models/semant
   **Set `config.yaml` `name:` to kebab-case now** — lowercase + hyphens (e.g. `customer-pricing-recommendations`, NOT `customer_pricing_recommendations`). `vulcan create_deploy_yaml` validates it against `^[a-z]([-a-z0-9]*[a-z0-9])?$` and rejects underscores; changing `name:` later invalidates the state registry and forces a `.state.db` delete + re-plan.
   **Wait for the user to confirm** before proceeding. Do NOT continue automatically.
 
-  **Then delete the example scaffolding BEFORE any plan**: `vulcan init` drops demo files that reference a non-existent example model (e.g. `models/full_model.sql`, `models/incremental_model.sql`, `models/seed_model.sql`, `models/semantics/incremental_model.yml`, `models/metrics/*_activity.yml`, `dq/full_model.yml`, `tests/test_full_model.yaml`). Left in place, they fail the very first `vulcan plan` with `Relation does not exist` / `depends_on not found`. Remove ALL init-generated example/demo files (keep `config.yaml`, `usage.yaml`, and the empty directory structure) before generating your own files or running any plan.
+  **If a project was already initialized without `--template empty`** (demo scaffolding present), delete ALL init-generated example/demo files (keep `config.yaml`, `usage.yaml`, and the empty directory structure) before generating your own files or running any plan.
 
   **Add `ignore_patterns` to `config.yaml` BEFORE any plan** — this is mandatory. Vulcan scans the entire project directory, so without ignore patterns it will pick up files from `dpbs-docs/` (including `dpbs-docs/vulcan-examples/`, `dpbs-docs/vulcan-book/`, `dpbs-docs/dataos-philosophy/`) and attempt to compile them as models, causing spurious errors. Open `config.yaml` and add:
 
@@ -264,7 +266,7 @@ This loop is used whenever `vulcan plan dev --auto-apply` fails, at any stage:
 - DQ `dimension: integrity` rejected → `integrity` is not one of Vulcan's 8 DQ dimensions; use `validity`/`consistency` (valid set: completeness, validity, accuracy, consistency, uniqueness, timeliness, conformity, coverage)
 - test YAML "expected a dict, got str" / top-level `model:` rejected → wrap the test under a top-level name (`test_<name>:`) with `model`/`inputs`/`outputs` nested under it
 - duplicate model / duplicate-key error after changing `config.yaml` `name:` (or renaming a model) → stale state registry; delete the state DB (`.state.db`) and re-plan
-- `Relation does not exist` / `depends_on` not found on the FIRST plan → leftover `vulcan init` example files; delete all init demo files before planning
+- `Relation does not exist` / `depends_on` not found on the FIRST plan → project was initialized without `--template empty`, leaving demo files; delete all init demo files before planning (or re-init with `vulcan init <engine_name> --template empty` next time)
 - `relation does not exist` during `vulcan evaluate -e dev` (NOT the first plan) → `evaluate` re-ran the SQL but didn't rewrite an intermediate VIEW dependency to its `__dev` name; query the already-materialized dev table directly with `vulcan fetchdf "SELECT * FROM <schema>__dev.<model> LIMIT 10"`
 - YAML parse errors → indentation or syntax issue
 
