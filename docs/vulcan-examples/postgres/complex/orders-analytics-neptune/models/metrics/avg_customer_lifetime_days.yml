@@ -1,3 +1,0 @@
-kind: metric
-name: avg_customer_lifetime_days
-measure: customer_profile.avg_customer_lifetime_days

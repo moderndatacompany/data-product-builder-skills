@@ -1,3 +1,0 @@
-kind: metric
-name: orders_per_sessions
-measure: web_heartbeat.orders_per_sessions

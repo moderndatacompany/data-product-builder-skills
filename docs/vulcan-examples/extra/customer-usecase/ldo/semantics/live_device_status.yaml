@@ -1,4 +1,0 @@
-models:
-  lenovo.ldo.live_device_status:
-    alias: live_device_status
-    

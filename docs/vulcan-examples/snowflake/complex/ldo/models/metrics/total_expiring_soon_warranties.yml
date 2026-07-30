@@ -1,3 +1,0 @@
-kind: metric
-name: total_expiring_soon_warranties
-measure: device_warranty.total_expiring_soon_warranties

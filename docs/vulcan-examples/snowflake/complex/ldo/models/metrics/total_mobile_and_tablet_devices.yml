@@ -1,3 +1,0 @@
-kind: metric
-name: total_mobile_and_tablet_devices
-measure: devices.total_mobile_and_tablet_devices

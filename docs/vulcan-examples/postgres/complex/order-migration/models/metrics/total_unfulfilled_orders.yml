@@ -1,3 +1,0 @@
-kind: metric
-name: total_unfulfilled_orders
-measure: sales_funnel.total_unfulfilled_orders

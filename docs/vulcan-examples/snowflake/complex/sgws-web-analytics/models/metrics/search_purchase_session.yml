@@ -1,3 +1,0 @@
-kind: metric
-name: search_purchase_session
-measure: web_heartbeat.search_purchase_session

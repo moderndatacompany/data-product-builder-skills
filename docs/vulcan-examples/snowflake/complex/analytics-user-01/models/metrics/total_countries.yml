@@ -1,3 +1,0 @@
-kind: metric
-name: total_countries
-measure: geo_mapping.total_countries

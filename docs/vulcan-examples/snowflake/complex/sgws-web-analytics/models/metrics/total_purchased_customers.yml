@@ -1,3 +1,0 @@
-kind: metric
-name: total_purchased_customers
-measure: sales.total_purchased_customers

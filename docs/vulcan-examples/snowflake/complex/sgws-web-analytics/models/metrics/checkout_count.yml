@@ -1,3 +1,0 @@
-kind: metric
-name: checkout_count
-measure: adobe_checkout.checkout_count

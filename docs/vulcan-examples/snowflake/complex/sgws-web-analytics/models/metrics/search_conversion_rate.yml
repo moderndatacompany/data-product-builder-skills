@@ -1,3 +1,0 @@
-kind: metric
-name: search_conversion_rate
-measure: web_heartbeat.search_conversion_rate

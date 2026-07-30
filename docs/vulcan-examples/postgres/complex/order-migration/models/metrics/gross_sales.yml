@@ -1,3 +1,0 @@
-kind: metric
-name: gross_sales
-measure: order_items.gross_sales

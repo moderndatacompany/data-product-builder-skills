@@ -1,3 +1,0 @@
-kind: metric
-name: total_registered_customers
-measure: sales_funnel.total_registered_customers

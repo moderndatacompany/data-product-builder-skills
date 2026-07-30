@@ -1,3 +1,0 @@
-kind: metric
-name: avg_payment_amount
-measure: payments.avg_payment_amount

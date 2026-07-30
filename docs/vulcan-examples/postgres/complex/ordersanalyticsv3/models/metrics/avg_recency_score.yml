@@ -1,3 +1,0 @@
-kind: metric
-name: avg_recency_score
-measure: rfm.avg_recency_score

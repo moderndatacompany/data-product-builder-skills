@@ -1,3 +1,0 @@
-kind: metric
-name: total_atc_cart_value
-measure: web_heartbeat.total_atc_cart_value

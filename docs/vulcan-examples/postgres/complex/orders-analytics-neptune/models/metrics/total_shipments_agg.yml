@@ -1,3 +1,0 @@
-kind: metric
-name: total_shipments_agg
-measure: daily_sales.total_shipments_agg

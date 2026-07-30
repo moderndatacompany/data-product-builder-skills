@@ -1,3 +1,0 @@
-kind: metric
-name: total_devices
-measure: events.total_devices

@@ -1,3 +1,0 @@
-kind: metric
-name: total_smartedge_devices
-measure: devices.total_smartedge_devices

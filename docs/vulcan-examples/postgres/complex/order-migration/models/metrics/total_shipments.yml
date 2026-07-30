@@ -1,3 +1,0 @@
-kind: metric
-name: total_shipments
-measure: shipments.total_shipments

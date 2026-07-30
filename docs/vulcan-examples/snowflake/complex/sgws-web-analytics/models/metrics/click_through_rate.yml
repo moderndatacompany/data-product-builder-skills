@@ -1,3 +1,0 @@
-kind: metric
-name: click_through_rate
-measure: web_heartbeat.click_through_rate

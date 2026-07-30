@@ -1,3 +1,0 @@
-kind: metric
-name: count_suppliers
-measure: product.count_suppliers

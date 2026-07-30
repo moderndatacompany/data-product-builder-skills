@@ -1,3 +1,0 @@
-kind: metric
-name: total_downtime_hours
-measure: fct_equipment_oee.total_downtime_hours

@@ -1,3 +1,0 @@
-kind: metric
-name: lost_customer_count
-measure: rfm.lost_customer_count

@@ -1,3 +1,0 @@
-kind: metric
-name: time_spent
-measure: web_heartbeat.time_spent

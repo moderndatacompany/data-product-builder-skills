@@ -1,3 +1,0 @@
-kind: metric
-name: total_offline_devices
-measure: devices_uptime.total_offline_devices

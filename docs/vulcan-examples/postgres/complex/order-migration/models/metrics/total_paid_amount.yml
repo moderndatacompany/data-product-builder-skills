@@ -1,3 +1,0 @@
-kind: metric
-name: total_paid_amount
-measure: payments.total_paid_amount

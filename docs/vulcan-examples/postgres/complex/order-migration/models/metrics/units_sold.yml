@@ -1,3 +1,0 @@
-kind: metric
-name: units_sold
-measure: order_items.units_sold

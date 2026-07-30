@@ -1,3 +1,0 @@
-kind: metric
-name: unique_users
-measure: web_heartbeat.unique_users

@@ -1,3 +1,0 @@
-kind: metric
-name: search_sessions
-measure: web_heartbeat.search_sessions

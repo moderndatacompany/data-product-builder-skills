@@ -2,7 +2,7 @@
 
 Cursor agent skills for designing and building [Vulcan/DataOS](https://dataosinfo.gitbook.io) data products.
 
-Run a single command to scaffold agent skills for **Cursor**, **Claude Code**, or **Codex** — plus the full Vulcan reference docs — into any project.
+Run a single command to scaffold agent skills for **Cursor**, **Claude Code**, **Codex**, or **VS Code (Copilot)** — plus the full Vulcan reference docs — into any project.
 
 ## Usage
 
@@ -43,7 +43,7 @@ Enter number (0–5):
     SKILL.md
   build-data-product/
     SKILL.md
-.claude-code/skills/         ← Claude Code (created if you chose Claude Code or All)
+.claude/skills/               ← Claude Code (created if you chose Claude Code or All)
   design-data-product/
     SKILL.md
   build-data-product/
@@ -53,12 +53,17 @@ Enter number (0–5):
     SKILL.md
   build-data-product/
     SKILL.md
-docs/
+.github/skills/               ← VS Code / GitHub Copilot (created if you chose VS Code or All)
+  design-data-product/
+    SKILL.md
+  build-data-product/
+    SKILL.md
+dpbs-docs/
   dataos-philosophy/  ← DataOS core concepts
   vulcan-docs/        ← Vulcan CLI & framework reference
   vulcan-examples/
     <engine>/         ← real working data product examples for your chosen engine
-  vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install docs/vulcan-*.whl
+  vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install dpbs-docs/vulcan-*.whl
 ```
 
 ## What the skills do
@@ -92,6 +97,53 @@ Turns the validated design spec into a working, deployed Vulcan data product —
 ## Re-running
 
 Running `npx dataproduct-builder-skills` again safely updates existing files with the latest skill and docs content.
+
+## Syncing Vulcan docs & examples (maintainers)
+
+`dpbs-docs/dataos` and `dpbs-docs/vulcan-examples` are git submodules (GitHub `moderndatacompany/dataos` and Bitbucket `rubik_/vulcan-examples`), reused locally instead of re-cloned every time.
+
+```bash
+npm run sync:vulcan          # dry-run — shows what would change
+npm run sync:vulcan:apply    # applies it
+```
+
+This updates/force-restores both submodules to their pinned commits, and restricts `dpbs-docs/dataos`'s working tree to just `documentation/references/resources/vulcan` via sparse-checkout. It does **not** filter `dpbs-docs/vulcan-examples` — that submodule is left with its full raw content after this script runs; engine/file filtering happens only at install time (`bin/create.js`) and at packaging time (see below). Run this whenever you want the full submodule content back for local browsing after packaging has pruned it.
+
+To pull the *latest* upstream commit (not just re-apply the currently pinned one):
+
+```bash
+git -C dpbs-docs/dataos fetch && git -C dpbs-docs/dataos checkout main && git -C dpbs-docs/dataos pull
+git -C dpbs-docs/vulcan-examples fetch && git -C dpbs-docs/vulcan-examples checkout main && git -C dpbs-docs/vulcan-examples pull
+npm run sync:vulcan:apply
+git add dpbs-docs/dataos dpbs-docs/vulcan-examples   # stage the new pinned commits
+```
+
+### Automatic pruning before packaging
+
+`npm pack`/`npm publish` runs `scripts/prepack-clean-examples.sh` automatically via the `prepack` npm lifecycle hook. It deletes everything in `dpbs-docs/vulcan-examples` except the allowed engines (`databricks`, `postgres`, `snowflake`, `spark`, `trino`) and strips junk files (`README.md`, `*.md`, `*.csv`, `*.tsv`, lockfiles, etc.) — without it, the raw submodule (200MB+ of seed CSVs, disallowed engines) would ship verbatim in the published tarball.
+
+⚠️ This **mutates your working tree**, not just the pack output — after running `npm pack`/`npm publish`, `dpbs-docs/vulcan-examples` on disk will be pruned down. Run `npm run sync:vulcan:apply` (or `git submodule update --init --force dpbs-docs/vulcan-examples`) afterward to restore full content for local dev.
+
+## Testing locally without publishing (maintainers)
+
+Build a `.tgz` from your current working tree and install it into a scratch project to see exactly what a real `npx` install would produce, without publishing anything:
+
+```bash
+# from this repo's root — packs whatever is currently on disk (including
+# any locally-synced submodule content in dpbs-docs/)
+npm pack
+```
+
+This creates `dataproduct-builder-skills-<version>.tgz` in the repo root. Install it into any other folder:
+
+```bash
+mkdir -p /tmp/vulcan-test-project && cd /tmp/vulcan-test-project
+npm init -y
+npm install /path/to/builder-skillss/dataproduct-builder-skills-<version>.tgz
+./node_modules/.bin/dataproduct-builder-skills snowflake
+```
+
+Inspect `.claude/skills/`, `.cursor/skills/`, and `dpbs-docs/` in that test project to verify the output. Re-run `npm pack` and reinstall the tarball after making further changes to pick them up. `*.tgz` files are gitignored — don't commit them.
 
 ## Publishing a new version (maintainers)
 

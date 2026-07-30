@@ -1,3 +1,0 @@
-kind: metric
-name: total_revenues_from_list
-measure: adobe_checkout.total_revenues_from_list

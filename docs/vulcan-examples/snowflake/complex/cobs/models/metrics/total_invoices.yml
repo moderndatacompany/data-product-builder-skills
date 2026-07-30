@@ -1,3 +1,0 @@
-kind: metric
-name: total_invoices
-measure: rfm_segments.total_invoices

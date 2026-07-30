@@ -1,3 +1,0 @@
-kind: metric
-name: total_chromebook_devices
-measure: devices.total_chromebook_devices

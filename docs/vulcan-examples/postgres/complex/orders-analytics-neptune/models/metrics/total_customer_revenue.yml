@@ -1,3 +1,0 @@
-kind: metric
-name: total_customer_revenue
-measure: customer_profile.total_customer_revenue

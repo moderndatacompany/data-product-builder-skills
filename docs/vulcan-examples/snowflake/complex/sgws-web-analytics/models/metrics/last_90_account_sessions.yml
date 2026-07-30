@@ -1,3 +1,0 @@
-kind: metric
-name: last_90_account_sessions
-measure: web_heartbeat.last_90_account_sessions

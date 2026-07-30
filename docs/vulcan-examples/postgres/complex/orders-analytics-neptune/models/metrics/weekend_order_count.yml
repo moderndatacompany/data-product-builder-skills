@@ -1,3 +1,0 @@
-kind: metric
-name: weekend_order_count
-measure: daily_sales.weekend_order_count

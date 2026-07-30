@@ -1,3 +1,0 @@
-kind: metric
-name: total_accounts_repeated_visits
-measure: web_heartbeat.total_accounts_repeated_visits
