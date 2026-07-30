@@ -4,7 +4,8 @@
   "description": "Cursor agent skills for designing and building Vulcan/DataOS data products. Run npx dataproduct-builder-skills to scaffold .cursor/skills and docs into your project.",
   "scripts": {
     "sync:vulcan": "bash scripts/sync-vulcan-sources.sh --dry-run",
-    "sync:vulcan:apply": "bash scripts/sync-vulcan-sources.sh --apply"
+    "sync:vulcan:apply": "bash scripts/sync-vulcan-sources.sh --apply",
+    "prepack": "bash scripts/prepack-clean-examples.sh"
   },
   "bin": {
     "dataproduct-builder-skills": "./bin/create.js"
