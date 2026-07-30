@@ -150,10 +150,11 @@ async function createPrompt() {
 }
 
 const IDE_OPTIONS = [
-  { label: 'Cursor',     folder: '.cursor' },
-  { label: 'Claude Code',folder: '.claude'  },
-  { label: 'Codex',      folder: '.codex'   },
-  { label: 'All three',  folder: null       },
+  { label: 'Cursor',            folder: '.cursor' },
+  { label: 'Claude Code',       folder: '.claude'  },
+  { label: 'Codex',             folder: '.codex'   },
+  { label: 'VS Code (Copilot)', folder: '.github'  },
+  { label: 'All',               folder: null       },
 ];
 
 async function main() {

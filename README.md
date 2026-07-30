@@ -2,7 +2,7 @@
 
 Cursor agent skills for designing and building [Vulcan/DataOS](https://dataosinfo.gitbook.io) data products.
 
-Run a single command to scaffold agent skills for **Cursor**, **Claude Code**, or **Codex** — plus the full Vulcan reference docs — into any project.
+Run a single command to scaffold agent skills for **Cursor**, **Claude Code**, **Codex**, or **VS Code (Copilot)** — plus the full Vulcan reference docs — into any project.
 
 ## Usage
 
@@ -43,12 +43,17 @@ Enter number (0–5):
     SKILL.md
   build-data-product/
     SKILL.md
-.claude-code/skills/         ← Claude Code (created if you chose Claude Code or All)
+.claude/skills/               ← Claude Code (created if you chose Claude Code or All)
   design-data-product/
     SKILL.md
   build-data-product/
     SKILL.md
 .codex/skills/               ← Codex (created if you chose Codex or All)
+  design-data-product/
+    SKILL.md
+  build-data-product/
+    SKILL.md
+.github/skills/               ← VS Code / GitHub Copilot (created if you chose VS Code or All)
   design-data-product/
     SKILL.md
   build-data-product/
