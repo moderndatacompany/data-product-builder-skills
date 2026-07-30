@@ -98,6 +98,32 @@ Turns the validated design spec into a working, deployed Vulcan data product —
 
 Running `npx dataproduct-builder-skills` again safely updates existing files with the latest skill and docs content.
 
+## Syncing Vulcan docs & examples (maintainers)
+
+`dpbs-docs/dataos` and `dpbs-docs/vulcan-examples` are git submodules (GitHub `moderndatacompany/dataos` and Bitbucket `rubik_/vulcan-examples`), reused locally instead of re-cloned every time.
+
+```bash
+npm run sync:vulcan          # dry-run — shows what would change
+npm run sync:vulcan:apply    # applies it
+```
+
+This updates/force-restores both submodules to their pinned commits, and restricts `dpbs-docs/dataos`'s working tree to just `documentation/references/resources/vulcan` via sparse-checkout. It does **not** filter `dpbs-docs/vulcan-examples` — that submodule is left with its full raw content after this script runs; engine/file filtering happens only at install time (`bin/create.js`) and at packaging time (see below). Run this whenever you want the full submodule content back for local browsing after packaging has pruned it.
+
+To pull the *latest* upstream commit (not just re-apply the currently pinned one):
+
+```bash
+git -C dpbs-docs/dataos fetch && git -C dpbs-docs/dataos checkout main && git -C dpbs-docs/dataos pull
+git -C dpbs-docs/vulcan-examples fetch && git -C dpbs-docs/vulcan-examples checkout main && git -C dpbs-docs/vulcan-examples pull
+npm run sync:vulcan:apply
+git add dpbs-docs/dataos dpbs-docs/vulcan-examples   # stage the new pinned commits
+```
+
+### Automatic pruning before packaging
+
+`npm pack`/`npm publish` runs `scripts/prepack-clean-examples.sh` automatically via the `prepack` npm lifecycle hook. It deletes everything in `dpbs-docs/vulcan-examples` except the allowed engines (`databricks`, `postgres`, `snowflake`, `spark`, `trino`) and strips junk files (`README.md`, `*.md`, `*.csv`, `*.tsv`, lockfiles, etc.) — without it, the raw submodule (200MB+ of seed CSVs, disallowed engines) would ship verbatim in the published tarball.
+
+⚠️ This **mutates your working tree**, not just the pack output — after running `npm pack`/`npm publish`, `dpbs-docs/vulcan-examples` on disk will be pruned down. Run `npm run sync:vulcan:apply` (or `git submodule update --init --force dpbs-docs/vulcan-examples`) afterward to restore full content for local dev.
+
 ## Testing locally without publishing (maintainers)
 
 Build a `.tgz` from your current working tree and install it into a scratch project to see exactly what a real `npx` install would produce, without publishing anything:
