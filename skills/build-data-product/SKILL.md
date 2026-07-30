@@ -121,8 +121,6 @@ Check if the project directory contains `config.yaml`, `models/`, `models/semant
   **Set `config.yaml` `name:` to kebab-case now** — lowercase + hyphens (e.g. `customer-pricing-recommendations`, NOT `customer_pricing_recommendations`). `vulcan create_deploy_yaml` validates it against `^[a-z]([-a-z0-9]*[a-z0-9])?$` and rejects underscores; changing `name:` later invalidates the state registry and forces a `.state.db` delete + re-plan.
   **Wait for the user to confirm** before proceeding. Do NOT continue automatically.
 
-  **If a project was already initialized without `--template empty`** (demo scaffolding present), delete ALL init-generated example/demo files (keep `config.yaml`, `usage.yaml`, and the empty directory structure) before generating your own files or running any plan.
-
   **Add `ignore_patterns` to `config.yaml` BEFORE any plan** — this is mandatory. Vulcan scans the entire project directory, so without ignore patterns it will pick up files from `dpbs-docs/` (including `dpbs-docs/vulcan-examples/`, `dpbs-docs/vulcan-book/`, `dpbs-docs/dataos-philosophy/`) and attempt to compile them as models, causing spurious errors. Open `config.yaml` and add:
 
   ```yaml
@@ -266,7 +264,7 @@ This loop is used whenever `vulcan plan dev --auto-apply` fails, at any stage:
 - DQ `dimension: integrity` rejected → `integrity` is not one of Vulcan's 8 DQ dimensions; use `validity`/`consistency` (valid set: completeness, validity, accuracy, consistency, uniqueness, timeliness, conformity, coverage)
 - test YAML "expected a dict, got str" / top-level `model:` rejected → wrap the test under a top-level name (`test_<name>:`) with `model`/`inputs`/`outputs` nested under it
 - duplicate model / duplicate-key error after changing `config.yaml` `name:` (or renaming a model) → stale state registry; delete the state DB (`.state.db`) and re-plan
-- `Relation does not exist` / `depends_on` not found on the FIRST plan → project was initialized without `--template empty`, leaving demo files; delete all init demo files before planning (or re-init with `vulcan init <engine_name> --template empty` next time)
+- `Relation does not exist` / `depends_on` not found on the FIRST plan → project was likely initialized without `--template empty`, leaving demo files referencing nonexistent models; STOP and ask the user how to proceed rather than deleting anything yourself
 - `relation does not exist` during `vulcan evaluate -e dev` (NOT the first plan) → `evaluate` re-ran the SQL but didn't rewrite an intermediate VIEW dependency to its `__dev` name; query the already-materialized dev table directly with `vulcan fetchdf "SELECT * FROM <schema>__dev.<model> LIMIT 10"`
 - YAML parse errors → indentation or syntax issue
 
