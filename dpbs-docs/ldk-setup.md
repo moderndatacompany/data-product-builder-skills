@@ -48,46 +48,45 @@ source .venv/bin/activate
 
 ## 3. Install Vulcan
 
-Vulcan ships as a Python wheel.
+Vulcan ships as a Python wheel, bundled at `dpbs-docs/vulcan-*.whl`.
 
-{% file src="../../.gitbook/assets/vulcan-0.228.1.26-py3-none-any.whl" %}
-
-Download and place the Vulcan `.whl` file in your working directory (or use its full path), then install:
+Resolve the exact filename, then install it:
 
 ```sh
-pip install "./vulcan-0.228.1.26-py3-none-any.whl"
+WHEEL=$(ls dpbs-docs/vulcan-*.whl | head -1)
+pip install "${WHEEL}"
 ```
 
-If you target a specific engine, install the matching extra. Quote the path so your shell does not interpret the brackets:
+If you target a specific engine, install the matching extra using the `WHEEL` variable resolved above. Quote the path so your shell does not interpret the brackets:
 
 {% tabs %}
 {% tab title="Postgres" %}
 ```bash
-pip install "./vulcan-0.228.1.26-py3-none-any.whl[postgres]"
+pip install "${WHEEL}[postgres]"
 ```
 {% endtab %}
 
 {% tab title="Snowflake" %}
 ```bash
-pip install "./vulcan-0.228.1.26-py3-none-any.whl[snowflake]"
+pip install "${WHEEL}[snowflake]"
 ```
 {% endtab %}
 
 {% tab title="Databricks" %}
 ```bash
-pip install "./vulcan-0.228.1.26-py3-none-any.whl[databricks]"
+pip install "${WHEEL}[databricks]"
 ```
 {% endtab %}
 
 {% tab title="Spark" %}
 ```bash
-pip install "./vulcan-0.228.1.26-py3-none-any.whl[spark]"
+pip install "${WHEEL}[spark]"
 ```
 {% endtab %}
 
 {% tab title="Trino" %}
 ```bash
-pip install "./vulcan-0.228.1.26-py3-none-any.whl[trino]"
+pip install "${WHEEL}[trino]"
 ```
 {% endtab %}
 {% endtabs %}
@@ -309,7 +308,7 @@ Start a local Spark standalone cluster with MinIO and an Iceberg REST catalog.
 
 This avoids Windows Hadoop or `winutils.exe` issues because the Spark driver runs inside Linux.
 
-Place `vulcan-0.228.1.26-py3-none-any.whl` in your project root, then save this as `docker/docker-compose.spark.yml`:
+Place the Vulcan `.whl` file (`vulcan-*.whl`) in your project root, then save this as `docker/docker-compose.spark.yml`:
 
 {% code overflow="wrap" expandable="true" %}
 ```yaml
