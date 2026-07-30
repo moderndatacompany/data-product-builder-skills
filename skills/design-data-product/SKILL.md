@@ -13,16 +13,16 @@ disable-model-invocation: true
 
 Design data products for Vulcan/DataOS. Be methodical, artifact-driven, and assumption-averse. Take the user from a vague idea to a validated, implementation-ready design spec.
 
-> **How this skill is installed**: The skills and grounding docs are installed by running `npx dataproduct-builder-skills` in the project root. This copies the skill files into the IDE folder (`.cursor/skills/`, `.claude/skills/`, or `.codex/skills/`) and installs `dpbs-docs/dataos/documentation/references/resources/vulcan/`, `dpbs-docs/dataos-philosophy/`, and `dpbs-docs/vulcan-examples/` into the project. If at any point the grounding docs are missing or a `dpbs-docs/` read returns nothing, tell the user to run `npx dataproduct-builder-skills` in their project root to install them.
+> **How this skill is installed**: The skills and grounding docs are installed by running `npx dataproduct-builder-skills` in the project root. This copies the skill files into the IDE folder (`.cursor/skills/`, `.claude/skills/`, or `.codex/skills/`) and installs `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, and `dpbs-docs/vulcan-examples/` into the project. If at any point the grounding docs are missing or a `dpbs-docs/` read returns nothing, tell the user to run `npx dataproduct-builder-skills` in their project root to install them.
 
 ---
 
 ## Core Principles
 
 1. **Never invent information** — if documentation doesn't support a claim, say "Unknown." Never invent column names, table names, schema details, or documentation links.
-2. **Never reason beyond the docs** — if a concept, syntax, or pattern isn't explicitly covered in `dpbs-docs/dataos/documentation/references/resources/vulcan/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`, don't deduce or extrapolate an answer from general knowledge. Say it's undocumented and ask the user or point to the closest documented alternative.
+2. **Never reason beyond the docs** — if a concept, syntax, or pattern isn't explicitly covered in `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`, don't deduce or extrapolate an answer from general knowledge. Say it's undocumented and ask the user or point to the closest documented alternative.
 3. **Never skip requirements** — always gather context before jumping to solutions. Don't skip stages.
-4. **Ground everything in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against the Vulcan documentation in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/` (search your indexed workspace and read the relevant page). For concrete code syntax, also read from `dpbs-docs/vulcan-examples/`. When in doubt, look it up — never rely on memory.
+4. **Ground everything in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against the Vulcan documentation in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` (search your indexed workspace and read the relevant page). For concrete code syntax, also read from `dpbs-docs/vulcan-examples/`. When in doubt, look it up — never rely on memory.
 5. **Build the artifact progressively** — create and update `data-product-plan.md` at every stage. Document decisions as you go.
 6. **Mark assumptions explicitly** — use the `[Assumption]` tag for anything not confirmed by the user.
 7. **Vulcan is anti-pipeline** — never use "pipeline." Use "model DAG", "data product", or "model layers" instead.
@@ -53,7 +53,7 @@ Use these resources proactively — grounding every decision in the docs is mand
 
 | Situation                           | What to do                                                                         | When                                                                           |
 | ----------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Any Vulcan concept mentioned        | Read the relevant page(s) in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/`     | BEFORE using the concept in any output                                         |
+| Any Vulcan concept mentioned        | Read the relevant page(s) in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`     | BEFORE using the concept in any output                                         |
 | Any design decision                 | Reason from the docs + confirmed requirements; record it in `data-product-plan.md` | AFTER each batch of questions                                                  |
 | Need implementation pattern         | read from `dpbs-docs/vulcan-examples/` (category=..., engine=...)                       | BEFORE generating any code or recommending patterns                            |
 | Quality checks for the data product | Derive them yourself from the spec columns, grounded in the `dq`/audits docs       | At end of Stage 3.5 (Step 2.5) after spec is finalized                         |
@@ -124,7 +124,7 @@ Then continue to Stage 1.
 **Goal**: Understand what the user wants to build.
 
 - Listen to the user's initial request
-- If they use unfamiliar terms, read the relevant page in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/` to clarify
+- If they use unfamiliar terms, read the relevant page in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` to clarify
 - Ask probing questions: "What problem are you solving?", "Who consumes this?", "What decisions does it enable?"
 
 No artifact yet — this is exploratory conversation.
@@ -245,7 +245,7 @@ If `table_profile` returns "profiler has not been run", note it and continue —
 
 **[Checkpoint — Model Kind Classification]** (mandatory, once per confirmed table)
 
-Read the **model kinds** page in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/` now — before any architecture decisions are made.
+Read the **model kinds** page in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` now — before any architecture decisions are made.
 
 Then, for each confirmed source table, classify it using this decision rule:
 
@@ -364,7 +364,7 @@ After answers → update plan with section 10.
 **Rules for all batches**:
 
 - Keep a running record of all confirmed values in `data-product-plan.md`: problem, use_case, consumers, key_questions, data_source, engine, entities, tables, model_kinds (each with table, kind = EXTERNAL|FULL|VIEW|INCREMENTAL|SEED, and owned_by = this DP / <other-dp-name> / raw source), joins, filters, measures, dimensions, metrics, grain, modeling_approach, consumption, freshness, backfill.
-- After each batch, actively look for gaps and open questions yourself — do not wait for the user to volunteer them. Ground every inference in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/`.
+- After each batch, actively look for gaps and open questions yourself — do not wait for the user to volunteer them. Ground every inference in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`.
 - Summarize what you understood and confirm with the user before moving to the next batch
 
 ---
@@ -419,7 +419,7 @@ Iterate with the user until they confirm. Persist confirmed assumptions to Secti
 **Stall handling**: If the user can't answer a critical question or you hit uncertainty:
 
 - **Blocked on a question** (especially grain): Surface what's blocking, offer 2-3 concrete options grounded in the docs and real examples (read from `dpbs-docs/vulcan-examples/`). If still unresolved, document as an open question with a recommended default and move on.
-- **Unknown concept**: Be transparent. Tell the user you couldn't find it in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/`, ask if it's a custom term.
+- **Unknown concept**: Be transparent. Tell the user you couldn't find it in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`, ask if it's a custom term.
 - **Vague requirements**: State specifically what you need to proceed. If you can't get clarity, provide a partial spec with grain marked UNKNOWN.
 - **No matching examples**: Say so, and offer the closest alternatives from `dpbs-docs/vulcan-examples/`.
 
@@ -433,7 +433,7 @@ Complete all steps before handing off to build.
 
 **Step 1 — Extract ALL technical terms from the spec:**
 
-Create two checklists from your `data-product-plan.md`, then read the relevant page(s) in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/` for each item (search your indexed workspace) and confirm your understanding:
+Create two checklists from your `data-product-plan.md`, then read the relevant page(s) in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` for each item (search your indexed workspace) and confirm your understanding:
 
 **Vulcan Concepts Checklist** (minimum required — read the docs page for each):
 
@@ -452,7 +452,7 @@ Create two checklists from your `data-product-plan.md`, then read the relevant p
 - [ ] each business term from measures/metrics
 - [ ] each domain-specific term
 
-Read the `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/` pages for every Vulcan concept above; for business terms, confirm the definition with the user if the docs don't cover them.
+Read the `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` pages for every Vulcan concept above; for business terms, confirm the definition with the user if the docs don't cover them.
 
 **Step 2 — Retrieve reference patterns:**
 
@@ -462,12 +462,12 @@ Read files from `dpbs-docs/vulcan-examples/<Q5b>/` only — this is the confirme
 - [ ] Read semantics files from `dpbs-docs/vulcan-examples/<Q5b>/` — see how measures/dimensions are defined
 - [ ] Read metrics files from `dpbs-docs/vulcan-examples/<Q5b>/` — see how metrics reference measures
 
-If NO examples found: tell the user, and fall back to the patterns documented in `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/`.
+If NO examples found: tell the user, and fall back to the patterns documented in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`.
 
 **Step 2.5 — Derive quality rules**:
 
 Derive the quality rules yourself from the finalized spec — there is no tool for this. Ground the
-rule types and YAML structure in the `dq` and audits pages of `dpbs-docs/dataos/documentation/references/resources/vulcan/` and `dpbs-docs/dataos-philosophy/`, and read dq and audits files from `dpbs-docs/vulcan-examples/<Q5b>/` only
+rule types and YAML structure in the `dq` and audits pages of `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`, and read dq and audits files from `dpbs-docs/vulcan-examples/<Q5b>/` only
 for concrete syntax. Because the model is not yet deployed, mark any numeric threshold as
 [Estimated] — these MUST be replaced with real values after deployment (re-derive from
 `vulcan evaluate` output during build).
@@ -625,11 +625,11 @@ Create a summary showing you completed the work:
 ## VERIFICATION SUMMARY
 
 ### Concepts Verified:
-- Grain: [definition from dpbs-docs/dataos/documentation/references/resources/vulcan and dpbs-docs/dataos-philosophy]
+- Grain: [definition from dpbs-docs/vulcan-docs and dpbs-docs/dataos-philosophy]
 - Measures: [list with explanations for each]
 - Metrics: [list — each as measure + time dimension, e.g., "revenue_by_segment = total_revenue over order_date"]
 - Dimensions: [list with types]
-- Model Kind: [chosen kind with rationale from dpbs-docs/dataos/documentation/references/resources/vulcan and dpbs-docs/dataos-philosophy]
+- Model Kind: [chosen kind with rationale from dpbs-docs/vulcan-docs and dpbs-docs/dataos-philosophy]
 - Assertions: [types needed based on grain/measures]
 
 ### Model Selection Reasoning (WHY):
