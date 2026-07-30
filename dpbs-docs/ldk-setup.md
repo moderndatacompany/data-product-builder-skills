@@ -97,48 +97,47 @@ python3.10 -m pip install --upgrade pip
 {% step %}
 ### Install Vulcan
 
-{% file src="../.gitbook/assets/vulcan-0.228.1.25-py3-none-any.whl" %}
-
-Download and place the Vulcan `.whl` file in your working directory (or use its full path), then install:
+The Vulcan `.whl` file is bundled at `dpbs-docs/vulcan-*.whl`. Resolve the exact filename, then install it:
 
 ```sh
-pip install "./vulcan-0.228.1.25-py3-none-any.whl"
+WHEEL=$(ls dpbs-docs/vulcan-*.whl | head -1)
+pip install "${WHEEL}"
 ```
 
 This installs the **core** library, which includes the DuckDB engine for local experimentation.
 
 #### Install with engine extras
 
-If your workflow targets a specific warehouse or execution engine, install the matching extra. Always wrap the path in quotes so your shell does not interpret the brackets:
+If your workflow targets a specific warehouse or execution engine, install the matching extra using the `WHEEL` variable resolved above. Always wrap the path in quotes so your shell does not interpret the brackets:
 
 {% tabs %}
 {% tab title="Postgres" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[postgres]"
+pip install "${WHEEL}[postgres]"
 ```
 {% endtab %}
 
 {% tab title="Snowflake" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[snowflake]"
+pip install "${WHEEL}[snowflake]"
 ```
 {% endtab %}
 
 {% tab title="Databricks" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[databricks]"
+pip install "${WHEEL}[databricks]"
 ```
 {% endtab %}
 
 {% tab title="Spark" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[spark]"
+pip install "${WHEEL}[spark]"
 ```
 {% endtab %}
 
 {% tab title="Trino" %}
 ```bash
-pip install "./vulcan-0.228.1.25-py3-none-any.whl[trino]"
+pip install "${WHEEL}[trino]"
 ```
 {% endtab %}
 {% endtabs %}
@@ -356,7 +355,7 @@ If you already have a Spark cluster, use the `vulcan-cli` service below and upda
 
 Spark uses a dedicated Docker Compose setup in this guide. It runs a Spark standalone cluster, MinIO, an Iceberg REST catalog, and a Linux-based `vulcan-cli` container. This avoids Windows Hadoop or `winutils.exe` issues because the Spark driver runs inside Linux.
 
-Place `vulcan-0.228.1.25-py3-none-any.whl` in your project root, then save this as `docker/docker-compose.spark.yml`:
+Place the Vulcan `.whl` file (`vulcan-*.whl`) in your project root, then save this as `docker/docker-compose.spark.yml`:
 
 {% code overflow="wrap" %}
 ```yaml
