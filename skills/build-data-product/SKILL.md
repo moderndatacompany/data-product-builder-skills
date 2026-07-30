@@ -581,7 +581,7 @@ vulcan plan prod \
 
 Use the backfill start date from Section 10 of `data-product-plan.md` (Q9). For "full history", use the earliest date in the source data.
 
-**DataOS deployment (scheduled production runs)**: After the local prod plan succeeds, generate the deployment manifest so the user can register the data product as a DataOS Vulcan resource for scheduled runs. Deploying to DataOS involves several setup steps outside of the Vulcan CLI — refer the user to the deployment guide: [LDK Setup](https://dataosinfo.gitbook.io/dataos-2.0-new-ia/j5idLvlrOLZoJN48bV2d/build/readme/ldk-setup). Do NOT fetch or open this URL — present it as a clickable link only.
+**DataOS deployment (scheduled production runs)**: After the local prod plan succeeds, generate the deployment manifest so the user can register the data product as a DataOS Vulcan resource for scheduled runs. Deploying to DataOS involves several setup steps outside of the Vulcan CLI — refer the user to the deployment guide: [Vulcan Deployment Guide](https://v2.dataos.info/references/resources/vulcan/deployment). Do NOT fetch or open this URL — present it as a clickable link only.
 
 1. **Generate the deployment manifest**:
 
