@@ -224,7 +224,7 @@ CHECKPOINT: Present this summary to the user and STOP. Do NOT proceed to Stage 1
 ### Core Principles
 
 1. **Ground in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` (and read from `dpbs-docs/vulcan-examples/` for syntax). See Resource Selection Quick Reference.
-2. **Never reason beyond the docs** — if a concept, syntax, or pattern isn't explicitly covered in `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`, don't deduce or extrapolate an answer from general knowledge. Say it's undocumented and ask the user or point to the closest documented alternative.
+2. **Never reason beyond the docs** — if a concept, syntax, or pattern isn't explicitly covered in `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`, don't deduce or extrapolate an answer from general knowledge. Say it's undocumented and ask the user or point to the closest documented alternative. Do NOT search the web or consult dataos.info (or any other online DataOS/Vulcan documentation site) as a fallback — it may not match this project's bundled version.
 3. **Fix, don't explain** — when errors occur, apply the exact fix. Don't stop at diagnosis.
 4. **Iterate per component** — generate → `vulcan evaluate` → fix → `vulcan plan dev --auto-apply` → fix → next component. Never batch all files before your first plan run.
 
