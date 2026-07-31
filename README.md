@@ -100,21 +100,20 @@ Running `npx dataproduct-builder-skills` again safely updates existing files wit
 
 ## Syncing Vulcan docs & examples (maintainers)
 
-`dpbs-docs/dataos` and `dpbs-docs/vulcan-examples` are git submodules (GitHub `moderndatacompany/dataos` and Bitbucket `rubik_/vulcan-examples`), reused locally instead of re-cloned every time.
+`dpbs-docs/dataos` and `dpbs-docs/vulcan-examples` are git submodules (GitHub `moderndatacompany/dataos` and Bitbucket `rubik_/vulcan-examples`, both tracking their `main` branch per `.gitmodules`), reused locally instead of re-cloned every time.
 
 ```bash
 npm run sync:vulcan          # dry-run — shows what would change
 npm run sync:vulcan:apply    # applies it
 ```
 
-This updates/force-restores both submodules to their pinned commits, and restricts `dpbs-docs/dataos`'s working tree to just `documentation/references/resources/vulcan` via sparse-checkout. It does **not** filter `dpbs-docs/vulcan-examples` — that submodule is left with its full raw content after this script runs; engine/file filtering happens only at install time (`bin/create.js`) and at packaging time (see below). Run this whenever you want the full submodule content back for local browsing after packaging has pruned it.
+This updates/force-restores both submodules to their currently pinned commits, and restricts `dpbs-docs/dataos`'s working tree to just `documentation/references/resources/vulcan` via sparse-checkout. It does **not** filter `dpbs-docs/vulcan-examples` — that submodule is left with its full raw content after this script runs; engine/file filtering happens only at install time (`bin/create.js`) and at packaging time (see below). Run this whenever you want the full submodule content back for local browsing after packaging has pruned it, or after pulling `main` and seeing the submodules show up as "modified (new commits)" — a teammate updated the pinned commit and you just need to check it out locally.
 
-To pull the *latest* upstream commit (not just re-apply the currently pinned one):
+To pull the *latest* upstream commit for both submodules (not just re-apply the currently pinned one):
 
 ```bash
-git -C dpbs-docs/dataos fetch && git -C dpbs-docs/dataos checkout main && git -C dpbs-docs/dataos pull
-git -C dpbs-docs/vulcan-examples fetch && git -C dpbs-docs/vulcan-examples checkout main && git -C dpbs-docs/vulcan-examples pull
-npm run sync:vulcan:apply
+git submodule update --remote --merge
+npm run sync:vulcan:apply                            # re-apply the dataos sparse-checkout
 git add dpbs-docs/dataos dpbs-docs/vulcan-examples   # stage the new pinned commits
 ```
 
