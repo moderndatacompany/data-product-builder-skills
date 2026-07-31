@@ -35,6 +35,8 @@ Which engine would you like to install examples for?
 Enter number (0–5):
 ```
 
+
+
 ## What gets installed
 
 ```
@@ -66,7 +68,11 @@ dpbs-docs/
   vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install dpbs-docs/vulcan-*.whl
 ```
 
+
+
 ## What the skills do
+
+
 
 ### `design-data-product`
 
@@ -81,6 +87,8 @@ Guides you from a vague idea to a validated `data-product-plan.md` spec through:
 
 > **Requires**: Data Product MCP (`dataproduct-mcp/api/v1`) connected in Cursor Settings → MCP.
 
+
+
 ### `build-data-product-workflow`
 
 Turns the validated design spec into a working, deployed Vulcan data product — scaffolding models, generating SQL/YAML, running `vulcan plan/evaluate`, enriching metadata, applying quality checks, and deploying to dev and prod.
@@ -89,10 +97,11 @@ Turns the validated design spec into a working, deployed Vulcan data product —
 
 ## Requirements
 
-- [Cursor IDE](https://cursor.com)
 - Node.js ≥ 16
 - Data Product MCP connected in Cursor (for the design skill)
 - Vulcan CLI (`pip install vulcan-data-tool`) for the build skill
+
+
 
 ## Re-running
 
@@ -116,6 +125,8 @@ git submodule update --remote --merge
 npm run sync:vulcan:apply                            # re-apply the dataos sparse-checkout
 git add dpbs-docs/dataos dpbs-docs/vulcan-examples   # stage the new pinned commits
 ```
+
+
 
 ### Automatic pruning before packaging
 
@@ -169,6 +180,8 @@ This automatically updates `package.json` and creates a git version commit + tag
 git push origin main --follow-tags
 ```
 
+
+
 ### 4. Publish to npm
 
 ```bash
@@ -177,11 +190,15 @@ npm publish --access public
 
 > First time only: run `npm login` before publishing and sign in with your npm account.
 
+
+
 ### One-liner (steps 2–4 combined)
 
 ```bash
 npm version patch && npm publish --access public && git push origin main --follow-tags
 ```
+
+
 
 ### 5. Verify
 
@@ -194,6 +211,8 @@ npx dataproduct-builder-skills@latest
 ```
 
 ---
+
+
 
 ## License
 
