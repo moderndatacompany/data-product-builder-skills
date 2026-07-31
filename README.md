@@ -9,31 +9,32 @@ Run a single command to scaffold agent skills for **Cursor**, **Claude Code**, *
 Installs the skills and the Vulcan reference docs your project needs:
 
 ```bash
-# Interactive — prompts you to pick an engine
+# Installs examples for all engines by default
 npx dataproduct-builder-skills
 
-# Or pass the engine directly to skip the prompt
+# Or pass an engine to install examples for just that one
 npx dataproduct-builder-skills snowflake
 npx dataproduct-builder-skills postgres
 npx dataproduct-builder-skills databricks
 ```
 
-This launches an interactive prompt:
+This launches an interactive prompt for which IDE(s) to install into:
 
 ```
 dataproduct-builder-skills — scaffolding skills + docs
 
-Which engine would you like to install examples for?
+Which IDE(s) are you using? (comma-separated for multiple, e.g. 1,2)
 
-  0  All engines
-  1  databricks
-  2  postgres
-  3  snowflake
-  4  spark
-  5  trino
+  1  Cursor
+  2  Claude Code
+  3  Codex
+  4  VS Code (Copilot)
+  5  All
 
-Enter number (0–5):
+Enter number(s) (1–5):
 ```
+
+Engine selection is **not** interactive — it's `all` by default, or whichever engine you passed as a CLI argument.
 
 
 
