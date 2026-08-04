@@ -162,7 +162,7 @@ async function main() {
   const targetDir   = process.cwd();               // the user's project (destination)
   const examplesDir = path.join(packageDir, 'dpbs-docs', 'vulcan-examples');
 
-  const ALLOWED_ENGINES = ['databricks', 'postgres', 'snowflake', 'spark', 'trino'];
+  const ALLOWED_ENGINES = ['databricks', 'fabric', 'mssql', 'postgres', 'snowflake', 'spark', 'trino'];
 
   // Only offer engines that actually shipped examples in this package version.
   const validEngines = fs.existsSync(examplesDir)

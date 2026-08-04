@@ -131,7 +131,7 @@ git add dpbs-docs/dataos dpbs-docs/vulcan-examples   # stage the new pinned comm
 
 ### Automatic pruning before packaging
 
-`npm pack`/`npm publish` runs `scripts/prepack-clean-examples.sh` automatically via the `prepack` npm lifecycle hook. It deletes everything in `dpbs-docs/vulcan-examples` except the allowed engines (`databricks`, `postgres`, `snowflake`, `spark`, `trino`) and strips junk files (`README.md`, `*.md`, `*.csv`, `*.tsv`, lockfiles, etc.) — without it, the raw submodule (200MB+ of seed CSVs, disallowed engines) would ship verbatim in the published tarball.
+`npm pack`/`npm publish` runs `scripts/prepack-clean-examples.sh` automatically via the `prepack` npm lifecycle hook. It deletes everything in `dpbs-docs/vulcan-examples` except the allowed engines (`databricks`, `fabric`, `mssql`, `postgres`, `snowflake`, `spark`, `trino`) and strips junk files (`README.md`, `*.md`, `*.csv`, `*.tsv`, lockfiles, etc.) — without it, the raw submodule (200MB+ of seed CSVs, disallowed engines) would ship verbatim in the published tarball.
 
 ⚠️ This **mutates your working tree**, not just the pack output — after running `npm pack`/`npm publish`, `dpbs-docs/vulcan-examples` on disk will be pruned down. Run `npm run sync:vulcan:apply` (or `git submodule update --init --force dpbs-docs/vulcan-examples`) afterward to restore full content for local dev.
 
