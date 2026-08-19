@@ -42,12 +42,30 @@ signals/             — Event signal handlers (Python)
 
 ## Gate Check
 
-**Before anything else**: Confirm the user has a design spec or `data-product-plan.md` from the design workflow.
+**Before anything else**: Confirm the user has *some* spec to build from — it does not have to be a `data-product-plan.md` produced by `design-data-product`. Classify what they hand you:
 
-- If **yes** → proceed to Stage 0.
-- If **no** → stop. Direct them to use the `design-data-product` skill first. Do NOT gather requirements or generate a design spec here — that is the design skill's job.
+- **No spec at all** → stop. Direct them to `design-data-product` first (or, for a DataOS 1.0 project, `migrate-data-product`). Do NOT gather requirements or generate a design spec here — that is those skills' job, not this one's.
+- **Canonical spec** — a `data-product-plan.md` (or `migration-map.md`) carrying the expected sections (engine, grain, entities, measures/dimensions/metrics, Section 13 Model Architecture, Section 15 Quality Rules) → proceed straight to Stage 0.
+- **External spec** — anything else the user brings in: a PRD, a dbt/Cube/other tool's YAML, a wiki export, a hand-written note, a JSON contract, etc. → run **Spec Intake** below before Stage 0.
 
-After the Gate Check passes, display this disclaimer exactly once before continuing:
+### Spec Intake (external specs only)
+
+The rest of this workflow (Stage 0 onward, the error-handling loop, the syntax rules) is written assuming a `data-product-plan.md`-shaped input. An external spec needs to be mapped onto that shape first — this step does the mapping, it does not replace `design-data-product`'s discovery rigor.
+
+**Required fields** (the "spec contract" this workflow actually consumes): engine, grain, entities, measures (with aggregation type), dimensions, metrics (measure + time dimension), model architecture / layering (Section 13 equivalent), quality rules (Section 15 equivalent — at minimum grain/key assertions).
+
+1. Read the external spec in full. Map its content onto the required fields above.
+2. For each required field the spec doesn't state explicitly, either infer it from what the spec *does* say (mark it `[Assumption]`, same discipline `design-data-product` uses) or ask the user directly — do not silently invent a grain, measure formula, or quality rule.
+3. Write the mapped result into a normalized `data-product-plan.md` (reuse the Artifact Template from `design-data-product`'s SKILL.md; sections with no source content in the external spec stay marked "To be defined" or `[Assumption]`, not fabricated).
+4. Proceed to Stage 0 using this normalized file as the spec.
+
+**Tell the user plainly, before generating anything**, that this path produces a lower-confidence build than a spec that went through `design-data-product`:
+
+> **Reduced-confidence build:** This spec didn't come from the `design-data-product` workflow, so it hasn't been through entity confirmation, table profiling, join/cardinality checks, the measure/metric formula probe, the answerability review, or `ai_context`/`behavior` drafting. I've mapped what your spec provides onto the fields this build needs and flagged the rest as assumptions or open questions below — please review those closely, they're the parts most likely to be wrong. For anything business-critical, running it through `design-data-product` first will produce a more reliable build.
+
+Show the mapped fields, the `[Assumption]` list, and any open questions, and get explicit user confirmation before proceeding to Stage 0 — same checkpoint discipline as `design-data-product`'s Stage 2.5.
+
+After the Gate Check (and Spec Intake, if it ran) passes, display this disclaimer exactly once before continuing:
 
 > **Build Disclaimer:** This build is AI-assisted and generated from your design spec. Please review the plan and generated files carefully before deploying to development or promoting to production, especially for semantic correctness, data quality, and environment-specific behavior
 
@@ -226,20 +244,20 @@ CHECKPOINT: Present this summary to the user and STOP. Do NOT proceed to Stage 1
 1. **Ground in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` (and read from `dpbs-docs/vulcan-examples/` for syntax). See Resource Selection Quick Reference.
 2. **Never reason beyond the docs** — if a concept, syntax, or pattern isn't explicitly covered in `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`, don't deduce or extrapolate an answer from general knowledge. Say it's undocumented and ask the user or point to the closest documented alternative. Do NOT search the web or consult dataos.info (or any other online DataOS/Vulcan documentation site) as a fallback — it may not match this project's bundled version. `https://v2.dataos.info` is the one exception — it's the correct, current documentation domain and may be used.
 3. **Fix, don't explain** — when errors occur, apply the exact fix. Don't stop at diagnosis.
-4. **Iterate per component** — generate → `vulcan evaluate` → fix → `vulcan plan dev --auto-apply` → fix → next component. Never batch all files before your first plan run.
+4. **Iterate per component** — generate → `vulcan evaluate` → fix → `vulcan plan` → fix → next component. Never batch all files before your first plan run.
 
 ---
 
 ### Standard Error Handling Loop
 
-This loop is used whenever `vulcan plan dev --auto-apply` fails, at any stage:
+This loop is used whenever `vulcan plan` fails, at any stage:
 
-1. Read the error message from `vulcan plan dev --auto-apply` output
+1. Read the error message from `vulcan plan` output
 2. Look up the error in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` (search for the error text or the concept it touches) to understand the root cause and fix
 3. Fix the broken file yourself, cross-checking against the relevant `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` pages and the Vulcan syntax rules below
 4. If the root cause is structural (not just syntax) → read from `dpbs-docs/vulcan-examples/` (category: `<affected category>`, engine: `<engine>`) to see how working projects handle it
 5. Apply the fix
-6. Re-run `vulcan plan dev --auto-apply`
+6. Re-run `vulcan plan`
 7. Repeat until the plan succeeds
 
 **Common error patterns:**
@@ -268,7 +286,7 @@ This loop is used whenever `vulcan plan dev --auto-apply` fails, at any stage:
 - `relation does not exist` during `vulcan evaluate -e dev` (NOT the first plan) → `evaluate` re-ran the SQL but didn't rewrite an intermediate VIEW dependency to its `__dev` name; query the already-materialized dev table directly with `vulcan fetchdf "SELECT * FROM <schema>__dev.<model> LIMIT 10"`
 - YAML parse errors → indentation or syntax issue
 
-Always use `vulcan plan dev --auto-apply`, NOT `vulcan plan` alone. The `--auto-apply` flag skips the interactive `y/n` prompt — without it, the command blocks the agent indefinitely.
+Always use `vulcan plan`, NOT `vulcan plan` alone. The `--auto-apply` flag skips the interactive `y/n` prompt — without it, the command blocks the agent indefinitely.
 
 ---
 
@@ -286,6 +304,28 @@ Ground every step in the docs and real examples — this is mandatory, not optio
 | Plan quality rules and checks                      | Derived during design (Section 15 of spec); re-derive yourself after Group B only if Section 15 is absent or any values are marked [Estimated] | —                                                                                       |
 
 When a docs page you used has a reference URL, show it to the user as "Reference docs:".
+
+---
+
+### Per-Engine Reference Notes
+
+`dpbs-docs/vulcan-examples/<engine>/` gives you real files for the target engine, but doesn't call out *why* one engine's file looks different from another's. `engines/<engine>.md` (in this skill's own directory, next to this SKILL.md) fills that gap: identifier casing convention, physical-model typing style, model-kind default pattern, and — the highest-defect-rate item — the per-engine date/time function syntax used inside semantic `segments:`/measure `expression:` fields (e.g. Postgres's `CURRENT_DATE - INTERVAL '7 days'` vs Databricks/Spark's `DATE_SUB(CURRENT_DATE(), 7)` vs MSSQL/Fabric's `DATEADD(DAY, -7, CAST(GETDATE() AS DATE))` vs Trino's `INTERVAL '7' DAY`).
+
+| `<ENGINE>` | File | Notes |
+|---|---|---|
+| `postgres` | `engines/postgres.md` | Reference dialect — ANSI intervals, `::` casts |
+| `snowflake` | `engines/snowflake.md` | UPPERCASE everywhere, defensive `::` casts even in `WHERE` |
+| `databricks` | `engines/databricks.md` | Spark SQL family — no `::`, use `CAST()`; `DATE_SUB(CURRENT_DATE(), N)` |
+| `spark` | `engines/spark.md` | Same cast rule as Databricks; casing follows the source table, not a fixed convention |
+| `trino` | `engines/trino.md` | Explicit `columns()` block; `INTERVAL 'N' DAY` (number/unit split, not a quoted phrase) |
+| `mssql` | `engines/mssql.md` | T-SQL — no `::`, use `CAST()`; `DATEADD`/`GETDATE()`, no native `DATE_TRUNC` |
+| `fabric` | `engines/fabric.md` | Same T-SQL surface as `mssql` — thin file, points back to `mssql.md` |
+
+**When**: read the file for `<ENGINE>` once, right before starting Group A/B (models) and again before Group C (semantics) — same timing as the `dpbs-docs/vulcan-examples/<engine>/` read, not a separate pass.
+
+**How**: use it to decide casing and typing style *before* writing a file, and to look up the correct date/time function whenever a segment or measure `expression:` needs "last N days"/date-truncation/current-date logic — do not reuse another engine's date-function syntax verbatim even if the rest of the semantic YAML structure is identical across engines. If a shared `macros/*.py` file is in play (e.g. a `safe_divide` macro emitting `::FLOAT`), check the target engine's file for the `::`-cast note before assuming the macro is portable.
+
+If no file exists yet for the target engine, say so and fall back to the general syntax rules in this document plus `dpbs-docs/vulcan-book/`.
 
 ---
 
@@ -374,10 +414,10 @@ update Section 15 of `data-product-plan.md` with the refined rules and real thre
 After generating each component group (A through E), you must:
 
 1. Run `vulcan evaluate <model_name> --limit 10` for each SQL model in the group
-2. Run `vulcan plan dev --auto-apply` and confirm it passes
+2. Run `vulcan plan` and confirm it passes
 3. Fix all errors before moving to the next group
 
-Follow `generation_order`, grouped by component type. After each group, run `vulcan plan dev --auto-apply` and resolve all errors (using the Standard Error Handling Loop) before moving on.
+Follow `generation_order`, grouped by component type. After each group, run `vulcan plan` and resolve all errors (using the Standard Error Handling Loop) before moving on.
 
 | Order   | Component Group         | Directory           | Common Issues                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------- | ----------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ---- | ----- | ----------------------------------------------------------------------- |
@@ -416,7 +456,7 @@ Follow `generation_order`, grouped by component type. After each group, run `vul
 - **`vars: {execution_time: <ISO-date>}`** — required for INCREMENTAL_BY_TIME_RANGE models; the date controls which weekly/daily interval the model processes during the test. The date MUST fall within the test mock data's date range or the model will return empty results
 - **Mock the direct dependency** — test inputs must mock the silver/staging model (the direct FROM clause target), not the raw seed tables
 
-**Before generating any file in a group**, read from `dpbs-docs/vulcan-examples/<engine>/` once to load real syntax examples for that group. **Only read from this one engine folder — never from any other engine subfolder.**
+**Before generating any file in a group**, read from `dpbs-docs/vulcan-examples/<engine>/` once to load real syntax examples for that group. **Only read from this one engine folder — never from any other engine subfolder.** Also read `engines/<engine>.md` per the Per-Engine Reference Notes table above, same timing.
 
 - Group A/B → read models files from `dpbs-docs/vulcan-examples/<engine>/`
 - Group C → read semantics files from `dpbs-docs/vulcan-examples/<engine>/` (files live in `models/semantics/`)
@@ -479,14 +519,14 @@ docs and examples, and write them directly.
 
 **Step 3 — Cross-file consistency check**:
 
-After ALL component groups pass `vulcan plan dev --auto-apply`, review the blueprint's `consistency_rules`:
+After ALL component groups pass `vulcan plan`, review the blueprint's `consistency_rules`:
 
 - Fully-qualified model name is identical across MODEL block, semantics, checks, and tests
 - Column names match between SQL SELECT, column_descriptions, and semantics dimensions
 - Semantic measure names differ from column names
 - Test input models match the SQL FROM clause
 
-Fix any inconsistencies, then run `vulcan plan dev --auto-apply` one more time to confirm.
+Fix any inconsistencies, then run `vulcan plan` one more time to confirm.
 
 **Step 4 — User review**:
 
@@ -496,17 +536,17 @@ Before proceeding to the final plan, confirm with the user:
 - [ ] Cron schedule — matches the freshness requirement from the design
 - [ ] Any domain-specific adjustments
 
-Present a summary: list every file created with a one-line description, noting which components passed `vulcan plan dev --auto-apply`.
+Present a summary: list every file created with a one-line description, noting which components passed `vulcan plan`.
 
 ---
 
 ### Stage 2: FINAL DEV PLAN & APPLY
 
-**Goal**: Run a full-project `vulcan plan dev --auto-apply`, review with the user, and apply to dev.
+**Goal**: Run a full-project `vulcan plan`, review with the user, and apply to dev.
 
 By this point, each component has already passed individually. This is the full-project confirmation in dev.
 
-1. Run: `vulcan plan dev --auto-apply`
+1. Run: `vulcan plan`
 2. Review the plan output (tables to create, intervals to backfill)
 3. If it succeeds → confirm with the user that results look correct
 4. If it fails → use the Standard Error Handling Loop to resolve
@@ -649,7 +689,7 @@ For any ❌ item: generate and write the missing artifact immediately, then re-c
 
 ## Escalation
 
-If `vulcan plan dev --auto-apply` fails 5+ times on the same component after applying different fixes, stop and reassess:
+If `vulcan plan` fails 5+ times on the same component after applying different fixes, stop and reassess:
 
 1. Present the recurring error and all attempted fixes to the user
 2. Suggest examining the design spec for conflicting requirements
@@ -682,6 +722,26 @@ These are exact, current-version rules; they override anything you remember abou
 - Semantics — measure names: must be unique across measures + segments, must NOT be `count` (reserved), and must DIFFER from the dimension/column they aggregate (column `wtp_score` → measure `m_wtp_score` or `avg_wtp_score`).
 - Semantics — behavior: the canonical typing block is `behavior:` (NOT `semantic_config:` — that name and `behaviour:` still work but log a deprecation warning, so always emit `behavior`). Dimensions: `behavior.type` = identifier | categorical. Measures: `behavior.type` = simple | flow | stock | ratio. `stock` REQUIRES `time_dimension`, `period_treatment`, AND `period_grain` (e.g. `period_grain: day`). `ratio` uses `numerator` + `denominator` (measure names, direct children of `behavior`, siblings of `type`), type `number`, and NO `expression`. DOC/CLI SKEW: some installed CLIs reject this `ratio` shape (they require a `type: number` measure to carry a non-empty `expression`); if the plan rejects it, drop the `ratio` behavior and express the ratio as filtered `count`/`sum` measures, dividing downstream (metric layer or BI).
 - Semantics — ai_context (valid on the model and on any dimension/measure/segment/join): keys ONLY `instructions` (string OR list of strings), `synonyms` (list of strings), `caveats` (list of strings), `examples`. `examples` is a list of OBJECTS, each shaped `{description, format, query}` (e.g. `description:` + `format: sql` + a `query:` literal block) — NOT bare strings. Unknown keys fail validation (extra="forbid"); never strip ai_context or its allowed keys.
+- Semantics — joins: a top-level `joins:` list, each entry `{name, type, on}`. `name` is the other semantic model's name (not its FQN). `type` ∈ `one_to_one | one_to_many | many_to_one` — there is NO `many_to_many`; model that as a bridge table + two `many_to_one` joins instead. `on` (quote the key as `'on'` in YAML — `on` unquoted is parsed as the boolean `true` by some YAML loaders) identifies the join key(s), confirmed working in a successful `vulcan plan dev --auto-apply`:
+  ```yaml
+  joins:
+  - name: other_model
+    type: many_to_one
+    'on': CUSTOMER_ID                    # single shared column name, present in both models
+  - name: another_model
+    type: one_to_one
+    'on':
+    - CONTRACT_ID                        # multiple shared column names (composite key)
+    - CUSTOMER_ID
+  - name: differently_named_key_model
+    type: one_to_one
+    'on':
+    - CONTRACT_ID
+    - - CUSTOMER_ID                      # [local_col, other_model_col] pair when column names differ across models
+      - ACCOUNT_ID
+  ```
+  DOC/CLI SKEW: older references describe joins as a free-text `expression: "{a.col} = {b.col}"` string. Both forms may be version-dependent — if the installed CLI rejects one, switch to the other rather than treating either as definitively wrong; the structured `on:` form above is the one verified against a real successful plan.
+- Reciprocal join pairs (model A joins to B, and B also joins to A) can confuse BI tools that expect one canonical path — if both directions are declared, check whether the installed CLI/BI layer needs a `skip_for_bi: true` marker on one edge before treating a reciprocal pair as safe.
 - Metrics (`models/metrics/*.yml`, `kind: metric`): `name`, `measure: <sem>.<measure>`, `ts: <sem>.<time_col>`, `granularity`, optional `dimensions`. `measure` and `ts` must differ. Do NOT mix metrics into a semantic file. Legacy keys `time` (→ `ts`) and `slices` (→ `dimensions`) are rejected.
 - DQ (`dq/*.yml`, `kind: dq`, NOT Soda-style `checks:`): `depends_on` + a `rules:` list; each rule is `- <expr>:` with an optional metadata block (`name`, `dimension`, `description`, `filter`, `warn`, `fail`, `severity`). Vulcan's 8 DQ dimensions (ODPS v3.1) are the ONLY valid `dimension:` values: completeness, validity, accuracy, consistency, uniqueness, timeliness, conformity, coverage. `integrity` is NOT one of them — for referential/FK checks use `validity` or `consistency`.
 - Tests (`tests/*.yml`): each file is a MAPPING keyed by a unique test NAME — the top level is `test_<name>:` with `model:`/`inputs:`/`outputs:` NESTED under it. A top-level `model:` as the first key is rejected (Vulcan expects a dict of named tests, not a string). `inputs` mock the DIRECT dependency (the staging/silver model, not raw seeds) via `<model>.rows:`; `outputs.query.rows:` is a list of row dicts, NOT an inline SQL string (CTE expectations go under `outputs.ctes.<name>.rows`). NO `description` field anywhere. INCREMENTAL_BY_TIME_RANGE models need `vars: {execution_time: <date-inside-mock-range>}`. Use `partial: true` to assert a subset of columns.
