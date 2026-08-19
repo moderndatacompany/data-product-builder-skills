@@ -1,0 +1,3 @@
+kind: metric
+name: platinum_customers
+measure: customers.platinum_customers

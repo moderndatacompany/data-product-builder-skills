@@ -1,0 +1,68 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_part_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_parts
+          attributes:
+            description: "At least one part exists"
+      - missing_count(p_partkey) = 0:
+          name: no_missing_partkey
+          attributes:
+            description: "Primary key must never be null"
+      - missing_count(p_name) = 0:
+          name: no_missing_part_name
+          attributes:
+            description: "Part name must not be null"
+      - missing_count(p_type) = 0:
+          name: no_missing_part_type
+          attributes:
+            description: "Part type must not be null"
+      - missing_count(p_size) = 0:
+          name: no_missing_part_size
+          attributes:
+            description: "Part size must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_retailprice
+          fail query: |
+            SELECT p_partkey, p_name, p_retailprice
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_part_sf1
+            WHERE p_retailprice < 0
+          samples limit: 5
+          attributes:
+            description: "Retail price cannot be negative"
+      - failed rows:
+          name: invalid_size_range
+          fail query: |
+            SELECT p_partkey, p_name, p_size
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_part_sf1
+            WHERE p_size < 1 OR p_size > 50
+          samples limit: 5
+          attributes:
+            description: "Part size must be between 1 and 50 (TPC-H spec)"
+      - failed rows:
+          name: invalid_container
+          fail query: |
+            SELECT p_partkey, p_container
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_part_sf1
+            WHERE p_container IS NULL OR LENGTH(TRIM(p_container)) = 0
+          samples limit: 5
+          attributes:
+            description: "Container type must not be empty"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(p_partkey) = 0:
+          name: unique_partkey
+          attributes:
+            description: "Part key is the primary key"
+
+    # --- Timeliness ---
+    timeliness:
+      - change for row_count >= -5%:
+          name: part_count_stable
+          attributes:
+            description: "Part count should not drop more than 5% between SCD loads"

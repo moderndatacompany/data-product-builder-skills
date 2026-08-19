@@ -1,0 +1,51 @@
+kind: semantic
+name: customers
+depends_on: sales.customers
+description: Customer dimension (semantic layer)
+
+dimensions:
+  - customer_id
+  - full_name
+  - email
+  - customer_segment
+  - account_status
+  - signup_date
+  - loyalty_score
+
+measures:
+  - name: total_customers
+    type: count
+    expression: "{customers.customer_id}"
+    description: Total number of customers
+
+  - name: active_customers
+    type: count
+    expression: "{customers.customer_id}"
+    filters:
+      - "{customers.account_status} = 'Active'"
+    description: Number of active customers
+
+  - name: platinum_customers
+    type: count
+    expression: "{customers.customer_id}"
+    filters:
+      - "{customers.customer_segment} = 'Platinum'"
+    description: Number of Platinum tier customers
+
+  - name: average_loyalty_score
+    type: avg
+    expression: "{customers.loyalty_score}"
+    description: Average loyalty score across all customers
+
+segments:
+  - name: high_value_customers
+    expression: "{customers.customer_segment} IN ('Platinum', 'Gold')"
+    description: High value customers (Platinum and Gold tiers)
+
+  - name: recent_signups
+    expression: "{customers.signup_date} >= DATE_SUB(CURRENT_DATE(), 30)"
+    description: Customers who signed up in the last 30 days
+
+  - name: at_risk_customers
+    expression: "{customers.account_status} = 'Inactive' OR {customers.account_status} = 'Suspended'"
+    description: Customers with inactive or suspended accounts

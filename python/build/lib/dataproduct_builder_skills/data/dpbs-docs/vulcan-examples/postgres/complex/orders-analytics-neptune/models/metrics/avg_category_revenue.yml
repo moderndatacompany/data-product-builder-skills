@@ -1,0 +1,3 @@
+kind: metric
+name: avg_category_revenue
+measure: category_performance.avg_category_revenue

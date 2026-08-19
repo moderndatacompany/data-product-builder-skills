@@ -1,0 +1,71 @@
+models:
+  lhs3ny001depot.tpch_sparkv3.view_order_line_summary_sf1:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about view order line summary sf1. Prefer
+        its measures for aggregations and its dimensions for filtering, grouping,
+        cohorting, and drill-downs.
+      synonyms:
+        - "view order line summary sf1"
+        - "view_order_line_summary_sf1"
+        - "view"
+        - "order"
+      examples:
+        - "Show view order line summary sf1 trends over time."
+        - "Break down view order line summary sf1 by key dimensions."
+    alias: view_order_line_summary_sf1
+
+    dimensions:
+      includes:
+        - o_orderkey
+        - o_custkey
+        - o_orderdate
+
+    measures:
+      total_quantity:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total quantity. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total quantity"
+            - "total_quantity"
+            - "total"
+            - "quantity"
+          examples:
+            - "What is total quantity by month?"
+            - "Compare total quantity across key dimensions."
+        type: sum
+        expression: "{view_order_line_summary_sf1.total_quantity}"
+
+      total_extended_price:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total extended price. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total extended price"
+            - "total_extended_price"
+            - "total"
+            - "extended"
+          examples:
+            - "What is total extended price by month?"
+            - "Compare total extended price across key dimensions."
+        type: sum
+        expression: "{view_order_line_summary_sf1.total_extended_price}"
+
+      line_count:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for line count. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "line count"
+            - "line_count"
+            - "line"
+            - "count"
+          examples:
+            - "What is line count by month?"
+            - "Compare line count across key dimensions."
+        type: sum
+        expression: "{view_order_line_summary_sf1.line_count}"

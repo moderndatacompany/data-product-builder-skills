@@ -1,0 +1,70 @@
+# Converted from legacy: semantics/part.yml
+kind: semantic
+name: parts
+depends_on: test_db.vulcan_test_project.part
+ai_context:
+  instructions: >
+    Use this semantic model for questions about parts. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "parts"
+  examples:
+    - "Show parts trends over time."
+    - "Break down parts by key dimensions."
+
+dimensions:
+- PARTKEY
+- NAME
+- MFGR
+- BRAND
+- TYPE
+- SIZE
+- CONTAINER
+- RETAILPRICE
+- COMMENT
+measures:
+- name: total_parts
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total parts. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total parts"
+      - "total_parts"
+      - "total"
+      - "parts"
+    examples:
+      - "What is total parts by month?"
+      - "Compare total parts across key segments."
+  type: count
+  expression: '{parts.PARTKEY}'
+  description: Total number of parts
+  tags:
+  - metric
+  terms:
+  - metric.total_parts
+- name: avg_retailprice
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg retailprice. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg retailprice"
+      - "avg_retailprice"
+      - "avg"
+      - "retailprice"
+    examples:
+      - "What is avg retailprice by month?"
+      - "Compare avg retailprice across key segments."
+  type: avg
+  expression: '{parts.RETAILPRICE}'
+  description: Average part retail price
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_retailprice
+  - metric.aggregate

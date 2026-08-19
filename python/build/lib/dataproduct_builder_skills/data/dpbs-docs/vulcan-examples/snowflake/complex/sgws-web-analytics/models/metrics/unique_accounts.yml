@@ -1,0 +1,3 @@
+kind: metric
+name: unique_accounts
+measure: adobe_checkout.unique_accounts

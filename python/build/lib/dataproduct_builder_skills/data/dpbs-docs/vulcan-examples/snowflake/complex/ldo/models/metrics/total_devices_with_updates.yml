@@ -1,0 +1,3 @@
+kind: metric
+name: total_devices_with_updates
+measure: system_update_devices.total_devices_with_updates

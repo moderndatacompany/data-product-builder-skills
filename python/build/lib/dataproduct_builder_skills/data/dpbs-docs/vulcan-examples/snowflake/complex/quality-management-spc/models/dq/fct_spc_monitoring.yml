@@ -1,0 +1,76 @@
+# kind: dq — converted from checks/fct_spc_monitoring.yml
+kind: dq
+name: fct_spc_monitoring_dq
+depends_on: QMS_PLATFORM.GOLD.FCT_SPC_MONITORING
+
+rules:
+- row_count >= 50000:
+    name: minimum_measurement_records
+    dimension: completeness
+    description: At least 50,000 SPC measurement records should exist
+
+- missing_count(measurement_id) = 0:
+    name: no_missing_measurement_id
+    dimension: completeness
+    description: All records must have a measurement_id
+
+- missing_count(measurement_date) = 0:
+    name: no_missing_measurement_date
+    dimension: completeness
+    description: All records must have a measurement_date
+
+- missing_count(equipment_id) = 0:
+    name: no_missing_equipment_id
+    dimension: completeness
+    description: All records must have an equipment_id
+
+- missing_count(measured_value) = 0:
+    name: no_missing_measured_value
+    dimension: completeness
+    description: All records must have a measured_value
+
+- failed rows:
+    name: spec_limits_ordered
+    dimension: validity
+    description: Lower spec limit must be less than or equal to upper spec limit
+    fail query: |
+      SELECT measurement_id, lower_spec_limit, upper_spec_limit
+      FROM QMS_PLATFORM.GOLD.FCT_SPC_MONITORING
+      WHERE lower_spec_limit > upper_spec_limit
+    samples limit: 10
+
+- failed rows:
+    name: control_limits_ordered
+    dimension: validity
+    description: Lower control limit must be less than or equal to upper control limit
+    fail query: |
+      SELECT measurement_id, lower_control_limit, upper_control_limit
+      FROM QMS_PLATFORM.GOLD.FCT_SPC_MONITORING
+      WHERE lower_control_limit > upper_control_limit
+    samples limit: 10
+
+- failed rows:
+    name: ooc_flag_consistent
+    dimension: validity
+    description: Out-of-control flag should be true when measurement is outside control limits
+    fail query: |
+      SELECT measurement_id, measured_value, lower_control_limit, upper_control_limit, out_of_control_flag
+      FROM QMS_PLATFORM.GOLD.FCT_SPC_MONITORING
+      WHERE (measured_value < lower_control_limit OR measured_value > upper_control_limit) AND out_of_control_flag = false
+    samples limit: 10
+
+- duplicate_count(measurement_id) = 0:
+    name: unique_measurement_ids
+    dimension: uniqueness
+    description: Each measurement_id must be unique
+
+- avg(measured_value) > 0:
+    name: average_measured_value_positive
+    dimension: accuracy
+    description: Average measured value should be positive
+
+- invalid_percent(parameter_name) < 1%:
+    name: valid_parameter_names
+    dimension: accuracy
+    description: Parameter names must be valid SPC parameters
+    valid values: [Dimension, Resistance, Temperature, Voltage, Current, Pressure, Torque, Frequency]

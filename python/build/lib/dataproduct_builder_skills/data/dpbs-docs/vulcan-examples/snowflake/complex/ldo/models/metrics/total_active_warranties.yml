@@ -1,0 +1,3 @@
+kind: metric
+name: total_active_warranties
+measure: device_warranty.total_active_warranties

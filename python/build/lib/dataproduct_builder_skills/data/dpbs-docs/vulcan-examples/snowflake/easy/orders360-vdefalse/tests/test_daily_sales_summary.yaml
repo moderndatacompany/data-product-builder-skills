@@ -1,0 +1,46 @@
+test_sales_analytics_daily_sales_summary_single_day:
+  model: DEMODB.VDEFALSE.DAILY_SALES_SUMMARY
+  description: >-
+    Aggregate test for the daily sales summary. Two orders on the same day
+    from two distinct customers should roll up to one summary row with
+    TOTAL_ORDERS = 2, UNIQUE_CUSTOMERS = 2, and AVG_ORDER_VALUE equal to the
+    arithmetic mean of the two order totals.
+  vars:
+    start: '2025-03-01'
+    end: '2025-03-31'
+
+  inputs:
+    DEMODB.VDEFALSE.ORDERS:
+      rows:
+        - ORDER_ID: "O100"
+          ORDER_DATE: "2025-03-15"
+          CUSTOMER_ID: "C100"
+          PRODUCT_ID: "P100"
+          QUANTITY: 2
+          UNIT_PRICE: 29.99
+          DISCOUNT: 0.10
+          TAX: 4.32
+          SHIPPING_COST: 5.99
+          TOTAL_AMOUNT: 60.00
+        - ORDER_ID: "O101"
+          ORDER_DATE: "2025-03-15"
+          CUSTOMER_ID: "C101"
+          PRODUCT_ID: "P101"
+          QUANTITY: 1
+          UNIT_PRICE: 100.00
+          DISCOUNT: 0.00
+          TAX: 8.00
+          SHIPPING_COST: 12.00
+          TOTAL_AMOUNT: 120.00
+
+  outputs:
+    query:
+      rows:
+        - SALES_DATE: "2025-03-15"
+          TOTAL_ORDERS: 2
+          UNIQUE_CUSTOMERS: 2
+          TOTAL_QUANTITY: 3
+          TOTAL_REVENUE: 180.00
+          AVG_ORDER_VALUE: 90.00
+          TOTAL_TAX: 12.32
+          TOTAL_SHIPPING: 17.99

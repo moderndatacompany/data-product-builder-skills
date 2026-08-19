@@ -1,0 +1,27 @@
+kind: dq
+name: CUSTOMER_ORDERS_dq
+depends_on: DEMODB.VDEFALSE.CUSTOMER_ORDERS
+rules:
+  - row_count > 0:
+      name: customer_orders_has_rows
+      dimension: completeness
+      description: Join must produce at least one matched customer-order row
+  - missing_count(CUSTOMER_ID) = 0:
+      name: customer_id_not_null
+      dimension: completeness
+      description: Customer ID must never be null after the join
+  - missing_count(ORDER_ID) = 0:
+      name: order_id_not_null
+      dimension: completeness
+      description: Order ID must never be null after the join
+  - failed rows:
+      name: orphan_orders
+      dimension: consistency
+      fail query: |
+        SELECT o.ORDER_ID, o.CUSTOMER_ID
+        FROM DEMODB.VDEFALSE.ORDERS o
+        LEFT JOIN DEMODB.VDEFALSE.CUSTOMERS c
+          ON o.CUSTOMER_ID = c.CUSTOMER_ID
+        WHERE c.CUSTOMER_ID IS NULL
+      samples limit: 10
+      description: Every order should match a customer row (no orphan orders)

@@ -1,0 +1,3 @@
+kind: metric
+name: total_expired_warranties
+measure: device_warranty.total_expired_warranties

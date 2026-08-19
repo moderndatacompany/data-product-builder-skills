@@ -1,0 +1,105 @@
+# Converted from legacy: semantics/question_response_summary.yml
+kind: semantic
+name: question_response_summary
+depends_on: GENSLER.ANALYTICS.QUALTRICS_QUESTION_RESPONSE_SUMMARY
+ai_context:
+  instructions: >
+    Use this semantic model for questions about question response summary. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "question response summary"
+    - "question_response_summary"
+    - "question"
+    - "response"
+  examples:
+    - "Show question response summary trends over time."
+    - "Break down question response summary by key dimensions."
+
+dimensions:
+- SURVEY_ID
+- SURVEY_NAME
+- SURVEY_DESCRIPTION
+- OWNER_ID
+- ORGANIZATION_ID
+- CREATION_DATE
+- LAST_MODIFIED_DATE
+- LAST_ACCESSED_DATE
+- IS_ACTIVE
+- EARLIEST_RESPONSE_DATE
+- LATEST_RESPONSE_DATE
+- TOTAL_RESPONSE_COUNT
+- LIVE_RESPONSE_COUNT
+- SURVEY_TYPE
+- STATUS
+- COUNT_PREVIEWS
+- QUESTION_COUNT
+- BLOCK_COUNT
+- ACTUAL_RESPONSE_COUNT
+- DAYS_SINCE_ACCESSED
+- ACTIVITY_LEVEL
+measures:
+- name: total_surveys
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total surveys. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total surveys"
+      - "total_surveys"
+      - "total"
+      - "surveys"
+    examples:
+      - "What is total surveys by month?"
+      - "Compare total surveys across key segments."
+  type: count
+  expression: '*'
+  description: Total surveys
+  tags:
+  - metric
+  terms:
+  - metric.total_surveys
+- name: total_responses
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total responses. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total responses"
+      - "total_responses"
+      - "total"
+      - "responses"
+    examples:
+      - "What is total responses by month?"
+      - "Compare total responses across key segments."
+  type: sum
+  expression: '{question_response_summary.TOTAL_RESPONSE_COUNT}'
+  description: Total responses
+  tags:
+  - metric
+  terms:
+  - metric.total_responses
+segments:
+- name: active_surveys
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the active surveys subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "active surveys"
+      - "active_surveys"
+      - "active"
+      - "surveys"
+    examples:
+      - "Show revenue for active surveys."
+      - "How many records are in active surveys?"
+  expression: '{question_response_summary.IS_ACTIVE} = TRUE'
+  description: Active surveys only
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active

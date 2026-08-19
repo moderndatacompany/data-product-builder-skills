@@ -1,0 +1,15 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: funnel_dropoff_analysis
+measure: sales_funnel.total_registration_dropoff
+ts: sales_funnel.funnel_date
+dimensions:
+- sales_funnel.region_name
+description: Customer drop-off after registration
+tags:
+- funnel
+- dropoff
+- churn
+terms:
+- funnel.dropoff_analysis
+- churn.non_converting_customers

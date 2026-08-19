@@ -1,0 +1,136 @@
+# Converted from legacy: semantics/product.yaml
+kind: semantic
+name: product
+depends_on: web_analytics_gold.PRODUCT
+ai_context:
+  instructions: >
+    Use this semantic model for questions about product. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "product"
+  examples:
+    - "Show product trends over time."
+    - "Break down product by key dimensions."
+
+measures:
+- name: count_products
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count products. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "count products"
+      - "count_products"
+      - "count"
+      - "products"
+    examples:
+      - "What is count products by month?"
+      - "Compare count products across key segments."
+  type: count_distinct
+  expression: '{product.SITE_ITEM_PK_PRODUCT}'
+  description: Total unique products
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.count_products
+  - metric.product_count
+- name: count_brands
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count brands. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "count brands"
+      - "count_brands"
+      - "count"
+      - "brands"
+    examples:
+      - "What is count brands by month?"
+      - "Compare count brands across key segments."
+  type: count_distinct
+  expression: '{product.BRAND_NAME}'
+  description: Total unique brands
+  tags:
+  - metric
+  terms:
+  - metric.count_brands
+- name: count_suppliers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count suppliers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "count suppliers"
+      - "count_suppliers"
+      - "count"
+      - "suppliers"
+    examples:
+      - "What is count suppliers by month?"
+      - "Compare count suppliers across key segments."
+  type: count_distinct
+  expression: '{product.SUPPLIER}'
+  description: Total unique suppliers
+  tags:
+  - metric
+  terms:
+  - metric.count_suppliers
+segments:
+- name: is_beer
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is beer subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "is beer"
+      - "is_beer"
+      - "beer"
+    examples:
+      - "Show revenue for is beer."
+      - "How many records are in is beer?"
+  expression: UPPER({product.CLASS}) = 'BEER'
+  description: Beer products
+  tags:
+  - metric
+  terms:
+  - metric.is_beer
+- name: is_wine
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is wine subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "is wine"
+      - "is_wine"
+      - "wine"
+    examples:
+      - "Show revenue for is wine."
+      - "How many records are in is wine?"
+  expression: UPPER({product.CLASS}) = 'WINE'
+  description: Wine products
+  tags:
+  - metric
+  terms:
+  - metric.is_wine
+- name: is_spirits
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is spirits subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is spirits"
+      - "is_spirits"
+      - "spirits"
+    examples:
+      - "Show revenue for is spirits."
+      - "How many records are in is spirits?"
+  expression: UPPER({product.CLASS}) IN ('RUM', 'WHISKEY', 'VODKA', 'TEQUILA', 'GIN')
+  description: Spirits products
+  tags:
+  - metric
+  terms:
+  - metric.is_spirits

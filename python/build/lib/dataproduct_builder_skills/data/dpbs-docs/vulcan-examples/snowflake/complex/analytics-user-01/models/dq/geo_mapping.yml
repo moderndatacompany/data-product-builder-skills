@@ -1,0 +1,55 @@
+# kind: dq — converted from checks/geo_mapping.yml
+kind: dq
+name: GEO_MAPPING_dq
+depends_on: LENOVO.USDK.GEO_MAPPING
+rules:
+- failed rows:
+    name: missing_country_code
+    dimension: validity
+    fail query: |
+      SELECT COUNTRY_CODE, COUNTRY_NAME, REGION
+      FROM LENOVO.USDK.GEO_MAPPING
+      WHERE COUNTRY_CODE IS NULL OR TRIM(COUNTRY_CODE) = ''
+    samples limit: 10
+    description: Country code is required and cannot be null or empty
+- failed rows:
+    name: invalid_country_code_format
+    dimension: validity
+    fail query: |
+      SELECT COUNTRY_CODE, COUNTRY_NAME
+      FROM LENOVO.USDK.GEO_MAPPING
+      WHERE LENGTH(COUNTRY_CODE) != 2 OR COUNTRY_CODE !~ '^[A-Z]{2}$'
+    samples limit: 10
+    description: Country code must be exactly 2 uppercase letters (ISO 3166-1 alpha-2)
+- failed rows:
+    name: missing_country_name
+    dimension: validity
+    fail query: |
+      SELECT COUNTRY_CODE, COUNTRY_NAME
+      FROM LENOVO.USDK.GEO_MAPPING
+      WHERE COUNTRY_NAME IS NULL OR TRIM(COUNTRY_NAME) = ''
+    samples limit: 10
+    description: Country name is required and cannot be null or empty
+- failed rows:
+    name: missing_region_mapping
+    dimension: validity
+    fail query: "SELECT COUNTRY_CODE, COUNTRY_NAME, REGION_KEY, REGION\nFROM LENOVO.USDK.GEO_MAPPING\nWHERE (REGION_KEY IS NULL AND REGION IS NOT NULL) \n   OR (REGION_KEY IS NOT NULL AND REGION IS NULL)\n"
+    samples limit: 10
+    description: Region key and region name must both be present or both be null
+- failed rows:
+    name: inconsistent_sub_region_mapping
+    dimension: validity
+    fail query: "SELECT COUNTRY_CODE, COUNTRY_NAME, SUB_REGION_KEY, SUB_REGION\nFROM LENOVO.USDK.GEO_MAPPING\nWHERE (SUB_REGION_KEY IS NULL AND SUB_REGION IS NOT NULL) \n   OR (SUB_REGION_KEY IS NOT NULL\
+      \ AND SUB_REGION IS NULL)\n"
+    samples limit: 10
+    description: Sub-region key and sub-region name must both be present or both be null
+- failed rows:
+    name: duplicate_country_codes
+    dimension: uniqueness
+    fail query: |
+      SELECT COUNTRY_CODE, COUNT(*) AS duplicate_count
+      FROM LENOVO.USDK.GEO_MAPPING
+      GROUP BY COUNTRY_CODE
+      HAVING COUNT(*) > 1
+    samples limit: 10
+    description: Country code must be unique (primary key violation)

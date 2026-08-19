@@ -1,0 +1,26 @@
+kind: dq
+name: CUSTOMERS_dq
+depends_on: DEMODB.VDETRUE.CUSTOMERS
+rules:
+  - missing_count(CUSTOMER_ID) = 0:
+      name: customer_id_not_null
+      dimension: completeness
+      description: Customer ID must never be null
+  - failed rows:
+      name: invalid_email_format
+      dimension: validity
+      fail query: |
+        SELECT CUSTOMER_ID, FULL_NAME, EMAIL
+        FROM DEMODB.VDETRUE.CUSTOMERS
+        WHERE EMAIL NOT LIKE '%@%' OR EMAIL IS NULL
+      samples limit: 10
+      description: Email addresses must be in a valid format
+  - failed rows:
+      name: segment_tier_in_range
+      dimension: validity
+      fail query: |
+        SELECT CUSTOMER_ID, SEGMENT_CODE, SEGMENT_TIER
+        FROM DEMODB.VDETRUE.CUSTOMERS
+        WHERE SEGMENT_TIER < 0 OR SEGMENT_TIER > 4
+      samples limit: 10
+      description: Joined segment tier must be between 0 (Retail) and 4 (Platinum)

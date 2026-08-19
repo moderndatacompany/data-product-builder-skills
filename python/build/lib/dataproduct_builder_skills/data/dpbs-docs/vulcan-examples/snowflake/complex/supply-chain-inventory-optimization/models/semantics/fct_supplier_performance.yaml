@@ -1,0 +1,140 @@
+models:
+  ERP_PLATFORM.GOLD.FCT_SUPPLIER_PERFORMANCE:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct supplier performance. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "fct supplier performance"
+        - "fct_supplier_performance"
+        - "fct"
+        - "supplier"
+      examples:
+        - "Show fct supplier performance trends over time."
+        - "Break down fct supplier performance by key dimensions."
+    alias: fct_supplier_performance
+
+    dimensions:
+      includes:
+        - supplier_perf_key
+        - supplier_id
+        - supplier_name
+        - supplier_category
+        - evaluation_period
+        - period_start_date
+        - period_end_date
+        - calculated_at
+
+    measures:
+      total_pos:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total pos. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total pos"
+            - "total_pos"
+            - "total"
+            - "pos"
+          examples:
+            - "What is total pos by month?"
+            - "Compare total pos across key dimensions."
+        type: sum
+        expression: "{fct_supplier_performance.total_pos}"
+
+      total_po_value_usd:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total po value usd. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total po value usd"
+            - "total_po_value_usd"
+            - "total"
+            - "value"
+          examples:
+            - "What is total po value usd by month?"
+            - "Compare total po value usd across key dimensions."
+        type: sum
+        expression: "{fct_supplier_performance.total_po_value_usd}"
+
+      on_time_deliveries:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for on time deliveries. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "on time deliveries"
+            - "on_time_deliveries"
+            - "time"
+            - "deliveries"
+          examples:
+            - "What is on time deliveries by month?"
+            - "Compare on time deliveries across key dimensions."
+        type: sum
+        expression: "{fct_supplier_performance.on_time_deliveries}"
+
+      on_time_delivery_rate:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for on time delivery rate. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "on time delivery rate"
+            - "on_time_delivery_rate"
+            - "time"
+            - "delivery"
+          examples:
+            - "What is on time delivery rate by month?"
+            - "Compare on time delivery rate across key dimensions."
+        type: avg
+        expression: "{fct_supplier_performance.on_time_delivery_rate}"
+
+      quality_acceptance_rate:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for quality acceptance rate. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "quality acceptance rate"
+            - "quality_acceptance_rate"
+            - "quality"
+            - "acceptance"
+          examples:
+            - "What is quality acceptance rate by month?"
+            - "Compare quality acceptance rate across key dimensions."
+        type: avg
+        expression: "{fct_supplier_performance.quality_acceptance_rate}"
+
+      average_lead_time_days:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for average lead time days. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "average lead time days"
+            - "average_lead_time_days"
+            - "average"
+            - "lead"
+          examples:
+            - "What is average lead time days by month?"
+            - "Compare average lead time days across key dimensions."
+        type: avg
+        expression: "{fct_supplier_performance.average_lead_time_days}"
+
+      supplier_score:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for supplier score. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "supplier score"
+            - "supplier_score"
+            - "supplier"
+            - "score"
+          examples:
+            - "What is supplier score by month?"
+            - "Compare supplier score across key dimensions."
+        type: avg
+        expression: "{fct_supplier_performance.supplier_score}"

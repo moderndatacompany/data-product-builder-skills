@@ -1,0 +1,28 @@
+- name: '"MES_PLATFORM"."BRONZE"."ACTUAL_PRODUCTION_OUTPUT"'
+  columns:
+    confirmation_id: DECIMAL(38, 0)
+    work_order_id: DECIMAL(38, 0)
+    plant_code: VARCHAR(16777216)
+    work_center: VARCHAR(16777216)
+    equipment_id: VARCHAR(16777216)
+    material_number: VARCHAR(16777216)
+    confirmation_date: VARCHAR(16777216)
+    shift: VARCHAR(16777216)
+    good_quantity: DECIMAL(38, 0)
+    scrap_quantity: DECIMAL(38, 0)
+    rework_quantity: DECIMAL(38, 0)
+    confirmation_timestamp: VARCHAR(16777216)
+    operator_id: VARCHAR(16777216)
+    duration_minutes: DECIMAL(38, 0)
+- name: '"MES_PLATFORM"."BRONZE"."DOWNTIME_EVENTS"'
+  columns:
+    downtime_id: DECIMAL(38, 0)
+    equipment_id: VARCHAR(16777216)
+    plant_code: VARCHAR(16777216)
+    downtime_start: VARCHAR(16777216)
+    downtime_end: VARCHAR(16777216)
+    duration_minutes: DECIMAL(38, 0)
+    downtime_category: VARCHAR(16777216)
+    downtime_reason: VARCHAR(16777216)
+    downtime_reason_detail: VARCHAR(16777216)
+    reported_by: VARCHAR(16777216)

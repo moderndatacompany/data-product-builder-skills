@@ -1,0 +1,33 @@
+# kind: dq — converted from checks/daily_refund_kpis.yml
+kind: dq
+name: daily_refund_kpis_dq
+depends_on: qcommerce_returns_gold.daily_refund_kpis
+
+rules:
+- row_count >= 4:
+    name: minimum_daily_city_rows
+    dimension: completeness
+    description: At least four city-day refund KPI rows should exist
+
+- missing_count(ds) = 0:
+    name: no_missing_ds
+    dimension: completeness
+    description: All KPI rows must have a ds value
+
+- invalid_count(refund_rate) = 0:
+    name: refund_rate_in_range
+    dimension: validity
+    description: Refund rate must be between 0 and 1
+    valid min: 0
+    valid max: 1
+
+- invalid_count(total_orders) = 0:
+    name: total_orders_positive
+    dimension: validity
+    description: Total orders must be at least one for each city-day
+    valid min: 1
+
+- duplicate_count(ds, city) = 0:
+    name: unique_ds_city
+    dimension: uniqueness
+    description: Each ds and city combination must be unique

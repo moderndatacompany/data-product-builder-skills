@@ -1,0 +1,45 @@
+# kind: dq — converted from checks/orders.yml
+kind: dq
+name: orders_dq
+depends_on: test_db.vulcan_test_project.orders
+rules:
+- missing_count(orderkey) = 0:
+    name: orderkey_not_null
+    dimension: completeness
+    description: ORDERS.ORDERKEY must be non-null
+- missing_count(custkey) = 0:
+    name: custkey_not_null
+    dimension: completeness
+    description: ORDERS.CUSTKEY must be non-null
+- missing_count(orderdate) = 0:
+    name: orderdate_not_null
+    dimension: completeness
+    description: ORDERS.ORDERDATE must be non-null
+- row_count > 0:
+    name: orders_has_rows
+    dimension: completeness
+    description: ORDERS should not be empty
+- duplicate_count(orderkey) = 0:
+    name: orderkey_unique
+    dimension: uniqueness
+    description: ORDERS.ORDERKEY must be unique
+- failed rows:
+    name: orders_customer_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT o.*
+      FROM test_db.vulcan_test_project.orders o
+      LEFT JOIN test_db.vulcan_test_project.customer c
+        ON o.custkey = c.custkey
+      WHERE c.custkey IS NULL
+    samples limit: 10
+    description: Every ORDERS.CUSTKEY must exist in CUSTOMER.CUSTKEY
+- failed rows:
+    name: totalprice_non_negative
+    dimension: validity
+    fail query: |
+      SELECT orderkey, custkey, totalprice
+      FROM test_db.vulcan_test_project.orders
+      WHERE totalprice < 0
+    samples limit: 10
+    description: ORDERS.TOTALPRICE should be non-negative

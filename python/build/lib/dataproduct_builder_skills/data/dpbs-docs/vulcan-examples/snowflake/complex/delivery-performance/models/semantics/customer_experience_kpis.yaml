@@ -1,0 +1,136 @@
+models:
+  QCOMMERCE_PLATFORM.GOLD.CUSTOMER_EXPERIENCE_KPIS:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about customer experience kpis. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "customer experience kpis"
+        - "customer_experience_kpis"
+        - "customer"
+        - "experience"
+      examples:
+        - "Show customer experience kpis trends over time."
+        - "Break down customer experience kpis by key dimensions."
+    alias: customer_experience_kpis
+
+    dimensions:
+      includes:
+        - DS
+        - CITY
+        - CUSTOMER_TIER
+        - EXPERIENCE_RISK_SEGMENT
+
+    measures:
+      TOTAL_ORDERS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total orders"
+            - "total_orders"
+            - "total"
+            - "orders"
+          examples:
+            - "What is total orders by month?"
+            - "Compare total orders across key dimensions."
+        type: sum
+        expression: "{customer_experience_kpis.TOTAL_ORDERS}"
+
+      CUSTOMERS_IMPACTED:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for customers impacted. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "customers impacted"
+            - "customers_impacted"
+            - "customers"
+            - "impacted"
+          examples:
+            - "What is customers impacted by month?"
+            - "Compare customers impacted across key dimensions."
+        type: sum
+        expression: "{customer_experience_kpis.CUSTOMERS_IMPACTED}"
+
+      LATE_ORDERS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for late orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "late orders"
+            - "late_orders"
+            - "late"
+            - "orders"
+          examples:
+            - "What is late orders by month?"
+            - "Compare late orders across key dimensions."
+        type: sum
+        expression: "{customer_experience_kpis.LATE_ORDERS}"
+
+      FAILED_ORDERS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for failed orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "failed orders"
+            - "failed_orders"
+            - "failed"
+            - "orders"
+          examples:
+            - "What is failed orders by month?"
+            - "Compare failed orders across key dimensions."
+        type: sum
+        expression: "{customer_experience_kpis.FAILED_ORDERS}"
+
+      TOTAL_ORDER_VALUE:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total order value. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total order value"
+            - "total_order_value"
+            - "total"
+            - "order"
+          examples:
+            - "What is total order value by month?"
+            - "Compare total order value across key dimensions."
+        type: sum
+        expression: "{customer_experience_kpis.TOTAL_ORDER_VALUE}"
+
+      REFUNDED_ORDERS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for refunded orders. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "refunded orders"
+            - "refunded_orders"
+            - "refunded"
+            - "orders"
+          examples:
+            - "What is refunded orders by month?"
+            - "Compare refunded orders across key dimensions."
+        type: sum
+        expression: "{customer_experience_kpis.REFUNDED_ORDERS}"
+
+      TOTAL_REFUND_AMOUNT:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total refund amount. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total refund amount"
+            - "total_refund_amount"
+            - "total"
+            - "refund"
+          examples:
+            - "What is total refund amount by month?"
+            - "Compare total refund amount across key dimensions."
+        type: sum
+        expression: "{customer_experience_kpis.TOTAL_REFUND_AMOUNT}"

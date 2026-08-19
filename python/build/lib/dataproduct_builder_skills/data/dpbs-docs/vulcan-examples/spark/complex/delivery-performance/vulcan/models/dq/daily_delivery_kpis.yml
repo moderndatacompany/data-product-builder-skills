@@ -1,0 +1,43 @@
+# kind: dq — converted from checks/daily_delivery_kpis.yml
+kind: dq
+name: daily_delivery_kpis_dq
+depends_on: s3depot.qcommerce_delivery_gold.daily_delivery_kpis
+
+rules:
+- row_count >= 25:
+    name: minimum_daily_city_rows
+    dimension: completeness
+    description: At least 25 daily city KPI rows should exist
+
+- missing_count(ds) = 0:
+    name: no_missing_ds
+    dimension: completeness
+    description: All KPI rows must have a ds value
+
+- missing_count(city) = 0:
+    name: no_missing_city
+    dimension: completeness
+    description: All KPI rows must have a city
+
+- invalid_count(total_orders) = 0:
+    name: total_orders_positive
+    dimension: validity
+    description: total_orders must be at least one for each city-day
+    valid min: 1
+
+- invalid_count(sla_breach_orders) = 0:
+    name: sla_breach_non_negative
+    dimension: validity
+    description: sla_breach_orders must be zero or positive
+    valid min: 0
+
+- invalid_count(failed_orders) = 0:
+    name: failed_orders_non_negative
+    dimension: validity
+    description: failed_orders must be zero or positive
+    valid min: 0
+
+- duplicate_count(ds, city) = 0:
+    name: unique_ds_city
+    dimension: uniqueness
+    description: Each ds and city combination must be unique

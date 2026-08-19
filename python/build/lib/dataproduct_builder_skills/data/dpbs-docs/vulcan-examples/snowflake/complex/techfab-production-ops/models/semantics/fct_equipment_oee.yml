@@ -1,0 +1,326 @@
+# Converted from legacy: semantics/fct_equipment_oee.yaml
+kind: semantic
+name: fct_equipment_oee
+depends_on: MES_PLATFORM.GOLD.EQUIPMENT_OEE_METRICS
+ai_context:
+  instructions: >
+    Use this semantic model for questions about fct equipment oee. Prefer its measures
+    for aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "fct equipment oee"
+    - "fct_equipment_oee"
+    - "fct"
+    - "equipment"
+  examples:
+    - "Show fct equipment oee trends over time."
+    - "Break down fct equipment oee by key dimensions."
+
+dimensions:
+- EQUIPMENT_ID
+- EQUIPMENT_NAME
+- EQUIPMENT_TYPE
+- PLANT_CODE
+- PLANT_NAME
+- METRIC_DATE
+measures:
+- name: good_units
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for good units. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "good units"
+      - "good_units"
+      - "good"
+      - "units"
+    examples:
+      - "What is good units by month?"
+      - "Compare good units across key segments."
+  type: number
+  expression: SUM({fct_equipment_oee.GOOD_UNITS})
+  description: Total good units produced by equipment
+  tags:
+  - metric
+  terms:
+  - metric.good_units
+- name: total_units
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total units. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total units"
+      - "total_units"
+      - "total"
+      - "units"
+    examples:
+      - "What is total units by month?"
+      - "Compare total units across key segments."
+  type: number
+  expression: SUM({fct_equipment_oee.TOTAL_UNITS})
+  description: Total units produced including rejects
+  tags:
+  - metric
+  terms:
+  - metric.total_units
+- name: total_downtime_hours
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total downtime hours. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total downtime hours"
+      - "total_downtime_hours"
+      - "total"
+      - "downtime"
+    examples:
+      - "What is total downtime hours by month?"
+      - "Compare total downtime hours across key segments."
+  type: number
+  expression: SUM({fct_equipment_oee.TOTAL_DOWNTIME_HOURS})
+  description: Total equipment downtime in hours
+  tags:
+  - metric
+  terms:
+  - metric.total_downtime_hours
+- name: total_production_hours
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total production hours. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total production hours"
+      - "total_production_hours"
+      - "total"
+      - "production"
+    examples:
+      - "What is total production hours by month?"
+      - "Compare total production hours across key segments."
+  type: number
+  expression: SUM({fct_equipment_oee.TOTAL_PRODUCTION_HOURS})
+  description: Total production time in hours
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_production_hours
+  - metric.product_count
+- name: availability_pct
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for availability pct. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "availability pct"
+      - "availability_pct"
+      - "availability"
+      - "pct"
+    examples:
+      - "What is availability pct by month?"
+      - "Compare availability pct across key segments."
+  type: number
+  expression: AVG({fct_equipment_oee.AVAILABILITY_PCT})
+  description: Equipment availability component of OEE
+  tags:
+  - metric
+  terms:
+  - metric.availability_pct
+- name: performance_pct
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for performance pct. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "performance pct"
+      - "performance_pct"
+      - "performance"
+      - "pct"
+    examples:
+      - "What is performance pct by month?"
+      - "Compare performance pct across key segments."
+  type: number
+  expression: AVG({fct_equipment_oee.PERFORMANCE_PCT})
+  description: Equipment performance efficiency component
+  tags:
+  - metric
+  terms:
+  - metric.performance_pct
+- name: quality_pct
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for quality pct. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "quality pct"
+      - "quality_pct"
+      - "quality"
+      - "pct"
+    examples:
+      - "What is quality pct by month?"
+      - "Compare quality pct across key segments."
+  type: number
+  expression: AVG({fct_equipment_oee.QUALITY_PCT})
+  description: Quality rate component of OEE
+  tags:
+  - metric
+  terms:
+  - metric.quality_pct
+- name: oee_pct
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for oee pct. Respect its aggregation type
+      and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "oee pct"
+      - "oee_pct"
+      - "oee"
+      - "pct"
+    examples:
+      - "What is oee pct by month?"
+      - "Compare oee pct across key segments."
+  type: number
+  expression: AVG({fct_equipment_oee.OEE_PCT})
+  description: Overall Equipment Effectiveness percentage
+  tags:
+  - metric
+  terms:
+  - metric.oee_pct
+- name: mttr_hours
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for mttr hours. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "mttr hours"
+      - "mttr_hours"
+      - "mttr"
+      - "hours"
+    examples:
+      - "What is mttr hours by month?"
+      - "Compare mttr hours across key segments."
+  type: number
+  expression: AVG({fct_equipment_oee.MTTR_HOURS})
+  description: Mean Time To Repair in hours
+  tags:
+  - metric
+  terms:
+  - metric.mttr_hours
+- name: mtbf_hours
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for mtbf hours. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "mtbf hours"
+      - "mtbf_hours"
+      - "mtbf"
+      - "hours"
+    examples:
+      - "What is mtbf hours by month?"
+      - "Compare mtbf hours across key segments."
+  type: number
+  expression: AVG({fct_equipment_oee.MTBF_HOURS})
+  description: Mean Time Between Failures in hours
+  tags:
+  - metric
+  terms:
+  - metric.mtbf_hours
+segments:
+- name: world_class_oee
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the world class oee subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "world class oee"
+      - "world_class_oee"
+      - "world"
+      - "class"
+    examples:
+      - "Show revenue for world class oee."
+      - "How many records are in world class oee?"
+  expression: '{fct_equipment_oee.OEE_PCT} >= 85'
+  description: Equipment achieving world-class OEE levels
+  tags:
+  - metric
+  terms:
+  - metric.world_class_oee
+- name: underperforming_equipment
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the underperforming equipment
+      subset. Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "underperforming equipment"
+      - "underperforming_equipment"
+      - "underperforming"
+      - "equipment"
+    examples:
+      - "Show revenue for underperforming equipment."
+      - "How many records are in underperforming equipment?"
+  expression: '{fct_equipment_oee.OEE_PCT} < 65'
+  description: Equipment requiring immediate improvement focus
+  tags:
+  - metric
+  terms:
+  - metric.underperforming_equipment
+- name: availability_issues
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the availability issues subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "availability issues"
+      - "availability_issues"
+      - "availability"
+      - "issues"
+    examples:
+      - "Show revenue for availability issues."
+      - "How many records are in availability issues?"
+  expression: '{fct_equipment_oee.AVAILABILITY_PCT} < 90'
+  description: Equipment with significant downtime problems
+  tags:
+  - metric
+  terms:
+  - metric.availability_issues
+- name: quality_issues
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the quality issues subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "quality issues"
+      - "quality_issues"
+      - "quality"
+      - "issues"
+    examples:
+      - "Show revenue for quality issues."
+      - "How many records are in quality issues?"
+  expression: '{fct_equipment_oee.QUALITY_PCT} < 95'
+  description: Equipment with quality defect problems
+  tags:
+  - metric
+  terms:
+  - metric.quality_issues
+joins:
+- name: fct_production_daily
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from fct production
+      daily. Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "fct production daily"
+      - "fct_production_daily"
+      - "fct"
+      - "production"
+    examples:
+      - "Analyze this model with fct production daily attributes."
+      - "Break measures down by fct production daily."
+  type: one_to_one
+  expression: '{fct_equipment_oee.PLANT_CODE} = {fct_production_daily.PLANT_CODE} AND {fct_equipment_oee.METRIC_DATE} = {fct_production_daily.CONFIRMATION_DATE}'

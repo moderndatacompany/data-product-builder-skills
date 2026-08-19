@@ -1,0 +1,14 @@
+# Converted from legacy: semantics/metrics.yml (order_volume)
+kind: metric
+name: order_volume
+measure: daily_sales.total_daily_orders
+ts: daily_sales.order_date
+granularity: day
+description: "Order volume trends over time"
+tags:
+  - sales
+  - volume
+  - metric
+terms:
+  - sales.order_volume
+  - metric.order_count_trend

@@ -1,0 +1,62 @@
+# Converted from legacy: semantics/system_update_devices.yaml
+kind: semantic
+name: system_update_devices
+depends_on: lenovo.ldo.system_update_devices
+ai_context:
+  instructions: >
+    Use this semantic model for questions about system update devices. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "system update devices"
+    - "system_update_devices"
+    - "system"
+    - "update"
+  examples:
+    - "Show system update devices trends over time."
+    - "Break down system update devices by key dimensions."
+
+dimensions:
+- DEVICE_ID
+- DEVICE_DISPLAY_NAME
+- INSTALLATION_STATUS
+- PACKAGE_SEVERITY
+- PACKAGE_ID
+- DEVICE_SERIAL_NUMBER
+- LAST_MODIFIED_DATE
+- CREATED_AT
+measures:
+- name: total_devices_with_updates
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total devices with updates. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total devices with updates"
+      - "total_devices_with_updates"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total devices with updates by month?"
+      - "Compare total devices with updates across key segments."
+  type: count_distinct
+  expression: '{system_update_devices.DEVICE_ID}'
+  description: Total number of devices with system updates. Do not use this for getting updates count.
+  tags:
+  - metric
+  terms:
+  - metric.total_devices_with_updates
+joins:
+- name: devices
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from devices. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "devices"
+    examples:
+      - "Analyze this model with devices attributes."
+      - "Break measures down by devices."
+  type: many_to_one
+  expression: '{system_update_devices.DEVICE_ID} = {devices.DEVICE_ID} '

@@ -1,0 +1,110 @@
+# kind: dq — converted from checks/consumer_analytics_events.yml
+kind: dq
+name: CONSUMER_ANALYTICS_EVENTS_dq
+depends_on: LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+rules:
+- missing_count(CONTEXT) = 0:
+    name: no_missing_context
+    dimension: completeness
+    description: All events must have context information
+- missing_count(EVENT) = 0:
+    name: no_missing_event
+    dimension: completeness
+    description: All records must have event data
+- missing_count(REPORTING_TIME) = 0:
+    name: no_missing_reporting_time
+    dimension: completeness
+    description: All events must have a reporting timestamp
+- row_count > 100:
+    name: sufficient_events
+    dimension: completeness
+    description: At least 100 events should be present in the table
+- failed rows:
+    name: missing_required_fields
+    dimension: validity
+    fail query: "SELECT REPORTING_TIME, CONTEXT, EVENT\nFROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS\nWHERE CONTEXT IS NULL \n   OR EVENT IS NULL \n   OR REPORTING_TIME IS NULL\n"
+    samples limit: 10
+    description: Context, event, and reporting_time are required fields and cannot be null
+- failed rows:
+    name: invalid_context_structure
+    dimension: validity
+    fail query: |
+      SELECT REPORTING_TIME, CONTEXT
+      FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+      WHERE TRY_PARSE_JSON(CONTEXT::VARCHAR) IS NULL
+    samples limit: 10
+    description: Context field must contain valid JSON structure
+- failed rows:
+    name: invalid_event_structure
+    dimension: validity
+    fail query: |
+      SELECT REPORTING_TIME, EVENT
+      FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+      WHERE TRY_PARSE_JSON(EVENT::VARCHAR) IS NULL
+    samples limit: 10
+    description: Event field must contain valid JSON structure
+- failed rows:
+    name: future_reporting_time
+    dimension: validity
+    fail query: |
+      SELECT REPORTING_TIME, CONTEXT, EVENT
+      FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+      WHERE REPORTING_TIME > CURRENT_TIMESTAMP()
+    samples limit: 10
+    description: Reporting time cannot be in the future
+- failed rows:
+    name: reporting_time_too_old
+    dimension: validity
+    fail query: |
+      SELECT REPORTING_TIME, CONTEXT, EVENT
+      FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+      WHERE REPORTING_TIME < '2020-01-01'
+    samples limit: 10
+    description: Reporting time before 2020 is likely a data quality issue
+- failed rows:
+    name: missing_device_info
+    dimension: validity
+    fail query: |
+      SELECT REPORTING_TIME, CONTEXT
+      FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+      WHERE GET_PATH(CONTEXT, 'device') IS NULL
+    samples limit: 10
+    description: Context must contain device information
+- failed rows:
+    name: missing_user_info
+    dimension: validity
+    fail query: |
+      SELECT REPORTING_TIME, CONTEXT
+      FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+      WHERE GET_PATH(CONTEXT, 'user') IS NULL
+    samples limit: 10
+    description: Context must contain user information
+- failed rows:
+    name: missing_event_timestamp
+    dimension: validity
+    fail query: |
+      SELECT REPORTING_TIME, EVENT
+      FROM LENOVO.USDK.CONSUMER_ANALYTICS_EVENTS
+      WHERE GET_PATH(EVENT, 'timestamp') IS NULL
+    samples limit: 10
+    description: Event must contain a timestamp
+- duplicate_count(REPORTING_TIME) < 100:
+    name: reasonable_duplicate_reporting_times
+    dimension: uniqueness
+    description: Some duplicate reporting times are expected, but not excessive
+- anomaly detection for row_count:
+    name: row_count_anomaly
+    dimension: accuracy
+    description: Detect anomalies in daily event count using historic data
+- change for row_count >= -50%:
+    name: row_count_change_check
+    dimension: timeliness
+    description: Alert if event count drops more than 50% from previous day
+- change same day last week for row_count > -30:
+    name: row_count_weekly_comparison
+    dimension: timeliness
+    description: Compare event count to same day last week
+- anomaly detection for row_count:
+    name: timeliness_row_count_anomaly
+    dimension: timeliness
+    description: Detect timing anomalies in row count patterns

@@ -1,0 +1,55 @@
+# Converted from legacy: semantics/device_bios.yaml
+kind: semantic
+name: device_bios
+depends_on: lenovo.ldo.device_bios
+ai_context:
+  instructions: >
+    Use this semantic model for questions about device bios. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "device bios"
+    - "device_bios"
+    - "device"
+    - "bios"
+  examples:
+    - "Show device bios trends over time."
+    - "Break down device bios by key dimensions."
+
+measures:
+- name: total_devices_with_recommended_bios
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total devices with recommended bios.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total devices with recommended bios"
+      - "total_devices_with_recommended_bios"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total devices with recommended bios by month?"
+      - "Compare total devices with recommended bios across key segments."
+  type: sum
+  expression: CASE WHEN {device_bios.RECOMMENDED_BIOS_ID} = {device_bios.DEVICE_BIOS_ID} THEN 1 ELSE 0 END
+  description: Total number of devices with recommended BIOS version.
+  tags:
+  - metric
+  terms:
+  - metric.total_devices_with_recommended_bios
+joins:
+- name: device_os
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from device os. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "device os"
+      - "device_os"
+      - "device"
+    examples:
+      - "Analyze this model with device os attributes."
+      - "Break measures down by device os."
+  type: one_to_one
+  expression: '{device_bios.DEVICE_ID} = {device_os.DEVICE_ID}'

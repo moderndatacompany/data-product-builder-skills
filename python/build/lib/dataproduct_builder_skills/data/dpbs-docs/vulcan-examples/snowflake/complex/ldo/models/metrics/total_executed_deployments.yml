@@ -1,0 +1,3 @@
+kind: metric
+name: total_executed_deployments
+measure: system_update_reports.total_executed_deployments

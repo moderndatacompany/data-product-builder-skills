@@ -1,0 +1,68 @@
+# kind: dq — converted from checks/os_family.yml
+kind: dq
+name: OS_FAMILY_dq
+depends_on: LENOVO.USDK.OS_FAMILY
+rules:
+- failed rows:
+    name: missing_os_version
+    dimension: validity
+    fail query: |
+      SELECT OS_VERSION, OS_FAMILY
+      FROM LENOVO.USDK.OS_FAMILY
+      WHERE OS_VERSION IS NULL OR TRIM(OS_VERSION) = ''
+    samples limit: 10
+    description: OS version is required and cannot be null or empty
+- failed rows:
+    name: missing_os_family
+    dimension: validity
+    fail query: |
+      SELECT OS_VERSION, OS_FAMILY
+      FROM LENOVO.USDK.OS_FAMILY
+      WHERE OS_FAMILY IS NULL OR TRIM(OS_FAMILY) = ''
+    samples limit: 10
+    description: OS family name is required and cannot be null or empty
+- failed rows:
+    name: invalid_os_version_format
+    dimension: validity
+    fail query: |
+      SELECT OS_VERSION, OS_FAMILY
+      FROM LENOVO.USDK.OS_FAMILY
+      WHERE OS_VERSION NOT LIKE '10.0.%'
+    samples limit: 10
+    description: OS version should follow Windows version format (10.0.XXXXX)
+- failed rows:
+    name: invalid_windows_family_format
+    dimension: validity
+    fail query: |
+      SELECT OS_VERSION, OS_FAMILY
+      FROM LENOVO.USDK.OS_FAMILY
+      WHERE OS_FAMILY NOT LIKE 'Windows 1_'
+         OR (OS_FAMILY NOT LIKE 'Windows 10%' AND OS_FAMILY NOT LIKE 'Windows 11%')
+    samples limit: 10
+    description: OS family should be in format 'Windows 10 XXXX' or 'Windows 11 XXXX'
+- failed rows:
+    name: duplicate_os_versions
+    dimension: uniqueness
+    fail query: |
+      SELECT OS_VERSION, COUNT(*) AS duplicate_count
+      FROM LENOVO.USDK.OS_FAMILY
+      GROUP BY OS_VERSION
+      HAVING COUNT(*) > 1
+    samples limit: 10
+    description: OS version must be unique (primary key violation)
+- failed rows:
+    name: missing_recent_windows_versions
+    dimension: completeness
+    fail query: |
+      WITH expected_versions AS (
+        SELECT version_name FROM (VALUES
+          ('10.0.22631'), -- Windows 11 23H2
+          ('10.0.26100')  -- Windows 11 24H2
+        ) AS t(version_name)
+      )
+      SELECT ev.version_name AS missing_version
+      FROM expected_versions ev
+      LEFT JOIN LENOVO.USDK.OS_FAMILY os ON os.OS_VERSION = ev.version_name
+      WHERE os.OS_VERSION IS NULL
+    samples limit: 10
+    description: Recent Windows versions (11 23H2, 11 24H2) should be present in the reference table

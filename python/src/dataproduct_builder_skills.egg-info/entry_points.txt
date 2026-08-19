@@ -1,0 +1,2 @@
+[console_scripts]
+dataproduct-builder-skills = dataproduct_builder_skills.cli:main

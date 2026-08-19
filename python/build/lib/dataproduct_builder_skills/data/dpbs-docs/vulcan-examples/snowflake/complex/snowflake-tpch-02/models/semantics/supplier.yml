@@ -1,0 +1,80 @@
+# Converted from legacy: semantics/supplier.yml
+kind: semantic
+name: suppliers
+depends_on: test_db.vulcan_test_project.supplier
+ai_context:
+  instructions: >
+    Use this semantic model for questions about suppliers. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "suppliers"
+  examples:
+    - "Show suppliers trends over time."
+    - "Break down suppliers by key dimensions."
+
+dimensions:
+- SUPPKEY
+- NAME
+- ADDRESS
+- NATIONKEY
+- PHONE
+- COMMENT
+measures:
+- name: total_suppliers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total suppliers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total suppliers"
+      - "total_suppliers"
+      - "total"
+      - "suppliers"
+    examples:
+      - "What is total suppliers by month?"
+      - "Compare total suppliers across key segments."
+  type: count
+  expression: '{suppliers.SUPPKEY}'
+  description: Total number of suppliers
+  tags:
+  - metric
+  terms:
+  - metric.total_suppliers
+- name: avg_acctbal
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg acctbal. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "avg acctbal"
+      - "avg_acctbal"
+      - "avg"
+      - "acctbal"
+    examples:
+      - "What is avg acctbal by month?"
+      - "Compare avg acctbal across key segments."
+  type: avg
+  expression: '{suppliers.ACCTBAL}'
+  description: Average supplier account balance
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_acctbal
+  - metric.aggregate
+joins:
+- name: nations
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from nations. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "nations"
+    examples:
+      - "Analyze this model with nations attributes."
+      - "Break measures down by nations."
+  type: many_to_one
+  expression: '{suppliers.NATIONKEY} = {nations.NATIONKEY}'

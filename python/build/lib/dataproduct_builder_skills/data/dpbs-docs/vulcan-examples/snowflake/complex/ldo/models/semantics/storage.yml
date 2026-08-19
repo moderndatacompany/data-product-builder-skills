@@ -1,0 +1,118 @@
+# Converted from legacy: semantics/storage.yaml
+kind: semantic
+name: storage
+depends_on: lenovo.ldo.storage
+ai_context:
+  instructions: >
+    Use this semantic model for questions about storage. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "storage"
+  examples:
+    - "Show storage trends over time."
+    - "Break down storage by key dimensions."
+
+dimensions:
+- STORAGE_ID
+- DEVICE_ID
+- STORAGE_CONDITION
+- STORAGE_FIRMWARE_REVISION
+- STORAGE_FREE_SPACE
+- STORAGE_INTERFACE_TYPE
+- STORAGE_MODEL
+- STORAGE_SERIAL_NUMBER
+- STORAGE_SIZE
+- STORAGE_TYPE
+- STORAGE_USED_PERCENTAGE
+- STORAGE_CREATED_AT
+- STORAGE_DISK_SPEC
+- STORAGE_HEALTH_STATUS
+measures:
+- name: total_storage_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total storage devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total storage devices"
+      - "total_storage_devices"
+      - "total"
+      - "storage"
+    examples:
+      - "What is total storage devices by month?"
+      - "Compare total storage devices across key segments."
+  type: count
+  expression: '{storage.STORAGE_ID}'
+  description: Total number of storage records across all devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_storage_devices
+- name: avg_storage_free_space
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg storage free space. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg storage free space"
+      - "avg_storage_free_space"
+      - "avg"
+      - "storage"
+    examples:
+      - "What is avg storage free space by month?"
+      - "Compare avg storage free space across key segments."
+  type: avg
+  expression: '{storage.STORAGE_FREE_SPACE}'
+  description: Average amount of free space available on all storage devices.
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_storage_free_space
+  - metric.aggregate
+- name: total_storage_free_space
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total storage free space. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total storage free space"
+      - "total_storage_free_space"
+      - "total"
+      - "storage"
+    examples:
+      - "What is total storage free space by month?"
+      - "Compare total storage free space across key segments."
+  type: sum
+  expression: COALESCE({storage.STORAGE_FREE_SPACE}, 0)
+  description: Total amount of free space available on all storage devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_storage_free_space
+- name: total_storage_capacity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total storage capacity. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total storage capacity"
+      - "total_storage_capacity"
+      - "total"
+      - "storage"
+    examples:
+      - "What is total storage capacity by month?"
+      - "Compare total storage capacity across key segments."
+  type: sum
+  expression: COALESCE({storage.STORAGE_SIZE}, 0)
+  description: Total combined storage capacity of all devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_storage_capacity

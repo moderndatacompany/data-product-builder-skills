@@ -1,0 +1,3 @@
+kind: metric
+name: last_30_account_sessions
+measure: web_heartbeat.last_30_account_sessions

@@ -1,0 +1,118 @@
+# Converted from legacy: semantics/shipments.yml
+kind: semantic
+name: shipments
+depends_on: sales.shipments
+ai_context:
+  instructions: >
+    Use this semantic model for questions about shipments. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "shipments"
+  examples:
+    - "Show shipments trends over time."
+    - "Break down shipments by key dimensions."
+
+dimensions:
+- shipment_id
+- order_id
+- shipped_date
+- delivered_date
+- carrier
+- tracking_number
+- shipping_status
+- shipping_cost
+measures:
+- name: total_shipments
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total shipments. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total shipments"
+      - "total_shipments"
+      - "total"
+      - "shipments"
+    examples:
+      - "What is total shipments by month?"
+      - "Compare total shipments across key segments."
+  type: count_distinct
+  expression: '{shipments.shipment_id}'
+  tags:
+  - metric
+  terms:
+  - metric.total_shipments
+- name: total_shipping_cost
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total shipping cost. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total shipping cost"
+      - "total_shipping_cost"
+      - "total"
+      - "shipping"
+    examples:
+      - "What is total shipping cost by month?"
+      - "Compare total shipping cost across key segments."
+  type: sum
+  expression: '{shipments.shipping_cost}'
+  tags:
+  - financial
+  - shipping
+  - metric
+  terms:
+  - finance.shipping_cost
+  - metric.shipping_total
+segments:
+- name: in_transit_shipments
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the in transit shipments subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "in transit shipments"
+      - "in_transit_shipments"
+      - "transit"
+      - "shipments"
+    examples:
+      - "Show revenue for in transit shipments."
+      - "How many records are in in transit shipments?"
+  expression: '{shipments.shipping_status} = ''InTransit'''
+  tags:
+  - metric
+  terms:
+  - metric.in_transit_shipments
+- name: delivered_shipments
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the delivered shipments subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "delivered shipments"
+      - "delivered_shipments"
+      - "delivered"
+      - "shipments"
+    examples:
+      - "Show revenue for delivered shipments."
+      - "How many records are in delivered shipments?"
+  expression: '{shipments.shipping_status} = ''Delivered'''
+  tags:
+  - metric
+  terms:
+  - metric.delivered_shipments
+joins:
+- name: orders
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from orders. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "orders"
+    examples:
+      - "Analyze this model with orders attributes."
+      - "Break measures down by orders."
+  type: many_to_one
+  expression: '{shipments.order_id} = {orders.order_id}'

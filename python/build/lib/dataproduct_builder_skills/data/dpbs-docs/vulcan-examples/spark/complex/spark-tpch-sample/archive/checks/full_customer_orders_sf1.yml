@@ -1,0 +1,93 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_rows
+          attributes:
+            description: "Full model must produce at least one row"
+      - missing_count(c_custkey) = 0:
+          name: no_missing_custkey
+          attributes:
+            description: "Customer key (grain) must not be null"
+      - missing_count(c_name) = 0:
+          name: no_missing_customer_name
+          attributes:
+            description: "Customer name must not be null"
+      - missing_count(order_count) = 0:
+          name: no_missing_order_count
+          attributes:
+            description: "Aggregated order count must not be null"
+      - missing_count(total_amount) = 0:
+          name: no_missing_total_amount
+          attributes:
+            description: "Aggregated total amount must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_order_count
+          fail query: |
+            SELECT c_custkey, c_name, order_count
+            FROM lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1
+            WHERE order_count < 0
+          samples limit: 10
+          attributes:
+            description: "Order count cannot be negative"
+      - failed rows:
+          name: negative_total_amount
+          fail query: |
+            SELECT c_custkey, c_name, total_amount
+            FROM lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1
+            WHERE total_amount < 0
+          samples limit: 10
+          attributes:
+            description: "Total amount cannot be negative"
+      - failed rows:
+          name: zero_orders_with_amount
+          fail query: |
+            SELECT c_custkey, c_name, order_count, total_amount
+            FROM lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1
+            WHERE order_count = 0 AND total_amount > 0
+          samples limit: 5
+          attributes:
+            description: "Cannot have positive amount with zero orders"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(c_custkey) = 0:
+          name: unique_custkey
+          attributes:
+            description: "Grain c_custkey must be unique"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: customer_count_matches_source
+          fail query: |
+            SELECT 'mismatch' AS issue,
+              (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1) AS derived_count,
+              (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1) AS source_count
+            WHERE (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1)
+               != (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1)
+          samples limit: 1
+          attributes:
+            description: "Row count must match source customer table (LEFT JOIN preserves all)"
+      - failed rows:
+          name: orphan_customers
+          fail query: |
+            SELECT f.c_custkey
+            FROM lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1 f
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1 c
+              ON c.c_custkey = f.c_custkey
+            WHERE c.c_custkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every customer in derived model must exist in source"
+
+    # --- Timeliness ---
+    timeliness:
+      - change for row_count >= -5%:
+          name: customer_orders_count_stable
+          attributes:
+            description: "Row count should not drop significantly between full refreshes"

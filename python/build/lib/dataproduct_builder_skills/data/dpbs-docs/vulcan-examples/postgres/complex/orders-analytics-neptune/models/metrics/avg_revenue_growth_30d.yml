@@ -1,0 +1,3 @@
+kind: metric
+name: avg_revenue_growth_30d
+measure: category_performance.avg_revenue_growth_30d

@@ -1,0 +1,64 @@
+# lakehouse definition
+name: ${LH_S3_NAME}
+version: v1alpha
+type: lakehouse
+tags:
+  - lakehouse
+  - lakehouses3
+spec:
+  runAsUser: ${LH_RUN_AS_USER}
+  compute: ${LH_COMPUTE_NAME}
+  logLevel: INFO
+  iceberg:
+    metastore:
+      hadoopConf:
+        fs.s3a.connection.maximum: 1000
+      postgresql:
+        database: ${LH_POSTGRES_DATABASE_S3}
+        host: ${LH_POSTGRES_HOST}
+        port: 5432
+        schema: public
+      replicas: 1
+      secret: ${ENTITY_TENANT_ID}:${LH_POSTGRES_SECRET_NAME}
+      type: iceberg-jdbc-catalog
+      resources:
+        requests:
+          cpu: "1"
+          memory: "1000Mi"
+        limits:
+          cpu: "1"
+          memory: "2000Mi"
+    storage:
+      s3:
+        bucket: ${LH_S3_BUCKET}
+        format: ICEBERG
+        scheme: s3a                                   # new field
+        relativePath: ${LH_S3_RELATIVE_PATH}
+      secret: ${ENTITY_TENANT_ID}:${LH_S3_SECRET_NAME}
+      type: s3
+    sherpa:
+      resources:
+        requests:
+          cpu: "200m"
+          memory: "512Mi"
+        limits:
+          cpu: "500m"
+          memory: "1000Mi"
+      replicas: 1
+    sparkCluster:
+      server:
+        requests:
+          cpu: "200m"
+          memory: "512Mi"
+        limits:
+          cpu: "500m"
+          memory: "1000Mi"
+      driver:
+        coreLimit: "2048m"
+        cores: 1
+        memory: "2048m"
+      executor:
+        coreLimit: "2048m"
+        cores: 1
+        memory: "2048m"
+        instances: 1

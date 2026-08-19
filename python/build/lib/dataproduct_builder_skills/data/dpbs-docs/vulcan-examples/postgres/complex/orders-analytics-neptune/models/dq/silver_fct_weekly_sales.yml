@@ -1,0 +1,75 @@
+# kind: dq — converted from checks/silver_fct_weekly_sales.yml
+kind: dq
+name: fct_weekly_sales_dq
+depends_on: silver_v1.fct_weekly_sales
+rules:
+- missing_count(week_start_date) = 0:
+    name: no_missing_week_start_dates
+    dimension: completeness
+    description: All records must have a week start date
+- missing_count(year) = 0:
+    name: no_missing_years
+    dimension: completeness
+    description: All records must have a year
+- missing_count(week_number) = 0:
+    name: no_missing_week_numbers
+    dimension: completeness
+    description: All records must have a week number
+- row_count > 10:
+    name: sufficient_weekly_records
+    dimension: completeness
+    description: At least 10 weekly sales records
+- failed rows:
+    name: valid_week_numbers
+    dimension: validity
+    fail query: |
+      SELECT week_start_date, year, week_number
+      FROM silver_v1.fct_weekly_sales
+      WHERE week_number < 1 OR week_number > 53
+    samples limit: 10
+    description: Week numbers must be between 1 and 53
+- failed rows:
+    name: non_negative_orders
+    dimension: validity
+    fail query: |
+      SELECT week_start_date, region_name, customer_id, product_id, total_orders
+      FROM silver_v1.fct_weekly_sales
+      WHERE total_orders < 0
+    samples limit: 10
+    description: Total orders cannot be negative
+- failed rows:
+    name: non_negative_revenue
+    dimension: validity
+    fail query: |
+      SELECT week_start_date, region_name, customer_id, product_id, total_revenue
+      FROM silver_v1.fct_weekly_sales
+      WHERE total_revenue < 0
+    samples limit: 10
+    description: Total revenue cannot be negative
+- failed rows:
+    name: week_end_after_start
+    dimension: validity
+    fail query: |
+      SELECT week_start_date, week_end_date, year, week_number
+      FROM silver_v1.fct_weekly_sales
+      WHERE week_end_date < week_start_date
+    samples limit: 10
+    description: Week end date must be after start date
+- failed rows:
+    name: weekly_revenue_threshold_check
+    dimension: validity
+    fail query: |
+      SELECT week_start_date, region_name, customer_id, product_id, total_revenue
+      FROM silver_v1.fct_weekly_sales
+      WHERE total_revenue > 1000
+    samples limit: 10
+    description: Weekly revenue should not exceed $1000 per customer-product (EXPECTED TO FAIL)
+- failed rows:
+    name: single_order_per_week_check
+    dimension: validity
+    fail query: |
+      SELECT week_start_date, region_name, customer_id, product_id, total_orders
+      FROM silver_v1.fct_weekly_sales
+      WHERE total_orders > 1
+    samples limit: 10
+    description: Should have max 1 order per customer-product per week (EXPECTED TO FAIL)

@@ -1,0 +1,36 @@
+kind: dq
+name: DAILY_SALES_SUMMARY_dq
+depends_on: DEMODB.VDEFALSE.DAILY_SALES_SUMMARY
+rules:
+  - missing_count(SALES_DATE) = 0:
+      name: sales_date_not_null
+      dimension: completeness
+      description: Sales date must never be null
+  - failed rows:
+      name: non_positive_orders
+      dimension: validity
+      fail query: |
+        SELECT SALES_DATE, TOTAL_ORDERS
+        FROM DEMODB.VDEFALSE.DAILY_SALES_SUMMARY
+        WHERE TOTAL_ORDERS <= 0
+      samples limit: 10
+      description: Each summary row must report at least one order
+  - failed rows:
+      name: negative_aggregates
+      dimension: validity
+      fail query: |
+        SELECT SALES_DATE, TOTAL_REVENUE, TOTAL_TAX, TOTAL_SHIPPING
+        FROM DEMODB.VDEFALSE.DAILY_SALES_SUMMARY
+        WHERE TOTAL_REVENUE < 0 OR TOTAL_TAX < 0 OR TOTAL_SHIPPING < 0
+      samples limit: 10
+      description: Aggregated financial measures must not be negative
+  - failed rows:
+      name: aov_internally_consistent
+      dimension: consistency
+      fail query: |
+        SELECT SALES_DATE, TOTAL_ORDERS, TOTAL_REVENUE, AVG_ORDER_VALUE
+        FROM DEMODB.VDEFALSE.DAILY_SALES_SUMMARY
+        WHERE TOTAL_ORDERS > 0
+          AND ABS(AVG_ORDER_VALUE - (TOTAL_REVENUE / TOTAL_ORDERS)) > 0.01
+      samples limit: 10
+      description: AVG_ORDER_VALUE should equal TOTAL_REVENUE / TOTAL_ORDERS (within rounding)

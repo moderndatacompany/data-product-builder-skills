@@ -1,0 +1,3 @@
+kind: metric
+name: average_proof_revenue
+measure: rfm_segments.average_proof_revenue

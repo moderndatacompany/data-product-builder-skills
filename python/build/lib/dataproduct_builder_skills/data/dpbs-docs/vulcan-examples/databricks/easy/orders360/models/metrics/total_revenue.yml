@@ -1,0 +1,9 @@
+kind: metric
+name: total_revenue
+measure: orders.total_revenue
+ts: orders.order_date
+granularity: day
+dimensions:
+  - orders.customer_id
+  - orders.product_id
+description: Total revenue from all orders

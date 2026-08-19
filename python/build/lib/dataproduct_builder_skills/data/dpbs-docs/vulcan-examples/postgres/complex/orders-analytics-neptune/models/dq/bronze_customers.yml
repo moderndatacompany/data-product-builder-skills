@@ -1,0 +1,69 @@
+# kind: dq — converted from checks/bronze_customers.yml
+kind: dq
+name: customers_dq
+depends_on: bronze_v1.customers
+rules:
+- missing_count(customer_id) = 0:
+    name: no_missing_customer_ids
+    dimension: completeness
+    description: All customers must have a customer ID
+- missing_count(name) = 0:
+    name: no_missing_names
+    dimension: completeness
+    description: All customers must have a name
+- missing_count(email) = 0:
+    name: no_missing_emails
+    dimension: completeness
+    description: All customers must have an email
+- row_count > 50:
+    name: sufficient_customers
+    dimension: completeness
+    description: At least 50 customers in the system
+- row_count > 200:
+    name: high_customer_count
+    dimension: completeness
+    description: Should have more than 200 customers (EXPECTED TO FAIL)
+- failed rows:
+    name: invalid_emails
+    dimension: validity
+    fail query: |
+      SELECT customer_id, name, email
+      FROM bronze_v1.customers
+      WHERE email NOT LIKE '%@%' OR email NOT LIKE '%.%'
+    samples limit: 10
+    description: Check for invalid email formats
+- failed rows:
+    name: positive_customer_ids
+    dimension: validity
+    fail query: |
+      SELECT customer_id, name, email
+      FROM bronze_v1.customers
+      WHERE customer_id <= 0
+    samples limit: 10
+    description: Customer IDs must be positive
+- failed rows:
+    name: valid_region_ids
+    dimension: validity
+    fail query: |
+      SELECT customer_id, region_id, name
+      FROM bronze_v1.customers
+      WHERE region_id NOT IN (1, 2, 3, 4, 5)
+    samples limit: 10
+    description: Region IDs must be valid (1-5)
+- failed rows:
+    name: name_length_check
+    dimension: validity
+    fail query: |
+      SELECT customer_id, name, email
+      FROM bronze_v1.customers
+      WHERE LENGTH(name) < 10
+    samples limit: 10
+    description: Customer names should be at least 10 characters (EXPECTED TO FAIL)
+- duplicate_count(customer_id) = 0:
+    name: unique_customer_ids
+    dimension: uniqueness
+    description: Customer IDs must be unique
+- duplicate_count(email) = 0:
+    name: unique_emails
+    dimension: uniqueness
+    description: Email addresses must be unique

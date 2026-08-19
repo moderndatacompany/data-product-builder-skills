@@ -1,0 +1,36 @@
+models:
+  s3lhyddepot.tpch_analytics.customer_orders_summary:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about customer orders summary. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "customer orders summary"
+        - "customer_orders_summary"
+        - "customer"
+        - "orders"
+      examples:
+        - "Show customer orders summary trends over time."
+        - "Break down customer orders summary by key dimensions."
+    alias: customer_orders_summary
+
+    dimensions:
+      includes:
+
+    measures:
+      total_customer_orders_summary:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total customer orders summary. Respect
+            its aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total customer orders summary"
+            - "total_customer_orders_summary"
+            - "total"
+            - "customer"
+          examples:
+            - "What is total customer orders summary by month?"
+            - "Compare total customer orders summary across key dimensions."
+        type: count
+        expression: "{customer_orders_summary.total_customer_orders_summary}"

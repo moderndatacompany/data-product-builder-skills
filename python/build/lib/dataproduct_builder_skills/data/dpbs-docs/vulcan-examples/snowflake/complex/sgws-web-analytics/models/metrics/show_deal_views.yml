@@ -1,0 +1,3 @@
+kind: metric
+name: show_deal_views
+measure: web_heartbeat.show_deal_views

@@ -1,0 +1,3 @@
+kind: metric
+name: prev30days_proof_revenue
+measure: sales.prev30days_proof_revenue

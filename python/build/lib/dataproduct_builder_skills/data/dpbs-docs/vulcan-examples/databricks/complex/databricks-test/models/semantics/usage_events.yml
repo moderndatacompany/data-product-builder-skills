@@ -1,0 +1,149 @@
+models:
+  b2b_saas.usage_events:
+    alias: usage_events
+    
+    # ============================================================================
+    # MEASURES - See users.yml for important notes on COUNT expressions
+    # ============================================================================
+    measures:
+      total_events:
+        type: count
+        expression: |
+          *
+        tags:
+          - usage
+          - events
+          - metric
+        terms:
+          - product.total_events
+          - usage.events
+        
+      daily_active_users:
+        type: count_distinct
+        expression: |
+          {usage_events.user_id}
+        filters:
+          - |
+            {usage_events.event_date} = CURRENT_DATE
+        tags:
+          - engagement
+          - dau
+          - daily
+        terms:
+          - engagement.dau
+          - metric.daily_active_users
+        
+      avg_session_duration:
+        type: avg
+        expression: |
+          {usage_events.session_duration}
+        tags:
+          - engagement
+          - session
+          - duration
+        terms:
+          - engagement.session_duration
+          - product.session_time
+        
+      feature_adoption_rate:
+        type: count_distinct
+        expression: |
+          {usage_events.user_id}
+        filters:
+          - |
+            {usage_events.feature_name} = 'reports'
+        tags:
+          - adoption
+          - feature
+          - reports
+        terms:
+          - product.feature_adoption
+          - feature.reports
+        
+      api_usage_count:
+        type: sum
+        expression: |
+          {usage_events.event_count}
+        filters:
+          - |
+            {usage_events.event_type} = 'api_call'
+        tags:
+          - api
+          - usage
+          - integration
+        terms:
+          - product.api_usage
+          - integration.api_calls
+        
+      total_engagement_score:
+        type: sum
+        expression: |
+          {usage_events.engagement_score}
+        tags:
+          - engagement
+          - score
+          - metric
+        terms:
+          - engagement.total_score
+          - product.engagement
+    
+    segments:
+      recent_activity:
+        expression: |
+          {usage_events.event_date} >= CURRENT_DATE - INTERVAL 7 DAYS
+        tags:
+          - temporal
+          - activity
+          - recent
+        terms:
+          - usage.recent_activity
+          - engagement.recent
+        
+      api_users:
+        expression: |
+          {usage_events.event_type} = 'api_call'
+        tags:
+          - api
+          - integration
+          - segment
+        terms:
+          - integration.api_users
+          - segment.api_integration
+        
+      core_feature_users:
+        expression: |
+          {usage_events.feature_category} = 'core'
+        tags:
+          - feature
+          - core
+          - adoption
+        terms:
+          - product.core_features
+          - adoption.core
+        
+      advanced_feature_users:
+        expression: |
+          {usage_events.feature_category} = 'advanced'
+        tags:
+          - feature
+          - advanced
+          - adoption
+        terms:
+          - product.advanced_features
+          - adoption.advanced
+    
+    # joins:
+    #   users:
+    #     type: many_to_one
+    #     expression: "usage_events.user_id = users.user_id"
+    
+    dimensions:
+      includes:
+        - user_id
+        - event_date
+        - event_type
+        - feature_name
+        - feature_category
+        - session_duration
+        - event_count
+        - engagement_score

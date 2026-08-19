@@ -1,0 +1,358 @@
+# Converted from legacy: semantics/devices.yaml
+kind: semantic
+name: devices
+depends_on: lenovo.ldo.devices
+ai_context:
+  instructions: >
+    Use this semantic model for questions about devices. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "devices"
+  examples:
+    - "Show devices trends over time."
+    - "Break down devices by key dimensions."
+
+measures:
+- name: total_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total devices. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total devices"
+      - "total_devices"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total devices by month?"
+      - "Compare total devices across key segments."
+  type: count_distinct
+  expression: '{devices.DEVICE_ID}'
+  description: Total number of devices. Shall be used to get the count of devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_devices
+- name: total_device_categories
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total device categories. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total device categories"
+      - "total_device_categories"
+      - "total"
+      - "device"
+    examples:
+      - "What is total device categories by month?"
+      - "Compare total device categories across key segments."
+  type: count_distinct
+  expression: '{devices.CATEGORY}'
+  description: Total number of device categories.
+  tags:
+  - metric
+  terms:
+  - metric.total_device_categories
+- name: total_pc_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total pc devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total pc devices"
+      - "total_pc_devices"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total pc devices by month?"
+      - "Compare total pc devices across key segments."
+  type: count_distinct
+  expression: '{devices.DEVICE_ID}'
+  filters:
+  - upper({devices.CATEGORY}) = 'PC'
+  description: Total number of PC devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_pc_devices
+- name: total_mobile_and_tablet_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total mobile and tablet devices.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total mobile and tablet devices"
+      - "total_mobile_and_tablet_devices"
+      - "total"
+      - "mobile"
+    examples:
+      - "What is total mobile and tablet devices by month?"
+      - "Compare total mobile and tablet devices across key segments."
+  type: count_distinct
+  expression: '{devices.DEVICE_ID}'
+  filters:
+  - upper({devices.CATEGORY}) IN ('MOBILE', 'PHONE', 'TABLET')
+  description: Total number of Mobile and Tablet devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_mobile_and_tablet_devices
+- name: total_ar_and_vr_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total ar and vr devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total ar and vr devices"
+      - "total_ar_and_vr_devices"
+      - "total"
+      - "and"
+    examples:
+      - "What is total ar and vr devices by month?"
+      - "Compare total ar and vr devices across key segments."
+  type: count_distinct
+  expression: '{devices.DEVICE_ID}'
+  filters:
+  - upper({devices.CATEGORY}) IN ('AR', 'VR')
+  description: Total number of AR and VR devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_ar_and_vr_devices
+- name: total_smartedge_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total smartedge devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total smartedge devices"
+      - "total_smartedge_devices"
+      - "total"
+      - "smartedge"
+    examples:
+      - "What is total smartedge devices by month?"
+      - "Compare total smartedge devices across key segments."
+  type: count_distinct
+  expression: '{devices.DEVICE_ID}'
+  filters:
+  - upper({devices.CATEGORY}) = 'SMARTEDGE'
+  description: Total number of SMARTEDGE devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_smartedge_devices
+- name: total_chromebook_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total chromebook devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total chromebook devices"
+      - "total_chromebook_devices"
+      - "total"
+      - "chromebook"
+    examples:
+      - "What is total chromebook devices by month?"
+      - "Compare total chromebook devices across key segments."
+  type: count_distinct
+  expression: '{devices.DEVICE_ID}'
+  filters:
+  - upper({devices.CATEGORY}) = 'CHROMEBOOK'
+  description: Total number of Chromebook devices.
+  tags:
+  - metric
+  terms:
+  - metric.total_chromebook_devices
+joins:
+- name: devices_uptime
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from devices uptime.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "devices uptime"
+      - "devices_uptime"
+      - "devices"
+      - "uptime"
+    examples:
+      - "Analyze this model with devices uptime attributes."
+      - "Break measures down by devices uptime."
+  type: one_to_one
+  expression: '{devices.DEVICE_ID} = {devices_uptime.DEVICE_ID}'
+- name: system_update_reports
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from system update
+      reports. Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "system update reports"
+      - "system_update_reports"
+      - "system"
+      - "update"
+    examples:
+      - "Analyze this model with system update reports attributes."
+      - "Break measures down by system update reports."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {system_update_reports.DEVICE_ID} '
+- name: schedules_app
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from schedules app. Keep
+      the configured join relationship to avoid double counting.
+    synonyms:
+      - "schedules app"
+      - "schedules_app"
+      - "schedules"
+      - "app"
+    examples:
+      - "Analyze this model with schedules app attributes."
+      - "Break measures down by schedules app."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {schedules_app.DEVICE_ID} '
+- name: storage
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from storage. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "storage"
+    examples:
+      - "Analyze this model with storage attributes."
+      - "Break measures down by storage."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {storage.DEVICE_ID}'
+- name: battery
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from battery. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "battery"
+    examples:
+      - "Analyze this model with battery attributes."
+      - "Break measures down by battery."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {battery.DEVICE_ID}'
+- name: device_bios
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from device bios. Keep
+      the configured join relationship to avoid double counting.
+    synonyms:
+      - "device bios"
+      - "device_bios"
+      - "device"
+      - "bios"
+    examples:
+      - "Analyze this model with device bios attributes."
+      - "Break measures down by device bios."
+  type: one_to_one
+  expression: '{devices.DEVICE_ID} = {device_bios.DEVICE_ID}'
+- name: device_os
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from device os. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "device os"
+      - "device_os"
+      - "device"
+    examples:
+      - "Analyze this model with device os attributes."
+      - "Break measures down by device os."
+  type: one_to_one
+  expression: '{devices.DEVICE_ID} = {device_os.DEVICE_ID}'
+- name: issue
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from issue. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "issue"
+    examples:
+      - "Analyze this model with issue attributes."
+      - "Break measures down by issue."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {issue.DEVICE_ID}'
+- name: device_warranty
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from device warranty.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "device warranty"
+      - "device_warranty"
+      - "device"
+      - "warranty"
+    examples:
+      - "Analyze this model with device warranty attributes."
+      - "Break measures down by device warranty."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {device_warranty.DEVICE_ID} '
+- name: device_context
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from device context.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "device context"
+      - "device_context"
+      - "device"
+      - "context"
+    examples:
+      - "Analyze this model with device context attributes."
+      - "Break measures down by device context."
+  type: one_to_one
+  expression: '{devices.DEVICE_ID} = {device_context.DEVICE_ID} '
+- name: consumed_licenses
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from consumed licenses.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "consumed licenses"
+      - "consumed_licenses"
+      - "consumed"
+      - "licenses"
+    examples:
+      - "Analyze this model with consumed licenses attributes."
+      - "Break measures down by consumed licenses."
+  type: one_to_many
+  expression: '{devices.DEVICE_ORG_ID} = {consumed_licenses.ENTITY_ID} AND {consumed_licenses.ENTITY_TYPE} = ''DEVICE'' '
+- name: live_device_status
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from live device status.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "live device status"
+      - "live_device_status"
+      - "live"
+      - "device"
+    examples:
+      - "Analyze this model with live device status attributes."
+      - "Break measures down by live device status."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {live_device_status.DEVICE_ID} '
+- name: system_update_testing
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from system update
+      testing. Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "system update testing"
+      - "system_update_testing"
+      - "system"
+      - "update"
+    examples:
+      - "Analyze this model with system update testing attributes."
+      - "Break measures down by system update testing."
+  type: one_to_many
+  expression: '{devices.DEVICE_ID} = {system_update_testing.DEVICE_ID} '

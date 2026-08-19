@@ -1,0 +1,60 @@
+test_sales_orders_single:
+  model: sales.orders
+  description: >
+    Full-output test for the Orders model using a single order header + 2 order item rows.
+  vars:
+    start: '2024-03-01'
+    end: '2024-03-31'
+
+  inputs:
+    raw.raw_orders:
+      rows:
+        - order_id: O1000
+          order_date: '2024-03-15'
+          customer_id: C0001
+          order_status: Completed
+          order_channel: Web
+          currency: USD
+          shipping_cost: 5.00
+          shipping_country: US
+          shipping_state: NY
+          shipping_city: New York
+          shipping_postal_code: "10001"
+          payment_status: Paid
+
+    raw.raw_order_items:
+      rows:
+        - order_item_id: OI1001
+          order_id: O1000
+          product_id: P0001
+          quantity: 2
+          unit_price: 10.00
+          discount_rate: 0.10
+          tax_rate: 0.08
+        - order_item_id: OI1002
+          order_id: O1000
+          product_id: P0014
+          quantity: 1
+          unit_price: 30.00
+          discount_rate: 0.00
+          tax_rate: 0.08
+
+  outputs:
+    query:
+      rows:
+        - order_id: "O1000"
+          order_date: "2024-03-15"
+          customer_id: "C0001"
+          order_status: "Completed"
+          order_channel: "Web"
+          currency: "USD"
+          subtotal_amount: 50.0
+          discount_amount: 2.0
+          tax_amount: 3.84
+          shipping_cost: 5.0
+          total_amount: 56.84
+          shipping_country: "US"
+          shipping_state: "NY"
+          shipping_city: "New York"
+          shipping_postal_code: "10001"
+          payment_status: "Paid"

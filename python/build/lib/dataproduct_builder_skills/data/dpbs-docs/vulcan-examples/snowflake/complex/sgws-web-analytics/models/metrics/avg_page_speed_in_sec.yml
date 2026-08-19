@@ -1,0 +1,3 @@
+kind: metric
+name: avg_page_speed_in_sec
+measure: web_heartbeat.avg_page_speed_in_sec

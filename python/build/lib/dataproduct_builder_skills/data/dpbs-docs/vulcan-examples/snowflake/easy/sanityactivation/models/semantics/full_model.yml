@@ -1,0 +1,66 @@
+# Converted from legacy: semantics/full_model.yml
+kind: semantic
+name: full_model
+depends_on: lenovo.vulcan_example.full_model
+ai_context:
+  instructions: >
+    Use this semantic model for questions about full model. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "full model"
+    - "full_model"
+    - "full"
+    - "model"
+  examples:
+    - "Show full model trends over time."
+    - "Break down full model by key dimensions."
+
+measures:
+- name: total_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total orders. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total orders"
+      - "total_orders"
+      - "total"
+      - "orders"
+    examples:
+      - "What is total orders by month?"
+      - "Compare total orders across key segments."
+  type: sum
+  expression: '{full_model.NUM_ORDERS}'
+  description: Total number of orders
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_orders
+  - metric.order_count
+- name: avg_orders_per_item
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg orders per item. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg orders per item"
+      - "avg_orders_per_item"
+      - "avg"
+      - "orders"
+    examples:
+      - "What is avg orders per item by month?"
+      - "Compare avg orders per item across key segments."
+  type: avg
+  expression: '{full_model.NUM_ORDERS}'
+  description: Average orders per item
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_orders_per_item
+  - metric.aggregate

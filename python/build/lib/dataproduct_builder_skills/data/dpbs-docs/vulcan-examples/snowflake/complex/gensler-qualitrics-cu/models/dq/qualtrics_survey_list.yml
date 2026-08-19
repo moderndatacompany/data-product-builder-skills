@@ -1,0 +1,36 @@
+# kind: dq — converted from checks/qualtrics_survey_list.yml
+kind: dq
+name: QUALTRICS_SURVEY_LIST_dq
+depends_on: GENSLER.FINAL.QUALTRICS_SURVEY_LIST
+rules:
+- missing_count(SURVEY_ID) = 0:
+    name: no_missing_survey_ids
+    dimension: completeness
+    description: All survey list entries must have a survey ID
+- missing_count(SURVEY_NAME) = 0:
+    name: no_missing_survey_names
+    dimension: completeness
+    description: All surveys should have a name
+- row_count > 0:
+    name: has_surveys
+    dimension: completeness
+    description: At least one survey must exist in the list
+- failed rows:
+    name: invalid_survey_status
+    dimension: validity
+    fail query: "SELECT SURVEY_ID, SURVEY_NAME, IS_ACTIVE\nFROM GENSLER.FINAL.QUALTRICS_SURVEY_LIST\nWHERE IS_ACTIVE IS NOT NULL \n  AND IS_ACTIVE NOT IN (TRUE, FALSE)\n"
+    samples limit: 10
+    description: Survey status must be Active, Inactive, or Draft
+- failed rows:
+    name: future_last_modified
+    dimension: validity
+    fail query: |
+      SELECT SURVEY_ID, SURVEY_NAME, LAST_MODIFIED_DATE
+      FROM GENSLER.FINAL.QUALTRICS_SURVEY_LIST
+      WHERE LAST_MODIFIED_DATE > CURRENT_TIMESTAMP()
+    samples limit: 10
+    description: Last modified timestamp cannot be in the future
+- duplicate_count(SURVEY_ID) = 0:
+    name: unique_survey_ids_in_list
+    dimension: uniqueness
+    description: Survey IDs must be unique in the survey list

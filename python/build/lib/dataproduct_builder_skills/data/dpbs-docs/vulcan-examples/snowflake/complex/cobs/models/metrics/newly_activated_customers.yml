@@ -1,0 +1,3 @@
+kind: metric
+name: newly_activated_customers
+measure: rfm_segments.newly_activated_customers

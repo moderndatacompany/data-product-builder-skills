@@ -1,0 +1,3 @@
+kind: metric
+name: no_of_critical_firmware_updates
+measure: system_update.no_of_critical_firmware_updates

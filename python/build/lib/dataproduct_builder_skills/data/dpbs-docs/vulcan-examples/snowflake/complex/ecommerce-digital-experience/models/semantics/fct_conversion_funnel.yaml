@@ -1,0 +1,89 @@
+models:
+  ECOMMERCE_PLATFORM.GOLD.FCT_CONVERSION_FUNNEL:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct conversion funnel. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "fct conversion funnel"
+        - "fct_conversion_funnel"
+        - "fct"
+        - "conversion"
+      examples:
+        - "Show fct conversion funnel trends over time."
+        - "Break down fct conversion funnel by key dimensions."
+    alias: fct_conversion_funnel
+
+    dimensions:
+      includes:
+        - session_id
+        - funnel_date
+        - traffic_source
+        - device_type
+        - calculated_at
+
+    measures:
+      has_cart:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for has cart. Respect its aggregation type
+            before comparing or segmenting results.
+          synonyms:
+            - "has cart"
+            - "has_cart"
+            - "has"
+            - "cart"
+          examples:
+            - "What is has cart by month?"
+            - "Compare has cart across key dimensions."
+        type: sum
+        expression: "{fct_conversion_funnel.has_cart}"
+
+      has_checkout:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for has checkout. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "has checkout"
+            - "has_checkout"
+            - "has"
+            - "checkout"
+          examples:
+            - "What is has checkout by month?"
+            - "Compare has checkout across key dimensions."
+        type: sum
+        expression: "{fct_conversion_funnel.has_checkout}"
+
+      has_purchase:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for has purchase. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "has purchase"
+            - "has_purchase"
+            - "has"
+            - "purchase"
+          examples:
+            - "What is has purchase by month?"
+            - "Compare has purchase across key dimensions."
+        type: sum
+        expression: "{fct_conversion_funnel.has_purchase}"
+
+      order_value_usd:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for order value usd. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "order value usd"
+            - "order_value_usd"
+            - "order"
+            - "value"
+          examples:
+            - "What is order value usd by month?"
+            - "Compare order value usd across key dimensions."
+        type: sum
+        expression: "{fct_conversion_funnel.order_value_usd}"

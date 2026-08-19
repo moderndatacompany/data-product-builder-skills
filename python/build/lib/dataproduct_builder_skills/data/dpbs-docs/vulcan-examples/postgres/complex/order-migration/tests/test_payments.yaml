@@ -1,0 +1,33 @@
+test_sales_payments_single:
+  model: sales.payments
+  description: >
+    Full-output test for the Payments model using a single payment record.
+
+  vars:
+    start: '2024-03-01'
+    end: '2024-03-31'
+
+  inputs:
+    raw.raw_payments:
+      rows:
+        - payment_id: PMT9001
+          order_id: O3000
+          payment_date: '2024-03-10'
+          payment_method: Card
+          provider: Stripe
+          transaction_id: TXN-9001
+          amount: 123.45
+          status: Paid
+
+  outputs:
+    query:
+      rows:
+        - payment_id: "PMT9001"
+          order_id: "O3000"
+          payment_date: "2024-03-10"
+          payment_method: "Card"
+          provider: "Stripe"
+          transaction_id: "TXN-9001"
+          amount: 123.45
+          status: "Paid"
+

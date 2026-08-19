@@ -1,0 +1,31 @@
+test_sales_returns_single:
+  model: sales.returns
+  description: >
+    Full-output test for the Returns model using a single return record.
+
+  vars:
+    start: '2024-03-01'
+    end: '2024-03-31'
+
+  inputs:
+    raw.raw_returns:
+      rows:
+        - return_id: RTN9001
+          order_id: O5000
+          order_item_id: OI5001
+          return_date: '2024-03-21'
+          return_reason: Defective
+          return_status: Approved
+          refund_amount: 19.99
+
+  outputs:
+    query:
+      rows:
+        - return_id: "RTN9001"
+          order_id: "O5000"
+          order_item_id: "OI5001"
+          return_date: "2024-03-21"
+          return_reason: "Defective"
+          return_status: "Approved"
+          refund_amount: 19.99
+

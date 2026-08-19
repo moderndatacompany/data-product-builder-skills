@@ -1,0 +1,3 @@
+kind: metric
+name: number_of_os
+measure: device_os.number_of_os

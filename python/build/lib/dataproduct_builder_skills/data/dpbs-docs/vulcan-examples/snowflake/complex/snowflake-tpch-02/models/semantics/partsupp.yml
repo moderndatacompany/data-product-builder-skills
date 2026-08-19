@@ -1,0 +1,111 @@
+# Converted from legacy: semantics/partsupp.yml
+kind: semantic
+name: partsupp
+depends_on: test_db.vulcan_test_project.partsupp
+ai_context:
+  instructions: >
+    Use this semantic model for questions about partsupp. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "partsupp"
+  examples:
+    - "Show partsupp trends over time."
+    - "Break down partsupp by key dimensions."
+
+dimensions:
+- PARTKEY
+- SUPPKEY
+- COMMENT
+measures:
+- name: total_partsupp
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total partsupp. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total partsupp"
+      - "total_partsupp"
+      - "total"
+      - "partsupp"
+    examples:
+      - "What is total partsupp by month?"
+      - "Compare total partsupp across key segments."
+  type: count
+  expression: '*'
+  description: Total number of PARTSUPP rows
+  tags:
+  - metric
+  terms:
+  - metric.total_partsupp
+- name: total_availqty
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total availqty. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total availqty"
+      - "total_availqty"
+      - "total"
+      - "availqty"
+    examples:
+      - "What is total availqty by month?"
+      - "Compare total availqty across key segments."
+  type: sum
+  expression: '{partsupp.AVAILQTY}'
+  description: Total available quantity across all part-supplier rows
+  tags:
+  - metric
+  terms:
+  - metric.total_availqty
+- name: avg_supplycost
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg supplycost. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg supplycost"
+      - "avg_supplycost"
+      - "avg"
+      - "supplycost"
+    examples:
+      - "What is avg supplycost by month?"
+      - "Compare avg supplycost across key segments."
+  type: avg
+  expression: '{partsupp.SUPPLYCOST}'
+  description: Average supply cost
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_supplycost
+  - metric.aggregate
+joins:
+- name: suppliers
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from suppliers. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "suppliers"
+    examples:
+      - "Analyze this model with suppliers attributes."
+      - "Break measures down by suppliers."
+  type: many_to_one
+  expression: '{partsupp.SUPPKEY} = {suppliers.SUPPKEY}'
+- name: parts
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from parts. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "parts"
+    examples:
+      - "Analyze this model with parts attributes."
+      - "Break measures down by parts."
+  type: many_to_one
+  expression: '{partsupp.PARTKEY} = {parts.PARTKEY}'

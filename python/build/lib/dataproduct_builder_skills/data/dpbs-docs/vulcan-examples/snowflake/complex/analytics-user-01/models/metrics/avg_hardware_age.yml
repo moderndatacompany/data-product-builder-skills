@@ -1,0 +1,3 @@
+kind: metric
+name: avg_hardware_age
+measure: events.avg_hardware_age

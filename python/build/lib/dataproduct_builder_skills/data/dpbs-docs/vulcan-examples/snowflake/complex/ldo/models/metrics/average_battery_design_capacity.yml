@@ -1,0 +1,3 @@
+kind: metric
+name: average_battery_design_capacity
+measure: battery.average_battery_design_capacity

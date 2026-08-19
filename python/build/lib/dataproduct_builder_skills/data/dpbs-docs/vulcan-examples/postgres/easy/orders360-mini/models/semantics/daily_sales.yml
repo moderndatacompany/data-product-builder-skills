@@ -1,0 +1,145 @@
+# Converted from legacy: semantics/daily_sales.yml
+kind: semantic
+name: daily_sales
+depends_on: sales.daily_sales
+description: "Daily sales aggregation tracking order volume and revenue trends over time"
+
+ai_context:
+  instructions: >
+    Use this semantic model for questions about daily sales. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "daily sales"
+    - "daily_sales"
+    - "daily"
+    - "sales"
+  examples:
+    - "Show daily sales trends over time."
+    - "Break down daily sales by key dimensions."
+
+dimensions:
+  - name: order_date
+    ai_context:
+      instructions: >
+        Use this dimension to filter, group, or drill into questions about order date.
+      synonyms:
+        - "order date"
+        - "order_date"
+        - "order"
+        - "date"
+      examples:
+        - "Break results down by order date."
+        - "Filter the analysis using order date."
+    granularities:
+      - name: weekly
+        ai_context:
+          instructions: >
+            Use this dimension to filter, group, or drill into questions about weekly.
+          synonyms:
+            - "weekly"
+          examples:
+            - "Break results down by weekly."
+            - "Filter the analysis using weekly."
+        interval: "1 week"
+        description: "Weekly sales aggregation"
+      - name: monthly
+        ai_context:
+          instructions: >
+            Use this dimension to filter, group, or drill into questions about monthly.
+          synonyms:
+            - "monthly"
+          examples:
+            - "Break results down by monthly."
+            - "Filter the analysis using monthly."
+        interval: "1 month"
+        description: "Monthly sales aggregation"
+      - name: quarterly
+        ai_context:
+          instructions: >
+            Use this dimension to filter, group, or drill into questions about quarterly.
+          synonyms:
+            - "quarterly"
+          examples:
+            - "Break results down by quarterly."
+            - "Filter the analysis using quarterly."
+        interval: "3 months"
+        description: "Quarterly sales aggregation"
+  - total_orders
+  - total_revenue
+  - last_order_id
+
+measures:
+  - name: total_daily_orders
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total daily orders. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "total daily orders"
+        - "total_daily_orders"
+        - "total"
+        - "daily"
+      examples:
+        - "What is total daily orders by month?"
+        - "Compare total daily orders across key segments."
+    type: sum
+    expression: "{daily_sales.total_orders}"
+    description: "Sum of all orders across selected days"
+    tags:
+      - sales
+      - count
+      - metric
+    terms:
+      - sales.total_daily_orders
+      - metric.daily_order_count
+
+  - name: total_daily_revenue
+    ai_context:
+      instructions: >
+        Use this measure when the question asks for total daily revenue. Respect its
+        aggregation type and any configured filters before comparing or segmenting
+        results.
+      synonyms:
+        - "total daily revenue"
+        - "total_daily_revenue"
+        - "total"
+        - "daily"
+      examples:
+        - "What is total daily revenue by month?"
+        - "Compare total daily revenue across key segments."
+    type: sum
+    expression: "{daily_sales.total_revenue}"
+    description: "Sum of all revenue across selected days"
+    tags:
+      - sales
+      - revenue
+      - metric
+    terms:
+      - sales.total_daily_revenue
+      - finance.daily_revenue
+
+segments:
+  - name: high_revenue_days
+    ai_context:
+      instructions: >
+        Apply this segment when the question asks for the high revenue days subset.
+        Combine it with measures to answer filtered business questions.
+      synonyms:
+        - "high revenue days"
+        - "high_revenue_days"
+        - "high"
+        - "revenue"
+      examples:
+        - "Show revenue for high revenue days."
+        - "How many records are in high revenue days?"
+    expression: "{daily_sales.total_revenue} >= 100"
+    description: "Days with $100+ in revenue"
+    tags:
+      - sales
+      - high_value
+      - segment
+    terms:
+      - sales.high_revenue_days
+      - segment.top_days

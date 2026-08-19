@@ -1,0 +1,49 @@
+# kind: dq — converted from checks/customer_experience_kpis.yml
+kind: dq
+name: customer_experience_kpis_dq
+depends_on: QCOMMERCE_PLATFORM.GOLD.CUSTOMER_EXPERIENCE_KPIS
+
+rules:
+- row_count >= 50:
+    name: minimum_customer_experience_rows
+    dimension: completeness
+    description: At least 50 customer experience KPI rows should exist
+
+- missing_count(CUSTOMER_TIER) = 0:
+    name: no_missing_customer_tier
+    dimension: completeness
+    description: All records must have a CUSTOMER_TIER
+
+- missing_count(EXPERIENCE_RISK_SEGMENT) = 0:
+    name: no_missing_experience_risk_segment
+    dimension: completeness
+    description: All records must have an EXPERIENCE_RISK_SEGMENT
+
+- invalid_count(LATE_ORDERS) = 0:
+    name: late_delivery_rate_in_range
+    dimension: validity
+    description: LATE_ORDERS must be zero or positive
+    valid min: 0
+
+- invalid_count(FAILED_ORDERS) = 0:
+    name: failed_delivery_rate_in_range
+    dimension: validity
+    description: FAILED_ORDERS must be zero or positive
+    valid min: 0
+
+- invalid_count(REFUNDED_ORDERS) = 0:
+    name: refund_rate_in_range
+    dimension: validity
+    description: REFUNDED_ORDERS must be zero or positive
+    valid min: 0
+
+- invalid_count(EXPERIENCE_RISK_SEGMENT) = 0:
+    name: experience_risk_segment_is_valid
+    dimension: validity
+    description: EXPERIENCE_RISK_SEGMENT must stay within the supported categorical buckets
+    valid values: [healthy, watchlist, high_risk, critical, unknown]
+
+- duplicate_count(DS, CITY, CUSTOMER_TIER) = 0:
+    name: unique_ds_city_customer_tier
+    dimension: uniqueness
+    description: Each DS, CITY, and CUSTOMER_TIER combination must be unique

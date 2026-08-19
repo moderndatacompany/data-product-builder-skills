@@ -1,0 +1,344 @@
+# Converted from legacy: semantics/fct_production_daily.yaml
+kind: semantic
+name: fct_production_daily
+depends_on: MES_PLATFORM.GOLD.PLANT_PERFORMANCE_DAILY
+ai_context:
+  instructions: >
+    Use this semantic model for questions about fct production daily. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "fct production daily"
+    - "fct_production_daily"
+    - "fct"
+    - "production"
+  examples:
+    - "Show fct production daily trends over time."
+    - "Break down fct production daily by key dimensions."
+
+dimensions:
+- PLANT_CODE
+- PLANT_NAME
+- PLANT_REGION
+- CONFIRMATION_DATE
+measures:
+- name: total_good_quantity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total good quantity. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total good quantity"
+      - "total_good_quantity"
+      - "total"
+      - "good"
+    examples:
+      - "What is total good quantity by month?"
+      - "Compare total good quantity across key segments."
+  type: number
+  expression: SUM({fct_production_daily.TOTAL_GOOD_QUANTITY})
+  description: Total accepted production volume passing quality checks
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: total_scrap_quantity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total scrap quantity. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total scrap quantity"
+      - "total_scrap_quantity"
+      - "total"
+      - "scrap"
+    examples:
+      - "What is total scrap quantity by month?"
+      - "Compare total scrap quantity across key segments."
+  type: number
+  expression: SUM({fct_production_daily.TOTAL_SCRAP_QUANTITY})
+  description: Total rejected production volume requiring disposal
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: total_rework_quantity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total rework quantity. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total rework quantity"
+      - "total_rework_quantity"
+      - "total"
+      - "rework"
+    examples:
+      - "What is total rework quantity by month?"
+      - "Compare total rework quantity across key segments."
+  type: number
+  expression: SUM({fct_production_daily.TOTAL_REWORK_QUANTITY})
+  description: Total production requiring additional processing
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: total_quantity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total quantity. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total quantity"
+      - "total_quantity"
+      - "total"
+      - "quantity"
+    examples:
+      - "What is total quantity by month?"
+      - "Compare total quantity across key segments."
+  type: number
+  expression: SUM({fct_production_daily.TOTAL_QUANTITY})
+  description: Total production volume including all categories
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: avg_first_pass_yield_pct
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg first pass yield pct. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg first pass yield pct"
+      - "avg_first_pass_yield_pct"
+      - "avg"
+      - "first"
+    examples:
+      - "What is avg first pass yield pct by month?"
+      - "Compare avg first pass yield pct across key segments."
+  type: number
+  expression: AVG({fct_production_daily.AVG_FIRST_PASS_YIELD_PCT})
+  description: Average percentage of production passing inspection first time
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_first_pass_yield_pct
+  - metric.aggregate
+- name: total_production_hours
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total production hours. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total production hours"
+      - "total_production_hours"
+      - "total"
+      - "production"
+    examples:
+      - "What is total production hours by month?"
+      - "Compare total production hours across key segments."
+  type: number
+  expression: SUM({fct_production_daily.TOTAL_PRODUCTION_HOURS})
+  description: Total time spent on production activities in hours
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_production_hours
+  - metric.product_count
+- name: total_confirmations
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total confirmations. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total confirmations"
+      - "total_confirmations"
+      - "total"
+      - "confirmations"
+    examples:
+      - "What is total confirmations by month?"
+      - "Compare total confirmations across key segments."
+  type: number
+  expression: SUM({fct_production_daily.TOTAL_CONFIRMATIONS})
+  description: Total number of production confirmations
+  tags:
+  - metric
+  terms:
+  - metric.total_confirmations
+- name: avg_scrap_rate_pct
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg scrap rate pct. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg scrap rate pct"
+      - "avg_scrap_rate_pct"
+      - "avg"
+      - "scrap"
+    examples:
+      - "What is avg scrap rate pct by month?"
+      - "Compare avg scrap rate pct across key segments."
+  type: number
+  expression: AVG({fct_production_daily.AVG_SCRAP_RATE_PCT})
+  description: Average scrap rate percentage
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_scrap_rate_pct
+  - metric.aggregate
+- name: avg_efficiency_pct
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg efficiency pct. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg efficiency pct"
+      - "avg_efficiency_pct"
+      - "avg"
+      - "efficiency"
+    examples:
+      - "What is avg efficiency pct by month?"
+      - "Compare avg efficiency pct across key segments."
+  type: number
+  expression: AVG({fct_production_daily.AVG_EFFICIENCY_PCT})
+  description: Average equipment efficiency percentage
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_efficiency_pct
+  - metric.aggregate
+- name: avg_units_per_hour
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg units per hour. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg units per hour"
+      - "avg_units_per_hour"
+      - "avg"
+      - "units"
+    examples:
+      - "What is avg units per hour by month?"
+      - "Compare avg units per hour across key segments."
+  type: number
+  expression: AVG({fct_production_daily.AVG_UNITS_PER_HOUR})
+  description: Average production rate (units per hour)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_units_per_hour
+  - metric.aggregate
+segments:
+- name: high_yield_production
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high yield production subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high yield production"
+      - "high_yield_production"
+      - "high"
+      - "yield"
+    examples:
+      - "Show revenue for high yield production."
+      - "How many records are in high yield production?"
+  expression: '{fct_production_daily.AVG_FIRST_PASS_YIELD_PCT} >= 95'
+  description: Production with excellent first pass yield above 95%
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.high_yield_production
+  - metric.product_count
+- name: low_yield_production
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the low yield production subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "low yield production"
+      - "low_yield_production"
+      - "low"
+      - "yield"
+    examples:
+      - "Show revenue for low yield production."
+      - "How many records are in low yield production?"
+  expression: '{fct_production_daily.AVG_FIRST_PASS_YIELD_PCT} < 85'
+  description: Production requiring quality improvement attention
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.low_yield_production
+  - metric.product_count
+- name: quality_target_met
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the quality target met subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "quality target met"
+      - "quality_target_met"
+      - "quality"
+      - "target"
+    examples:
+      - "Show revenue for quality target met."
+      - "How many records are in quality target met?"
+  expression: '{fct_production_daily.QUALITY_TARGET_MET} = TRUE'
+  description: Plants meeting quality target (scrap rate < 4%)
+  tags:
+  - metric
+  terms:
+  - metric.quality_target_met
+- name: efficiency_target_met
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the efficiency target met subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "efficiency target met"
+      - "efficiency_target_met"
+      - "efficiency"
+      - "target"
+    examples:
+      - "Show revenue for efficiency target met."
+      - "How many records are in efficiency target met?"
+  expression: '{fct_production_daily.EFFICIENCY_TARGET_MET} = TRUE'
+  description: Plants meeting efficiency target (efficiency > 80%)
+  tags:
+  - metric
+  terms:
+  - metric.efficiency_target_met

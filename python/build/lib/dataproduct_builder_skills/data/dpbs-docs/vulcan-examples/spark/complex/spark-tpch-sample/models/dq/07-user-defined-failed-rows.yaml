@@ -1,0 +1,25 @@
+# kind: dq — converted from checks/07-user-defined-failed-rows.yaml
+kind: dq
+name: tpch_orders_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1
+
+rules:
+- failed rows:
+    name: negative_totalprice
+    dimension: accuracy
+    description: Total price cannot be negative
+    fail query: |
+      SELECT o_orderkey, o_totalprice
+      FROM lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1
+      WHERE o_totalprice < 0
+    samples limit: 10
+
+- failed rows:
+    name: invalid_orderstatus
+    dimension: accuracy
+    description: Order status must be F, O, or P
+    fail query: |
+      SELECT o_orderkey, o_orderstatus
+      FROM lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1
+      WHERE o_orderstatus NOT IN ('F', 'O', 'P')
+    samples limit: 10

@@ -1,0 +1,5 @@
+kind: metric
+name: unique_customers
+measure: orders.unique_customers
+ts: orders.order_date
+granularity: day

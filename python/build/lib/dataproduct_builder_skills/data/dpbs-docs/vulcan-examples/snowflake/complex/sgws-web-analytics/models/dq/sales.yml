@@ -1,0 +1,48 @@
+# kind: dq — converted from checks/sales.yaml
+kind: dq
+name: SALES_dq
+depends_on: web_analytics_gold.SALES
+rules:
+- row_count > 0:
+    name: sales_records_exist
+    dimension: completeness
+    description: Sales fact table must contain transaction records
+- missing_count(customer_no) = 0:
+    name: customer_no_required
+    dimension: completeness
+    description: All sales transactions must be linked to a customer
+- missing_count(invoice_no) = 0:
+    name: invoice_no_required
+    dimension: completeness
+    description: All sales transactions must have an invoice number for traceability
+- missing_count(ext_net) = 0:
+    name: ext_net_required
+    dimension: completeness
+    description: All sales transactions must have an extended net amount (revenue)
+- failed rows:
+    name: invalid_source
+    dimension: validity
+    fail query: |
+      SELECT sales_pk, source
+      FROM web_analytics_gold.SALES
+      WHERE source NOT IN ('Proof', 'Non-proof')
+        AND source IS NOT NULL
+    samples limit: 10
+    description: Sales source must be classified as either Proof or Non-proof channel
+- failed rows:
+    name: negative_revenue
+    dimension: validity
+    fail query: |
+      SELECT sales_pk, customer_no, ext_net
+      FROM web_analytics_gold.SALES
+      WHERE ext_net < -10000
+    samples limit: 10
+    description: Sales revenue should not be excessively negative (returns exceeding $10K should be investigated)
+- duplicate_count(sales_pk) = 0:
+    name: sales_pk_unique
+    dimension: uniqueness
+    description: Sales primary key must be unique for each transaction line
+- row_count > 0:
+    name: recent_sales_data
+    dimension: timeliness
+    description: Sales data should be current and regularly updated

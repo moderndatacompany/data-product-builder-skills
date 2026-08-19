@@ -1,0 +1,81 @@
+# Converted from legacy: semantics/system_update_reports.yaml
+kind: semantic
+name: system_update_reports
+depends_on: lenovo.ldo.system_update_reports
+ai_context:
+  instructions: >
+    Use this semantic model for questions about system update reports. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "system update reports"
+    - "system_update_reports"
+    - "system"
+    - "update"
+  examples:
+    - "Show system update reports trends over time."
+    - "Break down system update reports by key dimensions."
+
+dimensions:
+- DEVICE_ID
+- PACKAGE_ID
+- INSTALLATION_STATUS
+- PACKAGE_NAME
+- PACKAGE_VERSION
+- CURRENT_INSTALLED_VERSION
+- PACKAGE_VENDOR
+- PACKAGE_SIZE
+- PACKAGE_REBOOT_TYPE
+- LAST_MODIFIED_DATE
+- DEVICE_PRODUCT_NAME
+- DEVICE_SERIAL_NUMBER
+- DISK_SPACE_REQUIRED
+- FAILURE_REASON
+- FAILURE_REASON_DETAILS
+measures:
+- name: total_executed_deployments
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total executed deployments. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total executed deployments"
+      - "total_executed_deployments"
+      - "total"
+      - "executed"
+    examples:
+      - "What is total executed deployments by month?"
+      - "Compare total executed deployments across key segments."
+  type: count
+  expression: '1'
+  filters:
+  - '{system_update_reports.INSTALLATION_STATUS} = ''DEPLOYED'''
+  description: Total number of successfully executed system updates.
+  tags:
+  - metric
+  terms:
+  - metric.total_executed_deployments
+- name: total_failed_deployments
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total failed deployments. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total failed deployments"
+      - "total_failed_deployments"
+      - "total"
+      - "failed"
+    examples:
+      - "What is total failed deployments by month?"
+      - "Compare total failed deployments across key segments."
+  type: count
+  expression: '1'
+  filters:
+  - '{system_update_reports.INSTALLATION_STATUS} = ''FAILED'''
+  description: Total number of failed system updates.
+  tags:
+  - metric
+  terms:
+  - metric.total_failed_deployments

@@ -1,0 +1,3 @@
+kind: metric
+name: active_customers
+measure: customers.active_customers

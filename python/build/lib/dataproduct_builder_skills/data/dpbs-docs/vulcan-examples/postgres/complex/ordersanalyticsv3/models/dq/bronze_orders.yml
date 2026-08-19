@@ -1,0 +1,66 @@
+# kind: dq — converted from checks/bronze_orders.yml
+kind: dq
+name: orders_dq
+depends_on: raw.orders
+rules:
+- missing_count(order_id) = 0:
+    name: no_missing_order_ids
+    dimension: completeness
+    description: All orders must have an order ID
+- missing_count(customer_id) = 0:
+    name: no_missing_customer_ids
+    dimension: completeness
+    description: All orders must have a customer ID
+- missing_count(order_date) = 0:
+    name: no_missing_order_dates
+    dimension: completeness
+    description: All orders must have an order date
+- row_count > 500:
+    name: sufficient_orders
+    dimension: completeness
+    description: At least 500 orders in the system
+- row_count > 5000:
+    name: high_order_volume
+    dimension: completeness
+    description: Should have more than 5000 orders (EXPECTED TO FAIL)
+- failed rows:
+    name: positive_order_ids
+    dimension: validity
+    fail query: |
+      SELECT order_id, customer_id, order_date
+      from raw.orders
+      WHERE order_id <= 0
+    samples limit: 10
+    description: Order IDs must be positive
+- failed rows:
+    name: valid_customer_references
+    dimension: validity
+    fail query: |
+      SELECT o.order_id, o.customer_id, o.order_date
+      from raw.orders o
+      LEFT JOIN raw.customers c ON o.customer_id = c.customer_id
+      WHERE c.customer_id IS NULL
+    samples limit: 10
+    description: All orders must reference valid customers
+- failed rows:
+    name: future_order_dates
+    dimension: validity
+    fail query: |
+      SELECT order_id, customer_id, order_date
+      from raw.orders
+      WHERE order_date > CURRENT_TIMESTAMP
+    samples limit: 10
+    description: Order dates cannot be in the future
+- failed rows:
+    name: recent_orders_only
+    dimension: validity
+    fail query: |
+      SELECT order_id, customer_id, order_date
+      from raw.orders
+      WHERE order_date < '2025-01-01'
+    samples limit: 10
+    description: All orders should be from 2025 or later (EXPECTED TO FAIL)
+- duplicate_count(order_id) = 0:
+    name: unique_order_ids
+    dimension: uniqueness
+    description: Order IDs must be unique

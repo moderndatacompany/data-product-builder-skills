@@ -1,0 +1,3 @@
+kind: metric
+name: total_storage_devices
+measure: storage.total_storage_devices

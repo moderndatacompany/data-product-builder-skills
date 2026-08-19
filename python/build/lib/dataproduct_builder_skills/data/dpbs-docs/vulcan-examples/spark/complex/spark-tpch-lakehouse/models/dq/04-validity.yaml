@@ -1,0 +1,53 @@
+# kind: dq — converted from checks/04-validity.yaml (table 1 of 3)
+kind: dq
+name: stg_customer_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_customer
+
+rules:
+- failed rows:
+    name: valid_mktsegment
+    dimension: validity
+    description: Market segment must be one of the 5 TPC-H segments
+    fail query: |
+      SELECT c_custkey, c_mktsegment
+      FROM mys3lh02depot.tpch_lakehouse.stg_customer
+      WHERE c_mktsegment NOT IN ('AUTOMOBILE', 'BUILDING', 'FURNITURE', 'HOUSEHOLD', 'MACHINERY')
+    samples limit: 5
+---
+# kind: dq — converted from checks/04-validity.yaml (table 2 of 3)
+kind: dq
+name: stg_orders_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_orders
+
+rules:
+- invalid_count(o_totalprice) = 0:
+    name: totalprice_non_negative
+    dimension: validity
+    description: Total price must be non-negative
+    valid min: 0
+
+- failed rows:
+    name: invalid_orderstatus
+    dimension: accuracy
+    description: Order status must be F, O, or P
+    fail query: |
+      SELECT o_orderkey, o_orderstatus
+      FROM mys3lh02depot.tpch_lakehouse.stg_orders
+      WHERE o_orderstatus NOT IN ('F', 'O', 'P')
+    samples limit: 10
+---
+# kind: dq — converted from checks/04-validity.yaml (table 3 of 3)
+kind: dq
+name: stg_region_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_region
+
+rules:
+- group evolution:
+    name: region_names_stable
+    dimension: conformity
+    description: Warn if the set of region names changes
+    query: |
+      SELECT r_name
+      FROM mys3lh02depot.tpch_lakehouse.stg_region
+      GROUP BY r_name
+    warn: {'when groups change': 'any'}

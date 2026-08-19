@@ -1,0 +1,81 @@
+# kind: dq — converted from checks/bronze_order_items.yml
+kind: dq
+name: order_items_dq
+depends_on: raw.order_items
+rules:
+- missing_count(order_id) = 0:
+    name: no_missing_order_ids
+    dimension: completeness
+    description: All order items must have an order ID
+- missing_count(product_id) = 0:
+    name: no_missing_product_ids
+    dimension: completeness
+    description: All order items must have a product ID
+- missing_count(quantity) = 0:
+    name: no_missing_quantities
+    dimension: completeness
+    description: All order items must have a quantity
+- missing_count(unit_price) = 0:
+    name: no_missing_prices
+    dimension: completeness
+    description: All order items must have a unit price
+- failed rows:
+    name: positive_quantities
+    dimension: validity
+    fail query: |
+      SELECT order_id, item_id, product_id, quantity
+      from raw.order_items
+      WHERE quantity <= 0
+    samples limit: 10
+    description: Quantities must be positive
+- failed rows:
+    name: positive_prices
+    dimension: validity
+    fail query: |
+      SELECT order_id, item_id, product_id, unit_price
+      from raw.order_items
+      WHERE unit_price <= 0
+    samples limit: 10
+    description: Unit prices must be positive
+- failed rows:
+    name: valid_order_references
+    dimension: validity
+    fail query: |
+      SELECT oi.order_id, oi.item_id, oi.product_id
+      from raw.order_items oi
+      LEFT JOIN raw.orders o ON oi.order_id = o.order_id
+      WHERE o.order_id IS NULL
+    samples limit: 10
+    description: All order items must reference valid orders
+- failed rows:
+    name: valid_product_references
+    dimension: validity
+    fail query: |
+      SELECT oi.order_id, oi.item_id, oi.product_id
+      from raw.order_items oi
+      LEFT JOIN raw.products p ON oi.product_id = p.product_id
+      WHERE p.product_id IS NULL
+    samples limit: 10
+    description: All order items must reference valid products
+- failed rows:
+    name: low_quantity_check
+    dimension: validity
+    fail query: |
+      SELECT order_id, item_id, product_id, quantity
+      from raw.order_items
+      WHERE quantity > 5
+    samples limit: 10
+    description: Quantities should not exceed 5 (EXPECTED TO FAIL)
+- failed rows:
+    name: expensive_items_check
+    dimension: validity
+    fail query: |
+      SELECT order_id, item_id, product_id, unit_price
+      from raw.order_items
+      WHERE unit_price > 100
+    samples limit: 10
+    description: Unit prices should not exceed 100 (EXPECTED TO FAIL)
+- duplicate_count(order_id, item_id) = 0:
+    name: unique_order_item_combinations
+    dimension: uniqueness
+    description: Order ID and Item ID combinations must be unique

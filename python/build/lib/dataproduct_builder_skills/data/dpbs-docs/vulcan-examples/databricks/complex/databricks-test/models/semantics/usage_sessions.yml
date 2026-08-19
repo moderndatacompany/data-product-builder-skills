@@ -1,0 +1,116 @@
+models:
+  b2b_saas.usage_sessions:
+    alias: usage_sessions
+    
+    joins:
+      usage_events:
+        type: many_to_one
+        expression: |
+          {usage_sessions.event_id} = {usage_events.event_id}
+    
+    dimensions:
+      includes:
+        - session_id
+        - event_id
+        - session_start
+        - session_end
+        - device_type
+        - session_duration_minutes
+        - actions_count
+        - pages_viewed
+      
+    measures:
+      session_count:
+        type: count
+        expression: |
+          *
+        tags:
+          - session
+          - count
+          - metric
+        terms:
+          - product.session_count
+          - engagement.sessions
+      
+      total_session_minutes:
+        type: sum
+        expression: |
+          {usage_sessions.session_duration_minutes}
+        tags:
+          - session
+          - duration
+          - time
+        terms:
+          - product.total_session_time
+          - engagement.duration
+      
+      avg_session_minutes:
+        type: avg
+        expression: |
+          {usage_sessions.session_duration_minutes}
+        tags:
+          - session
+          - duration
+          - average
+        terms:
+          - product.avg_session_time
+          - engagement.avg_duration
+      
+      total_actions:
+        type: sum
+        expression: |
+          {usage_sessions.actions_count}
+        tags:
+          - engagement
+          - actions
+          - metric
+        terms:
+          - product.total_actions
+          - engagement.actions
+      
+      total_pages_viewed:
+        type: sum
+        expression: |
+          {usage_sessions.pages_viewed}
+        tags:
+          - engagement
+          - pages
+          - metric
+        terms:
+          - product.total_pages_viewed
+          - engagement.pages
+    
+    segments:
+      mobile_sessions:
+        expression: |
+          {usage_sessions.device_type} = 'mobile'
+        tags:
+          - device
+          - mobile
+          - segment
+        terms:
+          - product.mobile_sessions
+          - device.mobile
+      
+      long_sessions:
+        expression: |
+          {usage_sessions.session_duration_minutes} >= 30
+        tags:
+          - duration
+          - engagement
+          - segment
+        terms:
+          - product.long_sessions
+          - engagement.extended
+      
+      active_sessions:
+        expression: |
+          {usage_sessions.actions_count} >= 10
+        tags:
+          - engagement
+          - active
+          - segment
+        terms:
+          - product.active_sessions
+          - engagement.high_activity
+

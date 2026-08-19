@@ -1,0 +1,46 @@
+test_demodb_customers_single:
+  model: DEMODB.VDETRUE.CUSTOMERS
+  description: >-
+    Full-output test for the customers model using one raw customer record and
+    the expected matching segment from the customer_segments seed.
+
+  inputs:
+    VULCAN.RAW.CUSTOMERS:
+      rows:
+        - CUSTOMER_ID: C100
+          FIRST_NAME: Alice
+          LAST_NAME: Johnson
+          EMAIL: alice.johnson@example.com
+          PHONE: "555-9999"
+          ADDRESS_LINE1: "10 Market St"
+          ADDRESS_LINE2: "Suite 200"
+          CITY: "Denver"
+          STATE: "CO"
+          POSTAL_CODE: "80205"
+          CUSTOMER_SEGMENT: "Gold"
+          ACCOUNT_STATUS: "Active"
+          SIGNUP_DATE: 2024-01-15
+          LOYALTY_SCORE: 78
+    DEMODB.VDETRUE.CUSTOMER_SEGMENTS:
+      rows:
+        - SEGMENT_CODE: "Gold"
+          SEGMENT_NAME: "Gold"
+          SEGMENT_TIER: 3
+          DISCOUNT_RATE: 0.15
+          DESCRIPTION: "High-value loyal customers with elevated benefits and priority shipping"
+
+  outputs:
+    query:
+      rows:
+        - CUSTOMER_ID: "C100"
+          FULL_NAME: "Alice Johnson"
+          EMAIL: "alice.johnson@example.com"
+          PHONE: "555-9999"
+          ADDRESS_LINE: "10 Market St Suite 200 Denver CO 80205"
+          SEGMENT_CODE: "Gold"
+          SEGMENT_NAME: "Gold"
+          SEGMENT_TIER: 3
+          SEGMENT_DISCOUNT_RATE: 0.15
+          ACCOUNT_STATUS: "Active"
+          SIGNUP_DATE: "2024-01-15"
+          LOYALTY_SCORE: 78

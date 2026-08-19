@@ -1,0 +1,31 @@
+kind: dq
+name: ORDERS_dq
+depends_on: DEMODB.VDEFALSE.ORDERS
+rules:
+  - missing_count(ORDER_ID) = 0:
+      name: order_id_not_null
+      dimension: completeness
+      description: Order ID must never be null
+  - failed rows:
+      name: negative_order_amounts
+      dimension: validity
+      fail query: |
+        SELECT ORDER_ID, ORDER_DATE, CUSTOMER_ID, QUANTITY, UNIT_PRICE, TOTAL_AMOUNT
+        FROM DEMODB.VDEFALSE.ORDERS
+        WHERE QUANTITY < 0
+           OR UNIT_PRICE < 0
+           OR DISCOUNT < 0
+           OR TAX < 0
+           OR SHIPPING_COST < 0
+           OR TOTAL_AMOUNT < 0
+      samples limit: 10
+      description: Order amounts cannot be negative
+  - failed rows:
+      name: discount_in_range
+      dimension: validity
+      fail query: |
+        SELECT ORDER_ID, DISCOUNT
+        FROM DEMODB.VDEFALSE.ORDERS
+        WHERE DISCOUNT < 0.0 OR DISCOUNT > 1.0
+      samples limit: 10
+      description: Per-order discount fraction must be in 0.0-1.0

@@ -1,0 +1,3 @@
+kind: metric
+name: weekday_revenue
+measure: daily_sales.weekday_revenue

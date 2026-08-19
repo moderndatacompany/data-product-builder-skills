@@ -1,0 +1,6 @@
+kind: metric
+name: total_daily_orders
+measure: daily_sales.total_daily_orders
+ts: daily_sales.order_date
+granularity: day
+description: "Sum of all orders across selected days"

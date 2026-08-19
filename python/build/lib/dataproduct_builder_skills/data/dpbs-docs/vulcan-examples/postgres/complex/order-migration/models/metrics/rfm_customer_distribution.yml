@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: rfm_customer_distribution
+measure: rfm.total_customers_rfm
+ts: customer_profile.first_order_date
+dimensions:
+- rfm.rfm_segment
+- rfm.region_name
+description: Customer distribution across RFM segments
+tags:
+- rfm
+- segmentation
+- customer
+terms:
+- rfm.distribution
+- customer.segmentation

@@ -1,0 +1,22 @@
+- name: '"ECOMMERCE_PLATFORM"."BRONZE"."WEB_CLICKSTREAM"'
+  columns:
+    event_id: VARCHAR(16777216)
+    session_id: VARCHAR(16777216)
+    user_id: VARCHAR(16777216)
+    event_timestamp: VARCHAR(16777216)
+    event_type: VARCHAR(16777216)
+    page_url: VARCHAR(16777216)
+    page_title: VARCHAR(16777216)
+    referrer_url: VARCHAR(16777216)
+    utm_source: VARCHAR(16777216)
+    utm_medium: VARCHAR(16777216)
+    utm_campaign: VARCHAR(16777216)
+    device_type: VARCHAR(16777216)
+    browser: VARCHAR(16777216)
+    operating_system: VARCHAR(16777216)
+    ip_address: VARCHAR(16777216)
+    country: VARCHAR(16777216)
+    product_id: VARCHAR(16777216)
+    order_id: VARCHAR(16777216)
+    order_value_usd: DECIMAL(10, 2)
+

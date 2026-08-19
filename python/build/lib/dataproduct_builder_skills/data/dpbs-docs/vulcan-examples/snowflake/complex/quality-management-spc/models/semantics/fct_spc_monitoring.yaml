@@ -1,0 +1,124 @@
+models:
+  QMS_PLATFORM.GOLD.FCT_SPC_MONITORING:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct spc monitoring. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "fct spc monitoring"
+        - "fct_spc_monitoring"
+        - "fct"
+        - "spc"
+      examples:
+        - "Show fct spc monitoring trends over time."
+        - "Break down fct spc monitoring by key dimensions."
+    alias: fct_spc_monitoring
+
+    dimensions:
+      includes:
+        - measurement_id
+        - measurement_date
+        - equipment_id
+        - material_number
+        - parameter_name
+        - out_of_control_flag
+        - out_of_spec_flag
+        - calculated_at
+
+    measures:
+      measured_value:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for measured value. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "measured value"
+            - "measured_value"
+            - "measured"
+            - "value"
+          examples:
+            - "What is measured value by month?"
+            - "Compare measured value across key dimensions."
+        type: sum
+        expression: "{fct_spc_monitoring.measured_value}"
+
+      target_value:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for target value. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "target value"
+            - "target_value"
+            - "target"
+            - "value"
+          examples:
+            - "What is target value by month?"
+            - "Compare target value across key dimensions."
+        type: sum
+        expression: "{fct_spc_monitoring.target_value}"
+
+      lower_spec_limit:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for lower spec limit. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "lower spec limit"
+            - "lower_spec_limit"
+            - "lower"
+            - "spec"
+          examples:
+            - "What is lower spec limit by month?"
+            - "Compare lower spec limit across key dimensions."
+        type: sum
+        expression: "{fct_spc_monitoring.lower_spec_limit}"
+
+      upper_spec_limit:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for upper spec limit. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "upper spec limit"
+            - "upper_spec_limit"
+            - "upper"
+            - "spec"
+          examples:
+            - "What is upper spec limit by month?"
+            - "Compare upper spec limit across key dimensions."
+        type: sum
+        expression: "{fct_spc_monitoring.upper_spec_limit}"
+
+      lower_control_limit:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for lower control limit. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "lower control limit"
+            - "lower_control_limit"
+            - "lower"
+            - "control"
+          examples:
+            - "What is lower control limit by month?"
+            - "Compare lower control limit across key dimensions."
+        type: sum
+        expression: "{fct_spc_monitoring.lower_control_limit}"
+
+      upper_control_limit:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for upper control limit. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "upper control limit"
+            - "upper_control_limit"
+            - "upper"
+            - "control"
+          examples:
+            - "What is upper control limit by month?"
+            - "Compare upper control limit across key dimensions."
+        type: sum
+        expression: "{fct_spc_monitoring.upper_control_limit}"

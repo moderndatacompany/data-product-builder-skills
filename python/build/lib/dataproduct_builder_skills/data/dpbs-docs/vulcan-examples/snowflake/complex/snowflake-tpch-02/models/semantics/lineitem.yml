@@ -1,0 +1,189 @@
+# Converted from legacy: semantics/lineitem.yml
+kind: semantic
+name: lineitems
+depends_on: test_db.vulcan_test_project.lineitem
+ai_context:
+  instructions: >
+    Use this semantic model for questions about lineitems. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "lineitems"
+  examples:
+    - "Show lineitems trends over time."
+    - "Break down lineitems by key dimensions."
+
+dimensions:
+- ORDERKEY
+- PARTKEY
+- SUPPKEY
+- LINENUMBER
+- RETURNFLAG
+- LINESTATUS
+- name: SHIPDATE
+  ai_context:
+    instructions: >
+      Use this dimension to filter, group, or drill into questions about shipdate.
+    synonyms:
+      - "shipdate"
+    examples:
+      - "Break results down by shipdate."
+      - "Filter the analysis using shipdate."
+  granularities:
+  - name: monthly
+    ai_context:
+      instructions: >
+        Use this dimension to filter, group, or drill into questions about monthly.
+      synonyms:
+        - "monthly"
+      examples:
+        - "Break results down by monthly."
+        - "Filter the analysis using monthly."
+    interval: 1 month
+    description: Monthly shipping date grain
+- COMMITDATE
+- RECEIPTDATE
+- SHIPINSTRUCT
+- SHIPMODE
+- COMMENT
+measures:
+- name: total_lineitems
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total lineitems. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total lineitems"
+      - "total_lineitems"
+      - "total"
+      - "lineitems"
+    examples:
+      - "What is total lineitems by month?"
+      - "Compare total lineitems across key segments."
+  type: count
+  expression: '*'
+  description: Total number of line items
+  tags:
+  - metric
+  terms:
+  - metric.total_lineitems
+- name: total_quantity
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total quantity. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total quantity"
+      - "total_quantity"
+      - "total"
+      - "quantity"
+    examples:
+      - "What is total quantity by month?"
+      - "Compare total quantity across key segments."
+  type: sum
+  expression: '{lineitems.QUANTITY}'
+  description: Total quantity ordered
+  tags:
+  - order
+  - inventory
+  - metric
+  terms:
+  - order.total_quantity
+  - inventory.units_sold
+- name: gross_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for gross revenue. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "gross revenue"
+      - "gross_revenue"
+      - "gross"
+      - "revenue"
+    examples:
+      - "What is gross revenue by month?"
+      - "Compare gross revenue across key segments."
+  type: sum
+  expression: '{lineitems.EXTENDEDPRICE}'
+  description: Gross revenue (sum of extended price)
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.gross_revenue
+  - finance.gross_sales
+- name: net_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for net revenue. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "net revenue"
+      - "net_revenue"
+      - "net"
+      - "revenue"
+    examples:
+      - "What is net revenue by month?"
+      - "Compare net revenue across key segments."
+  type: sum
+  expression: |
+    {lineitems.EXTENDEDPRICE} * (1 - {lineitems.DISCOUNT})
+  description: Net revenue (extended price after discount)
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.net_revenue
+  - finance.gross_sales
+- name: avg_discount
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg discount. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "avg discount"
+      - "avg_discount"
+      - "avg"
+      - "discount"
+    examples:
+      - "What is avg discount by month?"
+      - "Compare avg discount across key segments."
+  type: avg
+  expression: '{lineitems.DISCOUNT}'
+  description: Average discount
+  tags:
+  - revenue
+  - discount
+  - metric
+  terms:
+  - revenue.discount
+  - finance.discounts_given
+joins:
+- name: orders
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from orders. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "orders"
+    examples:
+      - "Analyze this model with orders attributes."
+      - "Break measures down by orders."
+  type: many_to_one
+  expression: '{lineitems.ORDERKEY} = {orders.ORDERKEY}'
+- name: parts
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from parts. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "parts"
+    examples:
+      - "Analyze this model with parts attributes."
+      - "Break measures down by parts."
+  type: many_to_one
+  expression: '{lineitems.PARTKEY} = {parts.PARTKEY}'

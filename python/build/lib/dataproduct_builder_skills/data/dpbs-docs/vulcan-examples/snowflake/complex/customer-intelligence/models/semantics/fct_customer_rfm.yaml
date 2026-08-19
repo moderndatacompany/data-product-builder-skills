@@ -1,0 +1,140 @@
+models:
+  CUSTOMER_PLATFORM.GOLD.FCT_CUSTOMER_RFM:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct customer rfm. Prefer its measures
+        for aggregations and its dimensions for filtering, grouping, cohorting, and
+        drill-downs.
+      synonyms:
+        - "fct customer rfm"
+        - "fct_customer_rfm"
+        - "fct"
+        - "customer"
+      examples:
+        - "Show fct customer rfm trends over time."
+        - "Break down fct customer rfm by key dimensions."
+    alias: fct_customer_rfm
+
+    dimensions:
+      includes:
+        - customer_id
+        - customer_name
+        - customer_type
+        - account_tier
+        - segment_id
+        - segment_name
+        - engagement_strategy
+        - calculated_at
+
+    measures:
+      recency_days:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for recency days. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "recency days"
+            - "recency_days"
+            - "recency"
+            - "days"
+          examples:
+            - "What is recency days by month?"
+            - "Compare recency days across key dimensions."
+        type: sum
+        expression: "{fct_customer_rfm.recency_days}"
+
+      frequency_count:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for frequency count. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "frequency count"
+            - "frequency_count"
+            - "frequency"
+            - "count"
+          examples:
+            - "What is frequency count by month?"
+            - "Compare frequency count across key dimensions."
+        type: sum
+        expression: "{fct_customer_rfm.frequency_count}"
+
+      monetary_value:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for monetary value. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "monetary value"
+            - "monetary_value"
+            - "monetary"
+            - "value"
+          examples:
+            - "What is monetary value by month?"
+            - "Compare monetary value across key dimensions."
+        type: sum
+        expression: "{fct_customer_rfm.monetary_value}"
+
+      recency_score:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for recency score. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "recency score"
+            - "recency_score"
+            - "recency"
+            - "score"
+          examples:
+            - "What is recency score by month?"
+            - "Compare recency score across key dimensions."
+        type: avg
+        expression: "{fct_customer_rfm.recency_score}"
+
+      frequency_score:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for frequency score. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "frequency score"
+            - "frequency_score"
+            - "frequency"
+            - "score"
+          examples:
+            - "What is frequency score by month?"
+            - "Compare frequency score across key dimensions."
+        type: avg
+        expression: "{fct_customer_rfm.frequency_score}"
+
+      monetary_score:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for monetary score. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "monetary score"
+            - "monetary_score"
+            - "monetary"
+            - "score"
+          examples:
+            - "What is monetary score by month?"
+            - "Compare monetary score across key dimensions."
+        type: avg
+        expression: "{fct_customer_rfm.monetary_score}"
+
+      rfm_score:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for rfm score. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "rfm score"
+            - "rfm_score"
+            - "rfm"
+            - "score"
+          examples:
+            - "What is rfm score by month?"
+            - "Compare rfm score across key dimensions."
+        type: avg
+        expression: "{fct_customer_rfm.rfm_score}"

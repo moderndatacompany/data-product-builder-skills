@@ -1,0 +1,418 @@
+# Converted from legacy: semantics/rfm_customer_segmentation.yml
+kind: semantic
+name: rfm
+depends_on: gold_v1.rfm_customer_segmentation
+ai_context:
+  instructions: >
+    Use this semantic model for questions about rfm. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "rfm"
+  examples:
+    - "Show rfm trends over time."
+    - "Break down rfm by key dimensions."
+
+dimensions:
+- customer_id
+- customer_name
+- email
+- region_name
+- recency_days
+- frequency_orders
+- monetary_value
+- recency_score
+- frequency_score
+- monetary_score
+- rfm_score
+- rfm_segment
+- recommended_action
+measures:
+- name: total_customers_rfm
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total customers rfm. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total customers rfm"
+      - "total_customers_rfm"
+      - "total"
+      - "customers"
+    examples:
+      - "What is total customers rfm by month?"
+      - "Compare total customers rfm across key segments."
+  type: count
+  expression: '{rfm.customer_id}'
+  description: Total customers in RFM analysis
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.total_customers_rfm
+  - metric.customer_count
+- name: avg_recency_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg recency score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg recency score"
+      - "avg_recency_score"
+      - "avg"
+      - "recency"
+    examples:
+      - "What is avg recency score by month?"
+      - "Compare avg recency score across key segments."
+  type: avg
+  expression: '{rfm.recency_score}'
+  description: Average recency score (1-5)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_recency_score
+  - metric.aggregate
+- name: avg_frequency_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg frequency score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg frequency score"
+      - "avg_frequency_score"
+      - "avg"
+      - "frequency"
+    examples:
+      - "What is avg frequency score by month?"
+      - "Compare avg frequency score across key segments."
+  type: avg
+  expression: '{rfm.frequency_score}'
+  description: Average frequency score (1-5)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_frequency_score
+  - metric.aggregate
+- name: avg_monetary_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg monetary score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg monetary score"
+      - "avg_monetary_score"
+      - "avg"
+      - "monetary"
+    examples:
+      - "What is avg monetary score by month?"
+      - "Compare avg monetary score across key segments."
+  type: avg
+  expression: '{rfm.monetary_score}'
+  description: Average monetary score (1-5)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_monetary_score
+  - metric.aggregate
+- name: total_rfm_value
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total rfm value. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total rfm value"
+      - "total_rfm_value"
+      - "total"
+      - "rfm"
+    examples:
+      - "What is total rfm value by month?"
+      - "Compare total rfm value across key segments."
+  type: sum
+  expression: '{rfm.monetary_value}'
+  format: currency
+  description: Total customer lifetime value in RFM
+  tags:
+  - metric
+  terms:
+  - metric.total_rfm_value
+- name: champions_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for champions count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "champions count"
+      - "champions_count"
+      - "champions"
+      - "count"
+    examples:
+      - "What is champions count by month?"
+      - "Compare champions count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{rfm.rfm_segment} = ''Champions'''
+  description: Number of champion customers
+  tags:
+  - metric
+  terms:
+  - metric.champions_count
+- name: at_risk_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for at risk count. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "at risk count"
+      - "at_risk_count"
+      - "risk"
+      - "count"
+    examples:
+      - "What is at risk count by month?"
+      - "Compare at risk count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{rfm.rfm_segment} IN (''At Risk'', ''Cannot Lose Them'')'
+  description: Number of at-risk customers
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment
+- name: lost_customer_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for lost customer count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "lost customer count"
+      - "lost_customer_count"
+      - "lost"
+      - "customer"
+    examples:
+      - "What is lost customer count by month?"
+      - "Compare lost customer count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{rfm.rfm_segment} IN (''Lost'', ''Hibernating'')'
+  description: Number of lost/hibernating customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.lost_customer_count
+  - metric.customer_count
+segments:
+- name: champions
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the champions subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "champions"
+    examples:
+      - "Show revenue for champions."
+      - "How many records are in champions?"
+  expression: '{rfm.rfm_segment} = ''Champions'''
+  description: Best customers - high R, F, M scores
+  tags:
+  - metric
+  terms:
+  - metric.champions
+- name: loyal_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the loyal customers subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "loyal customers"
+      - "loyal_customers"
+      - "loyal"
+      - "customers"
+    examples:
+      - "Show revenue for loyal customers."
+      - "How many records are in loyal customers?"
+  expression: '{rfm.rfm_segment} = ''Loyal Customers'''
+  description: Loyal customers with consistent purchases
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.loyal_customers
+  - metric.customer_count
+- name: at_risk
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the at risk subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "at risk"
+      - "at_risk"
+      - "risk"
+    examples:
+      - "Show revenue for at risk."
+      - "How many records are in at risk?"
+  expression: '{rfm.rfm_segment} = ''At Risk'''
+  description: Good customers who haven't purchased recently
+  tags:
+  - churn
+  - risk
+  - customer
+  terms:
+  - customer.at_risk
+  - churn.risk_segment
+- name: cannot_lose
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the cannot lose subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "cannot lose"
+      - "cannot_lose"
+      - "cannot"
+      - "lose"
+    examples:
+      - "Show revenue for cannot lose."
+      - "How many records are in cannot lose?"
+  expression: '{rfm.rfm_segment} = ''Cannot Lose Them'''
+  description: High-value customers at serious risk
+  tags:
+  - metric
+  terms:
+  - metric.cannot_lose
+- name: lost_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the lost customers subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "lost customers"
+      - "lost_customers"
+      - "lost"
+      - "customers"
+    examples:
+      - "Show revenue for lost customers."
+      - "How many records are in lost customers?"
+  expression: '{rfm.rfm_segment} = ''Lost'''
+  description: Customers who have not engaged for very long
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.lost_customers
+  - metric.customer_count
+- name: recent_customers
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recent customers subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "recent customers"
+      - "recent_customers"
+      - "recent"
+      - "customers"
+    examples:
+      - "Show revenue for recent customers."
+      - "How many records are in recent customers?"
+  expression: '{rfm.rfm_segment} = ''Recent Customers'''
+  description: New customers who bought recently
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recent_customers
+  - segment.recent
+- name: high_recency
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high recency subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "high recency"
+      - "high_recency"
+      - "high"
+      - "recency"
+    examples:
+      - "Show revenue for high recency."
+      - "How many records are in high recency?"
+  expression: '{rfm.recency_score} >= 4'
+  description: Customers who purchased in last 60 days
+  tags:
+  - metric
+  terms:
+  - metric.high_recency
+- name: high_frequency
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high frequency subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "high frequency"
+      - "high_frequency"
+      - "high"
+      - "frequency"
+    examples:
+      - "Show revenue for high frequency."
+      - "How many records are in high frequency?"
+  expression: '{rfm.frequency_score} >= 4'
+  description: Customers with 7+ orders
+  tags:
+  - metric
+  terms:
+  - metric.high_frequency
+- name: high_monetary
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high monetary subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "high monetary"
+      - "high_monetary"
+      - "high"
+      - "monetary"
+    examples:
+      - "Show revenue for high monetary."
+      - "How many records are in high monetary?"
+  expression: '{rfm.monetary_score} >= 4'
+  description: Customers with $2,000+ lifetime value
+  tags:
+  - metric
+  terms:
+  - metric.high_monetary
+joins:
+- name: customer_profile
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from customer profile.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "customer profile"
+      - "customer_profile"
+      - "customer"
+      - "profile"
+    examples:
+      - "Analyze this model with customer profile attributes."
+      - "Break measures down by customer profile."
+  type: one_to_one
+  expression: '{rfm.customer_id} = {customer_profile.customer_id}'

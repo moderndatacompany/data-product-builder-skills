@@ -1,0 +1,83 @@
+# kind: dq — converted from checks/silver_dim_product_profile.yml
+kind: dq
+name: dim_product_profile_dq
+depends_on: curated.dim_product_profile
+rules:
+- missing_count(product_id) = 0:
+    name: no_missing_product_ids
+    dimension: completeness
+    description: All profiles must have a product ID
+- missing_count(product_name) = 0:
+    name: no_missing_names
+    dimension: completeness
+    description: All profiles must have a product name
+- missing_count(category) = 0:
+    name: no_missing_categories
+    dimension: completeness
+    description: All profiles must have a category
+- missing_count(product_performance) = 0:
+    name: no_missing_performance
+    dimension: completeness
+    description: All profiles must have a performance classification
+- row_count > 50:
+    name: sufficient_product_profiles
+    dimension: completeness
+    description: At least 50 product profiles
+- failed rows:
+    name: valid_performance_categories
+    dimension: validity
+    fail query: |
+      SELECT product_id, product_name, product_performance
+      from curated.dim_product_profile
+      WHERE product_performance NOT IN ('Best Seller', 'Good Performer', 'Slow Mover', 'New', 'Stale')
+    samples limit: 10
+    description: Product performance must be from valid set
+- failed rows:
+    name: non_negative_orders
+    dimension: validity
+    fail query: |
+      SELECT product_id, product_name, total_orders
+      from curated.dim_product_profile
+      WHERE total_orders < 0
+    samples limit: 10
+    description: Total orders cannot be negative
+- failed rows:
+    name: non_negative_revenue
+    dimension: validity
+    fail query: |
+      SELECT product_id, product_name, total_revenue
+      from curated.dim_product_profile
+      WHERE total_revenue < 0
+    samples limit: 10
+    description: Total revenue cannot be negative
+- failed rows:
+    name: positive_current_price
+    dimension: validity
+    fail query: |
+      SELECT product_id, product_name, current_price
+      from curated.dim_product_profile
+      WHERE current_price <= 0
+    samples limit: 10
+    description: Current price must be positive
+- failed rows:
+    name: all_best_sellers_check
+    dimension: validity
+    fail query: |
+      SELECT product_id, product_name, product_performance, total_orders
+      from curated.dim_product_profile
+      WHERE product_performance != 'Best Seller'
+    samples limit: 10
+    description: All products should be best sellers (EXPECTED TO FAIL)
+- failed rows:
+    name: minimum_sales_check
+    dimension: validity
+    fail query: |
+      SELECT product_id, product_name, total_quantity_sold, product_performance
+      from curated.dim_product_profile
+      WHERE total_quantity_sold < 50
+    samples limit: 10
+    description: All products should have sold at least 50 units (EXPECTED TO FAIL)
+- duplicate_count(product_id) = 0:
+    name: unique_product_ids
+    dimension: uniqueness
+    description: Product IDs must be unique

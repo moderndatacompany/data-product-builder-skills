@@ -1,0 +1,5 @@
+kind: metric
+name: total_subtotal_amount
+measure: orders.total_subtotal_amount
+ts: orders.order_date
+granularity: day

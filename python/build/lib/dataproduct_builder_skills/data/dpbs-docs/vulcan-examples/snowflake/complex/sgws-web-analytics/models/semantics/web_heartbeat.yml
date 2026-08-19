@@ -1,0 +1,1212 @@
+# Converted from legacy: semantics/web_heartbeat.yaml
+kind: semantic
+name: web_heartbeat
+depends_on: web_analytics_gold.WEB_HEARTBEAT
+ai_context:
+  instructions: >
+    Use this semantic model for questions about web heartbeat. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "web heartbeat"
+    - "web_heartbeat"
+    - "web"
+    - "heartbeat"
+  examples:
+    - "Show web heartbeat trends over time."
+    - "Break down web heartbeat by key dimensions."
+
+measures:
+- name: account_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for account sessions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "account sessions"
+      - "account_sessions"
+      - "account"
+      - "sessions"
+    examples:
+      - "What is account sessions by month?"
+      - "Compare account sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT {web_heartbeat.SESSIONID})
+  description: Total number of sessions recorded. A session typically starts when a user lands on the site and ends after a period of inactivity or closing the site.
+  tags:
+  - metric
+  terms:
+  - metric.account_sessions
+- name: authenticated_account_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for authenticated account sessions.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "authenticated account sessions"
+      - "authenticated_account_sessions"
+      - "authenticated"
+      - "account"
+    examples:
+      - "What is authenticated account sessions by month?"
+      - "Compare authenticated account sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL OR {web_heartbeat.AUTHENTICATION_STATUS} = 'logged in' THEN {web_heartbeat.SESSIONID} END)
+  description: Total number of sessions recorded from authenticated user.
+  tags:
+  - metric
+  terms:
+  - metric.authenticated_account_sessions
+- name: unique_users
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for unique users. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "unique users"
+      - "unique_users"
+      - "unique"
+      - "users"
+    examples:
+      - "What is unique users by month?"
+      - "Compare unique users across key segments."
+  type: number
+  expression: COUNT(DISTINCT {web_heartbeat.ADOBE_ECID})
+  description: Total unique users visited the site.
+  tags:
+  - metric
+  terms:
+  - metric.unique_users
+- name: last_30_account_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for last 30 account sessions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "last 30 account sessions"
+      - "last_30_account_sessions"
+      - "last"
+      - "account"
+    examples:
+      - "What is last 30 account sessions by month?"
+      - "Compare last 30 account sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 31 DAY THEN {web_heartbeat.SESSIONID} END)
+  description: Total number of sessions in last 30 days.
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.last_30_account_sessions
+  - segment.recent
+- name: last_90_account_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for last 90 account sessions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "last 90 account sessions"
+      - "last_90_account_sessions"
+      - "last"
+      - "account"
+    examples:
+      - "What is last 90 account sessions by month?"
+      - "Compare last 90 account sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 91 DAY THEN {web_heartbeat.SESSIONID} END)
+  description: Total number of sessions in last 90 days.
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.last_90_account_sessions
+  - segment.recent
+- name: prev_last_30_account_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for prev last 30 account sessions. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "prev last 30 account sessions"
+      - "prev_last_30_account_sessions"
+      - "prev"
+      - "last"
+    examples:
+      - "What is prev last 30 account sessions by month?"
+      - "Compare prev last 30 account sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 61 DAY AND CAST({web_heartbeat.DATE_TIME} AS DATE) < CURRENT_DATE - INTERVAL 31 DAY THEN {web_heartbeat.SESSIONID}
+    END)
+  description: Total number of sessions in previous 30 days.
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.prev_last_30_account_sessions
+  - segment.recent
+- name: prev_last_90_account_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for prev last 90 account sessions. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "prev last 90 account sessions"
+      - "prev_last_90_account_sessions"
+      - "prev"
+      - "last"
+    examples:
+      - "What is prev last 90 account sessions by month?"
+      - "Compare prev last 90 account sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN CAST({web_heartbeat.DATE_TIME} AS DATE) >= CURRENT_DATE - INTERVAL 181 DAY AND CAST({web_heartbeat.DATE_TIME} AS DATE) < CURRENT_DATE - INTERVAL 91 DAY THEN {web_heartbeat.SESSIONID}
+    END)
+  description: Total number of sessions in previous 90 days.
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.prev_last_90_account_sessions
+  - segment.recent
+- name: total_page_views
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total page views. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total page views"
+      - "total_page_views"
+      - "total"
+      - "page"
+    examples:
+      - "What is total page views by month?"
+      - "Compare total page views across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.PAGE_EVENT} = 0 THEN {web_heartbeat.HITID} END)
+  description: Total page views occurred on the site
+  tags:
+  - metric
+  terms:
+  - metric.total_page_views
+- name: total_impressions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total impressions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total impressions"
+      - "total_impressions"
+      - "total"
+      - "impressions"
+    examples:
+      - "What is total impressions by month?"
+      - "Compare total impressions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%201%' THEN {web_heartbeat.HITID} END)
+  description: Provides total Impressions made on hit level.
+  tags:
+  - metric
+  terms:
+  - metric.total_impressions
+- name: total_product_impressions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total product impressions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total product impressions"
+      - "total_product_impressions"
+      - "total"
+      - "product"
+    examples:
+      - "What is total product impressions by month?"
+      - "Compare total product impressions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%201%' THEN CONCAT(CAST({web_heartbeat.PRODUCT_ID} AS STRING), {web_heartbeat.HITID}) END)
+  description: Provides total Impressions made on each products.
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_product_impressions
+  - metric.product_count
+- name: total_clicks
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total clicks. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total clicks"
+      - "total_clicks"
+      - "total"
+      - "clicks"
+    examples:
+      - "What is total clicks by month?"
+      - "Compare total clicks across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%202%' OR {web_heartbeat.EVENT_LIST} LIKE '%20170%' OR {web_heartbeat.EVENT_LIST} LIKE '%236%' THEN {web_heartbeat.HITID} END)
+  description: Total number of click events in proof sites.
+  tags:
+  - metric
+  terms:
+  - metric.total_clicks
+- name: total_product_clicks
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total product clicks. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total product clicks"
+      - "total_product_clicks"
+      - "total"
+      - "product"
+    examples:
+      - "What is total product clicks by month?"
+      - "Compare total product clicks across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%279%' THEN {web_heartbeat.HITID} END)
+  description: Total number of product clicks in proof sites.
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_product_clicks
+  - metric.product_count
+- name: click_through_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for click through rate. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "click through rate"
+      - "click_through_rate"
+      - "click"
+      - "through"
+    examples:
+      - "What is click through rate by month?"
+      - "Compare click through rate across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%279%' THEN {web_heartbeat.HITID} END) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%201%' THEN CONCAT(CAST({web_heartbeat.PRODUCT_ID}
+    AS STRING), {web_heartbeat.HITID}) END), 0)
+  description: Provides the rate of Clicks over Impressions on product
+  tags:
+  - metric
+  terms:
+  - metric.click_through_rate
+- name: total_hits
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total hits. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total hits"
+      - "total_hits"
+      - "total"
+      - "hits"
+    examples:
+      - "What is total hits by month?"
+      - "Compare total hits across key segments."
+  type: number
+  expression: COUNT(DISTINCT {web_heartbeat.HITID})
+  description: Total number of hits in proof sites.
+  tags:
+  - metric
+  terms:
+  - metric.total_hits
+- name: total_landingpage_hits
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total landingpage hits. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total landingpage hits"
+      - "total_landingpage_hits"
+      - "total"
+      - "landingpage"
+    examples:
+      - "What is total landingpage hits by month?"
+      - "Compare total landingpage hits across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_PAGE_NUM} = 1 THEN {web_heartbeat.HITID} END)
+  description: Total number of landing page hits in proof sites.
+  tags:
+  - metric
+  terms:
+  - metric.total_landingpage_hits
+- name: total_accounts_visiting
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total accounts visiting. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total accounts visiting"
+      - "total_accounts_visiting"
+      - "total"
+      - "accounts"
+    examples:
+      - "What is total accounts visiting by month?"
+      - "Compare total accounts visiting across key segments."
+  type: number
+  expression: COUNT(DISTINCT {web_heartbeat.ACCOUNT_UNIQUE_ID})
+  description: Total Visiting Accounts to the proof sites.
+  tags:
+  - metric
+  terms:
+  - metric.total_accounts_visiting
+- name: total_accounts_new_visit
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total accounts new visit. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total accounts new visit"
+      - "total_accounts_new_visit"
+      - "total"
+      - "accounts"
+    examples:
+      - "What is total accounts new visit by month?"
+      - "Compare total accounts new visit across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_NUM} = 1 THEN {web_heartbeat.ACCOUNT_UNIQUE_ID} END)
+  description: Total New Visiting Accounts to the proof sites.
+  tags:
+  - metric
+  terms:
+  - metric.total_accounts_new_visit
+- name: total_accounts_repeated_visits
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total accounts repeated visits.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total accounts repeated visits"
+      - "total_accounts_repeated_visits"
+      - "total"
+      - "accounts"
+    examples:
+      - "What is total accounts repeated visits by month?"
+      - "Compare total accounts repeated visits across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_NUM} > 1 THEN {web_heartbeat.ACCOUNT_UNIQUE_ID} END)
+  description: Total Repeated Visiting Accounts to the proof sites.
+  tags:
+  - metric
+  terms:
+  - metric.total_accounts_repeated_visits
+- name: pdp_views
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for pdp views. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "pdp views"
+      - "pdp_views"
+      - "pdp"
+      - "views"
+    examples:
+      - "What is pdp views by month?"
+      - "Compare pdp views across key segments."
+  type: number
+  expression: SUM(CASE WHEN {web_heartbeat.PAGE_TYPE} = 'productdetails' AND {web_heartbeat.EVENT_LIST} LIKE '%2%' THEN 1 ELSE 0 END)
+  description: Total occurrences of Product Details Page (PDP) views.
+  tags:
+  - metric
+  terms:
+  - metric.pdp_views
+- name: total_addtocart
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total addtocart. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total addtocart"
+      - "total_addtocart"
+      - "total"
+      - "addtocart"
+    examples:
+      - "What is total addtocart by month?"
+      - "Compare total addtocart across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%12%' THEN {web_heartbeat.HITID} END)
+  description: Total occurrences of ATC on proof site.
+  tags:
+  - metric
+  terms:
+  - metric.total_addtocart
+- name: total_checkouts
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total checkouts. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total checkouts"
+      - "total_checkouts"
+      - "total"
+      - "checkouts"
+    examples:
+      - "What is total checkouts by month?"
+      - "Compare total checkouts across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' THEN {web_heartbeat.HITID} END)
+  description: Total occurrences of checkouts on proof site.
+  tags:
+  - metric
+  terms:
+  - metric.total_checkouts
+- name: bulk_add_to_cart
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for bulk add to cart. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "bulk add to cart"
+      - "bulk_add_to_cart"
+      - "bulk"
+      - "add"
+    examples:
+      - "What is bulk add to cart by month?"
+      - "Compare bulk add to cart across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN LOWER({web_heartbeat.PAGE_URL}) LIKE '%bulkorder%' AND {web_heartbeat.EVENT_LIST} LIKE '%20140%' AND {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL THEN {web_heartbeat.HITID}
+    END)
+  description: Number of Bulk Add ATC occurred on proof site.
+  tags:
+  - metric
+  terms:
+  - metric.bulk_add_to_cart
+- name: deal_landing_page_view
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for deal landing page view. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "deal landing page view"
+      - "deal_landing_page_view"
+      - "deal"
+      - "landing"
+    examples:
+      - "What is deal landing page view by month?"
+      - "Compare deal landing page view across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN LOWER(TRIM({web_heartbeat.PAGE_TYPE})) = 'sgwsdeallandingpage' AND {web_heartbeat.PAGE_EVENT} = 0 THEN {web_heartbeat.HITID} END)
+  description: sgwsdeallandingpage page views occurred on site
+  tags:
+  - metric
+  terms:
+  - metric.deal_landing_page_view
+- name: show_deal_views
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for show deal views. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "show deal views"
+      - "show_deal_views"
+      - "show"
+      - "deal"
+    examples:
+      - "What is show deal views by month?"
+      - "Compare show deal views across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%257%' THEN {web_heartbeat.HITID} END)
+  description: Deals - Product Modal Tab View
+  tags:
+  - metric
+  terms:
+  - metric.show_deal_views
+- name: total_searches
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total searches. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total searches"
+      - "total_searches"
+      - "total"
+      - "searches"
+    examples:
+      - "What is total searches by month?"
+      - "Compare total searches across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%205%' THEN {web_heartbeat.HITID} END)
+  description: The unique search hits that a user had when performing searches from the Search bar.
+  tags:
+  - metric
+  terms:
+  - metric.total_searches
+- name: search_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for search sessions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "search sessions"
+      - "search_sessions"
+      - "search"
+      - "sessions"
+    examples:
+      - "What is search sessions by month?"
+      - "Compare search sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%205%' THEN {web_heartbeat.SESSIONID} END)
+  description: The unique search sessions occurred.
+  tags:
+  - metric
+  terms:
+  - metric.search_sessions
+- name: search_purchase_session
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for search purchase session. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "search purchase session"
+      - "search_purchase_session"
+      - "search"
+      - "purchase"
+    examples:
+      - "What is search purchase session by month?"
+      - "Compare search purchase session across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' AND {web_heartbeat.SEARCH_KEYWORDS} IS NOT NULL THEN {web_heartbeat.SESSIONID} END)
+  description: Searched users purchase unique sessions.
+  tags:
+  - metric
+  terms:
+  - metric.search_purchase_session
+- name: search_conversion_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for search conversion rate. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "search conversion rate"
+      - "search_conversion_rate"
+      - "search"
+      - "conversion"
+    examples:
+      - "What is search conversion rate by month?"
+      - "Compare search conversion rate across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' AND {web_heartbeat.SEARCH_KEYWORDS} IS NOT NULL THEN {web_heartbeat.SESSIONID} END) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN
+    {web_heartbeat.EVENT_LIST} LIKE '%205%' THEN {web_heartbeat.SESSIONID} END), 0)
+  description: Provides the conversion rate of users used search activity
+  tags:
+  - metric
+  terms:
+  - metric.search_conversion_rate
+- name: conversion_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for conversion rate. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "conversion rate"
+      - "conversion_rate"
+      - "conversion"
+      - "rate"
+    examples:
+      - "What is conversion rate by month?"
+      - "Compare conversion rate across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%1%' THEN {web_heartbeat.SESSIONID} END) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL THEN
+    {web_heartbeat.SESSIONID} END), 0)
+  description: Conversion Rate - Purchased Session / total sessions after login
+  tags:
+  - metric
+  terms:
+  - metric.conversion_rate
+- name: exit_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for exit rate. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "exit rate"
+      - "exit_rate"
+      - "exit"
+      - "rate"
+    examples:
+      - "What is exit rate by month?"
+      - "Compare exit rate across key segments."
+  type: number
+  expression: CAST(COUNT(DISTINCT CASE WHEN {web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = {web_heartbeat.VISIT_PAGE_NUM} THEN {web_heartbeat.HITID} END) AS DECIMAL(15,5)) / NULLIF(COUNT(DISTINCT CASE
+    WHEN {web_heartbeat.PAGE_EVENT} = 0 THEN {web_heartbeat.HITID} END), 0)
+  description: Calculates the exit rate, which is the proportion of page views that result in an exit from the website.
+  tags:
+  - metric
+  terms:
+  - metric.exit_rate
+- name: bounce_hit
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for bounce hit. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "bounce hit"
+      - "bounce_hit"
+      - "bounce"
+      - "hit"
+    examples:
+      - "What is bounce hit by month?"
+      - "Compare bounce hit across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = 1 THEN {web_heartbeat.HITID} END)
+  description: Provides the bounce hits from proof sites
+  tags:
+  - metric
+  terms:
+  - metric.bounce_hit
+- name: bounce_rate
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for bounce rate. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "bounce rate"
+      - "bounce_rate"
+      - "bounce"
+      - "rate"
+    examples:
+      - "What is bounce rate by month?"
+      - "Compare bounce rate across key segments."
+  type: number
+  expression: CAST(COUNT(DISTINCT CASE WHEN {web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = 1 THEN {web_heartbeat.HITID} END) AS DECIMAL(15,5)) / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.VISIT_PAGE_NUM}
+    = 1 THEN {web_heartbeat.HITID} END), 0)
+  description: Represents the percentage of single-page visits or sessions where the user left the site from the entrance page without interacting with the page
+  tags:
+  - metric
+  terms:
+  - metric.bounce_rate
+- name: orders_per_sessions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for orders per sessions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "orders per sessions"
+      - "orders_per_sessions"
+      - "orders"
+      - "per"
+    examples:
+      - "What is orders per sessions by month?"
+      - "Compare orders per sessions across key segments."
+  type: number
+  expression: COUNT(DISTINCT {web_heartbeat.ORDER_NUMBER}) * 1.00 / NULLIF(COUNT(DISTINCT CASE WHEN {web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL THEN {web_heartbeat.SESSIONID} END), 0)
+  description: Calculates the average number of unique orders per session after logins.
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.orders_per_sessions
+  - metric.order_count
+- name: total_orders_placed
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total orders placed. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total orders placed"
+      - "total_orders_placed"
+      - "total"
+      - "orders"
+    examples:
+      - "What is total orders placed by month?"
+      - "Compare total orders placed across key segments."
+  type: number
+  expression: COUNT(DISTINCT {web_heartbeat.ORDER_NUMBER})
+  description: The unique orders placed on proof sites.
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_orders_placed
+  - metric.order_count
+- name: time_spent
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for time spent. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "time spent"
+      - "time_spent"
+      - "time"
+      - "spent"
+    examples:
+      - "What is time spent by month?"
+      - "Compare time spent across key segments."
+  type: number
+  expression: SUM(UNIX_TIMESTAMP({web_heartbeat.NEXT_HIT_CUST_HIT_TIME}) - UNIX_TIMESTAMP({web_heartbeat.POST_CUST_HIT_TIME_GMT}))
+  description: Time spent on each hit in site (in secs).
+  tags:
+  - metric
+  terms:
+  - metric.time_spent
+- name: avg_time_spent_by_user
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg time spent by user. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg time spent by user"
+      - "avg_time_spent_by_user"
+      - "avg"
+      - "time"
+    examples:
+      - "What is avg time spent by user by month?"
+      - "Compare avg time spent by user across key segments."
+  type: number
+  expression: SUM(UNIX_TIMESTAMP({web_heartbeat.NEXT_HIT_CUST_HIT_TIME}) - UNIX_TIMESTAMP({web_heartbeat.POST_CUST_HIT_TIME_GMT})) * 1.00 / NULLIF(COUNT(DISTINCT {web_heartbeat.ADOBE_ECID}), 0)
+  description: Average time spent on site by users (in secs).
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_time_spent_by_user
+  - metric.aggregate
+- name: avg_page_speed_in_sec
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg page speed in sec. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg page speed in sec"
+      - "avg_page_speed_in_sec"
+      - "avg"
+      - "page"
+    examples:
+      - "What is avg page speed in sec by month?"
+      - "Compare avg page speed in sec across key segments."
+  type: number
+  expression: AVG({web_heartbeat.TOTAL_PAGE_LOAD_TIME}) / 1000
+  description: give average speed in seconds
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_page_speed_in_sec
+  - metric.aggregate
+- name: total_logins
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total logins. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total logins"
+      - "total_logins"
+      - "total"
+      - "logins"
+    examples:
+      - "What is total logins by month?"
+      - "Compare total logins across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%289%' THEN {web_heartbeat.HITID} END)
+  description: Total Logins happened on Proof Sites
+  tags:
+  - metric
+  terms:
+  - metric.total_logins
+- name: total_users_logins
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total users logins. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total users logins"
+      - "total_users_logins"
+      - "total"
+      - "users"
+    examples:
+      - "What is total users logins by month?"
+      - "Compare total users logins across key segments."
+  type: number
+  expression: COUNT(DISTINCT CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%289%' THEN {web_heartbeat.ADOBE_ECID} END)
+  description: Total Users Login into Proof Sites
+  tags:
+  - metric
+  terms:
+  - metric.total_users_logins
+- name: total_atc_cart_value
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total atc cart value. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total atc cart value"
+      - "total_atc_cart_value"
+      - "total"
+      - "atc"
+    examples:
+      - "What is total atc cart value by month?"
+      - "Compare total atc cart value across key segments."
+  type: number
+  expression: SUM(CASE WHEN {web_heartbeat.EVENT_LIST} LIKE '%12%' THEN CAST(COALESCE({web_heartbeat.ATC_REV}, '0') AS DECIMAL(15,2)) ELSE 0 END)
+  description: Provides the revenue generated from total ATC.
+  tags:
+  - metric
+  terms:
+  - metric.total_atc_cart_value
+- name: total_checkout_cart_value
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total checkout cart value. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total checkout cart value"
+      - "total_checkout_cart_value"
+      - "total"
+      - "checkout"
+    examples:
+      - "What is total checkout cart value by month?"
+      - "Compare total checkout cart value across key segments."
+  type: number
+  expression: SUM({web_heartbeat.REVENUES})
+  description: Provides the revenue generated from checkouts.
+  tags:
+  - metric
+  terms:
+  - metric.total_checkout_cart_value
+segments:
+- name: is_new_visit
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is new visit subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is new visit"
+      - "is_new_visit"
+      - "new"
+      - "visit"
+    examples:
+      - "Show revenue for is new visit."
+      - "How many records are in is new visit?"
+  expression: '{web_heartbeat.NEW_VISIT} = 1'
+  description: New visits
+  tags:
+  - metric
+  terms:
+  - metric.is_new_visit
+- name: is_return_visit
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is return visit subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is return visit"
+      - "is_return_visit"
+      - "return"
+      - "visit"
+    examples:
+      - "Show revenue for is return visit."
+      - "How many records are in is return visit?"
+  expression: '{web_heartbeat.NEW_VISIT} = 0 OR {web_heartbeat.NEW_VISIT} IS NULL'
+  description: Return visits
+  tags:
+  - metric
+  terms:
+  - metric.is_return_visit
+- name: is_authenticated
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is authenticated subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is authenticated"
+      - "is_authenticated"
+      - "authenticated"
+    examples:
+      - "Show revenue for is authenticated."
+      - "How many records are in is authenticated?"
+  expression: '{web_heartbeat.ACCOUNT_UNIQUE_ID} IS NOT NULL OR {web_heartbeat.AUTHENTICATION_STATUS} = ''logged in'''
+  description: Authenticated users
+  tags:
+  - metric
+  terms:
+  - metric.is_authenticated
+- name: is_guest
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is guest subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "is guest"
+      - "is_guest"
+      - "guest"
+    examples:
+      - "Show revenue for is guest."
+      - "How many records are in is guest?"
+  expression: '{web_heartbeat.ACCOUNT_UNIQUE_ID} IS NULL AND ({web_heartbeat.AUTHENTICATION_STATUS} IS NULL OR {web_heartbeat.AUTHENTICATION_STATUS} != ''logged in'')'
+  description: Guest users
+  tags:
+  - metric
+  terms:
+  - metric.is_guest
+- name: is_app
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is app subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "is app"
+      - "is_app"
+      - "app"
+    examples:
+      - "Show revenue for is app."
+      - "How many records are in is app?"
+  expression: '{web_heartbeat.DIGITALPLATFORM} = ''App'''
+  description: Mobile app users
+  tags:
+  - metric
+  terms:
+  - metric.is_app
+- name: is_web
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is web subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "is web"
+      - "is_web"
+      - "web"
+    examples:
+      - "Show revenue for is web."
+      - "How many records are in is web?"
+  expression: '{web_heartbeat.DIGITALPLATFORM} = ''Web'''
+  description: Web users
+  tags:
+  - metric
+  terms:
+  - metric.is_web
+- name: is_landing_page
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is landing page subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is landing page"
+      - "is_landing_page"
+      - "landing"
+      - "page"
+    examples:
+      - "Show revenue for is landing page."
+      - "How many records are in is landing page?"
+  expression: '{web_heartbeat.VISIT_PAGE_NUM} = 1'
+  description: Landing page hits
+  tags:
+  - metric
+  terms:
+  - metric.is_landing_page
+- name: is_exit_page
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is exit page subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is exit page"
+      - "is_exit_page"
+      - "exit"
+      - "page"
+    examples:
+      - "Show revenue for is exit page."
+      - "How many records are in is exit page?"
+  expression: '{web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = {web_heartbeat.VISIT_PAGE_NUM}'
+  description: Exit page hits
+  tags:
+  - metric
+  terms:
+  - metric.is_exit_page
+- name: is_bounce
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is bounce subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is bounce"
+      - "is_bounce"
+      - "bounce"
+    examples:
+      - "Show revenue for is bounce."
+      - "How many records are in is bounce?"
+  expression: '{web_heartbeat.MAX_VISIT_PAGE_NUM_OF_SESSION} = 1'
+  description: Bounce hits
+  tags:
+  - metric
+  terms:
+  - metric.is_bounce
+- name: is_favorites
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is favorites subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is favorites"
+      - "is_favorites"
+      - "favorites"
+    examples:
+      - "Show revenue for is favorites."
+      - "How many records are in is favorites?"
+  expression: '{web_heartbeat.LIST_TYPE} = ''Favorites'''
+  description: Favorites list interactions
+  tags:
+  - metric
+  terms:
+  - metric.is_favorites
+- name: is_my_list
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is my list subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is my list"
+      - "is_my_list"
+      - "list"
+    examples:
+      - "Show revenue for is my list."
+      - "How many records are in is my list?"
+  expression: '{web_heartbeat.LIST_TYPE} = ''My List'''
+  description: My List interactions
+  tags:
+  - metric
+  terms:
+  - metric.is_my_list
+- name: is_previously_purchased
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is previously purchased subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is previously purchased"
+      - "is_previously_purchased"
+      - "previously"
+      - "purchased"
+    examples:
+      - "Show revenue for is previously purchased."
+      - "How many records are in is previously purchased?"
+  expression: '{web_heartbeat.LIST_TYPE} = ''Previously Purchased'''
+  description: Previously Purchased interactions
+  tags:
+  - metric
+  terms:
+  - metric.is_previously_purchased
+- name: is_ready_to_reorder
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is ready to reorder subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is ready to reorder"
+      - "is_ready_to_reorder"
+      - "ready"
+      - "reorder"
+    examples:
+      - "Show revenue for is ready to reorder."
+      - "How many records are in is ready to reorder?"
+  expression: '{web_heartbeat.LIST_TYPE} = ''Ready to Reorder'''
+  description: Ready to Reorder interactions
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.is_ready_to_reorder
+  - metric.order_count
+- name: is_customers_like_you
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is customers like you subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is customers like you"
+      - "is_customers_like_you"
+      - "customers"
+      - "like"
+    examples:
+      - "Show revenue for is customers like you."
+      - "How many records are in is customers like you?"
+  expression: '{web_heartbeat.LIST_TYPE} = ''Customers Like You'''
+  description: Customers Like You recommendations
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.is_customers_like_you
+  - metric.customer_count
+- name: is_algorithmic
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is algorithmic subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is algorithmic"
+      - "is_algorithmic"
+      - "algorithmic"
+    examples:
+      - "Show revenue for is algorithmic."
+      - "How many records are in is algorithmic?"
+  expression: '{web_heartbeat.LIST_ALGORITHMIC_TYPE} = ''Algorithmic'''
+  description: Algorithmic recommendations
+  tags:
+  - metric
+  terms:
+  - metric.is_algorithmic
+- name: is_non_algorithmic
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is non algorithmic subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is non algorithmic"
+      - "is_non_algorithmic"
+      - "non"
+      - "algorithmic"
+    examples:
+      - "Show revenue for is non algorithmic."
+      - "How many records are in is non algorithmic?"
+  expression: '{web_heartbeat.LIST_ALGORITHMIC_TYPE} = ''Non-Algorithmic'''
+  description: Non-algorithmic lists
+  tags:
+  - metric
+  terms:
+  - metric.is_non_algorithmic

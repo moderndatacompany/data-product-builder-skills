@@ -1,0 +1,192 @@
+models:
+  hello.subscriptions:
+    alias: subscriptions
+    
+    # ============================================================================
+    # MEASURES - See users.yml for important notes on COUNT expressions
+    # ============================================================================
+    measures:
+      test_measure:
+        type: count
+        expression: |
+          *
+        
+        
+      avg_mrr_per_account:
+        type: avg
+        expression: |
+          {subscriptions.mrr}
+        filters:
+          - |
+            {subscriptions.status} = 'active'
+        format: currency
+        tags:
+          - revenue
+          - financial
+          - average
+        terms:
+          - revenue.avg_mrr
+          - finance.monthly_recurring_revenue
+        
+      total_seats:
+        type: sum
+        expression: |
+          {subscriptions.seats}
+        # filters:
+        #   - |
+        #     "{subscriptions.status} = 'active'"
+        tags:
+          - subscription
+          - capacity
+          - metric
+        terms:
+          - subscription.total_seats
+          - customer.seats
+        
+      churn_count:
+        type: count
+        expression: |
+          *
+        filters:
+          - |
+            {subscriptions.status} = 'cancelled'
+          - |
+            {subscriptions.end_date} >= CURRENT_DATE - INTERVAL 30 DAYS
+        tags:
+          - churn
+          - retention
+          - metric
+        terms:
+          - customer.churn
+          - retention.churned_subscriptions
+        
+      total_arr:
+        type: sum
+        expression: |
+          {subscriptions.arr}
+        # filters:
+        #   - |
+        #     "{subscriptions.status} = 'active'"
+        # format: currency
+        tags:
+          - revenue
+          - financial
+          - arr
+        terms:
+          - revenue.total_arr
+          - finance.annual_recurring_revenue
+
+      total_arr1:
+        type: number
+        expression: |
+          sum({subscriptions.arr})
+        # filters:
+        #   - |
+        #     "{subscriptions.status} = 'active'"
+        # format: currency
+        tags:
+          - revenue
+          - financial
+          - arr
+
+      subscription_count:
+        type: count
+        expression: |
+          *
+        filters:
+          - |
+            {subscriptions.status} = 'active'
+        tags:
+          - subscription
+          - count
+          - metric
+        terms:
+          - subscription.count
+          - customer.active_subscriptions
+    
+    segments:
+      active_subscriptions:
+        expression: |
+          {subscriptions.status} = 'active'
+        tags:
+          - subscription
+          - active
+          - status
+        terms:
+          - subscription.active
+          - customer.active_subscriptions
+        
+      high_value_accounts:
+        expression: |
+          {subscriptions.mrr} >= 1000
+        tags:
+          - revenue
+          - segment
+          - high_value
+        terms:
+          - customer.high_value
+          - revenue.premium_accounts
+        
+      annual_contracts:
+        expression: |
+          {subscriptions.billing_cycle} = 'annual'
+        tags:
+          - billing
+          - contract
+          - annual
+        terms:
+          - revenue.annual_contracts
+          - customer.annual_billing
+        
+      enterprise_subscriptions:
+        expression: |
+          {subscriptions.plan_type} = 'enterprise'
+        tags:
+          - enterprise
+          - segment
+          - plan
+        terms:
+          - customer.enterprise
+          - segment.enterprise_subscriptions
+        
+      recent_churn:
+        expression: |
+          {subscriptions.revenue_category} = 'recent_churn'
+        tags:
+          - churn
+          - retention
+          - temporal
+        terms:
+          - customer.recent_churn
+          - retention.churned
+    
+    
+    dimensions:
+      includes:
+        - user_id
+        - plan_id
+        - start_date
+        - end_date
+        - plan_type
+        - seats
+        - status
+        - billing_cycle
+        - revenue_category
+        - mrr
+        - arr
+      # enhancements:
+      #   - name: start_date
+      #     granularities:
+      #       - name: monthly
+      #         interval: 1 month
+      #         description: Monthly subscription cohorts
+      #       - name: quarterly
+      #         interval: 3 months
+      #         description: Quarterly cohorts
+
+    
+    joins:
+      subscription_plans:
+        type: many_to_one
+        expression: |
+          {subscriptions.plan_id} = {subscription_plans.plan_id}

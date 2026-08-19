@@ -1,0 +1,563 @@
+# Converted from legacy: semantics/category_performance_analysis.yml
+kind: semantic
+name: category_performance
+depends_on: gold_v1.category_performance_analysis
+ai_context:
+  instructions: >
+    Use this semantic model for questions about category performance. Prefer its
+    measures for aggregations and its dimensions for filtering, grouping, cohorting,
+    and drill-downs.
+  synonyms:
+    - "category performance"
+    - "category_performance"
+    - "category"
+    - "performance"
+  examples:
+    - "Show category performance trends over time."
+    - "Break down category performance by key dimensions."
+
+dimensions:
+- analysis_date
+- category
+- region_id
+- region_name
+- total_products
+- active_products
+- best_seller_products
+- good_performer_products
+- slow_mover_products
+- declining_products
+- stale_products
+- at_risk_products
+- new_products
+- category_tier
+- category_health_score
+- top_product_name
+- recommended_action
+measures:
+- name: total_categories
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total categories. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total categories"
+      - "total_categories"
+      - "total"
+      - "categories"
+    examples:
+      - "What is total categories by month?"
+      - "Compare total categories across key segments."
+  type: count
+  expression: '{category_performance.category}'
+  description: Total number of unique categories
+  tags:
+  - metric
+  terms:
+  - metric.total_categories
+- name: total_category_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total category revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total category revenue"
+      - "total_category_revenue"
+      - "total"
+      - "category"
+    examples:
+      - "What is total category revenue by month?"
+      - "Compare total category revenue across key segments."
+  type: sum
+  expression: '{category_performance.total_revenue}'
+  format: currency
+  description: Total revenue across all categories
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_category_revenue
+  - finance.gross_sales
+- name: avg_category_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg category revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg category revenue"
+      - "avg_category_revenue"
+      - "avg"
+      - "category"
+    examples:
+      - "What is avg category revenue by month?"
+      - "Compare avg category revenue across key segments."
+  type: avg
+  expression: '{category_performance.total_revenue}'
+  format: currency
+  description: Average revenue per category
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_category_revenue
+  - metric.aggregate
+- name: avg_category_health_score
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg category health score. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg category health score"
+      - "avg_category_health_score"
+      - "avg"
+      - "category"
+    examples:
+      - "What is avg category health score by month?"
+      - "Compare avg category health score across key segments."
+  type: avg
+  expression: '{category_performance.category_health_score}'
+  description: Average category health score (0-100)
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_category_health_score
+  - metric.aggregate
+- name: total_products_across_categories
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total products across categories.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total products across categories"
+      - "total_products_across_categories"
+      - "total"
+      - "products"
+    examples:
+      - "What is total products across categories by month?"
+      - "Compare total products across categories across key segments."
+  type: sum
+  expression: '{category_performance.total_products}'
+  description: Total products across all categories
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_products_across_categories
+  - metric.product_count
+- name: total_active_products
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total active products. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total active products"
+      - "total_active_products"
+      - "total"
+      - "active"
+    examples:
+      - "What is total active products by month?"
+      - "Compare total active products across key segments."
+  type: sum
+  expression: '{category_performance.active_products}'
+  description: Total active products (sold in last 90 days)
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active
+- name: total_best_sellers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total best sellers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total best sellers"
+      - "total_best_sellers"
+      - "total"
+      - "best"
+    examples:
+      - "What is total best sellers by month?"
+      - "Compare total best sellers across key segments."
+  type: sum
+  expression: '{category_performance.best_seller_products}'
+  description: Total best seller products across categories
+  tags:
+  - metric
+  terms:
+  - metric.total_best_sellers
+- name: total_declining_products
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total declining products. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total declining products"
+      - "total_declining_products"
+      - "total"
+      - "declining"
+    examples:
+      - "What is total declining products by month?"
+      - "Compare total declining products across key segments."
+  type: sum
+  expression: '{category_performance.declining_products}'
+  description: Total declining products needing attention
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_declining_products
+  - metric.product_count
+- name: total_stale_products
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total stale products. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total stale products"
+      - "total_stale_products"
+      - "total"
+      - "stale"
+    examples:
+      - "What is total stale products by month?"
+      - "Compare total stale products across key segments."
+  type: sum
+  expression: '{category_performance.stale_products}'
+  description: Total stale products (no sales 90+ days)
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.total_stale_products
+  - metric.product_count
+- name: star_category_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for star category count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "star category count"
+      - "star_category_count"
+      - "star"
+      - "category"
+    examples:
+      - "What is star category count by month?"
+      - "Compare star category count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{category_performance.category_tier} = ''Star'''
+  description: Number of star categories
+  tags:
+  - metric
+  terms:
+  - metric.star_category_count
+- name: growth_category_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for growth category count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "growth category count"
+      - "growth_category_count"
+      - "growth"
+      - "category"
+    examples:
+      - "What is growth category count by month?"
+      - "Compare growth category count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{category_performance.category_tier} = ''Growth'''
+  description: Number of growth categories
+  tags:
+  - metric
+  terms:
+  - metric.growth_category_count
+- name: declining_category_count
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for declining category count. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "declining category count"
+      - "declining_category_count"
+      - "declining"
+      - "category"
+    examples:
+      - "What is declining category count by month?"
+      - "Compare declining category count across key segments."
+  type: count
+  expression: '*'
+  filters:
+  - '{category_performance.category_tier} = ''Declining'''
+  description: Number of declining categories
+  tags:
+  - metric
+  terms:
+  - metric.declining_category_count
+- name: avg_revenue_growth_30d
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg revenue growth 30d. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg revenue growth 30d"
+      - "avg_revenue_growth_30d"
+      - "avg"
+      - "revenue"
+    examples:
+      - "What is avg revenue growth 30d by month?"
+      - "Compare avg revenue growth 30d across key segments."
+  type: avg
+  expression: '{category_performance.revenue_growth_30d_pct}'
+  description: Average 30-day revenue growth percentage
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_revenue_growth_30d
+  - metric.aggregate
+- name: total_category_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total category customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total category customers"
+      - "total_category_customers"
+      - "total"
+      - "category"
+    examples:
+      - "What is total category customers by month?"
+      - "Compare total category customers across key segments."
+  type: sum
+  expression: '{category_performance.total_customers}'
+  description: Total customers across all categories
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.total_category_customers
+  - metric.customer_count
+segments:
+- name: star_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the star categories subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "star categories"
+      - "star_categories"
+      - "star"
+      - "categories"
+    examples:
+      - "Show revenue for star categories."
+      - "How many records are in star categories?"
+  expression: '{category_performance.category_tier} = ''Star'''
+  description: High revenue, high growth categories
+  tags:
+  - metric
+  terms:
+  - metric.star_categories
+- name: growth_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the growth categories subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "growth categories"
+      - "growth_categories"
+      - "growth"
+      - "categories"
+    examples:
+      - "Show revenue for growth categories."
+      - "How many records are in growth categories?"
+  expression: '{category_performance.category_tier} = ''Growth'''
+  description: High growth rate categories
+  tags:
+  - metric
+  terms:
+  - metric.growth_categories
+- name: mature_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the mature categories subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "mature categories"
+      - "mature_categories"
+      - "mature"
+      - "categories"
+    examples:
+      - "Show revenue for mature categories."
+      - "How many records are in mature categories?"
+  expression: '{category_performance.category_tier} = ''Mature'''
+  description: Stable, established categories
+  tags:
+  - metric
+  terms:
+  - metric.mature_categories
+- name: declining_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the declining categories subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "declining categories"
+      - "declining_categories"
+      - "declining"
+      - "categories"
+    examples:
+      - "Show revenue for declining categories."
+      - "How many records are in declining categories?"
+  expression: '{category_performance.category_tier} = ''Declining'''
+  description: Categories with declining performance
+  tags:
+  - metric
+  terms:
+  - metric.declining_categories
+- name: emerging_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the emerging categories subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "emerging categories"
+      - "emerging_categories"
+      - "emerging"
+      - "categories"
+    examples:
+      - "Show revenue for emerging categories."
+      - "How many records are in emerging categories?"
+  expression: '{category_performance.category_tier} = ''Emerging'''
+  description: New or small but promising categories
+  tags:
+  - metric
+  terms:
+  - metric.emerging_categories
+- name: high_health_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high health categories subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high health categories"
+      - "high_health_categories"
+      - "high"
+      - "health"
+    examples:
+      - "Show revenue for high health categories."
+      - "How many records are in high health categories?"
+  expression: '{category_performance.category_health_score} >= 75'
+  description: Categories with health score 75+
+  tags:
+  - metric
+  terms:
+  - metric.high_health_categories
+- name: low_health_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the low health categories subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "low health categories"
+      - "low_health_categories"
+      - "low"
+      - "health"
+    examples:
+      - "Show revenue for low health categories."
+      - "How many records are in low health categories?"
+  expression: '{category_performance.category_health_score} < 50'
+  description: Categories with health score below 50
+  tags:
+  - metric
+  terms:
+  - metric.low_health_categories
+- name: high_revenue_share_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high revenue share categories
+      subset. Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high revenue share categories"
+      - "high_revenue_share_categories"
+      - "high"
+      - "revenue"
+    examples:
+      - "Show revenue for high revenue share categories."
+      - "How many records are in high revenue share categories?"
+  expression: '{category_performance.category_revenue_share} >= 0.15'
+  description: Categories contributing 15%+ of total revenue
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.high_revenue_share_categories
+  - finance.gross_sales
+- name: categories_with_declining_products
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the categories with declining
+      products subset. Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "categories with declining products"
+      - "categories_with_declining_products"
+      - "categories"
+      - "with"
+    examples:
+      - "Show revenue for categories with declining products."
+      - "How many records are in categories with declining products?"
+  expression: '{category_performance.declining_products} > 0'
+  description: Categories containing declining products
+  tags:
+  - product
+  - count
+  - metric
+  terms:
+  - product.categories_with_declining_products
+  - metric.product_count
+- name: positive_growth_categories
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the positive growth categories
+      subset. Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "positive growth categories"
+      - "positive_growth_categories"
+      - "positive"
+      - "growth"
+    examples:
+      - "Show revenue for positive growth categories."
+      - "How many records are in positive growth categories?"
+  expression: '{category_performance.revenue_growth_30d_pct} > 0'
+  description: Categories with positive 30-day growth
+  tags:
+  - metric
+  terms:
+  - metric.positive_growth_categories

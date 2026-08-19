@@ -1,0 +1,32 @@
+# kind: dq — converted from checks/rider_efficiency_kpis.yml
+kind: dq
+name: rider_efficiency_kpis_dq
+depends_on: QCOMMERCE_PLATFORM.GOLD.RIDER_EFFICIENCY_KPIS
+
+rules:
+- row_count >= 100:
+    name: minimum_rider_efficiency_rows
+    dimension: completeness
+    description: At least 100 rider efficiency KPI rows should exist
+
+- missing_count(RIDER_ID) = 0:
+    name: no_missing_rider_id
+    dimension: completeness
+    description: All records must have a RIDER_ID
+
+- invalid_count(ON_TIME_ORDERS) = 0:
+    name: on_time_rate_in_range
+    dimension: validity
+    description: ON_TIME_ORDERS must be zero or positive
+    valid min: 0
+
+- invalid_count(FAILED_DROPS) = 0:
+    name: failed_drop_rate_in_range
+    dimension: validity
+    description: FAILED_DROPS must be zero or positive
+    valid min: 0
+
+- duplicate_count(DS, CITY, RIDER_ID) = 0:
+    name: unique_ds_city_rider
+    dimension: uniqueness
+    description: Each DS, CITY, and RIDER_ID combination must be unique

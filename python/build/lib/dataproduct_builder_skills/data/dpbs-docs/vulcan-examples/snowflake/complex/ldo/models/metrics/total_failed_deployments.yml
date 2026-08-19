@@ -1,0 +1,3 @@
+kind: metric
+name: total_failed_deployments
+measure: system_update_reports.total_failed_deployments

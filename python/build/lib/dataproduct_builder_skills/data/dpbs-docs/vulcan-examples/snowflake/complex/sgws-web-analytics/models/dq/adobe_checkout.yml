@@ -1,0 +1,45 @@
+# kind: dq — converted from checks/adobe_checkout.yaml
+kind: dq
+name: ADOBE_CHECKOUT_dq
+depends_on: web_analytics_gold.ADOBE_CHECKOUT
+rules:
+- row_count > 0:
+    name: adobe_checkout_records_exist
+    dimension: completeness
+    description: Checkout funnel table must contain ATC-to-checkout matched events
+- missing_count(hitid) = 0:
+    name: hitid_required
+    dimension: completeness
+    description: All checkout events must have an Adobe Analytics hit identifier
+- missing_count(cart_id) = 0:
+    name: cart_id_required
+    dimension: completeness
+    description: All checkout events must have a shopping cart identifier for session tracking
+- missing_percent(account_unique_id) < 50:
+    name: account_completeness
+    dimension: completeness
+    description: At least 50% of checkout events should have customer account linkage
+- failed rows:
+    name: invalid_digital_platform
+    dimension: validity
+    fail query: |
+      SELECT uuid, hitid, digital_platform
+      FROM web_analytics_gold.ADOBE_CHECKOUT
+      WHERE digital_platform NOT IN ('App', 'Web')
+        AND digital_platform IS NOT NULL
+    samples limit: 10
+    description: Digital platform must be either App (mobile app) or Web (browser)
+- failed rows:
+    name: invalid_list_type
+    dimension: validity
+    fail query: |
+      SELECT uuid, hitid, list_type
+      FROM web_analytics_gold.ADOBE_CHECKOUT
+      WHERE list_type NOT IN ('Favorites', 'My List', 'Frequently Bought Together', 'Previously Purchased', 'Ready to Reorder', 'Customers Like You')
+        AND list_type IS NOT NULL
+    samples limit: 10
+    description: Product list type must be one of the predefined recommendation or manual list types
+- duplicate_count(uuid) = 0:
+    name: checkout_uuid_unique
+    dimension: uniqueness
+    description: Checkout event UUID must be unique for each ATC-checkout match

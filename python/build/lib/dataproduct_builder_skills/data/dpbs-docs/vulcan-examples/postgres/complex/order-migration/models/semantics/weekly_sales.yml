@@ -1,0 +1,219 @@
+# Converted from legacy: semantics/fct_weekly_sales.yml
+kind: semantic
+name: weekly_sales
+depends_on: curated.fct_weekly_sales
+ai_context:
+  instructions: >
+    Use this semantic model for questions about weekly sales. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "weekly sales"
+    - "weekly_sales"
+    - "weekly"
+    - "sales"
+  examples:
+    - "Show weekly sales trends over time."
+    - "Break down weekly sales by key dimensions."
+
+dimensions:
+- week_start_date
+- week_end_date
+- year
+- week_number
+- region_id
+- region_name
+- customer_id
+- product_id
+measures:
+- name: total_weekly_orders
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total weekly orders. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total weekly orders"
+      - "total_weekly_orders"
+      - "total"
+      - "weekly"
+    examples:
+      - "What is total weekly orders by month?"
+      - "Compare total weekly orders across key segments."
+  type: sum
+  expression: '{weekly_sales.total_orders}'
+  description: Total orders across all weeks
+  tags:
+  - order
+  - count
+  - metric
+  terms:
+  - order.total_weekly_orders
+  - metric.order_count
+- name: total_weekly_revenue
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total weekly revenue. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total weekly revenue"
+      - "total_weekly_revenue"
+      - "total"
+      - "weekly"
+    examples:
+      - "What is total weekly revenue by month?"
+      - "Compare total weekly revenue across key segments."
+  type: sum
+  expression: '{weekly_sales.total_revenue}'
+  format: currency
+  description: Total revenue across all weeks
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_weekly_revenue
+  - finance.gross_sales
+- name: avg_weekly_order_value
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg weekly order value. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg weekly order value"
+      - "avg_weekly_order_value"
+      - "avg"
+      - "weekly"
+    examples:
+      - "What is avg weekly order value by month?"
+      - "Compare avg weekly order value across key segments."
+  type: avg
+  expression: '{weekly_sales.avg_order_value}'
+  format: currency
+  description: Average order value across weeks
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_weekly_order_value
+  - metric.aggregate
+- name: avg_daily_revenue_in_weeks
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg daily revenue in weeks. Respect
+      its aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg daily revenue in weeks"
+      - "avg_daily_revenue_in_weeks"
+      - "avg"
+      - "daily"
+    examples:
+      - "What is avg daily revenue in weeks by month?"
+      - "Compare avg daily revenue in weeks across key segments."
+  type: avg
+  expression: '{weekly_sales.avg_daily_revenue}'
+  format: currency
+  description: Average daily revenue within weeks
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_daily_revenue_in_weeks
+  - metric.aggregate
+segments:
+- name: high_performing_weeks
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the high performing weeks subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "high performing weeks"
+      - "high_performing_weeks"
+      - "high"
+      - "performing"
+    examples:
+      - "Show revenue for high performing weeks."
+      - "How many records are in high performing weeks?"
+  expression: '{weekly_sales.total_revenue} >= 20000'
+  description: Weeks with revenue >= $20,000
+  tags:
+  - metric
+  terms:
+  - metric.high_performing_weeks
+- name: recent_weeks
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the recent weeks subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "recent weeks"
+      - "recent_weeks"
+      - "recent"
+      - "weeks"
+    examples:
+      - "Show revenue for recent weeks."
+      - "How many records are in recent weeks?"
+  expression: '{weekly_sales.week_start_date} >= CURRENT_DATE - INTERVAL ''4 weeks'''
+  description: Last 4 weeks
+  tags:
+  - temporal
+  - recent
+  - segment
+  terms:
+  - temporal.recent_weeks
+  - segment.recent
+- name: current_year
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the current year subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "current year"
+      - "current_year"
+      - "current"
+      - "year"
+    examples:
+      - "Show revenue for current year."
+      - "How many records are in current year?"
+  expression: '{weekly_sales.year} = EXTRACT(YEAR FROM CURRENT_DATE)'
+  description: Current year weeks
+  tags:
+  - metric
+  terms:
+  - metric.current_year
+joins:
+- name: customer_profile
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from customer profile.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "customer profile"
+      - "customer_profile"
+      - "customer"
+      - "profile"
+    examples:
+      - "Analyze this model with customer profile attributes."
+      - "Break measures down by customer profile."
+  type: many_to_one
+  expression: '{weekly_sales.customer_id} = {customer_profile.customer_id}'
+- name: product_profile
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from product profile.
+      Keep the configured join relationship to avoid double counting.
+    synonyms:
+      - "product profile"
+      - "product_profile"
+      - "product"
+      - "profile"
+    examples:
+      - "Analyze this model with product profile attributes."
+      - "Break measures down by product profile."
+  type: many_to_one
+  expression: '{weekly_sales.product_id} = {product_profile.product_id}'

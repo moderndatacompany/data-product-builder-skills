@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: rfm_value_by_segment
+measure: rfm.total_rfm_value
+ts: customer_profile.first_order_date
+dimensions:
+- rfm.rfm_segment
+- rfm.region_name
+description: Total customer value by RFM segment
+tags:
+- rfm
+- revenue
+- segmentation
+terms:
+- rfm.segment_value
+- revenue.by_segment

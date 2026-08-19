@@ -1,0 +1,17 @@
+# kind: dq — converted from checks/rfm_segment_1_month_data.yml
+kind: dq
+name: rfm_segment_1_month_data_dq
+depends_on: cobs.rfm_segment_1_month_data
+rules:
+- failed rows:
+    name: unique_account_date
+    dimension: validity
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  COUNT(*) as duplicate_count\nFROM cobs.rfm_segment_1_month_data\nGROUP BY ACCOUNT_ID, DATE\nHAVING COUNT(*) > 1\n"
+    samples limit: 5
+    description: Account_ID and date combination must be unique (grain validation)
+- failed rows:
+    name: non_negative_revenue
+    dimension: validity
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  TOTAL_REV,\n  PROOF_REV\nFROM cobs.rfm_segment_1_month_data\nWHERE TOTAL_REV < 0 OR PROOF_REV < 0\n"
+    samples limit: 10
+    description: Revenue values must be non-negative

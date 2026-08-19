@@ -1,0 +1,99 @@
+# kind: dq — converted from checks/lineitem.yml
+kind: dq
+name: lineitem_dq
+depends_on: test_db.vulcan_test_project.lineitem
+rules:
+- missing_count(orderkey) = 0:
+    name: orderkey_not_null
+    dimension: completeness
+    description: LINEITEM.ORDERKEY must be non-null
+- missing_count(linenumber) = 0:
+    name: linenumber_not_null
+    dimension: completeness
+    description: LINEITEM.LINENUMBER must be non-null
+- missing_count(partkey) = 0:
+    name: partkey_not_null
+    dimension: completeness
+    description: LINEITEM.PARTKEY must be non-null
+- missing_count(suppkey) = 0:
+    name: suppkey_not_null
+    dimension: completeness
+    description: LINEITEM.SUPPKEY must be non-null
+- missing_count(shipdate) = 0:
+    name: shipdate_not_null
+    dimension: completeness
+    description: LINEITEM.SHIPDATE must be non-null
+- row_count > 0:
+    name: lineitem_has_rows
+    dimension: completeness
+    description: LINEITEM should not be empty
+- failed rows:
+    name: lineitem_orders_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT l.*
+      FROM test_db.vulcan_test_project.lineitem l
+      LEFT JOIN test_db.vulcan_test_project.orders o
+        ON l.orderkey = o.orderkey
+      WHERE o.orderkey IS NULL
+    samples limit: 10
+    description: Every LINEITEM.ORDERKEY must exist in ORDERS.ORDERKEY
+- failed rows:
+    name: lineitem_part_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT l.*
+      FROM test_db.vulcan_test_project.lineitem l
+      LEFT JOIN test_db.vulcan_test_project.part p
+        ON l.partkey = p.partkey
+      WHERE p.partkey IS NULL
+    samples limit: 10
+    description: Every LINEITEM.PARTKEY must exist in PART.PARTKEY
+- failed rows:
+    name: lineitem_supplier_fk_exists
+    dimension: validity
+    fail query: |
+      SELECT l.*
+      FROM test_db.vulcan_test_project.lineitem l
+      LEFT JOIN test_db.vulcan_test_project.supplier s
+        ON l.suppkey = s.suppkey
+      WHERE s.suppkey IS NULL
+    samples limit: 10
+    description: Every LINEITEM.SUPPKEY must exist in SUPPLIER.SUPPKEY
+- failed rows:
+    name: discount_between_0_and_1
+    dimension: validity
+    fail query: |
+      SELECT orderkey, linenumber, discount
+      FROM test_db.vulcan_test_project.lineitem
+      WHERE discount < 0 OR discount > 1
+    samples limit: 10
+    description: LINEITEM.DISCOUNT must be between 0 and 1
+- failed rows:
+    name: quantity_non_negative
+    dimension: validity
+    fail query: |
+      SELECT orderkey, linenumber, quantity
+      FROM test_db.vulcan_test_project.lineitem
+      WHERE quantity < 0
+    samples limit: 10
+    description: LINEITEM.QUANTITY should be non-negative
+- failed rows:
+    name: extendedprice_non_negative
+    dimension: validity
+    fail query: |
+      SELECT orderkey, linenumber, extendedprice
+      FROM test_db.vulcan_test_project.lineitem
+      WHERE extendedprice < 0
+    samples limit: 10
+    description: LINEITEM.EXTENDEDPRICE should be non-negative
+- failed rows:
+    name: lineitem_composite_key_unique
+    dimension: uniqueness
+    fail query: |
+      SELECT orderkey, linenumber, COUNT(*) AS cnt
+      FROM test_db.vulcan_test_project.lineitem
+      GROUP BY orderkey, linenumber
+      HAVING COUNT(*) > 1
+    samples limit: 10
+    description: LINEITEM composite key (ORDERKEY, LINENUMBER) must be unique

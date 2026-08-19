@@ -1,0 +1,23 @@
+# kind: dq — converted from checks/shipments.yml
+kind: dq
+name: shipments_dq
+depends_on: sales.shipments
+rules:
+- failed rows:
+    name: negative_shipping_costs
+    dimension: validity
+    fail query: |
+      SELECT shipment_id, order_id, shipped_date, shipping_cost
+      FROM sales.shipments
+      WHERE shipping_cost < 0
+    samples limit: 10
+    description: Shipment shipping costs must not be negative
+- failed rows:
+    name: delivered_without_date
+    dimension: validity
+    fail query: |
+      SELECT shipment_id, order_id, shipped_date, delivered_date, shipping_status
+      FROM sales.shipments
+      WHERE shipping_status = 'Delivered' AND delivered_date IS NULL
+    samples limit: 10
+    description: Delivered shipments must have a delivered date

@@ -1,0 +1,188 @@
+models:
+  ERP_PLATFORM.GOLD.FCT_INVENTORY_OPTIMIZATION:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct inventory optimization. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "fct inventory optimization"
+        - "fct_inventory_optimization"
+        - "fct"
+        - "inventory"
+      examples:
+        - "Show fct inventory optimization trends over time."
+        - "Break down fct inventory optimization by key dimensions."
+    alias: fct_inventory_optimization
+
+    dimensions:
+      includes:
+        - inventory_opt_key
+        - material_number
+        - material_description
+        - plant_code
+        - abc_classification
+        - excess_inventory_flag
+        - primary_supplier_id
+        - calculated_at
+
+    measures:
+      current_inventory_qty:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for current inventory qty. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "current inventory qty"
+            - "current_inventory_qty"
+            - "current"
+            - "inventory"
+          examples:
+            - "What is current inventory qty by month?"
+            - "Compare current inventory qty across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.current_inventory_qty}"
+
+      current_inventory_value_usd:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for current inventory value usd. Respect
+            its aggregation type before comparing or segmenting results.
+          synonyms:
+            - "current inventory value usd"
+            - "current_inventory_value_usd"
+            - "current"
+            - "inventory"
+          examples:
+            - "What is current inventory value usd by month?"
+            - "Compare current inventory value usd across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.current_inventory_value_usd}"
+
+      annual_usage_qty:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for annual usage qty. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "annual usage qty"
+            - "annual_usage_qty"
+            - "annual"
+            - "usage"
+          examples:
+            - "What is annual usage qty by month?"
+            - "Compare annual usage qty across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.annual_usage_qty}"
+
+      annual_usage_value_usd:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for annual usage value usd. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "annual usage value usd"
+            - "annual_usage_value_usd"
+            - "annual"
+            - "usage"
+          examples:
+            - "What is annual usage value usd by month?"
+            - "Compare annual usage value usd across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.annual_usage_value_usd}"
+
+      inventory_turnover_ratio:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for inventory turnover ratio. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "inventory turnover ratio"
+            - "inventory_turnover_ratio"
+            - "inventory"
+            - "turnover"
+          examples:
+            - "What is inventory turnover ratio by month?"
+            - "Compare inventory turnover ratio across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.inventory_turnover_ratio}"
+
+      days_inventory_outstanding:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for days inventory outstanding. Respect
+            its aggregation type before comparing or segmenting results.
+          synonyms:
+            - "days inventory outstanding"
+            - "days_inventory_outstanding"
+            - "days"
+            - "inventory"
+          examples:
+            - "What is days inventory outstanding by month?"
+            - "Compare days inventory outstanding across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.days_inventory_outstanding}"
+
+      reorder_point:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for reorder point. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "reorder point"
+            - "reorder_point"
+            - "reorder"
+            - "point"
+          examples:
+            - "What is reorder point by month?"
+            - "Compare reorder point across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.reorder_point}"
+
+      safety_stock_level:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for safety stock level. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "safety stock level"
+            - "safety_stock_level"
+            - "safety"
+            - "stock"
+          examples:
+            - "What is safety stock level by month?"
+            - "Compare safety stock level across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.safety_stock_level}"
+
+      stockout_risk_score:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for stockout risk score. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "stockout risk score"
+            - "stockout_risk_score"
+            - "stockout"
+            - "risk"
+          examples:
+            - "What is stockout risk score by month?"
+            - "Compare stockout risk score across key dimensions."
+        type: avg
+        expression: "{fct_inventory_optimization.stockout_risk_score}"
+
+      days_since_last_movement:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for days since last movement. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "days since last movement"
+            - "days_since_last_movement"
+            - "days"
+            - "since"
+          examples:
+            - "What is days since last movement by month?"
+            - "Compare days since last movement across key dimensions."
+        type: sum
+        expression: "{fct_inventory_optimization.days_since_last_movement}"

@@ -1,0 +1,62 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.tpch_supplier_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_suppliers
+          attributes:
+            description: "At least one supplier exists"
+      - missing_count(s_suppkey) = 0:
+          name: no_missing_suppkey
+          attributes:
+            description: "Primary key must never be null"
+      - missing_count(s_name) = 0:
+          name: no_missing_supplier_name
+          attributes:
+            description: "Supplier name must not be null"
+      - missing_count(s_nationkey) = 0:
+          name: no_missing_nationkey
+          attributes:
+            description: "Every supplier must belong to a nation"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_acctbal
+          fail query: |
+            SELECT s_suppkey, s_name, s_acctbal
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_supplier_sf1
+            WHERE s_acctbal < -1000 OR s_acctbal > 10000
+          samples limit: 5
+          attributes:
+            description: "Supplier account balance should be within reasonable range"
+      - failed rows:
+          name: invalid_phone_format
+          fail query: |
+            SELECT s_suppkey, s_phone
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_supplier_sf1
+            WHERE s_phone IS NOT NULL AND LENGTH(s_phone) < 10
+          samples limit: 5
+          attributes:
+            description: "Phone numbers must be at least 10 characters"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(s_suppkey) = 0:
+          name: unique_suppkey
+          attributes:
+            description: "Supplier key is the primary key"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: orphan_nationkey
+          fail query: |
+            SELECT s.s_suppkey, s.s_name, s.s_nationkey
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_supplier_sf1 s
+            LEFT JOIN lhs3ny001depot.tpch_sparkv3.tpch_nation_sf1 n
+              ON n.n_nationkey = s.s_nationkey
+            WHERE n.n_nationkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "Every supplier nationkey must exist in nation table"

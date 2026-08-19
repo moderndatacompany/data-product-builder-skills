@@ -1,0 +1,35 @@
+test_sales_analytics_products_single:
+  model: DEMODB.VDEFALSE.PRODUCTS
+  description: >-
+    Single-record test for the products model. Asserts the projected catalog
+    columns and their explicit Snowflake types.
+
+  inputs:
+    VULCAN.RAW.PRODUCTS:
+      rows:
+        - PRODUCT_ID: P100
+          PRODUCT_NAME: "Test Widget"
+          CATEGORY: "Electronics"
+          SUBCATEGORY: "Accessories"
+          BRAND: "TestBrand"
+          SKU: "SKU-100"
+          PRICE: 49.99
+          COST: 20.00
+          RATING: 4.5
+          STOCK_QUANTITY: 100
+          DISCONTINUED: false
+
+  outputs:
+    query:
+      rows:
+        - PRODUCT_ID: "P100"
+          PRODUCT_NAME: "Test Widget"
+          CATEGORY: "Electronics"
+          SUBCATEGORY: "Accessories"
+          BRAND: "TestBrand"
+          SKU: "SKU-100"
+          PRICE: 49.99
+          COST: 20.00
+          RATING: 4.5
+          STOCK_QUANTITY: 100
+          DISCONTINUED: false

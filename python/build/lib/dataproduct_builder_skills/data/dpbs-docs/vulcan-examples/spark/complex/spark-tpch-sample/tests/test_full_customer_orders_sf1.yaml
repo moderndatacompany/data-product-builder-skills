@@ -1,0 +1,44 @@
+test_full_customer_orders_basic:
+  model: lhs3ny001depot.tpch_sparkv3.full_customer_orders_sf1
+  description: |
+    Validates full_customer_orders_sf1 grain and non-negative metrics.
+    Uses minimal TPC-H shaped input to assert output shape.
+
+  inputs:
+    lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1:
+      - c_custkey: 1
+        c_name: Customer A
+        c_nationkey: 0
+        c_acctbal: 100.5
+      - c_custkey: 2
+        c_name: Customer B
+        c_nationkey: 1
+        c_acctbal: 200.0
+    lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1:
+      - o_orderkey: 10
+        o_custkey: 1
+        o_orderdate: '2025-01-01'
+      - o_orderkey: 20
+        o_custkey: 1
+        o_orderdate: '2025-01-02'
+    lhs3ny001depot.tpch_sparkv3.tpch_lineitem_sf1:
+      - l_orderkey: 10
+        l_linenumber: 1
+        l_extendedprice: 50
+        l_discount: 0.1
+      - l_orderkey: 20
+        l_linenumber: 1
+        l_extendedprice: 30
+        l_discount: 0
+
+  outputs:
+    query:
+      rows:
+        - c_custkey: 1
+          c_name: Customer A
+          order_count: 2
+          total_amount: 75.0
+        - c_custkey: 2
+          c_name: Customer B
+          order_count: 0
+          total_amount: 0

@@ -1,0 +1,41 @@
+# kind: dq — converted from checks/customer.yaml
+kind: dq
+name: CUSTOMER_dq
+depends_on: web_analytics_gold.CUSTOMER
+rules:
+- row_count > 0:
+    name: customer_records_exist
+    dimension: completeness
+    description: Customer dimension must contain at least one record
+- missing_count(customer_name) = 0:
+    name: customer_name_required
+    dimension: completeness
+    description: All customers must have a business name for identification
+- missing_percent(email) < 80:
+    name: customer_email_completeness
+    dimension: completeness
+    description: At least 20% of customers should have email addresses for communication
+- failed rows:
+    name: invalid_sales_bucket
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, sales_bucket
+      FROM web_analytics_gold.CUSTOMER
+      WHERE sales_bucket NOT IN ('$0-$25k', '$25k-$50k', '$50k-$75k', '$75k-$100k', '$100k-$200k', '$200k-$300k', '$300k-$400k', '$400k-$500k', '$500k+')
+        AND sales_bucket IS NOT NULL
+    samples limit: 10
+    description: Sales bucket must be one of the predefined revenue tier classifications
+- failed rows:
+    name: invalid_customer_premise
+    dimension: validity
+    fail query: |
+      SELECT customer_id, customer_name, customer_premise
+      FROM web_analytics_gold.CUSTOMER
+      WHERE customer_premise NOT IN ('On Premise', 'Off Premise', 'Any', '')
+        AND customer_premise IS NOT NULL
+    samples limit: 10
+    description: Customer premise type must be valid alcohol consumption location classification
+- duplicate_count(customer_id) = 0:
+    name: customer_id_unique
+    dimension: uniqueness
+    description: Customer ID must be unique across all records

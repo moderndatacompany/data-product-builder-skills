@@ -1,0 +1,83 @@
+# kind: dq — converted from checks/fct_supplier_performance.yml
+kind: dq
+name: fct_supplier_performance_dq
+depends_on: ERP_PLATFORM.GOLD.FCT_SUPPLIER_PERFORMANCE
+
+rules:
+- row_count >= 100:
+    name: minimum_supplier_performance_records
+    dimension: completeness
+    description: At least 100 supplier-period performance records should exist
+
+- missing_count(supplier_perf_key) = 0:
+    name: no_missing_supplier_perf_key
+    dimension: completeness
+    description: All records must have a supplier_perf_key
+
+- missing_count(supplier_id) = 0:
+    name: no_missing_supplier_id
+    dimension: completeness
+    description: All records must have a supplier_id
+
+- missing_count(evaluation_period) = 0:
+    name: no_missing_evaluation_period
+    dimension: completeness
+    description: All records must have an evaluation_period
+
+- missing_count(period_start_date) = 0:
+    name: no_missing_period_start_date
+    dimension: completeness
+    description: All records must have a period_start_date
+
+- invalid_count(total_pos) = 0:
+    name: total_pos_non_negative
+    dimension: validity
+    description: Total POs must be non-negative
+    valid min: 0
+
+- invalid_count(on_time_delivery_rate) = 0:
+    name: on_time_delivery_rate_valid_range
+    dimension: validity
+    description: On-time delivery rate must be between 0 and 100
+    valid min: 0
+    valid max: 100
+
+- invalid_count(supplier_score) = 0:
+    name: supplier_score_valid_range
+    dimension: validity
+    description: Supplier score must be between 0 and 100
+    valid min: 0
+    valid max: 100
+
+- invalid_count(quality_acceptance_rate) = 0:
+    name: quality_acceptance_rate_valid_range
+    dimension: validity
+    description: Quality acceptance rate must be between 0 and 100
+    valid min: 0
+    valid max: 100
+
+- duplicate_count(supplier_perf_key) = 0:
+    name: unique_supplier_perf_keys
+    dimension: uniqueness
+    description: Each supplier_perf_key must be unique
+
+- failed rows:
+    name: supplier_exists_in_seed
+    dimension: accuracy
+    description: All supplier_ids must exist in supplier_master seed
+    fail query: |
+      SELECT fsp.supplier_perf_key, fsp.supplier_id
+      FROM ERP_PLATFORM.GOLD.FCT_SUPPLIER_PERFORMANCE fsp
+      LEFT JOIN ERP_PLATFORM.SEED.SUPPLIER_MASTER sm ON fsp.supplier_id = sm.SUPPLIER_ID
+      WHERE sm.SUPPLIER_ID IS NULL
+    samples limit: 10
+
+- failed rows:
+    name: on_time_within_total
+    dimension: accuracy
+    description: On-time deliveries should not exceed total POs
+    fail query: |
+      SELECT supplier_perf_key, total_pos, on_time_deliveries
+      FROM ERP_PLATFORM.GOLD.FCT_SUPPLIER_PERFORMANCE
+      WHERE on_time_deliveries > total_pos
+    samples limit: 10

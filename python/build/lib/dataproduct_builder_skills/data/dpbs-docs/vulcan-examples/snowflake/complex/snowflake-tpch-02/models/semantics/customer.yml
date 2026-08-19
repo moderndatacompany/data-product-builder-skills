@@ -1,0 +1,104 @@
+# Converted from legacy: semantics/customer.yml
+kind: semantic
+name: customers
+depends_on: test_db.vulcan_test_project.customer
+ai_context:
+  instructions: >
+    Use this semantic model for questions about customers. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "customers"
+  examples:
+    - "Show customers trends over time."
+    - "Break down customers by key dimensions."
+
+dimensions:
+- CUSTKEY
+- NAME
+- ADDRESS
+- NATIONKEY
+- PHONE
+- MKTSEGMENT
+- COMMENT
+measures:
+- name: total_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total customers"
+      - "total_customers"
+      - "total"
+      - "customers"
+    examples:
+      - "What is total customers by month?"
+      - "Compare total customers across key segments."
+  type: count
+  expression: '{customers.CUSTKEY}'
+  description: Total number of customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.total_customers
+  - metric.customer_count
+- name: avg_acctbal
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg acctbal. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "avg acctbal"
+      - "avg_acctbal"
+      - "avg"
+      - "acctbal"
+    examples:
+      - "What is avg acctbal by month?"
+      - "Compare avg acctbal across key segments."
+  type: avg
+  expression: '{customers.ACCTBAL}'
+  description: Average customer account balance
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_acctbal
+  - metric.aggregate
+- name: total_acctbal
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total acctbal. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total acctbal"
+      - "total_acctbal"
+      - "total"
+      - "acctbal"
+    examples:
+      - "What is total acctbal by month?"
+      - "Compare total acctbal across key segments."
+  type: sum
+  expression: '{customers.ACCTBAL}'
+  description: Total customer account balance
+  tags:
+  - metric
+  terms:
+  - metric.total_acctbal
+joins:
+- name: nations
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from nations. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "nations"
+    examples:
+      - "Analyze this model with nations attributes."
+      - "Break measures down by nations."
+  type: many_to_one
+  expression: '{customers.NATIONKEY} = {nations.NATIONKEY}'

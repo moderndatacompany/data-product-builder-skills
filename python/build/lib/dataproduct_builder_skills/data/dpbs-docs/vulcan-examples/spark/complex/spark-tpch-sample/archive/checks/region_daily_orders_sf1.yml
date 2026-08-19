@@ -1,0 +1,75 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.region_daily_orders_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_rows
+          attributes:
+            description: "At least one region-date combination exists"
+      - missing_count(r_regionkey) = 0:
+          name: no_missing_regionkey
+          attributes:
+            description: "Region key must not be null"
+      - missing_count(r_name) = 0:
+          name: no_missing_region_name
+          attributes:
+            description: "Region name must not be null"
+      - missing_count(o_orderdate) = 0:
+          name: no_missing_orderdate
+          attributes:
+            description: "Order date partition key must not be null"
+      - missing_count(region_order_key) = 0:
+          name: no_missing_composite_key
+          attributes:
+            description: "Composite grain key must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: negative_order_count
+          fail query: |
+            SELECT region_order_key, r_name, o_orderdate, order_count
+            FROM lhs3ny001depot.tpch_sparkv3.region_daily_orders_sf1
+            WHERE order_count < 0
+          samples limit: 5
+          attributes:
+            description: "Order count cannot be negative"
+      - failed rows:
+          name: invalid_region_names
+          fail query: |
+            SELECT DISTINCT r_regionkey, r_name
+            FROM lhs3ny001depot.tpch_sparkv3.region_daily_orders_sf1
+            WHERE r_name NOT IN ('AFRICA', 'AMERICA', 'ASIA', 'EUROPE', 'MIDDLE EAST')
+          samples limit: 5
+          attributes:
+            description: "Region names must be valid TPC-H regions"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(region_order_key) = 0:
+          name: unique_region_order_key
+          attributes:
+            description: "Composite key must be unique"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: all_regions_represented
+          fail query: |
+            SELECT r.r_regionkey, r.r_name
+            FROM lhs3ny001depot.tpch_sparkv3.tpch_region_sf1 r
+            LEFT JOIN (
+              SELECT DISTINCT r_regionkey
+              FROM lhs3ny001depot.tpch_sparkv3.region_daily_orders_sf1
+            ) rdo ON rdo.r_regionkey = r.r_regionkey
+            WHERE rdo.r_regionkey IS NULL
+          samples limit: 5
+          attributes:
+            description: "All 5 regions should appear in the daily orders"
+
+    # --- Timeliness ---
+    timeliness:
+      - change for row_count >= -10%:
+          name: region_orders_count_stable
+          attributes:
+            description: "Row count should not drop significantly between partition loads"

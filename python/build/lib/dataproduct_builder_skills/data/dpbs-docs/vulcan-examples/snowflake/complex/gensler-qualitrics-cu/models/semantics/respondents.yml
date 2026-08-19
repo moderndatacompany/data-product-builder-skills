@@ -1,0 +1,69 @@
+# Converted from legacy: semantics/respondents.yml
+kind: semantic
+name: respondents
+depends_on: GENSLER.ANALYTICS.QUALTRICS_RESPONDENTS_DIMENSION
+ai_context:
+  instructions: >
+    Use this semantic model for questions about respondents. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "respondents"
+  examples:
+    - "Show respondents trends over time."
+    - "Break down respondents by key dimensions."
+
+dimensions:
+- SURVEY_ID
+- RESPONSE_ID
+- RESPONSE_TYPE
+- RESPONSE_TYPE_STATUS
+- SURVEY_NAME
+- SURVEY_DESCRIPTION
+- OWNER_ID
+- ORGANIZATION_ID
+- RESPONSE_STATUS
+- SURVEY_TYPE
+- SURVEY_STATUS
+measures:
+- name: total_respondents
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total respondents. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total respondents"
+      - "total_respondents"
+      - "total"
+      - "respondents"
+    examples:
+      - "What is total respondents by month?"
+      - "Compare total respondents across key segments."
+  type: count
+  expression: '*'
+  description: Total respondents
+  tags:
+  - metric
+  terms:
+  - metric.total_respondents
+segments:
+- name: complete_responses
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the complete responses subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "complete responses"
+      - "complete_responses"
+      - "complete"
+      - "responses"
+    examples:
+      - "Show revenue for complete responses."
+      - "How many records are in complete responses?"
+  expression: '{respondents.RESPONSE_STATUS} = ''Complete'''
+  description: Complete responses only
+  tags:
+  - metric
+  terms:
+  - metric.complete_responses

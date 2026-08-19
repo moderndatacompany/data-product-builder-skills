@@ -1,0 +1,67 @@
+checks:
+  lhs3ny001depot.tpch_sparkv3.customer_snapshot_sf1:
+    # --- Completeness ---
+    completeness:
+      - row_count > 0:
+          name: has_rows
+          attributes:
+            description: "At least one customer snapshot row exists"
+      - missing_count(c_custkey) = 0:
+          name: no_missing_custkey
+          attributes:
+            description: "Unique key must not be null"
+      - missing_count(c_name) = 0:
+          name: no_missing_customer_name
+          attributes:
+            description: "Customer name must not be null"
+
+    # --- Validity ---
+    validity:
+      - failed rows:
+          name: invalid_acctbal_range
+          fail query: |
+            SELECT c_custkey, c_name, c_acctbal
+            FROM lhs3ny001depot.tpch_sparkv3.customer_snapshot_sf1
+            WHERE c_acctbal < -1000 OR c_acctbal > 10000
+          samples limit: 5
+          attributes:
+            description: "Account balance should be within reasonable range"
+
+    # --- Uniqueness ---
+    uniqueness:
+      - duplicate_count(c_custkey) = 0:
+          name: unique_custkey
+          attributes:
+            description: "Unique key c_custkey must be unique after upsert"
+
+    # --- Consistency ---
+    consistency:
+      - failed rows:
+          name: snapshot_matches_source_count
+          fail query: |
+            SELECT 'mismatch' AS issue,
+              (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.customer_snapshot_sf1) AS snapshot_count,
+              (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1) AS source_count
+            WHERE (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.customer_snapshot_sf1)
+               != (SELECT COUNT(*) FROM lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1)
+          samples limit: 1
+          attributes:
+            description: "Snapshot should contain same number of customers as source"
+      - failed rows:
+          name: balance_drift
+          fail query: |
+            SELECT s.c_custkey, s.c_acctbal AS snapshot_bal, c.c_acctbal AS source_bal
+            FROM lhs3ny001depot.tpch_sparkv3.customer_snapshot_sf1 s
+            JOIN lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1 c
+              ON c.c_custkey = s.c_custkey
+            WHERE ABS(s.c_acctbal - c.c_acctbal) > 0.01
+          samples limit: 10
+          attributes:
+            description: "Snapshot balance should match latest source balance"
+
+    # --- Timeliness ---
+    timeliness:
+      - change for row_count >= -5%:
+          name: snapshot_count_stable
+          attributes:
+            description: "Snapshot row count should be stable between daily upserts"

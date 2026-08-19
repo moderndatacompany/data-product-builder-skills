@@ -1,0 +1,3 @@
+kind: metric
+name: total_customers
+measure: customers.total_customers

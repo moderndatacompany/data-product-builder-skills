@@ -1,0 +1,27 @@
+models:
+  mys3lh02depot.tpch_lakehouse.customer_360:
+    alias: customer_360
+    dimensions:
+      includes:
+        - c_custkey
+        - c_name
+        - c_mktsegment
+        - n_name
+        - r_name
+
+    measures:
+      total_customers:
+        type: count
+        expression: "{customer_360.c_custkey}"
+      sum_order_count:
+        type: sum
+        expression: "{customer_360.order_count}"
+      sum_total_revenue:
+        type: sum
+        expression: "{customer_360.total_revenue}"
+      avg_revenue_per_customer:
+        type: avg
+        expression: "{customer_360.total_revenue}"
+      avg_account_balance:
+        type: avg
+        expression: "{customer_360.c_acctbal}"

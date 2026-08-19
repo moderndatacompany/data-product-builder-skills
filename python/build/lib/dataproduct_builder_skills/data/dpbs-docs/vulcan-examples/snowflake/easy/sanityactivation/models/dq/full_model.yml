@@ -1,0 +1,22 @@
+# kind: dq — converted from checks/full_model.yml
+kind: dq
+name: full_model_dq
+depends_on: lenovo.vulcan_example.full_model
+rules:
+- missing_count(item_id) = 0:
+    name: item_id_not_null
+    dimension: completeness
+    description: Item ID must not be null
+- row_count > 0:
+    name: has_rows
+    dimension: completeness
+    description: Model must have at least one row
+- failed rows:
+    name: positive_item_id
+    dimension: validity
+    fail query: |
+      SELECT item_id, num_orders
+      FROM lenovo.vulcan_example.full_model
+      WHERE item_id <= 0
+    samples limit: 10
+    description: Item ID must be positive

@@ -1,0 +1,26 @@
+models:
+  mys3lh02depot.tpch_lakehouse.supplier_performance:
+    alias: supplier_performance
+    dimensions:
+      includes:
+        - s_suppkey
+        - s_name
+        - n_name
+        - r_name
+
+    measures:
+      total_suppliers:
+        type: count
+        expression: "{supplier_performance.s_suppkey}"
+      sum_total_revenue:
+        type: sum
+        expression: "{supplier_performance.total_revenue}"
+      avg_revenue_per_supplier:
+        type: avg
+        expression: "{supplier_performance.total_revenue}"
+      sum_line_count:
+        type: sum
+        expression: "{supplier_performance.line_count}"
+      sum_parts_supplied:
+        type: sum
+        expression: "{supplier_performance.parts_supplied}"

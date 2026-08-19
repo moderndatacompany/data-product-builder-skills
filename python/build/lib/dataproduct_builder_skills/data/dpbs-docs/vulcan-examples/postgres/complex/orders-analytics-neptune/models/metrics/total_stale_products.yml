@@ -1,0 +1,3 @@
+kind: metric
+name: total_stale_products
+measure: category_performance.total_stale_products

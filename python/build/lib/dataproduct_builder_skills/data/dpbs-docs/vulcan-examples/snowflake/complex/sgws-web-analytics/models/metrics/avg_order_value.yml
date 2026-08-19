@@ -1,0 +1,5 @@
+kind: metric
+name: avg_order_value
+measure: orders.avg_order_value
+ts: orders.order_date
+granularity: day

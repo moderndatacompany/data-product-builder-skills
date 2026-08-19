@@ -1,0 +1,23 @@
+models:
+  mys3lh02depot.tpch_lakehouse.daily_order_metrics:
+    alias: daily_order_metrics
+    dimensions:
+      includes:
+        - o_orderdate
+
+    measures:
+      sum_order_count:
+        type: sum
+        expression: "{daily_order_metrics.order_count}"
+      sum_total_revenue:
+        type: sum
+        expression: "{daily_order_metrics.total_revenue}"
+      avg_daily_revenue:
+        type: avg
+        expression: "{daily_order_metrics.total_revenue}"
+      mean_order_value:
+        type: avg
+        expression: "{daily_order_metrics.avg_order_value}"
+      sum_total_quantity:
+        type: sum
+        expression: "{daily_order_metrics.total_quantity}"

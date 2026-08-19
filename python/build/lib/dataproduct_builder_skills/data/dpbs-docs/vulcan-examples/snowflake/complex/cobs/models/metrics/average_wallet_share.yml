@@ -1,0 +1,3 @@
+kind: metric
+name: average_wallet_share
+measure: rfm_segments.average_wallet_share

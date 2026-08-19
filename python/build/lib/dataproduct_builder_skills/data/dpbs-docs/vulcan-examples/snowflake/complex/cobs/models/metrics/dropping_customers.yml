@@ -1,0 +1,3 @@
+kind: metric
+name: dropping_customers
+measure: rfm_segments.dropping_customers

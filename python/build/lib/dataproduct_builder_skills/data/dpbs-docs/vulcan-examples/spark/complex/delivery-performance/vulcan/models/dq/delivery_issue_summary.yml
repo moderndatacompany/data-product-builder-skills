@@ -1,0 +1,32 @@
+# kind: dq — converted from checks/delivery_issue_summary.yml
+kind: dq
+name: delivery_issue_summary_dq
+depends_on: s3depot.qcommerce_delivery_gold.delivery_issue_summary
+
+rules:
+- row_count >= 15:
+    name: minimum_issue_summary_rows
+    dimension: completeness
+    description: At least 15 delivery issue summary rows should exist
+
+- missing_count(issue_type) = 0:
+    name: no_missing_issue_type
+    dimension: completeness
+    description: All records must have an issue_type
+
+- invalid_count(total_orders) = 0:
+    name: total_orders_non_negative
+    dimension: validity
+    description: total_orders must be zero or positive
+    valid min: 0
+
+- invalid_count(affected_orders) = 0:
+    name: affected_orders_positive
+    dimension: validity
+    description: affected_orders must be at least one for every issue summary row
+    valid min: 1
+
+- duplicate_count(ds, city, issue_type) = 0:
+    name: unique_ds_city_issue_type
+    dimension: uniqueness
+    description: Each ds, city, and issue_type combination must be unique

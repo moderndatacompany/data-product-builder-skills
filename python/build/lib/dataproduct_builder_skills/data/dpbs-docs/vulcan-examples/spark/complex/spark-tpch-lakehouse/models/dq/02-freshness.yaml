@@ -1,0 +1,21 @@
+# kind: dq — converted from checks/02-freshness.yaml (table 1 of 2)
+kind: dq
+name: order_line_summary_dq
+depends_on: mys3lh02depot.tpch_lakehouse.order_line_summary
+
+rules:
+- freshness(o_orderdate) < 14d:
+    name: order_summary_fresh_14d
+    dimension: timeliness
+    description: Order line summary should be updated within 14 days
+---
+# kind: dq — converted from checks/02-freshness.yaml (table 2 of 2)
+kind: dq
+name: daily_order_metrics_dq
+depends_on: mys3lh02depot.tpch_lakehouse.daily_order_metrics
+
+rules:
+- freshness(o_orderdate) < 14d:
+    name: daily_metrics_fresh_14d
+    dimension: timeliness
+    description: Daily order metrics should be updated within 14 days

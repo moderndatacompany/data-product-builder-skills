@@ -1,0 +1,134 @@
+models:
+  s3depot.qcommerce_delivery_gold.daily_delivery_kpis:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about daily delivery kpis. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "daily delivery kpis"
+        - "daily_delivery_kpis"
+        - "daily"
+        - "delivery"
+      examples:
+        - "Show daily delivery kpis trends over time."
+        - "Break down daily delivery kpis by key dimensions."
+    alias: daily_delivery_kpis
+
+    dimensions:
+      includes:
+        - ds
+        - city
+
+    measures:
+      total_orders:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total orders"
+            - "total_orders"
+            - "total"
+            - "orders"
+          examples:
+            - "What is total orders by month?"
+            - "Compare total orders across key dimensions."
+        type: sum
+        expression: "{daily_delivery_kpis.total_orders}"
+
+      delivered_orders:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for delivered orders. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "delivered orders"
+            - "delivered_orders"
+            - "delivered"
+            - "orders"
+          examples:
+            - "What is delivered orders by month?"
+            - "Compare delivered orders across key dimensions."
+        type: sum
+        expression: "{daily_delivery_kpis.delivered_orders}"
+
+      late_orders:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for late orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "late orders"
+            - "late_orders"
+            - "late"
+            - "orders"
+          examples:
+            - "What is late orders by month?"
+            - "Compare late orders across key dimensions."
+        type: sum
+        expression: "{daily_delivery_kpis.late_orders}"
+
+      sla_breach_orders:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for sla breach orders. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "sla breach orders"
+            - "sla_breach_orders"
+            - "sla"
+            - "breach"
+          examples:
+            - "What is sla breach orders by month?"
+            - "Compare sla breach orders across key dimensions."
+        type: sum
+        expression: "{daily_delivery_kpis.sla_breach_orders}"
+
+      failed_orders:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for failed orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "failed orders"
+            - "failed_orders"
+            - "failed"
+            - "orders"
+          examples:
+            - "What is failed orders by month?"
+            - "Compare failed orders across key dimensions."
+        type: sum
+        expression: "{daily_delivery_kpis.failed_orders}"
+
+      gross_order_value:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for gross order value. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "gross order value"
+            - "gross_order_value"
+            - "gross"
+            - "order"
+          examples:
+            - "What is gross order value by month?"
+            - "Compare gross order value across key dimensions."
+        type: sum
+        expression: "{daily_delivery_kpis.gross_order_value}"
+
+      total_delivery_minutes:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total delivery minutes. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total delivery minutes"
+            - "total_delivery_minutes"
+            - "total"
+            - "delivery"
+          examples:
+            - "What is total delivery minutes by month?"
+            - "Compare total delivery minutes across key dimensions."
+        type: sum
+        expression: "{daily_delivery_kpis.total_delivery_minutes}"

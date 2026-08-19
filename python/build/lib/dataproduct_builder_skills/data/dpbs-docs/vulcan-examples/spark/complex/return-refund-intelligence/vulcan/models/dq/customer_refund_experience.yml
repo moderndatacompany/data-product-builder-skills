@@ -1,0 +1,27 @@
+# kind: dq — converted from checks/customer_refund_experience.yml
+kind: dq
+name: customer_refund_experience_dq
+depends_on: qcommerce_returns_gold.customer_refund_experience
+
+rules:
+- row_count >= 4:
+    name: minimum_customer_rows
+    dimension: completeness
+    description: At least four customer refund experience rows should exist
+
+- missing_count(customer_tier) = 0:
+    name: no_missing_customer_tier
+    dimension: completeness
+    description: Each row must have a customer tier
+
+- invalid_count(refund_rate) = 0:
+    name: refund_rate_in_range
+    dimension: validity
+    description: Refund rate must be between 0 and 1
+    valid min: 0
+    valid max: 1
+
+- duplicate_count(ds, city, customer_tier) = 0:
+    name: unique_ds_city_tier
+    dimension: uniqueness
+    description: Each ds, city, and customer tier combination must be unique

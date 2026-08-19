@@ -1,0 +1,42 @@
+models:
+  lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about tpch customer sf1. Prefer its measures
+        for aggregations and its dimensions for filtering, grouping, cohorting, and
+        drill-downs.
+      synonyms:
+        - "tpch customer sf1"
+        - "tpch_customer_sf1"
+        - "tpch"
+        - "customer"
+      examples:
+        - "Show tpch customer sf1 trends over time."
+        - "Break down tpch customer sf1 by key dimensions."
+    alias: tpch_customer_sf1
+
+    dimensions:
+      includes:
+        - c_custkey
+        - c_name
+        - c_address
+        - c_nationkey
+        - c_phone
+        - c_mktsegment
+        - c_comment
+
+    measures:
+      c_acctbal:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for c acctbal. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "c acctbal"
+            - "c_acctbal"
+            - "acctbal"
+          examples:
+            - "What is c acctbal by month?"
+            - "Compare c acctbal across key dimensions."
+        type: sum
+        expression: "{tpch_customer_sf1.c_acctbal}"

@@ -1,0 +1,54 @@
+# kind: dq — converted from checks/05-uniqueness.yaml (table 1 of 5)
+kind: dq
+name: stg_customer_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_customer
+
+rules:
+- duplicate_count(c_custkey) = 0:
+    name: unique_custkey
+    dimension: uniqueness
+    description: Customer key must be unique
+---
+# kind: dq — converted from checks/05-uniqueness.yaml (table 2 of 5)
+kind: dq
+name: stg_orders_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_orders
+
+rules:
+- duplicate_count(o_orderkey) = 0:
+    name: unique_orderkey
+    dimension: uniqueness
+    description: Order key must be unique
+---
+# kind: dq — converted from checks/05-uniqueness.yaml (table 3 of 5)
+kind: dq
+name: customer_360_dq
+depends_on: mys3lh02depot.tpch_lakehouse.customer_360
+
+rules:
+- duplicate_count(c_custkey) = 0:
+    name: unique_custkey_360
+    dimension: uniqueness
+    description: Customer key must be unique in customer 360
+---
+# kind: dq — converted from checks/05-uniqueness.yaml (table 4 of 5)
+kind: dq
+name: supplier_performance_dq
+depends_on: mys3lh02depot.tpch_lakehouse.supplier_performance
+
+rules:
+- duplicate_count(s_suppkey) = 0:
+    name: unique_suppkey
+    dimension: uniqueness
+    description: Supplier key must be unique in supplier performance
+---
+# kind: dq — converted from checks/05-uniqueness.yaml (table 5 of 5)
+kind: dq
+name: daily_order_metrics_dq
+depends_on: mys3lh02depot.tpch_lakehouse.daily_order_metrics
+
+rules:
+- duplicate_count(o_orderdate) = 0:
+    name: unique_order_date
+    dimension: uniqueness
+    description: Order date must be unique (one row per day)

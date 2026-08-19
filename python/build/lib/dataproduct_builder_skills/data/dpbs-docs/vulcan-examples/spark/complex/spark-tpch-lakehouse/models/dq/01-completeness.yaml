@@ -1,0 +1,82 @@
+# kind: dq — converted from checks/01-completeness.yaml (table 1 of 3)
+kind: dq
+name: stg_orders_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_orders
+
+rules:
+- row_count > 0:
+    name: orders_table_not_empty
+    dimension: completeness
+    description: Orders table must have records
+
+- missing_count(o_orderkey) = 0:
+    name: no_missing_orderkey
+    dimension: completeness
+    description: Order key must not be null
+
+- missing_count(o_custkey) = 0:
+    name: no_missing_custkey
+    dimension: completeness
+    description: Every order must reference a customer
+
+- missing_count(o_orderdate) = 0:
+    name: no_missing_orderdate
+    dimension: completeness
+    description: Order date must not be null
+
+- missing_count(o_orderstatus) = 0:
+    name: no_missing_orderstatus
+    dimension: completeness
+    description: Order status must not be null
+---
+# kind: dq — converted from checks/01-completeness.yaml (table 2 of 3)
+kind: dq
+name: stg_customer_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_customer
+
+rules:
+- row_count > 0:
+    name: customer_table_not_empty
+    dimension: completeness
+    description: Customer table must have records
+
+- missing_count(c_custkey) = 0:
+    name: no_missing_custkey
+    dimension: completeness
+    description: Customer key must not be null
+
+- missing_count(c_name) = 0:
+    name: no_missing_cust_name
+    dimension: completeness
+    description: Customer name must not be null
+
+- missing_count(c_nationkey) = 0:
+    name: no_missing_nationkey
+    dimension: completeness
+    description: Every customer must have a nation key
+
+- missing_percent(c_comment) < 100:
+    name: low_missing_pct_comment
+    dimension: completeness
+    description: Most customers should have a comment
+---
+# kind: dq — converted from checks/01-completeness.yaml (table 3 of 3)
+kind: dq
+name: stg_lineitem_dq
+depends_on: mys3lh02depot.tpch_lakehouse.stg_lineitem
+
+rules:
+- row_count > 0:
+    name: lineitem_table_not_empty
+    dimension: completeness
+    description: Line item table must have records
+
+- missing_count(l_orderkey) = 0:
+    name: no_missing_lineitem_orderkey
+    dimension: completeness
+    description: Line item order key must not be null
+
+- missing_count(l_quantity) = 0:
+    name: no_missing_quantity
+    dimension: completeness
+    description: Quantity must not be null

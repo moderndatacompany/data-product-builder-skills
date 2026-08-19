@@ -1,0 +1,41 @@
+# kind: dq — converted from checks/01-filters-and-variables.yaml
+kind: dq
+name: tpch_orders_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.tpch_orders_sf1
+
+rules:
+- row_count > 0:
+    name: orders_exist
+    dimension: completeness
+    description: Orders table must have records
+
+- missing_count(o_orderkey) = 0:
+    name: no_missing_orderkey
+    dimension: completeness
+    description: Order key must not be null
+
+- missing_count(o_custkey) = 0:
+    name: no_missing_custkey
+    dimension: completeness
+    description: Every order must have a customer
+
+- missing_count(o_orderdate) = 0:
+    name: no_missing_orderdate
+    dimension: completeness
+    description: Order date must not be null
+
+- missing_count(o_orderstatus) = 0:
+    name: no_missing_orderstatus
+    dimension: completeness
+    description: Order status must not be null
+
+- invalid_count(o_totalprice) = 0:
+    name: totalprice_non_negative
+    dimension: validity
+    description: Total price must be non-negative
+    valid min: 0
+
+- duplicate_count(o_orderkey) = 0:
+    name: unique_orderkey
+    dimension: uniqueness
+    description: Order key must be unique

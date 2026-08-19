@@ -1,0 +1,9 @@
+kind: metric
+name: average_loyalty_score
+measure: customers.average_loyalty_score
+ts: customers.signup_date
+granularity: month
+dimensions:
+  - customers.customer_segment
+  - customers.account_status
+description: Average loyalty score across all customers

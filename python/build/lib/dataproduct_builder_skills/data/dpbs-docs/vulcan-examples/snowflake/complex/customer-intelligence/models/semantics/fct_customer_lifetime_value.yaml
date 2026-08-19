@@ -1,0 +1,157 @@
+models:
+  CUSTOMER_PLATFORM.GOLD.FCT_CUSTOMER_LIFETIME_VALUE:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about fct customer lifetime value. Prefer
+        its measures for aggregations and its dimensions for filtering, grouping,
+        cohorting, and drill-downs.
+      synonyms:
+        - "fct customer lifetime value"
+        - "fct_customer_lifetime_value"
+        - "fct"
+        - "customer"
+      examples:
+        - "Show fct customer lifetime value trends over time."
+        - "Break down fct customer lifetime value by key dimensions."
+    alias: fct_customer_lifetime_value
+
+    dimensions:
+      includes:
+        - customer_id
+        - customer_name
+        - customer_type
+        - account_tier
+        - segment_name
+        - engagement_strategy
+        - first_order_date
+        - last_order_date
+        - calculated_at
+
+    measures:
+      recency_days:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for recency days. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "recency days"
+            - "recency_days"
+            - "recency"
+            - "days"
+          examples:
+            - "What is recency days by month?"
+            - "Compare recency days across key dimensions."
+        type: sum
+        expression: "{fct_customer_lifetime_value.recency_days}"
+
+      frequency_count:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for frequency count. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "frequency count"
+            - "frequency_count"
+            - "frequency"
+            - "count"
+          examples:
+            - "What is frequency count by month?"
+            - "Compare frequency count across key dimensions."
+        type: sum
+        expression: "{fct_customer_lifetime_value.frequency_count}"
+
+      monetary_value:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for monetary value. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "monetary value"
+            - "monetary_value"
+            - "monetary"
+            - "value"
+          examples:
+            - "What is monetary value by month?"
+            - "Compare monetary value across key dimensions."
+        type: sum
+        expression: "{fct_customer_lifetime_value.monetary_value}"
+
+      total_orders:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total orders. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total orders"
+            - "total_orders"
+            - "total"
+            - "orders"
+          examples:
+            - "What is total orders by month?"
+            - "Compare total orders across key dimensions."
+        type: sum
+        expression: "{fct_customer_lifetime_value.total_orders}"
+
+      customer_tenure_months:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for customer tenure months. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "customer tenure months"
+            - "customer_tenure_months"
+            - "customer"
+            - "tenure"
+          examples:
+            - "What is customer tenure months by month?"
+            - "Compare customer tenure months across key dimensions."
+        type: sum
+        expression: "{fct_customer_lifetime_value.customer_tenure_months}"
+
+      total_revenue:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total revenue. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "total revenue"
+            - "total_revenue"
+            - "total"
+            - "revenue"
+          examples:
+            - "What is total revenue by month?"
+            - "Compare total revenue across key dimensions."
+        type: sum
+        expression: "{fct_customer_lifetime_value.total_revenue}"
+
+      avg_order_value:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for avg order value. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "avg order value"
+            - "avg_order_value"
+            - "avg"
+            - "order"
+          examples:
+            - "What is avg order value by month?"
+            - "Compare avg order value across key dimensions."
+        type: avg
+        expression: "{fct_customer_lifetime_value.avg_order_value}"
+
+      customer_lifetime_value:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for customer lifetime value. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "customer lifetime value"
+            - "customer_lifetime_value"
+            - "customer"
+            - "lifetime"
+          examples:
+            - "What is customer lifetime value by month?"
+            - "Compare customer lifetime value across key dimensions."
+        type: sum
+        expression: "{fct_customer_lifetime_value.customer_lifetime_value}"

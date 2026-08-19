@@ -1,0 +1,45 @@
+# kind: dq — converted from checks/order_fulfillment_enriched.yml
+kind: dq
+name: order_fulfillment_enriched_dq
+depends_on: QCOMMERCE_PLATFORM.SILVER.ORDER_FULFILLMENT_ENRICHED
+
+rules:
+- row_count >= 1000:
+    name: minimum_fulfillment_rows
+    dimension: completeness
+    description: At least 1,000 enriched fulfillment rows should exist
+
+- missing_count(ORDER_ID) = 0:
+    name: no_missing_order_id
+    dimension: completeness
+    description: All records must have an ORDER_ID
+
+- missing_count(CITY) = 0:
+    name: no_missing_city
+    dimension: completeness
+    description: All records must have a CITY
+
+- invalid_count(SLA_MINUTES) = 0:
+    name: sla_minutes_reasonable
+    dimension: validity
+    description: SLA_MINUTES must be between 1 and 180 minutes
+    valid min: 1
+    valid max: 180
+
+- invalid_count(DELIVERY_DELAY_MINUTES) = 0:
+    name: delivery_delay_within_bounds
+    dimension: validity
+    description: DELIVERY_DELAY_MINUTES must stay within the expected early and late delivery bounds
+    valid min: -180
+    valid max: 1440
+
+- invalid_count(SCAN_COUNT) = 0:
+    name: scan_count_non_negative
+    dimension: validity
+    description: SCAN_COUNT must be non-negative
+    valid min: 0
+
+- duplicate_count(ORDER_ID) = 0:
+    name: unique_order_id
+    dimension: uniqueness
+    description: Each ORDER_ID must appear only once in the silver fulfillment model

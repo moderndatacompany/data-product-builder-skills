@@ -1,0 +1,66 @@
+# kind: dq — converted from checks/devices_uptime.yml
+kind: dq
+name: devices_uptime_dq
+depends_on: lenovo.ldo.devices_uptime
+rules:
+- row_count > 0:
+    name: uptime_records_exist
+    dimension: completeness
+    description: At least one uptime record should exist
+- missing_count(DEVICE_ID) = 0:
+    name: no_missing_device_id
+    dimension: completeness
+    description: All records must have a device_id
+- missing_count(NETWORK) = 0:
+    name: no_missing_network
+    dimension: completeness
+    description: All devices must have a network status
+- failed rows:
+    name: invalid_network
+    dimension: validity
+    fail query: |
+      SELECT DEVICE_ID, NETWORK
+      FROM lenovo.ldo.devices_uptime
+      WHERE NETWORK NOT IN ('ONLINE', 'OFFLINE')
+        AND NETWORK IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Network status must be ONLINE or OFFLINE
+- failed rows:
+    name: online_without_online_timestamp
+    dimension: validity
+    fail query: |
+      SELECT DEVICE_ID, NETWORK, LAST_CHANGE_TO_ONLINE
+      FROM lenovo.ldo.devices_uptime
+      WHERE NETWORK = 'ONLINE'
+        AND LAST_CHANGE_TO_ONLINE IS NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Online devices should have last_change_to_online timestamp
+- failed rows:
+    name: offline_without_offline_timestamp
+    dimension: validity
+    fail query: |
+      SELECT DEVICE_ID, NETWORK, LAST_CHANGE_TO_OFFLINE
+      FROM lenovo.ldo.devices_uptime
+      WHERE NETWORK = 'OFFLINE'
+        AND LAST_CHANGE_TO_OFFLINE IS NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Offline devices should have last_change_to_offline timestamp
+- failed rows:
+    name: future_online_timestamp
+    dimension: validity
+    fail query: |
+      SELECT DEVICE_ID, LAST_CHANGE_TO_ONLINE, NETWORK
+      FROM lenovo.ldo.devices_uptime
+      WHERE LAST_CHANGE_TO_ONLINE > CURRENT_TIMESTAMP
+        AND __DELETED = 'False'
+    samples limit: 5
+    description: Last change to online timestamp cannot be in the future
+- failed rows:
+    name: duplicate_device_records
+    dimension: consistency
+    fail query: "SELECT \n  DEVICE_ID,\n  COUNT(*) as RECORD_COUNT\nFROM lenovo.ldo.devices_uptime\nWHERE __DELETED = 'False'\nGROUP BY DEVICE_ID\nHAVING COUNT(*) > 1\n"
+    samples limit: 10
+    description: Each device should have only one active uptime record

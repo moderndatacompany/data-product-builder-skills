@@ -1,0 +1,3 @@
+kind: metric
+name: total_quantity_sold_agg
+measure: product_profile.total_quantity_sold_agg

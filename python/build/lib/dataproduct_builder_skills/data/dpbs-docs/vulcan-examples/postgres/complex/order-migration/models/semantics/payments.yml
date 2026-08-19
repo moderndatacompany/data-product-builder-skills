@@ -1,0 +1,141 @@
+# Converted from legacy: semantics/payments.yml
+kind: semantic
+name: payments
+depends_on: sales.payments
+ai_context:
+  instructions: >
+    Use this semantic model for questions about payments. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "payments"
+  examples:
+    - "Show payments trends over time."
+    - "Break down payments by key dimensions."
+
+dimensions:
+- payment_id
+- order_id
+- payment_date
+- payment_method
+- provider
+- transaction_id
+- status
+- amount
+measures:
+- name: total_payments
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total payments. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total payments"
+      - "total_payments"
+      - "total"
+      - "payments"
+    examples:
+      - "What is total payments by month?"
+      - "Compare total payments across key segments."
+  type: count_distinct
+  expression: '{payments.payment_id}'
+  tags:
+  - metric
+  terms:
+  - metric.total_payments
+- name: total_paid_amount
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total paid amount. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total paid amount"
+      - "total_paid_amount"
+      - "total"
+      - "paid"
+    examples:
+      - "What is total paid amount by month?"
+      - "Compare total paid amount across key segments."
+  type: sum
+  expression: '{payments.amount}'
+  tags:
+  - revenue
+  - financial
+  - metric
+  terms:
+  - revenue.total_paid_amount
+  - finance.gross_sales
+- name: avg_payment_amount
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for avg payment amount. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "avg payment amount"
+      - "avg_payment_amount"
+      - "avg"
+      - "payment"
+    examples:
+      - "What is avg payment amount by month?"
+      - "Compare avg payment amount across key segments."
+  type: avg
+  expression: '{payments.amount}'
+  tags:
+  - metric
+  - average
+  - aggregate
+  terms:
+  - metric.avg_payment_amount
+  - metric.aggregate
+segments:
+- name: refunded_payments
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the refunded payments subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "refunded payments"
+      - "refunded_payments"
+      - "refunded"
+      - "payments"
+    examples:
+      - "Show revenue for refunded payments."
+      - "How many records are in refunded payments?"
+  expression: '{payments.status} = ''Refunded'''
+  tags:
+  - metric
+  terms:
+  - metric.refunded_payments
+- name: pending_payments
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the pending payments subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "pending payments"
+      - "pending_payments"
+      - "pending"
+      - "payments"
+    examples:
+      - "Show revenue for pending payments."
+      - "How many records are in pending payments?"
+  expression: '{payments.status} = ''Pending'''
+  tags:
+  - metric
+  terms:
+  - metric.pending_payments
+joins:
+- name: orders
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from orders. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "orders"
+    examples:
+      - "Analyze this model with orders attributes."
+      - "Break measures down by orders."
+  type: many_to_one
+  expression: '{payments.order_id} = {orders.order_id}'

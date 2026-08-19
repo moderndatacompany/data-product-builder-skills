@@ -1,0 +1,3 @@
+kind: metric
+name: min_battery_fullcharge_capacity
+measure: battery.min_battery_fullcharge_capacity

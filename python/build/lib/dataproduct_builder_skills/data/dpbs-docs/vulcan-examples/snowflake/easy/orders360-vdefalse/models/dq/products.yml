@@ -1,0 +1,35 @@
+kind: dq
+name: PRODUCTS_dq
+depends_on: DEMODB.VDEFALSE.PRODUCTS
+rules:
+  - missing_count(PRODUCT_ID) = 0:
+      name: product_id_not_null
+      dimension: completeness
+      description: Product ID must never be null
+  - failed rows:
+      name: invalid_price_range
+      dimension: validity
+      fail query: |
+        SELECT PRODUCT_ID, PRODUCT_NAME, PRICE
+        FROM DEMODB.VDEFALSE.PRODUCTS
+        WHERE PRICE <= 0 OR PRICE > 100000
+      samples limit: 10
+      description: Product price must be between 0.01 and 100,000
+  - failed rows:
+      name: invalid_rating_range
+      dimension: validity
+      fail query: |
+        SELECT PRODUCT_ID, PRODUCT_NAME, RATING
+        FROM DEMODB.VDEFALSE.PRODUCTS
+        WHERE RATING < 1.0 OR RATING > 5.0
+      samples limit: 10
+      description: Product rating must be in 1.0-5.0
+  - failed rows:
+      name: cost_not_exceed_price
+      dimension: consistency
+      fail query: |
+        SELECT PRODUCT_ID, PRODUCT_NAME, PRICE, COST
+        FROM DEMODB.VDEFALSE.PRODUCTS
+        WHERE COST > PRICE
+      samples limit: 10
+      description: Product cost must not exceed selling price

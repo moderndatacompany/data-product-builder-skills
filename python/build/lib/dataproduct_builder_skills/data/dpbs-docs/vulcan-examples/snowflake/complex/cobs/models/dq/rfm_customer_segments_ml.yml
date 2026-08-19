@@ -1,0 +1,60 @@
+# kind: dq — converted from checks/rfm_customer_segments_ml.yml
+kind: dq
+name: rfm_customer_segments_ml_dq
+depends_on: cobs.rfm_customer_segments_ml
+rules:
+- failed rows:
+    name: unique_account_date
+    dimension: validity
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  COUNT(*) as duplicate_count\nFROM cobs.rfm_customer_segments_ml\nGROUP BY ACCOUNT_ID, DATE\nHAVING COUNT(*) > 1\n"
+    samples limit: 5
+    description: Account_ID and date combination must be unique (grain validation)
+- failed rows:
+    name: valid_segment_values
+    dimension: validity
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  SEGMENT\nFROM cobs.rfm_customer_segments_ml\nWHERE SEGMENT NOT IN (\n  'Champions', 'Loyal', 'Potential Loyalists', 'New Customers', \n  'Promising',\
+      \ 'Need Attention', 'About to Sleep', 'At Risk', \n  'Cannot Lose Them', 'Hibernating', 'Lapsed', 'Newly Activated', \n  'Outperformers', 'Dropping'\n)\n"
+    samples limit: 10
+    description: Segment must be one of the valid predefined segments
+- failed rows:
+    name: rfm_scores_in_range
+    dimension: validity
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  RECENCY_SCORE,\n  FREQUENCY_SCORE,\n  WALLET_SCORE\nFROM cobs.rfm_customer_segments_ml\nWHERE RECENCY_SCORE NOT BETWEEN 1 AND 5\n   OR FREQUENCY_SCORE\
+      \ NOT BETWEEN 1 AND 5\n   OR WALLET_SCORE NOT BETWEEN 1 AND 5\n"
+    samples limit: 10
+    description: RFM scores must be between 1 and 5 (quintile range)
+- failed rows:
+    name: non_negative_revenue
+    dimension: validity
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  R12_PROOF_REV,\n  R12_TOTAL_REV,\n  R12_NON_PROOF_REV\nFROM cobs.rfm_customer_segments_ml\nWHERE R12_Proof_Rev < 0 \n   OR R12_Total_Rev < 0 \n   OR R12_Non_Proof_Rev\
+      \ < 0\n"
+    samples limit: 10
+    description: All revenue values must be non-negative
+- failed rows:
+    name: required_fields_not_null
+    dimension: completeness
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  SALES_BUCKET,\n  SEGMENT\nFROM cobs.rfm_customer_segments_ml\nWHERE ACCOUNT_ID IS NULL\n   OR DATE IS NULL\n   OR SALES_BUCKET IS NULL\n   OR segment\
+      \ IS NULL\n"
+    samples limit: 10
+    description: Critical fields (Account_ID, date, Sales_Bucket, segment) must not be null
+- failed rows:
+    name: rfm_scores_completeness
+    dimension: completeness
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  SEGMENT,\n  RECENCY_SCORE,\n  FREQUENCY_SCORE,\n  WALLET_SCORE\nFROM cobs.rfm_customer_segments_ml\nWHERE segment NOT IN ('Lapsed', 'Newly Activated')\n\
+      \  AND (RECENCY_SCORE IS NULL \n    OR FREQUENCY_SCORE IS NULL \n    OR WALLET_SCORE IS NULL)\n"
+    samples limit: 10
+    description: RFM scores should not be null for non-Lapsed/Newly Activated segments
+- failed rows:
+    name: calculated_non_proof_revenue_matches
+    dimension: consistency
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  R12_TOTAL_REV,\n  R12_PROOF_REV,\n  R12_NON_PROOF_REV,\n  (R12_TOTAL_REV - R12_PROOF_REV) AS expected_non_proof,\n  ABS(R12_NON_PROOF_REV - (R12_TOTAL_REV\
+      \ - R12_PROOF_REV)) AS difference\nFROM cobs.rfm_customer_segments_ml\nWHERE ABS(R12_NON_PROOF_REV - (R12_TOTAL_REV - R12_PROOF_REV)) > 0.01\n"
+    samples limit: 10
+    description: Non-proof revenue should equal total revenue minus proof revenue
+- failed rows:
+    name: calculated_non_proof_invoices_matches
+    dimension: consistency
+    fail query: "SELECT \n  ACCOUNT_ID,\n  DATE,\n  R12_TOTAL_INVOICES,\n  R12_PROOF_INVOICES,\n  R12_NON_PROOF_INVOICES,\n  (R12_TOTAL_INVOICES - R12_PROOF_INVOICES) AS expected_non_proof\nFROM cobs.rfm_customer_segments_ml\n\
+      WHERE R12_NON_PROOF_INVOICES != (R12_TOTAL_INVOICES - R12_PROOF_INVOICES)\n"
+    samples limit: 10
+    description: Non-proof invoices should equal total invoices minus proof invoices

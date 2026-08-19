@@ -1,0 +1,31 @@
+# Snowflake Depot Configuration
+# Environment variables required:
+# - ENTITY_TENANT_ID: Name of the tenant
+# - SNOWFLAKE_SECRET_NAME: Name of the Snowflake secret
+# - DEPOT_SNOWFLAKE_URL: Snowflake account URL
+# - DEPOT_SNOWFLAKE_DATABASE: Snowflake database name
+# - DEPOT_SNOWFLAKE_WAREHOUSE: Snowflake warehouse name
+version: v2alpha
+name: snowflakevulcanv1
+type: depot
+tags:
+  - Snowflake
+  - depot
+  - warehouse
+layer: user
+spec:
+  type: snowflake
+  description: "Snowflake cloud data warehouse depot for data storage and analytics"
+  spec:
+    url: EQZOTUQ-JCA67320.snowflakecomputing.com
+    database: SNOWFLAKE_SAMPLE_DATA
+    warehouse: COMPUTE_WH
+    account: EQZOTUQ-JCA67320
+    role: ACCOUNTADMIN
+  secrets:
+    - id: qa:vulcansecretmfa
+      purpose: rw
+    - id: qa:vulcansecretmfa
+      purpose: scan
+    - id: qa:vulcansecretmfa
+      purpose: query

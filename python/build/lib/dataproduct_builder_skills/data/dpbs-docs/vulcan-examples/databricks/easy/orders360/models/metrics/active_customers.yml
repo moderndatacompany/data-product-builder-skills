@@ -1,0 +1,8 @@
+kind: metric
+name: active_customers
+measure: customers.active_customers
+ts: customers.signup_date
+granularity: day
+dimensions:
+  - customers.customer_segment
+description: Number of active customers

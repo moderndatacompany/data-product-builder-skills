@@ -1,0 +1,25 @@
+# kind: dq — converted from checks/05-missing-metrics.yaml
+kind: dq
+name: tpch_customer_sf1_dq
+depends_on: lhs3ny001depot.tpch_sparkv3.tpch_customer_sf1
+
+rules:
+- missing_count(c_custkey) = 0:
+    name: no_missing_custkey
+    dimension: completeness
+    description: Customer key must not be null
+
+- missing_count(c_name) = 0:
+    name: no_missing_name
+    dimension: completeness
+    description: Customer name must not be null
+
+- missing_count(c_nationkey) = 0:
+    name: no_missing_nationkey
+    dimension: completeness
+    description: Every customer must have a nation key
+
+- missing_percent(c_comment) < 100:
+    name: low_missing_pct_comment
+    dimension: completeness
+    description: Most customers should have a comment

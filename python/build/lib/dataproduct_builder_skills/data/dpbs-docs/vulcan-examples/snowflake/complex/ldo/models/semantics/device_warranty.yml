@@ -1,0 +1,163 @@
+# Converted from legacy: semantics/device_warranty.yaml
+kind: semantic
+name: device_warranty
+depends_on: lenovo.ldo.device_warranty
+ai_context:
+  instructions: >
+    Use this semantic model for questions about device warranty. Prefer its measures
+    for aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "device warranty"
+    - "device_warranty"
+    - "device"
+    - "warranty"
+  examples:
+    - "Show device warranty trends over time."
+    - "Break down device warranty by key dimensions."
+
+measures:
+- name: total_devices_with_expired_warranty
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total devices with expired warranty.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total devices with expired warranty"
+      - "total_devices_with_expired_warranty"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total devices with expired warranty by month?"
+      - "Compare total devices with expired warranty across key segments."
+  type: sum
+  expression: CASE WHEN {device_warranty.WARRANTY_END} < CURRENT_TIMESTAMP THEN 1 ELSE 0 END
+  description: Total number of devices with expired warranties. This shouldn't be used for total number of expired warranties.
+  tags:
+  - metric
+  terms:
+  - metric.total_devices_with_expired_warranty
+- name: total_devices_with_soon_expiring_warranty
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total devices with soon expiring
+      warranty. Respect its aggregation type and any configured filters before comparing
+      or segmenting results.
+    synonyms:
+      - "total devices with soon expiring warranty"
+      - "total_devices_with_soon_expiring_warranty"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total devices with soon expiring warranty by month?"
+      - "Compare total devices with soon expiring warranty across key segments."
+  type: count_distinct
+  expression: '{device_warranty.DEVICE_ID}'
+  filters:
+  - '{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP'
+  - '{device_warranty.WARRANTY_END} < DATE_ADD(''DAY'', 60, CURRENT_TIMESTAMP)'
+  description: Total number of devices with warranties expiring soon. This shouldn't be used for total number of expiring soon warranties.
+  tags:
+  - metric
+  terms:
+  - metric.total_devices_with_soon_expiring_warranty
+- name: total_devices_with_active_warranty
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total devices with active warranty.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total devices with active warranty"
+      - "total_devices_with_active_warranty"
+      - "total"
+      - "devices"
+    examples:
+      - "What is total devices with active warranty by month?"
+      - "Compare total devices with active warranty across key segments."
+  type: count_distinct
+  expression: '{device_warranty.DEVICE_ID}'
+  filters:
+  - '{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP'
+  description: Total number of devices with active warranties. This shouldn't be used for total number of active warranties.
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active
+- name: total_expired_warranties
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total expired warranties. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total expired warranties"
+      - "total_expired_warranties"
+      - "total"
+      - "expired"
+    examples:
+      - "What is total expired warranties by month?"
+      - "Compare total expired warranties across key segments."
+  type: count_distinct
+  expression: '{device_warranty.WARRANTY_ID}'
+  filters:
+  - '{device_warranty.WARRANTY_END} < CURRENT_TIMESTAMP'
+  description: Total number of expired warranties. This is different from the total number of devices with expired warranties because one device can have multiple warranties.
+  tags:
+  - metric
+  terms:
+  - metric.total_expired_warranties
+- name: total_expiring_soon_warranties
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total expiring soon warranties.
+      Respect its aggregation type and any configured filters before comparing or
+      segmenting results.
+    synonyms:
+      - "total expiring soon warranties"
+      - "total_expiring_soon_warranties"
+      - "total"
+      - "expiring"
+    examples:
+      - "What is total expiring soon warranties by month?"
+      - "Compare total expiring soon warranties across key segments."
+  type: count_distinct
+  expression: '{device_warranty.WARRANTY_ID}'
+  filters:
+  - '{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP'
+  - '{device_warranty.WARRANTY_END} < DATE_ADD(''DAY'', 60, CURRENT_TIMESTAMP)'
+  description: Total number of warranties expiring soon. This is different from the total number of devices with warranties expiring soon because one device can have multiple warranties.
+  tags:
+  - metric
+  terms:
+  - metric.total_expiring_soon_warranties
+- name: total_active_warranties
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total active warranties. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total active warranties"
+      - "total_active_warranties"
+      - "total"
+      - "active"
+    examples:
+      - "What is total active warranties by month?"
+      - "Compare total active warranties across key segments."
+  type: count_distinct
+  expression: '{device_warranty.WARRANTY_ID}'
+  filters:
+  - '{device_warranty.WARRANTY_END} > CURRENT_TIMESTAMP'
+  description: Total number of active warranties. This is different from the total number of devices with active warranties because one device can have multiple warranties.
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active

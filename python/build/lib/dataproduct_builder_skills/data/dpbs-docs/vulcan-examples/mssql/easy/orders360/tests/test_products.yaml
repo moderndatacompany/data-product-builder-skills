@@ -1,0 +1,53 @@
+test_sales_products_single:
+  model: sales.products
+  description: >
+    Full-output test for the Products model using a single input record.
+
+  inputs:
+    raw.raw_products:
+      rows:
+        - product_id: P100
+          product_name: "Test Widget"
+          category: "Electronics"
+          subcategory: "Accessories"
+          brand: "TestBrand"
+          color: "Blue"
+          size: "M"
+          weight: 0.5
+          material: "Plastic"
+          model_number: "TB-001"
+          sku: "SKU-100"
+          upc: "999999999999"
+          price: 49.99
+          cost: 20.00
+          supplier: "Test Supplier"
+          warranty_period: "1 year"
+          release_date: 2024-01-01
+          rating: 4.5
+          stock_quantity: 100
+          discontinued: 0
+
+  outputs:
+    query:
+      rows:
+        - product_id: "P100"
+          product_name: "Test Widget"
+          category: "Electronics"
+          subcategory: "Accessories"
+          brand: "TestBrand"
+          color: "Blue"
+          size: "M"
+          weight: 0.5
+          material: "Plastic"
+          model_number: "TB-001"
+          sku: "SKU-100"
+          upc: "999999999999"
+          price: 49.99
+          cost: 20.00
+          supplier: "Test Supplier"
+          warranty_period: "1 year"
+          release_date: "2024-01-01"
+          rating: 4.5
+          stock_quantity: 100
+          discontinued: 0
+

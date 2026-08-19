@@ -1,0 +1,3 @@
+kind: metric
+name: avg_first_pass_yield_pct
+measure: fct_production_daily.avg_first_pass_yield_pct

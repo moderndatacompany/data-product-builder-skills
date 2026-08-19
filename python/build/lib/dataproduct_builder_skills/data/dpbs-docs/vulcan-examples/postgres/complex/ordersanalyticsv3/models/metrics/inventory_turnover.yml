@@ -1,0 +1,16 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: inventory_turnover
+measure: product_profile.total_quantity_sold_agg
+ts: product_profile.first_sale_date
+dimensions:
+- product_profile.category
+- product_profile.product_performance
+description: Product sales velocity by category
+tags:
+- inventory
+- sales
+- turnover
+terms:
+- inventory.turnover
+- metric.sales_velocity

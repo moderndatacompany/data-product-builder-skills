@@ -1,0 +1,194 @@
+# Converted from legacy: semantics/customer.yaml
+kind: semantic
+name: customer
+depends_on: web_analytics_gold.CUSTOMER
+ai_context:
+  instructions: >
+    Use this semantic model for questions about customer. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "customer"
+  examples:
+    - "Show customer trends over time."
+    - "Break down customer by key dimensions."
+
+measures:
+- name: count_customers
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for count customers. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "count customers"
+      - "count_customers"
+      - "count"
+      - "customers"
+    examples:
+      - "What is count customers by month?"
+      - "Compare count customers across key segments."
+  type: number
+  expression: COUNT(DISTINCT {customer.CUSTOMER_ID})
+  description: count of total customers
+  tags:
+  - customer
+  - count
+  - metric
+  terms:
+  - customer.count_customers
+  - metric.customer_count
+segments:
+- name: is_active
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is active subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is active"
+      - "is_active"
+      - "active"
+    examples:
+      - "Show revenue for is active."
+      - "How many records are in is active?"
+  expression: '{customer.STATUS} = ''A'''
+  description: Active customers
+  tags:
+  - customer
+  - active
+  - engagement
+  terms:
+  - customer.active
+  - engagement.active
+- name: is_proof_eligible
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is proof eligible subset.
+      Combine it with measures to answer filtered business questions.
+    synonyms:
+      - "is proof eligible"
+      - "is_proof_eligible"
+      - "proof"
+      - "eligible"
+    examples:
+      - "Show revenue for is proof eligible."
+      - "How many records are in is proof eligible?"
+  expression: '{customer.PROOF_OF_ELIGIBLE_ACCT} = ''Y'''
+  description: Proof eligible accounts
+  tags:
+  - metric
+  terms:
+  - metric.is_proof_eligible
+- name: is_on_premise
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is on premise subset. Combine it
+      with measures to answer filtered business questions.
+    synonyms:
+      - "is on premise"
+      - "is_on_premise"
+      - "premise"
+    examples:
+      - "Show revenue for is on premise."
+      - "How many records are in is on premise?"
+  expression: '{customer.CUSTOMER_PREMISE} = ''On Premise'''
+  description: On Premise customers
+  tags:
+  - metric
+  terms:
+  - metric.is_on_premise
+- name: is_off_premise
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is off premise subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is off premise"
+      - "is_off_premise"
+      - "off"
+      - "premise"
+    examples:
+      - "Show revenue for is off premise."
+      - "How many records are in is off premise?"
+  expression: '{customer.CUSTOMER_PREMISE} = ''Off Premise'''
+  description: Off Premise customers
+  tags:
+  - metric
+  terms:
+  - metric.is_off_premise
+- name: has_mobile_app
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the has mobile app subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "has mobile app"
+      - "has_mobile_app"
+      - "has"
+      - "mobile"
+    examples:
+      - "Show revenue for has mobile app."
+      - "How many records are in has mobile app?"
+  expression: '{customer.HASMOBILEAPP} = true'
+  description: Customers using mobile app
+  tags:
+  - metric
+  terms:
+  - metric.has_mobile_app
+- name: has_web
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the has web subset. Combine it with
+      measures to answer filtered business questions.
+    synonyms:
+      - "has web"
+      - "has_web"
+      - "has"
+      - "web"
+    examples:
+      - "Show revenue for has web."
+      - "How many records are in has web?"
+  expression: '{customer.HASWEB} = true'
+  description: Customers using web
+  tags:
+  - metric
+  terms:
+  - metric.has_web
+- name: is_west_region
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is west region subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is west region"
+      - "is_west_region"
+      - "west"
+      - "region"
+    examples:
+      - "Show revenue for is west region."
+      - "How many records are in is west region?"
+  expression: '{customer.SITE_REGION} = ''West'''
+  description: West region customers
+  tags:
+  - metric
+  terms:
+  - metric.is_west_region
+- name: is_east_region
+  ai_context:
+    instructions: >
+      Apply this segment when the question asks for the is east region subset. Combine
+      it with measures to answer filtered business questions.
+    synonyms:
+      - "is east region"
+      - "is_east_region"
+      - "east"
+      - "region"
+    examples:
+      - "Show revenue for is east region."
+      - "How many records are in is east region?"
+  expression: '{customer.SITE_REGION} = ''East'''
+  description: East region customers
+  tags:
+  - metric
+  terms:
+  - metric.is_east_region

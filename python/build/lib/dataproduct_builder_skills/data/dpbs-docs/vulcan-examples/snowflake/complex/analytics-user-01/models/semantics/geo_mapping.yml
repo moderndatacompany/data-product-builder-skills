@@ -1,0 +1,88 @@
+# Converted from legacy: semantics/geo_mapping.yml
+kind: semantic
+name: geo_mapping
+depends_on: LENOVO.USDK.GEO_MAPPING
+ai_context:
+  instructions: >
+    Use this semantic model for questions about geo mapping. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "geo mapping"
+    - "geo_mapping"
+    - "geo"
+    - "mapping"
+  examples:
+    - "Show geo mapping trends over time."
+    - "Break down geo mapping by key dimensions."
+
+dimensions:
+- COUNTRY_CODE
+- COUNTRY_NAME
+- REGION
+- REGION_KEY
+- SUB_REGION
+- SUB_REGION_KEY
+measures:
+- name: total_countries
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total countries. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total countries"
+      - "total_countries"
+      - "total"
+      - "countries"
+    examples:
+      - "What is total countries by month?"
+      - "Compare total countries across key segments."
+  type: count_distinct
+  expression: '{geo_mapping.COUNTRY_CODE}'
+  description: Total number of countries in mapping
+  tags:
+  - metric
+  terms:
+  - metric.total_countries
+- name: total_regions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total regions. Respect its aggregation
+      type and any configured filters before comparing or segmenting results.
+    synonyms:
+      - "total regions"
+      - "total_regions"
+      - "total"
+      - "regions"
+    examples:
+      - "What is total regions by month?"
+      - "Compare total regions across key segments."
+  type: count_distinct
+  expression: '{geo_mapping.REGION}'
+  description: Total number of unique regions
+  tags:
+  - metric
+  terms:
+  - metric.total_regions
+- name: total_sub_regions
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total sub regions. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total sub regions"
+      - "total_sub_regions"
+      - "total"
+      - "sub"
+    examples:
+      - "What is total sub regions by month?"
+      - "Compare total sub regions across key segments."
+  type: count_distinct
+  expression: '{geo_mapping.SUB_REGION}'
+  description: Total number of unique sub-regions
+  tags:
+  - metric
+  terms:
+  - metric.total_sub_regions

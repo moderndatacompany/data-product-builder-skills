@@ -1,0 +1,9 @@
+kind: metric
+name: total_customers
+measure: customers.total_customers
+ts: customers.signup_date
+granularity: day
+dimensions:
+  - customers.customer_segment
+  - customers.account_status
+description: Total registered customers

@@ -1,0 +1,66 @@
+# kind: dq — converted from checks/qualtrics_response_final.yml
+kind: dq
+name: QUALTRICS_RESPONSE_FINAL_RESPONSE_dq
+depends_on: GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE
+rules:
+- missing_count(SURVEY_ID) = 0:
+    name: no_missing_survey_ids
+    dimension: completeness
+    description: All responses must be associated with a survey
+- missing_count(RESPONSE_ID) = 0:
+    name: no_missing_response_ids
+    dimension: completeness
+    description: All responses must have a response ID
+- missing_count(QUESTION_ID) = 0:
+    name: no_missing_question_ids
+    dimension: completeness
+    description: All responses must be associated with a question
+- missing_count(QUESTIONS_KEY) = 0:
+    name: no_missing_questions_key
+    dimension: completeness
+    description: All responses must have a questions_key for mapping
+- row_count > 0:
+    name: has_responses
+    dimension: completeness
+    description: At least one survey response must exist
+- failed rows:
+    name: invalid_response_ids
+    dimension: validity
+    fail query: |
+      SELECT SURVEY_ID, RESPONSE_ID, QUESTION_ID
+      FROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE
+      WHERE RESPONSE_ID IS NULL OR RESPONSE_ID = '' OR LENGTH(RESPONSE_ID) < 10
+    samples limit: 10
+    description: Response IDs must be valid Qualtrics format
+- failed rows:
+    name: responses_without_question_match
+    dimension: validity
+    fail query: "SELECT r.SURVEY_ID, r.RESPONSE_ID, r.QUESTION_ID, r.QUESTIONS_KEY\nFROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE r\nLEFT JOIN GENSLER.RAW.QUALTRICS_QUESTIONS_FLATTENING_PART_001\
+      \ q \n  ON r.SURVEY_ID = q.SURVEY_ID \n  AND r.QUESTION_ID = q.QUESTION_ID\n  AND r.QUESTIONS_KEY = q.QUESTIONS_KEY\nWHERE q.QUESTION_ID IS NULL\n"
+    samples limit: 10
+    description: All responses should match to questions in definition
+- failed rows:
+    name: invalid_response_types
+    dimension: validity
+    fail query: "SELECT SURVEY_ID, RESPONSE_ID, QUESTION_ID, RESPONSE_TYPE, RESPONSE_TYPE_STATUS\nFROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE\nWHERE RESPONSE_TYPE_STATUS IS NOT NULL \n  AND RESPONSE_TYPE_STATUS\
+      \ NOT IN (0, 1, 2)\n"
+    samples limit: 10
+    description: Response type status must be valid (0=IP Address, 1=Preview, 2=Normal)
+- duplicate_count(RESPONSE_ID) > 0:
+    name: expected_duplicate_responses
+    dimension: uniqueness
+    description: Response IDs will have duplicates (one per question) - this is expected
+- failed rows:
+    name: null_responses_for_required_questions
+    dimension: accuracy
+    fail query: "SELECT r.SURVEY_ID, r.RESPONSE_ID, r.QUESTION_ID, r.QUESTION_TEXT, r.RESPONSE, r.RESPONSE_VALUE\nFROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE r\nWHERE r.RESPONSE IS NULL \n  AND\
+      \ r.RESPONSE_VALUE IS NULL\n  AND r.QUESTION_TYPE IN ('MC', 'Matrix')\n"
+    samples limit: 10
+    description: Multiple choice and matrix questions should have response values
+- failed rows:
+    name: mismatched_recode_values
+    dimension: accuracy
+    fail query: "SELECT SURVEY_ID, RESPONSE_ID, QUESTION_ID, CHOICE_RECODE, SUB_QUESTIONS_RECODE\nFROM GENSLER.FINAL.QUALTRICS_RESPONSE_FINAL_RESPONSE\nWHERE CHOICE_RECODE IS NOT NULL \n  AND SUB_QUESTIONS_RECODE\
+      \ IS NOT NULL\n  AND CHOICE_RECODE != SUB_QUESTIONS_RECODE\n"
+    samples limit: 10
+    description: Recode values should be consistent when both are present

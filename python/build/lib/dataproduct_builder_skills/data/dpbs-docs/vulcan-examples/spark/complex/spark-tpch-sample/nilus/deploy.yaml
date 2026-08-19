@@ -1,0 +1,171 @@
+name: nilus-batch-tpch-sf0
+version: v2alpha
+type: workflow
+tags:
+  - workflow
+  - nilus-batch
+  - tpch
+  - sf1
+description: Nilus Batch Workflow for Snowflake TPC-H SF1 to DataOS Lakehouse
+workspace: public
+workflow:
+  dag:
+    - name: customer-sf0
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.CUSTOMER
+          sink: 
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.customer
+              incremental-strategy: append
+
+    - name: orders-sf1
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.ORDERS
+          sink:
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.orders
+              incremental-strategy: append
+
+    - name: lineitem-sf1
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.LINEITEM
+          sink:
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.lineitem
+              incremental-strategy: append
+
+    - name: part-sf1
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.PART
+          sink:
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.part
+              incremental-strategy: append
+
+    - name: partsupp-sf1
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.PARTSUPP
+          sink:
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.partsupp
+              incremental-strategy: append
+
+    - name: supplier-sf1
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.SUPPLIER
+          sink:
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.supplier
+              incremental-strategy: append
+
+    - name: nation-sf1
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.NATION
+          sink:
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.nation
+              incremental-strategy: append
+
+    - name: region-sf1
+      spec:
+        stack: nilus:1.0
+        compute:  comet-compute
+        logLevel: INFO
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stackSpec:
+          source:
+            address: dataos://snowflakevulcan?purpose=rw
+            options:
+              source-table: TPCH_SF1.REGION
+          sink:
+            address: dataos://mys3lh01depot?purpose=rw
+            options:
+              dest-table: tpch_sf1.region
+              incremental-strategy: append

@@ -1,0 +1,77 @@
+- name: lhs3ny001depot.tpch_sf1.customer
+  columns:
+    c_custkey: BIGINT
+    c_name: STRING
+    c_address: STRING
+    c_nationkey: BIGINT
+    c_phone: STRING
+    c_acctbal: DECIMAL(12, 2)
+    c_mktsegment: STRING
+    c_comment: STRING
+- name: lhs3ny001depot.tpch_sf1.lineitem
+  columns:
+    l_orderkey: BIGINT
+    l_partkey: BIGINT
+    l_suppkey: BIGINT
+    l_linenumber: BIGINT
+    l_quantity: DECIMAL(12, 2)
+    l_extendedprice: DECIMAL(12, 2)
+    l_discount: DECIMAL(12, 2)
+    l_tax: DECIMAL(12, 2)
+    l_returnflag: STRING
+    l_linestatus: STRING
+    l_shipdate: DATE
+    l_commitdate: DATE
+    l_receiptdate: DATE
+    l_shipinstruct: STRING
+    l_shipmode: STRING
+    l_comment: STRING
+- name: lhs3ny001depot.tpch_sf1.nation
+  columns:
+    n_nationkey: BIGINT
+    n_name: STRING
+    n_regionkey: BIGINT
+    n_comment: STRING
+- name: lhs3ny001depot.tpch_sf1.orders
+  columns:
+    o_orderkey: BIGINT
+    o_custkey: BIGINT
+    o_orderstatus: STRING
+    o_totalprice: DECIMAL(12, 2)
+    o_orderdate: DATE
+    o_orderpriority: STRING
+    o_clerk: STRING
+    o_shippriority: BIGINT
+    o_comment: STRING
+- name: lhs3ny001depot.tpch_sf1.part
+  columns:
+    p_partkey: BIGINT
+    p_name: STRING
+    p_mfgr: STRING
+    p_brand: STRING
+    p_type: STRING
+    p_size: BIGINT
+    p_container: STRING
+    p_retailprice: DECIMAL(12, 2)
+    p_comment: STRING
+- name: lhs3ny001depot.tpch_sf1.partsupp
+  columns:
+    ps_partkey: BIGINT
+    ps_suppkey: BIGINT
+    ps_availqty: BIGINT
+    ps_supplycost: DECIMAL(12, 2)
+    ps_comment: STRING
+- name: lhs3ny001depot.tpch_sf1.region
+  columns:
+    r_regionkey: BIGINT
+    r_name: STRING
+    r_comment: STRING
+- name: lhs3ny001depot.tpch_sf1.supplier
+  columns:
+    s_suppkey: BIGINT
+    s_name: STRING
+    s_address: STRING
+    s_nationkey: BIGINT
+    s_phone: STRING
+    s_acctbal: DECIMAL(12, 2)
+    s_comment: STRING

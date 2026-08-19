@@ -1,0 +1,10 @@
+- name: '"testawslhnewdepot"."tpch_sf1v1"."customer"'
+  columns:
+    c_custkey: DECIMAL(38, 0)
+    c_name: VARCHAR
+    c_address: VARCHAR
+    c_nationkey: DECIMAL(38, 0)
+    c_phone: VARCHAR
+    c_acctbal: DECIMAL(12, 2)
+    c_mktsegment: VARCHAR
+    c_comment: VARCHAR

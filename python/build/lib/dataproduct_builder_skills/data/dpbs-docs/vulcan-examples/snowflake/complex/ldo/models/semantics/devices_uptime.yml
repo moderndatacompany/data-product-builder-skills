@@ -1,0 +1,70 @@
+# Converted from legacy: semantics/devices_uptime.yaml
+kind: semantic
+name: devices_uptime
+depends_on: lenovo.ldo.devices_uptime
+ai_context:
+  instructions: >
+    Use this semantic model for questions about devices uptime. Prefer its measures
+    for aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "devices uptime"
+    - "devices_uptime"
+    - "devices"
+    - "uptime"
+  examples:
+    - "Show devices uptime trends over time."
+    - "Break down devices uptime by key dimensions."
+
+dimensions:
+- DEVICE_ID
+- NETWORK
+- LAST_CHANGE_TO_OFFLINE
+- LAST_CHANGE_TO_ONLINE
+measures:
+- name: total_online_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total online devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total online devices"
+      - "total_online_devices"
+      - "total"
+      - "online"
+    examples:
+      - "What is total online devices by month?"
+      - "Compare total online devices across key segments."
+  type: count_distinct
+  expression: '{devices_uptime.DEVICE_ID}'
+  filters:
+  - '{devices_uptime.NETWORK} = ''ONLINE'''
+  description: Total number of devices that are currently online, indicating device connectivity.
+  tags:
+  - metric
+  terms:
+  - metric.total_online_devices
+- name: total_offline_devices
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for total offline devices. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "total offline devices"
+      - "total_offline_devices"
+      - "total"
+      - "offline"
+    examples:
+      - "What is total offline devices by month?"
+      - "Compare total offline devices across key segments."
+  type: count_distinct
+  expression: '{devices_uptime.DEVICE_ID}'
+  filters:
+  - '{devices_uptime.NETWORK} = ''OFFLINE'''
+  description: Total number of devices that are currently offline, indicating device connectivity.
+  tags:
+  - metric
+  terms:
+  - metric.total_offline_devices

@@ -1,0 +1,83 @@
+# kind: dq — converted from checks/device_warranty.yml
+kind: dq
+name: device_warranty_dq
+depends_on: lenovo.ldo.device_warranty
+rules:
+- row_count > 0:
+    name: warranty_records_exist
+    dimension: completeness
+    description: At least one warranty record should exist
+- missing_count(_ID) = 0:
+    name: no_missing_id
+    dimension: completeness
+    description: All records must have an _id
+- missing_count(DEVICE_ID) = 0:
+    name: no_missing_device_id
+    dimension: completeness
+    description: All warranty records must be linked to a device
+- missing_count(WARRANTY_ID) = 0:
+    name: no_missing_warranty_id
+    dimension: completeness
+    description: All records must have a warranty_id
+- failed rows:
+    name: invalid_warranty_type
+    dimension: validity
+    fail query: |
+      SELECT _ID, WARRANTY_ID, WARRANTY_TYPE, DEVICE_ID
+      FROM lenovo.ldo.device_warranty
+      WHERE WARRANTY_TYPE NOT IN ('UPGRADE', 'BASE')
+        AND WARRANTY_TYPE IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Warranty type must be UPGRADE or BASE
+- failed rows:
+    name: invalid_warranty_category
+    dimension: validity
+    fail query: |
+      SELECT _ID, WARRANTY_ID, WARRANTY_CATEGORY, DEVICE_ID
+      FROM lenovo.ldo.device_warranty
+      WHERE WARRANTY_CATEGORY NOT IN ('MACHINE', 'COMPONENT')
+        AND WARRANTY_CATEGORY IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Warranty category must be MACHINE or COMPONENT
+- failed rows:
+    name: invalid_warranty_date_range
+    dimension: validity
+    fail query: |
+      SELECT _ID, WARRANTY_ID, WARRANTY_START, WARRANTY_END, DEVICE_ID
+      FROM lenovo.ldo.device_warranty
+      WHERE WARRANTY_END < WARRANTY_START
+        AND WARRANTY_START IS NOT NULL
+        AND WARRANTY_END IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 10
+    description: Warranty end date should be after start date
+- failed rows:
+    name: future_created_at
+    dimension: validity
+    fail query: |
+      SELECT _ID, WARRANTY_ID, CREATED_AT, DEVICE_ID
+      FROM lenovo.ldo.device_warranty
+      WHERE CREATED_AT > CURRENT_TIMESTAMP
+        AND __DELETED = 'False'
+    samples limit: 5
+    description: Created timestamp cannot be in the future
+- failed rows:
+    name: duplicate_warranty_records
+    dimension: consistency
+    fail query: "SELECT \n  _ID,\n  COUNT(*) as RECORD_COUNT\nFROM lenovo.ldo.device_warranty\nWHERE __DELETED = 'False'\nGROUP BY _ID\nHAVING COUNT(*) > 1\n"
+    samples limit: 10
+    description: Each _id should be unique among active records
+- failed rows:
+    name: updated_before_created
+    dimension: consistency
+    fail query: |
+      SELECT _ID, WARRANTY_ID, CREATED_AT, LAST_UPDATED, DEVICE_ID
+      FROM lenovo.ldo.device_warranty
+      WHERE LAST_UPDATED < CREATED_AT
+        AND CREATED_AT IS NOT NULL
+        AND LAST_UPDATED IS NOT NULL
+        AND __DELETED = 'False'
+    samples limit: 5
+    description: Last updated should be after created timestamp

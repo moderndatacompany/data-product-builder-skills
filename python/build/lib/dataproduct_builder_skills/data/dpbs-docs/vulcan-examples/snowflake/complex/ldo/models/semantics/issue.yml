@@ -1,0 +1,113 @@
+# Converted from legacy: semantics/issue.yaml
+kind: semantic
+name: issue
+depends_on: lenovo.ldo.issue
+ai_context:
+  instructions: >
+    Use this semantic model for questions about issue. Prefer its measures for
+    aggregations and its dimensions for filtering, grouping, cohorting, and
+    drill-downs.
+  synonyms:
+    - "issue"
+  examples:
+    - "Show issue trends over time."
+    - "Break down issue by key dimensions."
+
+dimensions:
+- ISSUE_UUID
+- BUCKET_ID
+- INCIDENT_CATEGORY
+- ERROR_CODE
+- DETAILS
+- HARDWARE_ID
+- REPORTED_AT
+- RESOLVED_AT
+- INCIDENT_STATUS
+- TIMELINE
+- UPDATED_AT
+- VALUE
+- BATTERY_ID
+- DEVICE_ID
+- INSIGHT_ID
+- STORAGE_ID
+- GENERATE_TICKET
+- HAS_TICKET
+- IS_HIDDEN
+- INSIGHT_ITEM_ID
+- RESOLVED_BY_USER_AT
+measures:
+- name: number_of_issues
+  ai_context:
+    instructions: >
+      Use this measure when the question asks for number of issues. Respect its
+      aggregation type and any configured filters before comparing or segmenting
+      results.
+    synonyms:
+      - "number of issues"
+      - "number_of_issues"
+      - "number"
+      - "issues"
+    examples:
+      - "What is number of issues by month?"
+      - "Compare number of issues across key segments."
+  type: count
+  expression: '{issue.ISSUE_UUID}'
+  description: Total number of issue records.
+  tags:
+  - metric
+  terms:
+  - metric.number_of_issues
+joins:
+- name: storage
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from storage. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "storage"
+    examples:
+      - "Analyze this model with storage attributes."
+      - "Break measures down by storage."
+  type: many_to_one
+  expression: '{issue.STORAGE_ID} = {storage.STORAGE_ID}'
+- name: battery
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from battery. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "battery"
+    examples:
+      - "Analyze this model with battery attributes."
+      - "Break measures down by battery."
+  type: many_to_one
+  expression: '{issue.BATTERY_ID} = {battery.BATTERY_ID}'
+- name: device_bios
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from device bios. Keep
+      the configured join relationship to avoid double counting.
+    synonyms:
+      - "device bios"
+      - "device_bios"
+      - "device"
+      - "bios"
+    examples:
+      - "Analyze this model with device bios attributes."
+      - "Break measures down by device bios."
+  type: many_to_one
+  expression: '{issue.DEVICE_ID} = {device_bios.DEVICE_ID}'
+- name: device_os
+  ai_context:
+    instructions: >
+      Use this join when a question needs attributes or metrics from device os. Keep the
+      configured join relationship to avoid double counting.
+    synonyms:
+      - "device os"
+      - "device_os"
+      - "device"
+    examples:
+      - "Analyze this model with device os attributes."
+      - "Break measures down by device os."
+  type: many_to_one
+  expression: '{issue.DEVICE_ID} = {device_os.DEVICE_ID}'

@@ -1,0 +1,87 @@
+models:
+  QCOMMERCE_PLATFORM.GOLD.RIDER_EFFICIENCY_KPIS:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about rider efficiency kpis. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "rider efficiency kpis"
+        - "rider_efficiency_kpis"
+        - "rider"
+        - "efficiency"
+      examples:
+        - "Show rider efficiency kpis trends over time."
+        - "Break down rider efficiency kpis by key dimensions."
+    alias: rider_efficiency_kpis
+
+    dimensions:
+      includes:
+        - DS
+        - CITY
+        - RIDER_ID
+
+    measures:
+      ORDERS_HANDLED:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for orders handled. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "orders handled"
+            - "orders_handled"
+            - "orders"
+            - "handled"
+          examples:
+            - "What is orders handled by month?"
+            - "Compare orders handled across key dimensions."
+        type: sum
+        expression: "{rider_efficiency_kpis.ORDERS_HANDLED}"
+
+      ON_TIME_ORDERS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for on time orders. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "on time orders"
+            - "on_time_orders"
+            - "time"
+            - "orders"
+          examples:
+            - "What is on time orders by month?"
+            - "Compare on time orders across key dimensions."
+        type: sum
+        expression: "{rider_efficiency_kpis.ON_TIME_ORDERS}"
+
+      FAILED_DROPS:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for failed drops. Respect its aggregation
+            type before comparing or segmenting results.
+          synonyms:
+            - "failed drops"
+            - "failed_drops"
+            - "failed"
+            - "drops"
+          examples:
+            - "What is failed drops by month?"
+            - "Compare failed drops across key dimensions."
+        type: sum
+        expression: "{rider_efficiency_kpis.FAILED_DROPS}"
+
+      TOTAL_PICKUP_TO_DELIVERY_MINUTES:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total pickup to delivery minutes.
+            Respect its aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total pickup to delivery minutes"
+            - "total_pickup_to_delivery_minutes"
+            - "total"
+            - "pickup"
+          examples:
+            - "What is total pickup to delivery minutes by month?"
+            - "Compare total pickup to delivery minutes across key dimensions."
+        type: sum
+        expression: "{rider_efficiency_kpis.TOTAL_PICKUP_TO_DELIVERY_MINUTES}"

@@ -1,0 +1,36 @@
+models:
+  s3lhyddepot.tpch_analytics.order_line_revenue:
+    ai_context:
+      instructions: >
+        Use this semantic model for questions about order line revenue. Prefer its
+        measures for aggregations and its dimensions for filtering, grouping, cohorting,
+        and drill-downs.
+      synonyms:
+        - "order line revenue"
+        - "order_line_revenue"
+        - "order"
+        - "line"
+      examples:
+        - "Show order line revenue trends over time."
+        - "Break down order line revenue by key dimensions."
+    alias: order_line_revenue
+
+    dimensions:
+      includes:
+
+    measures:
+      total_order_line_revenue:
+        ai_context:
+          instructions: >
+            Use this measure when the question asks for total order line revenue. Respect its
+            aggregation type before comparing or segmenting results.
+          synonyms:
+            - "total order line revenue"
+            - "total_order_line_revenue"
+            - "total"
+            - "order"
+          examples:
+            - "What is total order line revenue by month?"
+            - "Compare total order line revenue across key dimensions."
+        type: count
+        expression: "{order_line_revenue.total_order_line_revenue}"

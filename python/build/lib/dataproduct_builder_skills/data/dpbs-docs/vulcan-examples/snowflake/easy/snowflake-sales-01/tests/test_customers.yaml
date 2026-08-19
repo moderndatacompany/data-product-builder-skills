@@ -1,0 +1,36 @@
+test_sales_customers_single:
+  model: SALES.CUSTOMERS
+  description: >
+    Full-output test for the Customers model using a single input record.
+
+  inputs:
+    VULCAN.RAW.CUSTOMERS:
+      rows:
+        - CUSTOMER_ID: C100
+          FIRST_NAME: Alice
+          LAST_NAME: Johnson
+          EMAIL: alice.johnson@example.com
+          PHONE: "555-9999"
+          ADDRESS_LINE1: "10 Market St"
+          ADDRESS_LINE2: "Suite 200"
+          CITY: "Denver"
+          STATE: "CO"
+          POSTAL_CODE: "80205"
+          CUSTOMER_SEGMENT: "Retail"
+          ACCOUNT_STATUS: "Active"
+          SIGNUP_DATE: 2022-01-15
+          LOYALTY_SCORE: 55
+
+  outputs:
+    query:
+      rows:
+        - CUSTOMER_ID: "C100"
+          FULL_NAME: "Alice Johnson"
+          EMAIL: "alice.johnson@example.com"
+          PHONE: "555-9999"
+          ADDRESS_LINE: "10 Market St Suite 200 Denver CO 80205"
+          CUSTOMER_SEGMENT: "Retail"
+          ACCOUNT_STATUS: "Active"
+          SIGNUP_DATE: "2022-01-15"
+          LOYALTY_SCORE: 55
+

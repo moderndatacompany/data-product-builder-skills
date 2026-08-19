@@ -1,0 +1,3 @@
+kind: metric
+name: avg_purchase_frequency_score
+measure: customer_profile.avg_purchase_frequency_score

@@ -1,0 +1,63 @@
+# kind: dq — converted from checks/usage_events.yml
+kind: dq
+name: usage_events_dq
+depends_on: b2b_saas.usage_events
+
+rules:
+- missing_count(user_id) = 0:
+    name: no_missing_user_ids
+    dimension: completeness
+    description: All events must have a user ID
+
+- missing_count(event_date) = 0:
+    name: no_missing_event_dates
+    dimension: completeness
+    description: All events must have an event date
+
+- missing_count(event_type) = 0:
+    name: no_missing_event_types
+    dimension: completeness
+    description: All events must have an event type
+
+- row_count:
+    name: sufficient_events
+    dimension: completeness
+    description: At least 10 events captured
+    warn: when < 10
+    fail: "when > 100"
+
+- row_count > 0:
+    name: events_in_run_window
+    dimension: completeness
+    description: Events exist in the run window (uses SQLMesh run_date variable)
+    filter: "event_date >= CAST('${run_date}' AS DATE) - INTERVAL '7 days'"
+    warn_only: true
+
+- failed rows:
+    name: positive_event_count
+    dimension: validity
+    description: Event count must be positive
+    fail query: |
+      SELECT * FROM b2b_saas.usage_events
+      WHERE event_count <= 0
+
+- failed rows:
+    name: non_negative_session_duration
+    dimension: validity
+    description: Session duration cannot be negative
+    fail query: |
+      SELECT * FROM b2b_saas.usage_events
+      WHERE session_duration < 0
+
+- failed rows:
+    name: valid_event_types
+    dimension: validity
+    description: Event types must be from valid set
+    fail query: |
+      SELECT * FROM b2b_saas.usage_events
+      WHERE event_type NOT IN ('api_call', 'feature_use', 'export', 'login', 'other')
+
+- duplicate_count(event_id) = 0:
+    name: unique_event_ids
+    dimension: uniqueness
+    description: Event IDs must be unique

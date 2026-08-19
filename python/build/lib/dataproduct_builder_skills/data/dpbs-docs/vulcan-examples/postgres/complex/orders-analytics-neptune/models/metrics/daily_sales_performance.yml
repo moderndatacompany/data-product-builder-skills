@@ -1,0 +1,15 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: daily_sales_performance
+measure: daily_sales.total_daily_revenue
+ts: daily_sales.order_date
+dimensions:
+- daily_sales.region_name
+description: Daily revenue trends by region
+tags:
+- sales
+- revenue
+- daily
+terms:
+- sales.daily_performance
+- metric.daily_revenue

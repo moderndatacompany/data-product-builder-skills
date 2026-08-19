@@ -1,0 +1,3 @@
+kind: metric
+name: avg_refund_amount
+measure: returns.avg_refund_amount

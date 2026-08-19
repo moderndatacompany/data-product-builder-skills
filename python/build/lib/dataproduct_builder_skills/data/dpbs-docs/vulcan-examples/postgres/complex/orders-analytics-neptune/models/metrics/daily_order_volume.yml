@@ -1,0 +1,15 @@
+# Converted from legacy: semantics/metrics.yml
+kind: metric
+name: daily_order_volume
+measure: daily_sales.total_daily_orders
+ts: daily_sales.order_date
+dimensions:
+- daily_sales.region_name
+description: Daily order volume by region
+tags:
+- sales
+- orders
+- volume
+terms:
+- sales.order_volume
+- metric.daily_orders

@@ -1,0 +1,38 @@
+# kind: dq — converted from checks/order_fulfillment_enriched.yml
+kind: dq
+name: order_fulfillment_enriched_dq
+depends_on: s3depot.qcommerce_delivery_silver.order_fulfillment_enriched
+
+rules:
+- row_count >= 100:
+    name: minimum_fulfillment_rows
+    dimension: completeness
+    description: At least 100 enriched fulfillment rows should exist
+
+- missing_count(order_id) = 0:
+    name: no_missing_order_id
+    dimension: completeness
+    description: All records must have an order_id
+
+- missing_count(city) = 0:
+    name: no_missing_city
+    dimension: completeness
+    description: All records must have a city
+
+- invalid_count(sla_minutes) = 0:
+    name: sla_minutes_reasonable
+    dimension: validity
+    description: sla_minutes must be between 1 and 180 minutes
+    valid min: 1
+    valid max: 180
+
+- invalid_count(scan_count) = 0:
+    name: scan_count_non_negative
+    dimension: validity
+    description: scan_count must be non-negative
+    valid min: 0
+
+- duplicate_count(order_id) = 0:
+    name: unique_order_id
+    dimension: uniqueness
+    description: Each order_id must appear only once in the silver fulfillment model

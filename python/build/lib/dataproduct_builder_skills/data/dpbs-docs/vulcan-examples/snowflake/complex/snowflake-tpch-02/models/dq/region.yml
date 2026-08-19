@@ -1,0 +1,17 @@
+# kind: dq — converted from checks/region.yml
+kind: dq
+name: region_dq
+depends_on: test_db.vulcan_test_project.region
+rules:
+- missing_count(regionkey) = 0:
+    name: regionkey_not_null
+    dimension: completeness
+    description: REGION.REGIONKEY must be non-null
+- row_count > 0:
+    name: region_has_rows
+    dimension: completeness
+    description: REGION should not be empty
+- duplicate_count(regionkey) = 0:
+    name: regionkey_unique
+    dimension: uniqueness
+    description: REGION.REGIONKEY must be unique

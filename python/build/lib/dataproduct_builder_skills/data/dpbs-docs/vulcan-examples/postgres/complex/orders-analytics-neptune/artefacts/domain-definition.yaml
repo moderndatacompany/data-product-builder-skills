@@ -1,0 +1,272 @@
+name: vulcan-app-domain-01
+version: v1alpha
+entity: domain
+type: resource
+v1alpha:
+  resource:
+    type:
+      name: vulcan-postgres
+      version: v1alpha
+    operator:
+      name: poros
+    details:
+      specSchema:
+        jsonSchema: |
+          { "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://dataos.io/v1.0/vulcan-app-v1", "type": "object", "properties": { "runAsUser": { "type": "string", "description": "User ID to run the resource as" }, "compute": { "type": "string" }, "engine": { "type": "string", "enum": [ "postgres", "spark", "bigquery", "mssql", "mysql", "snowflake" ], "description": "Query engine to use (postgres, spark, bigquery, mssql, mysql, snowflake)" }, "repo": { "type": "object", "properties": { "url": { "type": [ "string", "null" ] }, "syncFlags": { "type": [ "array", "null" ], "items": { "type": "string" }, "description": "Git sync flags (e.g., ['--ref=main'])" }, "baseDir": { "type": [ "string", "null" ] }, "secret": { "type": [ "string", "null" ], "description": "Secret ID for repository authentication" } }, "additionalProperties": false }, "depots": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "List of depot references (e.g., 'dataos://vulcandepot?purpose=rw')" }, "api": { "type": "object", "properties": { "replicas": { "type": "integer", "description": "Number of API service replicas" }, "logLevel": { "type": "string", "description": "Logging level for the API service" }, "resource": { "type": "object", "properties": { "request": { "type": "object", "properties": { "cpu": { "type": [ "string", "null" ] }, "memory": { "type": [ "string", "null" ] } } }, "limit": { "type": "object", "properties": { "cpu": { "type": [ "string", "null" ] }, "memory": { "type": [ "string", "null" ] } } } } } } }, "workflow": { "type": "object", "properties": { "type": { "type": "string", "enum": [ "schedule", "instance", "template" ], "description": "Type of workflow schedule (schedule, instance, template)" }, "schedule": { "type": "object" }, "logLevel": { "type": "string", "description": "Logging level for the workflow service" }, "resource": { "type": "object", "properties": { "request": { "type": "object", "properties": { "cpu": { "type": [ "string", "null" ] }, "memory": { "type": [ "string", "null" ] } } }, "limit": { "type": "object", "properties": { "cpu": { "type": [ "string", "null" ] }, "memory": { "type": [ "string", "null" ] } } } } }, "plan": { "type": "object", "description": "Execution plan for the workflow", "properties": { "command": { "type": "array", "items": { "type": "string" }, "description": "Commands to execute (e.g., ['vulcan'])" }, "arguments": { "type": "array", "items": { "type": "string" }, "description": "Arguments for the commands (e.g., ['run', '--all'])" } }, "additionalProperties": false }, "migrate": { "type": "object", "description": "Execution plan for the workflow", "properties": { "command": { "type": "array", "items": { "type": "string" }, "description": "Commands to execute (e.g., ['vulcan'])" }, "arguments": { "type": "array", "items": { "type": "string" }, "description": "Arguments for the commands (e.g., ['run', '--all'])" } }, "additionalProperties": false }, "run": { "type": "object", "description": "Execution plan for the workflow", "properties": { "command": { "type": "array", "items": { "type": "string" }, "description": "Commands to execute (e.g., ['vulcan'])" }, "arguments": { "type": "array", "items": { "type": "string" }, "description": "Arguments for the commands (e.g., ['run', '--all'])" } }, "additionalProperties": false } } } }, "required": [ "compute", "depots", "workflow" ], "allOf": [ { "if": { "properties": { "engine": { "const": "spark" } }, "required": [ "engine" ] }, "then": { "properties": { "depots": { "minItems": 1 } } }, "else": { "properties": { "depots": { "minItems": 1, "maxItems": 1 } } } } ], "additionalProperties": true }
+      isRunnable: true
+      resources:
+        - id: vulcan-migrate-workflow
+          integratedResource: true
+          resourceTemplate: |-
+            version: v2alpha
+            name: {{ resource.name }}-migrate-workflow
+            type: workflow
+            owner: {{ resource.owner }}
+            spec:
+              type: "instance"
+              dag:
+                - name: {{ resource.name }}-migrate-job
+                  spec:
+                    compute: {{ spec.compute }}
+                    runAsUser: {{ spec.runAsUser | default: resource.owner }}
+                    resources:
+                      requests:
+                        cpu: "{{ spec.workflow.resource.request.cpu | default: '200m' }}"
+                        memory: "{{ spec.workflow.resource.request.memory | default: '512Mi' }}"
+                      limits:
+                        cpu: "{{ spec.workflow.resource.limit.cpu | default: '1000m' }}"
+                        memory: "{{ spec.workflow.resource.limit.memory | default: '1Gi' }}"
+                    stack: vulcan-{{ spec.engine }}:1.0
+                    logLevel: {{ spec.workflow.logLevel }}
+                    stackSpec:
+                      {%- if spec.engine == 'spark' and spec.sparkMaster %}
+                      sparkMaster: {{ spec.sparkMaster }}
+                      {%- endif %}
+                      repo:
+                        url: {{ spec.repo.url }}
+                        syncFlags:
+                          {%- if spec.repo.syncFlags %}
+                          {%- for flag in spec.repo.syncFlags %}
+                          - {{ flag }}
+                          {%- endfor %}
+                          {%- endif %}
+                        baseDir: {{ spec.repo.baseDir }}
+                        secret: {{ spec.repo.secret }}
+                      depots:
+                        {%- for depot in spec.depots %}
+                        - {{ depot }}
+                        {%- endfor %}
+                      
+                      command:
+                      {%- for cmd in spec.workflow.migrate.command %}
+                        - {{ cmd }}
+
+                      {%- endfor %}
+                      
+                      {%- if spec.workflow.migrate.arguments %}
+                      arguments:
+                      {%- for args in spec.workflow.migrate.arguments %}
+                        - {{ args }}
+                      {%- endfor %}
+                      {%- endif %}
+
+        - id: vulcan-plan-workflow
+          integratedResource: true
+          dependencies:
+            - vulcan-migrate-workflow
+          dependencyConditions:
+            - resourceId: vulcan-migrate-workflow
+              runtime:
+                is: ["succeeded", "completed"]
+              
+          resourceTemplate: |-
+            version: v2alpha
+            name: {{ resource.name }}-plan-workflow
+            type: workflow
+            owner: {{ resource.owner }}
+            spec:
+              type: "instance"
+              dag:
+                - name: {{ resource.name }}-plan-job
+                  spec:
+                    compute: {{ spec.compute }}
+                    runAsUser: {{ spec.runAsUser | default: resource.owner }}
+                    resources:
+                      requests:
+                        cpu: "{{ spec.workflow.resource.request.cpu | default: '200m' }}"
+                        memory: "{{ spec.workflow.resource.request.memory | default: '512Mi' }}"
+                      limits:
+                        cpu: "{{ spec.workflow.resource.limit.cpu | default: '1000m' }}"
+                        memory: "{{ spec.workflow.resource.limit.memory | default: '1Gi' }}"
+                    stack: vulcan-{{ spec.engine }}:1.0
+                    logLevel: {{ spec.workflow.logLevel }}
+                    stackSpec:
+                      {%- if spec.engine == 'spark' and spec.sparkMaster %}
+                      sparkMaster: {{ spec.sparkMaster }}
+                      {%- endif %}
+                      repo:
+                        url: {{ spec.repo.url }}
+                        syncFlags:
+                          {%- if spec.repo.syncFlags %}
+                          {%- for flag in spec.repo.syncFlags %}
+                          - {{ flag }}
+                          {%- endfor %}
+                          {%- endif %}
+                        baseDir: {{ spec.repo.baseDir }}
+                        secret: {{ spec.repo.secret }}
+                      depots:
+                        {%- for depot in spec.depots %}
+                        - {{ depot }}
+                        {%- endfor %}
+                      
+                      command:
+                      {%- for cmd in spec.workflow.plan.command %}
+                        - {{ cmd }}
+                      {%- if cmd == "vulcan" %}
+                        - -p
+                        - /etc/dataos/work/{{ spec.repo.baseDir }}
+                      {%- endif %}
+                      {%- endfor %}
+                      
+                      {%- if spec.workflow.plan.arguments %}
+                      arguments:
+                      {%- for args in spec.workflow.plan.arguments %}
+                        - {{ args }}
+                      {%- endfor %}
+                      {%- endif %}
+
+        - id: vulcan-run-workflow
+          integratedResource: true
+          dependencies:
+            - vulcan-plan-workflow
+          dependencyConditions:
+            - resourceId: vulcan-plan-workflow
+              runtime:
+                is: ["succeeded", "completed"]
+          resourceTemplate: |-
+            version: v2alpha
+            name: {{ resource.name }}-run-workflow
+            type: workflow
+            owner: {{ resource.owner }}
+            spec:
+              type: "{{ spec.workflow.type }}"
+              {%- if spec.workflow.type == "schedule" %}
+              schedule:
+                crons:
+                {% for c in spec.workflow.schedule.crons %}
+                - "{{ c }}"
+                {% endfor %}
+                timezone: "{{ spec.workflow.schedule.timezone }}"
+                endOn: "{{ spec.workflow.schedule.endOn }}"
+                concurrencyPolicy: "{{ spec.workflow.schedule.concurrencyPolicy }}"
+              {%- endif %}
+              dag:
+                - name: {{ resource.name }}-run-job
+                  spec:
+                    compute: {{ spec.compute }}
+                    runAsUser: {{ spec.runAsUser | default: resource.owner }}
+                    resources:
+                      requests:
+                        cpu: "{{ spec.workflow.resource.request.cpu | default: '200m' }}"
+                        memory: "{{ spec.workflow.resource.request.memory | default: '512Mi' }}"
+                      limits:
+                        cpu: "{{ spec.workflow.resource.limit.cpu | default: '1000m' }}"
+                        memory: "{{ spec.workflow.resource.limit.memory | default: '1Gi' }}"
+                    stack: vulcan-{{ spec.engine }}:1.0
+                    logLevel: {{ spec.workflow.logLevel }}
+                    stackSpec:
+                      {%- if spec.engine == 'spark' and spec.sparkMaster %}
+                      sparkMaster: {{ spec.sparkMaster }}
+                      {%- endif %}
+                      repo:
+                        url: {{ spec.repo.url }}
+                        syncFlags:
+                          {%- if spec.repo.syncFlags %}
+                          {%- for flag in spec.repo.syncFlags %}
+                          - {{ flag }}
+                          {%- endfor %}
+                          {%- endif %}
+                        baseDir: {{ spec.repo.baseDir }}
+                        secret: {{ spec.repo.secret }}
+                      depots:
+                        {%- for depot in spec.depots %}
+                        - {{ depot }}
+                        {%- endfor %}
+                      
+                      command:
+                      {%- for cmd in spec.workflow.run.command %}
+                        - {{ cmd }}
+                      {%- if cmd == "vulcan" %}
+                        - -p
+                        - /etc/dataos/work/{{ spec.repo.baseDir }}
+                      {%- endif %}
+                      {%- endfor %}
+                      
+                      {%- if spec.workflow.run.arguments %}
+                      arguments:
+                      {%- for args in spec.workflow.run.arguments %}
+                        - {{ args }}
+                      {%- endfor %}
+                      {%- endif %}
+
+        - id: vulcan-api
+          integratedResource: true
+          resourceTemplate: |-
+            version: v2alpha
+            name: {{ resource.name }}-api
+            type: service
+            {%- if resource.tags %}
+            tags:
+              {%- for tag in resource.tags %}
+              - {{ tag }}
+              {%- endfor %}
+            {%- endif %}
+            owner: {{ resource.owner }}
+            spec:
+              hostname: {{ resource.name }}-api
+              compute: {{ spec.compute }}
+              runAsUser: {{ spec.runAsUser | default: resource.owner }}
+              replicas: {{ spec.api.replicas }}
+              logLevel: INFO
+              servicePorts:
+                - name: http
+                  port: 8000
+              http:
+                enabled: true
+                port: 8000
+                path: /{{ instance.entityTenant }}/vulcan/{{ resource.name }}
+                stripPath: true
+                noNetworkAuthorization: true
+                ingress:
+                  enabled: true
+                  stripPath: true
+                  path: /{{ instance.entityTenant }}/vulcan/{{ resource.name }}
+              stack: vulcan-{{ spec.engine }}:1.0
+              stackSpec:
+                {%- if spec.engine == 'spark' and spec.sparkMaster %}
+                sparkMaster: {{ spec.sparkMaster }}
+                {%- endif %}
+                repo:
+                  url: {{ spec.repo.url }}
+                  {%- if spec.repo.syncFlags %}
+                  syncFlags:
+                    {%- for flag in spec.repo.syncFlags %}
+                    - {{ flag }}
+                    {%- endfor %}
+                  {%- endif %}
+                  baseDir: {{ spec.repo.baseDir }}
+                  {%- if spec.repo.secret %}
+                  secret: {{ spec.repo.secret }}
+                  {%- endif %}
+                depots:
+                  {%- for depot in spec.depots %}
+                  - {{ depot }}
+                  {%- endfor %}
+              resources:
+                requests:
+                  cpu: "{{ spec.api.resource.request.cpu }}"
+                  memory: "{{ spec.api.resource.request.memory }}"
+                limits:
+                  cpu: "{{ spec.api.resource.limit.cpu }}"
+                  memory: "{{ spec.api.resource.limit.memory }}"
+

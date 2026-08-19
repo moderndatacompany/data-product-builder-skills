@@ -1,0 +1,3 @@
+kind: metric
+name: total_revenue
+measure: sales.total_revenue

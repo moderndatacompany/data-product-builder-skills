@@ -1,0 +1,3 @@
+kind: metric
+name: high_value_customer_count
+measure: customer_profile.high_value_customer_count

@@ -1,0 +1,3 @@
+kind: metric
+name: declining_category_count
+measure: category_performance.declining_category_count
