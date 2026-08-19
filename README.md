@@ -90,7 +90,7 @@ Guides you from a vague idea to a validated `data-product-plan.md` spec through:
 
 
 
-### `build-data-product-workflow`
+### `build-data-product`
 
 Turns the validated design spec into a working, deployed Vulcan data product — scaffolding models, generating SQL/YAML, running `vulcan plan/evaluate`, enriching metadata, applying quality checks, and deploying to dev and prod.
 
