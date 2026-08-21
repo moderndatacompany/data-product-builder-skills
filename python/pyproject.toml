@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dataproduct-builder-skills"
-version = "1.2.2"
+version = "1.2.3"
 description = "Agent skills for designing and building Vulcan/DataOS data products — run via uvx/pipx to scaffold .cursor/.claude/.codex/.github skills and docs into any project."
 readme = "README.md"
 license = { text = "MIT" }
