@@ -1,3 +1,0 @@
-kind: metric
-name: conversion_rate
-measure: web_heartbeat.conversion_rate

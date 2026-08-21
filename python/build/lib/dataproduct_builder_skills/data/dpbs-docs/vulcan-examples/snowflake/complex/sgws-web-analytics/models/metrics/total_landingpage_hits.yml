@@ -1,3 +1,0 @@
-kind: metric
-name: total_landingpage_hits
-measure: web_heartbeat.total_landingpage_hits

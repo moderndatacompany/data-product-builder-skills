@@ -1,3 +1,0 @@
-kind: metric
-name: avg_weekly_order_value
-measure: weekly_sales.avg_weekly_order_value

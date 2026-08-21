@@ -1,3 +1,0 @@
-kind: metric
-name: count_brands
-measure: product.count_brands

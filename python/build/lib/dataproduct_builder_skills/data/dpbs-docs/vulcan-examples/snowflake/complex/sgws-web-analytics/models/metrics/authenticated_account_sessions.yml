@@ -1,3 +1,0 @@
-kind: metric
-name: authenticated_account_sessions
-measure: web_heartbeat.authenticated_account_sessions

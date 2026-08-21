@@ -1,3 +1,0 @@
-kind: metric
-name: total_users_logins
-measure: web_heartbeat.total_users_logins

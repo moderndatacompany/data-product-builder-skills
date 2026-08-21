@@ -1,3 +1,0 @@
-kind: metric
-name: net_sales
-measure: order_items.net_sales

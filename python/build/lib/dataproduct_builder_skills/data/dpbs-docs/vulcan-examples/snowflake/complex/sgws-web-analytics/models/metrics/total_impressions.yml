@@ -1,3 +1,0 @@
-kind: metric
-name: total_impressions
-measure: web_heartbeat.total_impressions

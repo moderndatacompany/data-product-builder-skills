@@ -1,3 +1,0 @@
-kind: metric
-name: avg_storage_free_space
-measure: storage.avg_storage_free_space

@@ -1,3 +1,0 @@
-kind: metric
-name: bounce_hit
-measure: web_heartbeat.bounce_hit

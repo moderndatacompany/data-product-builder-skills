@@ -1,3 +1,0 @@
-kind: metric
-name: total_orders
-measure: full_model.total_orders

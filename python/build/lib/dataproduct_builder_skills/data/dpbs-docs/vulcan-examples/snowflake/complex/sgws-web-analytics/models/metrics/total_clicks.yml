@@ -1,3 +1,0 @@
-kind: metric
-name: total_clicks
-measure: web_heartbeat.total_clicks

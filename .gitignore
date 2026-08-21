@@ -7,5 +7,6 @@ todo.md
 *.tgz
 python/src/dataproduct_builder_skills/data/
 python/dist/
-python/*.egg-info/
+python/build/
+python/**/*.egg-info/
 python/.venv/

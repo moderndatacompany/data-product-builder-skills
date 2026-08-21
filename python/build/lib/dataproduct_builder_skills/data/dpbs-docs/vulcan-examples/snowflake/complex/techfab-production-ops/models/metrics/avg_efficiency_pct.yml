@@ -1,3 +1,0 @@
-kind: metric
-name: avg_efficiency_pct
-measure: fct_production_daily.avg_efficiency_pct

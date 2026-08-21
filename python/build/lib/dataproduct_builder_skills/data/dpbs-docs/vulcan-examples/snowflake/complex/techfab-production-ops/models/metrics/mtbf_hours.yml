@@ -1,3 +1,0 @@
-kind: metric
-name: mtbf_hours
-measure: fct_equipment_oee.mtbf_hours

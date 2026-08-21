@@ -1,3 +1,0 @@
-kind: metric
-name: total_assigned_licenses
-measure: consumed_licenses.total_assigned_licenses

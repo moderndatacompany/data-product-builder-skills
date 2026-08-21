@@ -1,3 +1,0 @@
-kind: metric
-name: number_of_system_updates
-measure: system_update.number_of_system_updates

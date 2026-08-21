@@ -1,3 +1,0 @@
-kind: metric
-name: total_customers_rfm
-measure: rfm.total_customers_rfm

@@ -1,3 +1,0 @@
-kind: metric
-name: quality_pct
-measure: fct_equipment_oee.quality_pct

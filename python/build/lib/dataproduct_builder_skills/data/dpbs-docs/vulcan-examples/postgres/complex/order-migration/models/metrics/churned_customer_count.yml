@@ -1,3 +1,0 @@
-kind: metric
-name: churned_customer_count
-measure: customer_profile.churned_customer_count

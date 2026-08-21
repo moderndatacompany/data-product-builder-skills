@@ -1,3 +1,0 @@
-kind: metric
-name: availability_pct
-measure: fct_equipment_oee.availability_pct

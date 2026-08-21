@@ -1,3 +1,0 @@
-kind: metric
-name: avg_orders_per_customer
-measure: customer_profile.avg_orders_per_customer

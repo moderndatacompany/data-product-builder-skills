@@ -1,5 +1,0 @@
-kind: metric
-name: count_orders
-measure: orders.count_orders
-ts: orders.order_date
-granularity: day

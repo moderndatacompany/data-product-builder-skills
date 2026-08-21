@@ -1,3 +1,0 @@
-kind: metric
-name: prev30days_total_revenue
-measure: sales.prev30days_total_revenue

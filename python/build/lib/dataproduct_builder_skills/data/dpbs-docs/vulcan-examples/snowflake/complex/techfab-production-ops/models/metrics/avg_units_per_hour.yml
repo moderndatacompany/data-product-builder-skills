@@ -1,3 +1,0 @@
-kind: metric
-name: avg_units_per_hour
-measure: fct_production_daily.avg_units_per_hour

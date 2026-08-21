@@ -1,3 +1,0 @@
-kind: metric
-name: avg_shipment_rate
-measure: daily_sales.avg_shipment_rate

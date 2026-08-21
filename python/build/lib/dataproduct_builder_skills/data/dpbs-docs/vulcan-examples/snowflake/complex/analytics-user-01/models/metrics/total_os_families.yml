@@ -1,3 +1,0 @@
-kind: metric
-name: total_os_families
-measure: os_family.total_os_families

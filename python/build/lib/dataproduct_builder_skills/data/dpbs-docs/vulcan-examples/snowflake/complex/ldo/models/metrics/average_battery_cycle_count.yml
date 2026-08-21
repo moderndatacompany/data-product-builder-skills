@@ -1,3 +1,0 @@
-kind: metric
-name: average_battery_cycle_count
-measure: battery.average_battery_cycle_count

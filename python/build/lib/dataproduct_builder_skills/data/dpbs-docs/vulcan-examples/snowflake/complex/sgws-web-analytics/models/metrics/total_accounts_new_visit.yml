@@ -1,3 +1,0 @@
-kind: metric
-name: total_accounts_new_visit
-measure: web_heartbeat.total_accounts_new_visit

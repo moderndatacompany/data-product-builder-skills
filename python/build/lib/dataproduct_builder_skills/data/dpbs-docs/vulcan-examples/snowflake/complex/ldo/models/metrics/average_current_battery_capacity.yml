@@ -1,3 +1,0 @@
-kind: metric
-name: average_current_battery_capacity
-measure: battery.average_current_battery_capacity
