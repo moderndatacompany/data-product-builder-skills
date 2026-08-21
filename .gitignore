@@ -5,4 +5,8 @@ node_modules/
 todo.md
 .ignore/
 *.tgz
-python
+python/src/dataproduct_builder_skills/data/
+python/dist/
+python/build/
+python/**/*.egg-info/
+python/.venv/
