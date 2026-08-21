@@ -1,6 +1,6 @@
 # dataproduct-builder-skills
 
-Cursor agent skills for designing and building [Vulcan/DataOS](https://dataosinfo.gitbook.io) data products.
+Cursor agent skills for designing and building [Vulcan/DataOS](https://v2.dataos.info/) data products.
 
 Run a single command to scaffold agent skills for **Cursor**, **Claude Code**, **Codex**, or **VS Code (Copilot)** — plus the full Vulcan reference docs — into any project.
 

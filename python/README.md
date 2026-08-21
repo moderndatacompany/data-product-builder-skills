@@ -1,6 +1,6 @@
 # dataproduct-builder-skills (Python)
 
-Agent skills for designing and building [Vulcan/DataOS](https://dataosinfo.gitbook.io) data products — the Python port of the `dataproduct-builder-skills` npm scaffolder. Run it via `uvx`/`pipx` instead of `npx`.
+Agent skills for designing and building [Vulcan/DataOS](https://v2.dataos.info/) data products — the Python port of the `dataproduct-builder-skills` npm scaffolder. Run it via `uvx`/`pipx` instead of `npx`.
 
 Scaffolds agent skills for **Cursor**, **Claude Code**, **Codex**, or **VS Code (Copilot)** — plus the full Vulcan reference docs — into any project.
 
