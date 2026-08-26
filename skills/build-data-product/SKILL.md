@@ -4,9 +4,11 @@ description: >-
   Build-focused workflow that turns a validated Vulcan/DataOS design spec
   (data-product-plan.md) into a working, deployed data product — scaffolding models,
   generating SQL/YAML components, running vulcan plan/evaluate, enriching metadata,
-  applying quality checks, and deploying to dev and prod. Use when the user is ready to
-  build a Vulcan data product, or asks about vulcan scaffold, vulcan plan, vulcan run,
-  vulcan evaluate, model generation, DQ checks, or DataOS deployment.
+  applying quality checks, and deploying to dev and prod. After the build, it tells the
+  user what vulcan review needs (review.model config, provider API key) without ever
+  running review itself. Use when the user is ready to build a Vulcan data product, or
+  asks about vulcan scaffold, vulcan plan, vulcan run, vulcan evaluate, model generation,
+  DQ checks, or DataOS deployment.
 disable-model-invocation: true
 ---
 
@@ -684,6 +686,39 @@ Report the result as a checklist:
 ```
 
 For any ❌ item: generate and write the missing artifact immediately, then re-confirm. Do NOT mark the build complete while any ❌ remains.
+
+---
+
+### Stage 6: POST-BUILD REVIEW REMINDER (no auto-trigger)
+
+**Goal**: Once the build is done, tell the user what `vulcan review` needs and let them decide when to run it. This agent never invokes `vulcan review` itself — not here, not anywhere else in this workflow.
+
+Only run this stage once Stage 5 has no remaining ❌ items.
+
+1. **Check what's in place, don't run anything**:
+   - A business-intent doc (`usage.yaml` — already populated in Step 1.5 of this workflow).
+   - A `review:` block in `config.yaml` with a `model:` value in `provider:model` form, e.g.:
+     ```yaml
+     review:
+       model: "openai:gpt-5.6-luna"
+     ```
+   - The matching provider API key exported in the shell the user will run `vulcan` from (e.g. `export OPENAI_API_KEY=...` for an `openai:` model) — this cannot be checked from inside the session; just tell the user it's required.
+2. **Report status, not results** — tell the user plainly what's missing and what to do next. Do not run `vulcan review` yourself even if everything above looks satisfied.
+
+   If `review.model` is missing:
+   > "Build complete. Before you can review this data product, add a `review:` block to `config.yaml`:
+   > ```yaml
+   > review:
+   >   model: \"openai:gpt-5.6-luna\"
+   > ```
+   > and export the matching provider API key in your shell (e.g. `export OPENAI_API_KEY=...`). Once both are set, run:
+   > ```
+   > vulcan review --output .vulcan/reviews
+   > ```
+   > yourself, then invoke the `review-data-product` skill to interpret the report — it only reads an existing report, it doesn't generate one."
+
+   If `review.model` is already set:
+   > "Build complete. To review this data product: make sure the API key for `<review.model's provider>` is exported in your shell (e.g. `export OPENAI_API_KEY=...`), run `vulcan review --output .vulcan/reviews` yourself, then invoke the `review-data-product` skill to interpret the report — neither step is triggered automatically."
 
 ---
 
