@@ -355,7 +355,7 @@ _Persona: business user or analyst — these questions are simple enough for bot
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | 7   | Where will this data product be consumed? (e.g., AI agents or agentic applications — e.g. Claude, Cursor, or a custom MCP client; BI dashboard, API, ad-hoc queries, embedded in an app) | 10. Consumption & Freshness — Consumption Pattern |
 | 8   | How often does the data need to be refreshed? (e.g., real-time, hourly, daily, weekly)                                                                                                   | 10. Consumption & Freshness — Freshness           |
-| 9   | Do you need historical data loaded from the start, and if so, how far back?                                                                                                              | 10. Consumption & Freshness — Backfill            |
+| 9   | Do you need historical data loaded from the start, and if so, how far back? And separately: once built, should it keep generating new periods going forward (e.g. through the current date), or is the whole time range fixed/bounded (e.g. a closed historical snapshot)? | 10. Consumption & Freshness — Backfill / Ongoing Horizon |
 
 After answers → update plan with section 10.
 
@@ -816,6 +816,7 @@ Create this file after Batch 1 and progressively fill it through the workflow.
 - **Consumption Pattern**: [Q7 — dashboard / API / ad-hoc / embedded]
 - **Freshness**: [Q8 — real-time / hourly / daily / weekly]
 - **Backfill**: [Q9 — how far back, or "none"]
+- **Ongoing Horizon**: [Q9 — does the model keep extending forward past the backfill window (e.g. through `CURRENT_DATE`), or is the time range permanently fixed/bounded? Default to "extends forward" unless the user states the range is a closed historical snapshot. This is the field `build-data-product` must use to decide whether any generated month/date spine gets a dynamic upper bound or a literal one — the backfill start/end dates above describe the initial load only, never a permanent ceiling on future runs unless this line says so explicitly.]
 
 ## 10.5 Data Agreement
 
