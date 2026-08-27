@@ -149,3 +149,7 @@ rare exception — say so explicitly rather than defaulting to open text out of 
 - Data Agreement (§10.5) is mandatory for every plan, no exceptions and no silent skip — this is
   a house policy stricter than Vulcan's own optional guidance for `agreement.md`. Draft it
   tailored to the specific product, never boilerplate.
+- AI readiness (§15.5) is mandatory for every semantic object, no exceptions: every model,
+  dimension, measure, segment, and join gets `tags`, and `ai_context` (instructions/synonyms/
+  examples where meaningful). A field with nothing else to add still gets at least one taxonomy
+  tag — never leave an object with zero tags or zero ai_context content.
