@@ -87,13 +87,13 @@ Before writing anything — to the plan or to any model file — state the inten
 > 2. **Propose fixes** for the `blocker`/`high` items only (medium/low stay as tracked checklist items, no fix attempted):
 >    - [title] — `[model]` — [one-line description of the fix you'd make]
 >    - [title] — `[model]` — [one-line description of the fix you'd make]
-> 3. **Fill every AI-readiness gap** from the Step 1.5 checklist — this part isn't optional the way medium/low is, so I'll do all of it unless you tell me otherwise:
+> 3. **Fill every AI-readiness gap** from the Step 1.5 checklist — this is mandatory, the same way the Data Agreement is mandatory in every plan, so all of it gets done, not just the items you pick:
 >    - `[model].[object_type].[object_name]` — missing: description, tags
 >    - `[model].[object_type].[object_name]` — missing: ai_context
 >
-> Should I go ahead with the plan update, these proposed fixes, and the AI-readiness fill-in? You can also tell me to skip specific items."
+> Should I go ahead? You can tell me to skip specific items in (1)/(2) above; the AI-readiness fill-in in (3) isn't a pick-and-choose list."
 
-Wait for explicit agreement. If the user agrees to the plan update but not the fixes (or vice versa), do only what they agreed to. If they ask for changes to the proposed fix list, revise and re-confirm before proceeding. The AI-readiness checklist can still be descoped if the user explicitly says so — "compulsory" means it's not silently dropped like medium/low, not that the user's veto is overridden.
+Wait for explicit agreement. If the user agrees to the plan update but not the fixes (or vice versa), do only what they agreed to. If they ask for changes to the proposed fix list, revise and re-confirm before proceeding. The AI-readiness checklist is mandatory, the same way Data Agreement (§10.5) is mandatory in `grill-data-product` — no exceptions, no silent skip, and no user opt-out. "Should I go ahead" in the prompt above still applies to it (you always wait for the go-ahead before writing), but a "skip that part" answer for the AI-readiness fill-in gets pushed back on once — explain that every semantic field needs a description/tags/ai_context to be agent-ready before re-asking. If the user insists after that, record the refusal explicitly in Section 17 rather than quietly dropping the item.
 
 ---
 
