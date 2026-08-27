@@ -42,22 +42,22 @@ Engine selection is **not** interactive — it's `all` by default, or whichever 
 
 ```
 .cursor/skills/              ← Cursor (created if you chose Cursor or All)
-  design-data-product/
+  grill-data-product/
     SKILL.md
   build-data-product/
     SKILL.md
 .claude/skills/               ← Claude Code (created if you chose Claude Code or All)
-  design-data-product/
+  grill-data-product/
     SKILL.md
   build-data-product/
     SKILL.md
 .codex/skills/               ← Codex (created if you chose Codex or All)
-  design-data-product/
+  grill-data-product/
     SKILL.md
   build-data-product/
     SKILL.md
 .github/skills/               ← VS Code / GitHub Copilot (created if you chose VS Code or All)
-  design-data-product/
+  grill-data-product/
     SKILL.md
   build-data-product/
     SKILL.md
@@ -75,16 +75,16 @@ dpbs-docs/
 
 
 
-### `design-data-product`
+### `grill-data-product`
 
-Guides you from a vague idea to a validated `data-product-plan.md` spec through:
+Guides you from a vague idea to a validated `data-product-plan.md` spec by grilling you with sharp, one-at-a-time questions instead of a scripted questionnaire:
 
-- Structured question batches (business context, data sources, grain, measures, metrics)
+- Adaptive interrogation — asks exactly what's still missing, pulling context from bundled reference docs and the Data Product MCP instead of surveying everything
 - Entity inference and table discovery via the Data Product MCP
 - Model-kind classification, join recommendations
 - Quality rules, AI context, and semantic behavior drafting
 
-**Trigger**: ask the agent to *"design a data product"*, *"start a Vulcan design session"*, or *"help me with data-product-plan.md"*.
+**Trigger**: ask the agent to *"design a data product"*, *"grill me for a data product"*, *"start a Vulcan design session"*, or *"help me with data-product-plan.md"*.
 
 > **Requires**: Data Product MCP (`dataproduct-mcp/api/v1`) connected in Cursor Settings → MCP.
 

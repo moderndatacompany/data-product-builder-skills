@@ -36,7 +36,7 @@ Date/time functions — same Spark SQL family as Databricks (`DATE_SUB`,
 `ai_context` is used more heavily in Spark examples than other engines —
 routinely present at both the model level and on individual measures, not
 just as an afterthought. Treat this as validation that the `ai_context`
-step in `design-data-product` Step 2.6 is worth doing thoroughly here, not
+step in `grill-data-product`'s bundled `design-data-product` reference (Step 2.6) is worth doing thoroughly here, not
 as a Spark-specific requirement.
 
 One example was seen with an empty `dimensions: includes:` (no dimensions

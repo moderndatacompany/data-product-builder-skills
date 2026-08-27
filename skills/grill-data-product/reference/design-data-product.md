@@ -407,7 +407,16 @@ Iterate with the user until they confirm. Persist confirmed assumptions to Secti
 **Finalize**:
 
 - Review the spec for completeness: all sections filled, no UNKNOWN grain, assumptions tagged
-- Add the YAML contract (section 14) to `data-product-plan.md` (section 15 will be populated by Step 2.5)
+- There is no YAML-contract section in this template. `build-data-product` reads directly from
+  the prose sections (1–13) plus Section 15/15.5/15.6 — do not generate a separate YAML restate
+  of sections 1–10. (The only place that format is used is `build-data-product`'s own Spec
+  Intake step, for normalizing an external spec — not part of this workflow's output.)
+- Section 10.5 (Data Agreement) is mandatory — confirm it's drafted for every plan (not left as
+  a placeholder), using the structure from `dpbs-docs/vulcan-docs/configurations/agreement.md`,
+  tailored to this product's actual consumers and data. This is a house policy stricter than
+  Vulcan's own optional default — say so if the user asks why.
+- Section 15.8 (Rollup Candidates) — confirm it's either populated with a genuine candidate or
+  explicitly marked `Not applicable`; don't leave it blank.
 
 **Validate with the user**:
 
@@ -601,7 +610,7 @@ For each **measure**, assign one of:
 - `behavior.type: simple` — additive count/sum that does not need special time treatment
 - `behavior.type: flow` — accumulates over time (events/transactions, e.g. `total_orders`, `total_signups`)
 - `behavior.type: stock` — point-in-time value that should NOT be summed across days (e.g. `total_arr`, `mrr`, `active_users`). For stock measures, also note the `time_dimension`, `period_treatment` (typically `last`), and `period_grain` (e.g. `day`/`month`) — all three are required when the build writes the measure.
-- `behavior.type: ratio` — computed from numerator and denominator measures. Use the formula already captured in Q5 of the Measures recommendation (or the ratio formula probe). For ratio measures, record the `numerator` and `denominator` measure names — these are siblings of `type` under `behavior`, NOT nested under a `ratio:` key, and the measure must NOT have an `expression`. NOTE: some Vulcan CLIs reject the `ratio` behavior (they require a `type: number` measure to carry an `expression`), so ALSO keep the explicit formula here — numerator, denominator, and any row filters — so the build can fall back to filtered `count`/`sum` measures + downstream division if the installed CLI rejects `ratio`.
+- `behavior.type: ratio` — computed from numerator and denominator measures. Use the formula already captured in Q5 of the Measures recommendation (or the ratio formula probe). For ratio measures, record the `numerator` and `denominator` measure names — these are siblings of `type` under `behavior`, NOT nested under a `ratio:` key, and the measure must NOT have an `expression`. **Required, not optional**: also record a `formula_fallback` field (a sibling of `behavior`, not nested inside it) — the exact formula from Section 6's Definition column, including numerator, denominator, and any row filters. Some Vulcan CLIs reject the `ratio` behavior shape (they require a `type: number` measure to carry an `expression`); `formula_fallback` is what lets build compute the ratio directly (filtered `count`/`sum` measures + downstream division) without needing `numerator`/`denominator` to exist as standalone measures anywhere else in the spec.
 
 If a measure's type is genuinely ambiguous (e.g. could be flow or stock without more business context), leave it untyped and surface it as an Open Question.
 
@@ -614,6 +623,54 @@ Present the full draft to the user:
 Wait for confirmation. Incorporate any edits. Only after the user approves: populate **Section 15.6: Behavior** in `data-product-plan.md` using the template under "Artifact Template" below.
 
 Keep `behavior` in the plan only — it is consumed by the build workflow, not re-derived.
+
+---
+
+**Step 2.8 — Segments (optional — but actively look for them, don't just wait to be told)**
+
+Segments are reusable named filters on the semantic model — still not mandatory, but don't leave
+this to chance. Before defaulting to `Not applicable`, actively scan for a candidate:
+
+- Re-read every example query you just drafted in Step 2.6 (`ai_context.examples`) and every
+  Population Filter in Section 4 — if the same filter combination (e.g. one categorical dimension
+  = a fixed value, or two combined) shows up more than once, that's a candidate, whether or not
+  the user ever said the word "segment."
+- If you find one, propose it explicitly rather than silently skipping it:
+
+  > "`[dimension] = [value]` (+ `[dimension2] = [value2]`) came up more than once while drafting
+  > this — want it as a reusable named segment (e.g. `[suggested_name]`)?
+  > A) Yes — save it as `[suggested_name]`
+  > B) Yes — but a different name/rule (tell me)
+  > C) No — ad hoc filtering only, don't add it"
+
+- Only mark Section 15.7 `Not applicable` after you've actually looked and asked — not because
+  nothing repeated to look at, and not just because the user didn't bring it up unprompted.
+
+---
+
+**Step 2.9 — Rollup candidates (optional — but actively look for them too)**
+
+Rollups pre-aggregate a semantic model for performance (`enable_rollup: true` in `config.yaml`,
+see `dpbs-docs/vulcan-docs/models/semantic-models/rollups.md`) — still not mandatory, and the
+final decision still belongs at build time once real query volume exists. But if the spec you've
+already drafted makes an obvious repeated query shape visible right now, flag it instead of
+staying silent until `build-data-product` maybe notices later:
+
+- Look at Section 7's metrics and Section 6's measures: does one of them get grouped by a time
+  bucket (the metric's time dimension) plus one or two Section 5 dimensions, in a way that
+  clearly matches Section 10's Consumption Pattern (e.g. a recurring dashboard)?
+- If yes, propose it as a **candidate for build time**, not a decision to make now:
+
+  > "`[measure]` grouped by `[time_dimension]` (+ `[dimension]`) looks like the primary way this
+  > will be queried. Want me to flag it as a rollup candidate for `build-data-product` to revisit
+  > once there's real data volume to justify it?
+  > A) Yes — flag `[measure] × [time_dimension] × [dimension]`
+  > B) No — skip, decide at build time with real usage data"
+
+- If flagged, populate **Section 15.8: Rollup Candidates** with the measure/dimension/time bucket
+  and a one-line reason. If nothing looks like an obvious pattern, or the user says no, mark
+  Section 15.8 `Not applicable` — never enable a rollup or touch `config.yaml` here; this section
+  only ever records a candidate for `build-data-product` to act on.
 
 ---
 
@@ -751,6 +808,22 @@ Create this file after Batch 1 and progressively fill it through the workflow.
 - **Freshness**: [Q8 — real-time / hourly / daily / weekly]
 - **Backfill**: [Q9 — how far back, or "none"]
 
+## 10.5 Data Agreement
+
+**Mandatory for every plan** — house policy, stricter than Vulcan's own default guidance (Vulcan
+itself treats `agreement.md` as optional; this project always generates one). Draft it using the
+structure from `dpbs-docs/vulcan-docs/configurations/agreement.md`, tailored to this specific data
+product — never boilerplate, never copy the doc's illustrative example verbatim.
+
+- **Who this covers**: [consumers from Section 1 — teams, roles, tools, and any AI agent acting on their behalf]
+- **What you can use it for**: [bullet list, grounded in Section 1's use case + Section 7's metrics]
+- **What you can't use it for**: [bullet list — at minimum: no redistribution outside named consumers; no use as a system of record if this product is analytical-only; no re-identification if anything here is anonymized or aggregated from PII]
+- **How to handle it**: [where it may live — approved tools only; PII-minimization notes if Section 2/5 involves personal data]
+- **How long you can keep it**: [retention rule for extracts — default to Section 10's freshness cadence unless a stricter rule applies]
+- **Crediting it**: [how a derived report should cite this data product + the refresh date used]
+- **If the rules aren't followed**: [consequence — typically: access logged, treated as a governance issue]
+- **How long this applies**: [duration — typically: for as long as access is held, and for anything retained afterward]
+
 ## 11. Assumptions
 
 - [Assumption] [populated from Final Checkpoint — Review & Confirm]
@@ -774,53 +847,6 @@ Create this file after Batch 1 and progressively fill it through the workflow.
 - **Why silver/staging**: [e.g., "3 sources need joining, shared join logic"]
 - **Why [model kind]**: [e.g., "Daily aggregation, manageable data volume"]
 - **Why not INCREMENTAL**: [e.g., "Table size doesn't warrant it yet"]
-
-## 14. Design Specification — YAML Contract
-
-```yaml
-name: [product_name]
-version: 1.0
-engine: [Q5 — e.g., snowflake]
-
-goal: [business goal]
-consumers:
-  - [consumer 1]
-  - [consumer 2]
-
-entities:
-  - name: [entity_name]
-    grain: [what one row represents]
-
-entity_relationships:
-  - left: [orders]
-    right: [customers]
-    join_key: [customer_id]
-    purpose: [customer attributes for segmentation]
-
-measures:
-  - name: [measure_name]
-    definition: [aggregation logic]
-    entity: [tied to which entity]
-
-metrics:
-  - name: [metric_name]
-    measure: [which measure to track over time]
-    time_dimension: [time field, e.g., order_date]
-    description: [business question as a time series]
-
-dimensions:
-  - name: [dimension_name]
-    type: [string/date/number]
-    entity: [tied to which entity]
-
-freshness:
-  cadence: [daily/hourly/real-time]
-  expected_by: [e.g., "6am UTC"]
-  backfill: [how far back if needed]
-
-consumption:
-  pattern: [dashboard/API/ad-hoc/embedded]
-```
 
 ## 15. Quality Rules (Recommended)
 
@@ -881,9 +907,43 @@ rules: [rules you derived in Stage 3.5 Step 2.5]
       #   numerator: <numerator_measure_name>
       #   denominator: <denominator_measure_name>
       #   (ratio measures must NOT have an `expression`)
+    formula_fallback: <REQUIRED for ratio measures — the exact formula from Section 6's
+      Definition column, e.g. "cancelled_subs / active_subs_at_month_start">
+      # sibling of `behavior`, not nested inside it — lets build compute the ratio directly
+      # if the installed CLI rejects the `ratio` behavior shape
 ```
 
 - [mark genuinely ambiguous measures as untyped + add to Open Questions]
+
+## 15.7 Segments (optional — reusable named filters)
+
+Not mandatory. Populate only if a genuinely reusable, business-named filter surfaced during
+grilling (e.g. "high value accounts", "at risk users") — something consumers will slice by
+repeatedly, not a one-off ad hoc filter. If nothing like that came up, leave this section as:
+`Not applicable — no reusable segment surfaced.` Do not manufacture one to fill the section.
+
+```yaml
+- segment_name:
+    expression: "{model.column} <condition>"   # must reference only this semantic model's columns
+    description: <what this represents, in business terms>
+```
+
+## 15.8 Rollup Candidates (optional — recommendations for build-data-product)
+
+Optional. Populate only if Step 2.9 found an obvious repeated query pattern (a measure grouped by
+a time bucket plus one or two dimensions) and the user agreed to flag it. This section only ever
+records a *candidate* — it does not enable rollups or touch `config.yaml`; `build-data-product`
+decides whether to actually build one once real data exists. If nothing surfaced, leave this as:
+`Not applicable — no rollup candidate surfaced.`
+
+```yaml
+- rollup_name:
+    measures: [measure_name]
+    dimensions: [dimension_name]
+    time_dimension: <time_dim_name>
+    granularity: <day|week|month|...>
+    reason: <why this looks like the primary query pattern>
+```
 
 ## 16. Validation Checklist
 
@@ -897,9 +957,16 @@ rules: [rules you derived in Stage 3.5 Step 2.5]
 - [ ] All EXTERNAL models identified, ownership confirmed, and documented in Section 13
 - [ ] All [Assumption] tags reviewed with stakeholder
 - [ ] Open questions resolved or documented as out-of-scope
-- [ ] YAML contract parseable and complete
 - [ ] Quality rules reviewed and added to spec (Section 15) — format is kind: dq
 - [ ] AI context drafted and confirmed (Section 15.5)
 - [ ] Semantic types (behavior) drafted and confirmed (Section 15.6) — or genuinely ambiguous ones moved to Open Questions
+- [ ] Every ratio measure in Section 15.6 has a formula_fallback tied to its Section 6 definition
+- [ ] Segments (Section 15.7) — actively checked for a repeated filter pattern (Step 2.8), not
+  just left to chance; populated or correctly marked not applicable
+- [ ] Rollup Candidates (Section 15.8) — actively checked for a repeated query pattern (Step 2.9),
+  not just left to chance; populated or correctly marked not applicable
+- [ ] Data Agreement (Section 10.5) — drafted for this specific product (mandatory, every plan);
+  not a placeholder, not copied verbatim from the docs example
+- [ ] Verification Summary (Stage 3.5 Step 3) is written into this file, not just shown in chat
 - [ ] Ready for implementation → proceed to the build-data-product skill
 ````

@@ -341,6 +341,20 @@ If no file exists yet for the target engine, say so and fall back to the general
 
 ---
 
+### Optional: Rollup Candidates (suggest, never assume)
+
+Rollups pre-aggregate a semantic model for query performance (`dpbs-docs/vulcan-docs/models/semantic-models/rollups.md`) and are off by default (`enable_rollup: true` in `config.yaml`). This is a real-data, real-query-pattern decision — never add one without the user opting in.
+
+**Check the design spec first.** Section 15.8 (Rollup Candidates) of `data-product-plan.md` may already have a candidate the design workflow flagged (see Group C pre-check step 8). If so, that's your starting point — confirm it's still relevant now that the semantic model actually exists, rather than re-deriving one from scratch.
+
+After Group C (Semantic Layer) is written and passing `vulcan plan`, look at the measures + `time_dimension` combinations you just defined — whether or not Section 15.8 had a candidate. If Section 15.8 named one, ask about that specifically; if it's `Not applicable` but a pattern is now obvious with the real semantic model in front of you (a measure grouped by a time bucket plus one or two categorical dimensions that dashboards will hit constantly), ask the user once:
+
+> "`[measure]` grouped by `[time_dimension]` (+ `[dimension]`) looks like a common query pattern. Want a rollup for it? (Optional — speeds up repeated queries once data volume grows; adds a managed table.)"
+
+If yes: set `enable_rollup: true` in `config.yaml`, add a `rollups:` block to the semantic YAML (`measures`, `dimensions`, `time_dimension`, `granularity` — see the docs page for the full schema and the 32-character Postgres identifier limit on the combined `<semantic_model>_<rollup_name>` name), and re-run `vulcan plan`. If no, or nothing looks like an obvious repeated pattern, skip it entirely — don't ask again later in the same build.
+
+---
+
 ## Workflow
 
 ### Stage 1: SCAFFOLD (Blueprint-Driven)
@@ -384,6 +398,8 @@ references:
 ```
 
 Source `good_for` from Section 1 (Business Context: Use Case and Key Questions); source `not_for`/`caveats` from Section 12 (Open Questions / known constraints) plus any freshness or exclusion notes.
+
+**Also write `agreement.md`**: Read Section 10.5 (Data Agreement) of `data-product-plan.md` — this section is now mandatory in every plan produced by `grill-data-product`/`design-data-product`, so expect it populated. Write its content as `agreement.md` at the project root: prose markdown covering who it covers, allowed/disallowed uses, handling, retention, crediting, and consequences — Vulcan doesn't parse this file, so write it as readable text for a human to accept, not YAML. The default `agreement_path` in `config.yaml` is already `agreement.md`, so no config change is needed unless the project already sets a different `agreement_path` or an inline `agreement` key — if one exists, tell the user about the conflict rather than silently overriding it. (If Section 10.5 is genuinely missing — e.g. an external/Spec-Intake spec that never went through the mandatory-agreement policy — draft one now from Section 1's consumers/use case, grounded in `dpbs-docs/vulcan-docs/configurations/agreement.md`, rather than skipping it.)
 
 ---
 
@@ -449,6 +465,8 @@ Follow `generation_order`, grouped by component type. After each group, run `vul
 4. Build the `dimensions:` list: it is a PLAIN list of column names (there is NO `includes`/`excludes` block). It MUST include every column that any measure `expression` references (a measure referencing `{model.wtp_score}` requires `wtp_score` in `dimensions:`, else the plan fails with "no join path between ..."), plus all grouping/identifier columns. Numeric columns that are only ever aggregated still must be listed here for the measure expression to resolve.
 5. Read **Section 15.5 (AI Context)** of `data-product-plan.md`. Extract the `ai_context` entries for: the semantic model, each dimension, each measure, each segment, and each join. Hold these in memory — you will insert them as `ai_context:` blocks when writing the semantic YAML. If Section 15.5 is absent, skip ai_context insertion.
 6. Read **Section 15.6 (Behavior)** of `data-product-plan.md`. Extract the `behavior` entries for each dimension and each measure. Hold these in memory — you will insert them as `behavior:` blocks alongside the corresponding dimension/measure when writing the semantic YAML. Allowed values: dimensions use `type: identifier|categorical`; measures use `type: simple|flow|stock|ratio`. For `ratio` measures, `numerator` and `denominator` are direct children of `behavior` (siblings of `type`), NOT nested under a `ratio:` key, and the measure must NOT have an `expression`. (DOC/CLI SKEW: some installed CLIs reject the `ratio` behavior because a `type: number` measure must carry a non-empty `expression`; if the plan rejects it, drop `ratio` and compute the percentage as filtered `count`/`sum` measures, dividing downstream in the metric layer or BI.) For `stock` measures, include `time_dimension`, `period_treatment`, AND `period_grain` (all three are required) when Section 15.6 provides them. If Section 15.6 is absent, infer types using the same rules and surface them to the user for confirmation before writing; do NOT guess for a measure or dimension whose type is genuinely ambiguous — leave it untyped and note it as a TODO.
+7. Read **Section 15.7 (Segments)** of `data-product-plan.md`. This section is optional — the design workflow actively checks for reusable filter patterns before defaulting it, so don't assume it's empty. If it's marked `Not applicable`, skip this entirely, do not add a `segments:` block. If it IS populated, hold the segment name/expression/description in memory — you will insert a top-level `segments:` block in the semantic YAML (siblings of `dimensions:`/`measures:`). Segment names must be unique against measure names in the same semantic model, and each `expression` may only reference columns on that same model (canonical `{model}.column` or bare `column` form — no subqueries/CTEs/aliases).
+8. Read **Section 15.8 (Rollup Candidates)** of `data-product-plan.md`. If it's marked `Not applicable`, there's nothing to do here — fall through to the "Optional: Rollup Candidates" section below for your own post-build check. If it IS populated, hold the candidate(s) in memory: once this semantic model is written and passing `vulcan plan`, revisit it as your first rollup suggestion (per "Optional: Rollup Candidates" below) instead of scanning fresh — the design workflow already identified the pattern, you're just confirming it's still worth it and implementing if the user agrees.
 
 **Before generating Tests (Group E)**: Vulcan test YAML has strict rules — violating them causes silent failures or parse errors:
 
@@ -537,6 +555,7 @@ Before proceeding to the final plan, confirm with the user:
 - [ ] Source table references — replace any `-- TODO:` markers with actual table names
 - [ ] Cron schedule — matches the freshness requirement from the design
 - [ ] Any domain-specific adjustments
+- [ ] Optional: rollup candidates flagged for user review (see "Optional: Rollup Candidates" earlier)
 
 Present a summary: list every file created with a one-line description, noting which components passed `vulcan plan`.
 
@@ -672,6 +691,7 @@ Re-read Section 15 of `data-product-plan.md` and check each of the following:
 | Tests                  | `tests/` contains at least one test for the gold model                                   | List `tests/` directory                              |
 | Semantic layer         | `models/semantics/` contains a `.yml` with the gold model's measures and dimensions      | List `models/semantics/` directory                   |
 | usage.yaml             | Root `usage.yaml` is populated (at least `good_for`; use `caveats` for any known limits) | Read `usage.yaml`                                    |
+| agreement.md           | Present at project root, drawn from Section 10.5 (mandatory in every plan)               | Read `agreement.md`; cross-check against Section 10.5 |
 
 Report the result as a checklist:
 
