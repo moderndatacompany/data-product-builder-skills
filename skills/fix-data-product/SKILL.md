@@ -1,5 +1,5 @@
 ---
-name: review-data-product
+name: fix-data-product
 description: >-
   Human-invoked workflow for interpreting an existing `vulcan review` report for a
   Vulcan/DataOS data product. Does NOT run `vulcan review` itself — it reads a report

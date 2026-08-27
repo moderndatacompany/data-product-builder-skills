@@ -715,10 +715,10 @@ Only run this stage once Stage 5 has no remaining ❌ items.
    > ```
    > vulcan review --output .vulcan/reviews
    > ```
-   > yourself, then invoke the `review-data-product` skill to interpret the report — it only reads an existing report, it doesn't generate one."
+   > yourself, then invoke the `fix-data-product` skill to interpret the report — it only reads an existing report, it doesn't generate one."
 
    If `review.model` is already set:
-   > "Build complete. To review this data product: make sure the API key for `<review.model's provider>` is exported in your shell (e.g. `export OPENAI_API_KEY=...`), run `vulcan review --output .vulcan/reviews` yourself, then invoke the `review-data-product` skill to interpret the report — neither step is triggered automatically."
+   > "Build complete. To review this data product: make sure the API key for `<review.model's provider>` is exported in your shell (e.g. `export OPENAI_API_KEY=...`), run `vulcan review --output .vulcan/reviews` yourself, then invoke the `fix-data-product` skill to interpret the report — neither step is triggered automatically."
 
 ---
 
