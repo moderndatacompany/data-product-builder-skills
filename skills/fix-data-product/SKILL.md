@@ -13,13 +13,13 @@ disable-model-invocation: true
 
 # Review Data Product — Vulcan Review Interpretation Workflow
 
-Interpret an already-generated `vulcan review` report, keep `data-product-plan.md` in sync with it, and — with a human in the loop at every consequential step — fix the findings that matter most. Be precise about severity: only `blocker`/`high` findings are ever fix-eligible; everything else is tracked, not touched.
+Interpret an already-generated `vulcan review` report, keep `data-product-plan.md` in sync with it, and — with a human in the loop at every consequential step — fix the findings that matter most. Be precise about severity: only `blocker`/`high` findings are ever fix-eligible; everything else is tracked, not touched. The one exception is AI readiness (descriptions/tags/ai_context coverage) — that gap is always compulsory to close, regardless of severity bucketing, because an incomplete field isn't a judgment call the way a modeling finding is.
 
 **Language note**: Vulcan is anti-pipeline. Never use "pipeline" in output or conversation. Use "model DAG", "data product", or "model layers" instead.
 
 ## What this skill does and does not do
 
-- **Does**: locate/read a `vulcan review` report, summarize it, propose a plan update and (for blocker/high only) fixes — and waits for explicit agreement before writing anything.
+- **Does**: locate/read a `vulcan review` report, summarize it, propose a plan update and (for blocker/high, plus AI-readiness gaps) fixes — and waits for explicit agreement before writing anything.
 - **Does not run `vulcan review`.** Generating the report is the user's job, run from their own shell (it needs `review.model` in `config.yaml` and a provider API key exported there — see Step 0). This skill only ever *reads* a report that already exists.
 - **Does not auto-trigger itself or get triggered by another skill.** Including `build-data-product`, whose post-build stage only reminds the user what's needed — it never runs review and never calls this skill on the user's behalf.
 
@@ -67,6 +67,17 @@ LOW (n): [title] — [model]
 
 ---
 
+## Step 1.5 — Build the AI-readiness checklist
+
+The report's "AI readiness" card only gives aggregate counts (e.g. `descriptions 45/46`, `tags 7/46`, `ai_context 0/24`) — it does not name which field is missing what. If any of the three axes is below 100%, build the actual field-level checklist yourself before proposing anything:
+
+1. List every `models/semantics/*.yml` file in the project.
+2. For each semantic object — the model itself, and every `dimensions:`/`measures:`/`segments:`/`joins:` entry — check for a non-empty `description`, a non-empty `tags` list, and (per `grill-data-product`'s Step 2.6 rules — the model/dimension/measure gets `instructions`/`synonyms`/`examples`/`caveats` where meaningful) `ai_context`.
+3. Record every object missing any of the three as a checklist line: `[model].[object_type].[object_name] — missing: description, tags` (list only what's actually missing for that object).
+4. This checklist is **compulsory, not optional** — unlike medium/low findings, it does not get left as "tracked, not touched." Every object on it gets filled, no cherry-picking, regardless of blocker/high severity elsewhere in the report.
+
+---
+
 ## Step 2 — Tell the user what you intend to do, then wait
 
 Before writing anything — to the plan or to any model file — state the intended plan explicitly and stop for agreement. Do not update `data-product-plan.md` or touch any code until the user agrees.
@@ -76,10 +87,13 @@ Before writing anything — to the plan or to any model file — state the inten
 > 2. **Propose fixes** for the `blocker`/`high` items only (medium/low stay as tracked checklist items, no fix attempted):
 >    - [title] — `[model]` — [one-line description of the fix you'd make]
 >    - [title] — `[model]` — [one-line description of the fix you'd make]
+> 3. **Fill every AI-readiness gap** from the Step 1.5 checklist — this part isn't optional the way medium/low is, so I'll do all of it unless you tell me otherwise:
+>    - `[model].[object_type].[object_name]` — missing: description, tags
+>    - `[model].[object_type].[object_name]` — missing: ai_context
 >
-> Should I go ahead with the plan update and these proposed fixes? You can also tell me to skip specific items."
+> Should I go ahead with the plan update, these proposed fixes, and the AI-readiness fill-in? You can also tell me to skip specific items."
 
-Wait for explicit agreement. If the user agrees to the plan update but not the fixes (or vice versa), do only what they agreed to. If they ask for changes to the proposed fix list, revise and re-confirm before proceeding.
+Wait for explicit agreement. If the user agrees to the plan update but not the fixes (or vice versa), do only what they agreed to. If they ask for changes to the proposed fix list, revise and re-confirm before proceeding. The AI-readiness checklist can still be descoped if the user explicitly says so — "compulsory" means it's not silently dropped like medium/low, not that the user's veto is overridden.
 
 ---
 
@@ -104,6 +118,11 @@ Fold the findings into `data-product-plan.md` under a **Section 17: Review Findi
 
 ### Low (tracked, not auto-fixed)
 - [title] — `[model]` — [one-line recommendation]
+
+### AI Readiness (compulsory — from Step 1.5)
+**Descriptions**: [n]/[total] — **Tags**: [n]/[total] — **AI context**: [n]/[total]
+- [ ] `[model].[object_type].[object_name]` — missing: description, tags
+- [ ] `[model].[object_type].[object_name]` — missing: ai_context
 ```
 
 ---
@@ -121,6 +140,13 @@ For each agreed `blocker`/`high` finding:
 5. **Check off the plan item**: mark the corresponding Section 17 checkbox `[x]` once applied and verified.
 
 Never batch-apply fixes without showing each diff first — a review finding is a recommendation, not a guaranteed-correct patch.
+
+**AI-readiness checklist items** (Step 1.5) follow a lighter version of the same loop, since these are additive metadata fills, not behavioral changes:
+
+1. For each checked-in item, draft the missing `description`/`tags`/`ai_context` for that object — ground it in Section 15.5 of `data-product-plan.md` if it already has content for that object; otherwise derive it the same way `build-data-product`'s Step 5 item 5 would (from Section 1's business context and Section 6's definitions), never a placeholder like `"TODO"` or a bare repeat of the field name.
+2. Batch these into one diff per semantic YAML file (unlike blocker/high fixes, these don't need one confirmation per field — grouping by file keeps the review manageable) and show it to the user before writing.
+3. **Wait for approval**, then apply and re-run `vulcan plan` to confirm the YAML still validates.
+4. Check off each item in Section 17's AI Readiness checklist once applied and verified, and update the `n/total` counts at the top of that subsection.
 
 ---
 
