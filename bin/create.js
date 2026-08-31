@@ -354,7 +354,7 @@ async function main() {
     log('');
     log(`  ${BOLD}design-data-product${RESET} → replaced by ${BOLD}${CYAN}grill-data-product${RESET}`);
     log(`  ${DIM}Same output (data-product-plan.md), adaptive one-question-at-a-time${RESET}`);
-    log(`  ${DIM}interrogation instead of a scripted questionnaire.${RESET}`);
+    log(`  ${DIM}grilling instead of a scripted questionnaire.${RESET}`);
     log('');
     log(`  ${BOLD}${CYAN}fix-data-product${RESET} — new skill`);
     log(`  ${DIM}Reads an existing 'vulcan review' report and, with your sign-off,${RESET}`);

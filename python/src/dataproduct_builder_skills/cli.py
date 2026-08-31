@@ -216,7 +216,7 @@ def main():
         log()
         log(f"  {BOLD}design-data-product{RESET} → replaced by {BOLD}{CYAN}grill-data-product{RESET}")
         log(f"  {DIM}Same output (data-product-plan.md), adaptive one-question-at-a-time{RESET}")
-        log(f"  {DIM}interrogation instead of a scripted questionnaire.{RESET}")
+        log(f"  {DIM}grilling instead of a scripted questionnaire.{RESET}")
         log()
         log(f"  {BOLD}{CYAN}fix-data-product{RESET} — new skill")
         log(f"  {DIM}Reads an existing 'vulcan review' report and, with your sign-off,{RESET}")
