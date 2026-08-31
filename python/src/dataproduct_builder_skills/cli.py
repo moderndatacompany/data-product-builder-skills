@@ -208,6 +208,19 @@ def main():
     info(f"dpbs-docs/vulcan-examples/{engine or '{all engines}'}/")
     info(f"dpbs-docs/vulcan-*.whl  — install: pip install \"dpbs-docs/vulcan-*.whl[{engine or 'ENGINE'}]\"")
     log()
+
+    if "fix-data-product" in installed_skills:
+        log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
+        log(f"{BOLD}{YELLOW}  WHAT'S NEW{RESET}")
+        log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
+        log()
+        log(f"  {BOLD}{CYAN}fix-data-product{RESET} — new skill")
+        log(f"  {DIM}Reads an existing 'vulcan review' report and, with your sign-off,{RESET}")
+        log(f"  {DIM}syncs findings into the plan and fixes blocker/high issues + AI readiness.{RESET}")
+        log()
+        log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
+        log()
+
     log("Ask the agent to use the skills — e.g.:")
     log(f'  {CYAN}"design a data product for daily revenue by customer segment"{RESET}')
     log()
