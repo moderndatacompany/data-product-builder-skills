@@ -4,9 +4,11 @@ description: >-
   Build-focused workflow that turns a validated Vulcan/DataOS design spec
   (data-product-plan.md) into a working, deployed data product — scaffolding models,
   generating SQL/YAML components, running vulcan plan/evaluate, enriching metadata,
-  applying quality checks, and deploying to dev and prod. Use when the user is ready to
-  build a Vulcan data product, or asks about vulcan scaffold, vulcan plan, vulcan run,
-  vulcan evaluate, model generation, DQ checks, or DataOS deployment.
+  applying quality checks, and deploying to dev and prod. After the build, it tells the
+  user what vulcan review needs (review.model config, provider API key) without ever
+  running review itself. Use when the user is ready to build a Vulcan data product, or
+  asks about vulcan scaffold, vulcan plan, vulcan run, vulcan evaluate, model generation,
+  DQ checks, or DataOS deployment.
 disable-model-invocation: true
 ---
 
@@ -271,7 +273,7 @@ This loop is used whenever `vulcan plan` fails, at any stage:
 - "Extra inputs are not permitted" on a measure → you put `format:` (or another dimension-only/unknown key) on a measure; remove it (`format:` belongs on dimensions only)
 - "Extra inputs are not permitted" in ai_context → an unknown ai_context key, or `examples` written as bare strings; `examples` must be a list of `{description, format, query}` objects
 - Measure name collision → a measure name equals a dimension/column name; rename the measure (e.g. `m_<col>`, `avg_<col>`). `count` is reserved — never use it as a measure name
-- `Measure '<m>' of type 'number' requires a non-empty expression` → the installed CLI won't accept the `ratio` behavior shape (numerator/denominator, no expression); drop the `ratio` behavior and compute the ratio as filtered `count`/`sum` measures, dividing downstream
+- `Measure '<m>' of type 'number' requires a non-empty expression` → a `type: number` measure (including `ratio` behavior) needs a non-empty `expression` computing the value (e.g. `"{model.numerator_col} / {model.denominator_col}"` for a ratio); add it. Only if the plan still rejects the `ratio` shape after that, fall back to filtered `count`/`sum` measures with downstream division
 - "stock" measure rejected / missing period_grain → a `stock` behavior is missing `period_grain` (and/or `time_dimension`/`period_treatment`); add all three
 - "Model owner is not listed in config.users" → add the owner to `users:` in config.yaml before planning
 - "Incomplete audit definition" → an `audits/*.sql` file is missing its `AUDIT (name ...)` header above the SELECT
@@ -439,14 +441,16 @@ Follow `generation_order`, grouped by component type. After each group, run `vul
 
 **After writing the gold model SQL file (Group B)**: merge the Audit Assertions from Section 15 of `data-product-plan.md` into the `assertions(...)` block of the gold model's `MODEL()` definition. Also add any `assertion_ref` values from the Custom Audit Files. Do NOT duplicate assertions you already wrote into the `MODEL()` block.
 
+**Every `[Assumption]` in `data-product-plan.md` about grain, cardinality, or join behavior needs an enforcing check, not just a comment.** An assumption like "each X maps to exactly one Y" is a claim about the data that can silently become false — write a corresponding audit/dq check (e.g. a uniqueness or row-count-preservation assertion on the relevant join/grain) alongside the model it affects, in the same Group B/C pass, so a violation surfaces as a failing check instead of a silent duplication or misattribution bug. Note which assertion covers which `[Assumption]` in your build summary.
+
 **Before generating Semantic Layer (Group C)** — mandatory pre-check, complete before writing any file:
 
 1. Read the gold model SQL file and list every column name in the SELECT clause.
 2. List every proposed semantic measure name from the design spec.
 3. Find any names that appear in both lists — these are collisions. Resolve each one now (rename the semantic measure, e.g. `m_total_revenue`, or rename the physical column) before writing any semantic YAML. Do NOT proceed with a collision in place.
 4. Build the `dimensions:` list: it is a PLAIN list of column names (there is NO `includes`/`excludes` block). It MUST include every column that any measure `expression` references (a measure referencing `{model.wtp_score}` requires `wtp_score` in `dimensions:`, else the plan fails with "no join path between ..."), plus all grouping/identifier columns. Numeric columns that are only ever aggregated still must be listed here for the measure expression to resolve.
-5. Read **Section 15.5 (AI Context)** of `data-product-plan.md`. Extract the `ai_context` entries for: the semantic model, each dimension, each measure, each segment, and each join. Hold these in memory — you will insert them as `ai_context:` blocks when writing the semantic YAML. If Section 15.5 is absent, skip ai_context insertion.
-6. Read **Section 15.6 (Behavior)** of `data-product-plan.md`. Extract the `behavior` entries for each dimension and each measure. Hold these in memory — you will insert them as `behavior:` blocks alongside the corresponding dimension/measure when writing the semantic YAML. Allowed values: dimensions use `type: identifier|categorical`; measures use `type: simple|flow|stock|ratio`. For `ratio` measures, `numerator` and `denominator` are direct children of `behavior` (siblings of `type`), NOT nested under a `ratio:` key, and the measure must NOT have an `expression`. (DOC/CLI SKEW: some installed CLIs reject the `ratio` behavior because a `type: number` measure must carry a non-empty `expression`; if the plan rejects it, drop `ratio` and compute the percentage as filtered `count`/`sum` measures, dividing downstream in the metric layer or BI.) For `stock` measures, include `time_dimension`, `period_treatment`, AND `period_grain` (all three are required) when Section 15.6 provides them. If Section 15.6 is absent, infer types using the same rules and surface them to the user for confirmation before writing; do NOT guess for a measure or dimension whose type is genuinely ambiguous — leave it untyped and note it as a TODO.
+5. Read **Section 15.5 (AI Context)** of `data-product-plan.md`. Extract the `ai_context` entries AND `tags` for: the semantic model, each dimension, each measure, each segment, and each join. Hold these in memory — you will insert them as `ai_context:` and `tags:` blocks when writing the semantic YAML. **AI readiness is mandatory, not optional**: `vulcan review` scores descriptions, tags, and ai_context coverage per field, and a build with gaps here is graded NOT AGENT-READY. If Section 15.5 is absent or incomplete for an object, do NOT skip it — derive `tags` (at minimum one taxonomy label per object, from Section 1's business context and Section 6's definitions) and `ai_context` (instructions/synonyms/examples where meaningful) yourself now, the same way Step 2.6 of the design workflow would, and surface what you inferred to the user for a quick confirmation rather than leaving fields empty.
+6. Read **Section 15.6 (Behavior)** of `data-product-plan.md`. Extract the `behavior` entries for each dimension and each measure. Hold these in memory — you will insert them as `behavior:` blocks alongside the corresponding dimension/measure when writing the semantic YAML. Allowed values: dimensions use `type: identifier|categorical`; measures use `type: simple|flow|stock|ratio`. For `ratio` measures, `numerator` and `denominator` are direct children of `behavior` (siblings of `type`), NOT nested under a `ratio:` key. An `expression` (e.g. `"{model.churn_count} / {model.subscription_count}"`) IS allowed alongside `behavior.type: ratio` — the only forbidden siblings are `time_dimension`, `period_treatment`, `period_grain`. Write the `ratio` behavior as documented; only fall back to filtered `count`/`sum` measures with downstream division if a real `vulcan plan` run actually rejects it (report the exact error before working around it — don't drop `ratio` pre-emptively). If you do fall back: the downstream division is not optional — a `type: simple`/`flow` measure left standing in for a ratio with no paired division metric is exactly the additive-ratio bug `vulcan review`'s AI-readiness/modeling checks flag. Add the dividing metric in `models/metrics/` (or note it explicitly if BI-side), and add an `ai_context.caveats`/description warning on the component measure(s) that they are ratio components, not standalone additive values. For `stock` measures, include `time_dimension`, `period_treatment`, AND `period_grain` (all three are required) when Section 15.6 provides them. If Section 15.6 is absent, infer types using the same rules and surface them to the user for confirmation before writing; do NOT guess for a measure or dimension whose type is genuinely ambiguous — leave it untyped and note it as a TODO.
 
 **Before generating Tests (Group E)**: Vulcan test YAML has strict rules — violating them causes silent failures or parse errors:
 
@@ -670,6 +674,8 @@ Re-read Section 15 of `data-product-plan.md` and check each of the following:
 | Tests                  | `tests/` contains at least one test for the gold model                                   | List `tests/` directory                              |
 | Semantic layer         | `models/semantics/` contains a `.yml` with the gold model's measures and dimensions      | List `models/semantics/` directory                   |
 | usage.yaml             | Root `usage.yaml` is populated (at least `good_for`; use `caveats` for any known limits) | Read `usage.yaml`                                    |
+| AI readiness           | Every dimension/measure/segment/join in each semantic YAML has a `description`, at least one `tags` entry, and `ai_context` where Section 15.5 provides one | Read each `models/semantics/*.yml`; count fields missing `description`/`tags`/`ai_context` the same way `vulcan review`'s AI-readiness score does |
+| Assumption enforcement | Every `[Assumption]` about grain/cardinality/join behavior in the spec has a corresponding audit/dq check | Grep the spec for `[Assumption]`; confirm a matching check exists in `dq/`/`audits/`/`MODEL()` assertions |
 
 Report the result as a checklist:
 
@@ -681,9 +687,43 @@ Report the result as a checklist:
 ✅ tests/ — at least one test present
 ✅ models/semantics/daily_revenue.yml — present
 ✅ usage.yaml — present (good_for + caveats)
+✅ AI readiness — descriptions 12/12, tags 12/12, ai_context 12/12
 ```
 
-For any ❌ item: generate and write the missing artifact immediately, then re-confirm. Do NOT mark the build complete while any ❌ remains.
+For any ❌ item: generate and write the missing artifact immediately, then re-confirm. Do NOT mark the build complete while any ❌ remains. This includes AI readiness — a semantic field with a missing `description`, zero `tags`, or (where Section 15.5 provided content) missing `ai_context` is a ❌, not a nice-to-have; derive and write the missing piece before declaring the build done.
+
+---
+
+### Stage 6: POST-BUILD REVIEW REMINDER (no auto-trigger)
+
+**Goal**: Once the build is done, tell the user what `vulcan review` needs and let them decide when to run it. This agent never invokes `vulcan review` itself — not here, not anywhere else in this workflow.
+
+Only run this stage once Stage 5 has no remaining ❌ items.
+
+1. **Check what's in place, don't run anything**:
+   - A business-intent doc (`usage.yaml` — already populated in Step 1.5 of this workflow).
+   - A `review:` block in `config.yaml` with a `model:` value in `provider:model` form, e.g.:
+     ```yaml
+     review:
+       model: "openai:gpt-5.6-luna"
+     ```
+   - The matching provider API key exported in the shell the user will run `vulcan` from (e.g. `export OPENAI_API_KEY=...` for an `openai:` model) — this cannot be checked from inside the session; just tell the user it's required.
+2. **Report status, not results** — tell the user plainly what's missing and what to do next. Do not run `vulcan review` yourself even if everything above looks satisfied.
+
+   If `review.model` is missing:
+   > "Build complete. Before you can review this data product, add a `review:` block to `config.yaml`:
+   > ```yaml
+   > review:
+   >   model: \"openai:gpt-5.6-luna\"
+   > ```
+   > and export the matching provider API key in your shell (e.g. `export OPENAI_API_KEY=...`). Once both are set, run:
+   > ```
+   > vulcan review --output .vulcan/reviews
+   > ```
+   > yourself, then invoke the `fix-data-product` skill to interpret the report — it only reads an existing report, it doesn't generate one."
+
+   If `review.model` is already set:
+   > "Build complete. To review this data product: make sure the API key for `<review.model's provider>` is exported in your shell (e.g. `export OPENAI_API_KEY=...`), run `vulcan review --output .vulcan/reviews` yourself, then invoke the `fix-data-product` skill to interpret the report — neither step is triggered automatically."
 
 ---
 
@@ -720,7 +760,7 @@ These are exact, current-version rules; they override anything you remember abou
 - Semantics — time: any column used as a time dimension (a metric `ts`, or a `stock` measure's `time_dimension`) MUST be TIMESTAMP, not DATE — cast it in the SQL model (`CAST(col AS TIMESTAMP)`).
 - Semantics — measures: list of `{name, type, expression, filters?}`. `type` ∈ count|count_distinct|sum|avg|min|max|number|string|time|boolean. `expression` is REQUIRED for every type except `count` and uses `{model_name.column}` syntax. EVERY column referenced in a measure `expression`/`filters` MUST ALSO appear in the `dimensions:` list, else the plan fails with "no join path between '<model>' and '<dep>'" (the message is "no join path", NOT "unknown dimension"). `format:` is NOT a measure field — it is a DIMENSION-only display hint; putting `format:` on a measure fails with "Extra inputs are not permitted".
 - Semantics — measure names: must be unique across measures + segments, must NOT be `count` (reserved), and must DIFFER from the dimension/column they aggregate (column `wtp_score` → measure `m_wtp_score` or `avg_wtp_score`).
-- Semantics — behavior: the canonical typing block is `behavior:` (NOT `semantic_config:` — that name and `behaviour:` still work but log a deprecation warning, so always emit `behavior`). Dimensions: `behavior.type` = identifier | categorical. Measures: `behavior.type` = simple | flow | stock | ratio. `stock` REQUIRES `time_dimension`, `period_treatment`, AND `period_grain` (e.g. `period_grain: day`). `ratio` uses `numerator` + `denominator` (measure names, direct children of `behavior`, siblings of `type`), type `number`, and NO `expression`. DOC/CLI SKEW: some installed CLIs reject this `ratio` shape (they require a `type: number` measure to carry a non-empty `expression`); if the plan rejects it, drop the `ratio` behavior and express the ratio as filtered `count`/`sum` measures, dividing downstream (metric layer or BI).
+- Semantics — behavior: the canonical typing block is `behavior:` (NOT `semantic_config:` — that name and `behaviour:` still work but log a deprecation warning, so always emit `behavior`). Dimensions: `behavior.type` = identifier | categorical. Measures: `behavior.type` = simple | flow | stock | ratio. `stock` REQUIRES `time_dimension`, `period_treatment`, AND `period_grain` (e.g. `period_grain: day`). `ratio` uses `numerator` + `denominator` (measure names, direct children of `behavior`, siblings of `type`), type `number`, and an `expression` computing the division (e.g. `"{model.numerator_col} / {model.denominator_col}"`) is expected, not forbidden — the only siblings `ratio` forbids are `time_dimension`, `period_treatment`, `period_grain`. Only if a real `vulcan plan` run rejects this shape, fall back to filtered `count`/`sum` measures with downstream division (metric layer or BI) — the division step is then mandatory, and the component measures need a caveat marking them as ratio components so they don't read as ordinary additive measures.
 - Semantics — ai_context (valid on the model and on any dimension/measure/segment/join): keys ONLY `instructions` (string OR list of strings), `synonyms` (list of strings), `caveats` (list of strings), `examples`. `examples` is a list of OBJECTS, each shaped `{description, format, query}` (e.g. `description:` + `format: sql` + a `query:` literal block) — NOT bare strings. Unknown keys fail validation (extra="forbid"); never strip ai_context or its allowed keys.
 - Semantics — joins: a top-level `joins:` list, each entry `{name, type, on}`. `name` is the other semantic model's name (not its FQN). `type` ∈ `one_to_one | one_to_many | many_to_one` — there is NO `many_to_many`; model that as a bridge table + two `many_to_one` joins instead. `on` (quote the key as `'on'` in YAML — `on` unquoted is parsed as the boolean `true` by some YAML loaders) identifies the join key(s), confirmed working in a successful `vulcan plan`:
   ```yaml

@@ -251,6 +251,7 @@ async function main() {
 
   // ── Step 3: Skills ────────────────────────────────────────────────────────
   const skillsSrc = path.join(packageDir, 'skills');
+  let installedSkills = [];
 
   if (!fs.existsSync(skillsSrc)) {
     warn('skills/ directory not found in package — skipping');
@@ -258,6 +259,7 @@ async function main() {
     const skills = fs.readdirSync(skillsSrc, { withFileTypes: true })
       .filter(e => e.isDirectory())
       .map(e => e.name);
+    installedSkills = skills;
 
     for (const ideFolder of ideFolders) {
       for (const skill of skills) {
@@ -337,12 +339,27 @@ async function main() {
   log(`${GREEN}${BOLD}Done!${RESET}  Your project now has:`);
   log('');
   for (const ideFolder of ideFolders) {
-    info(`${ideFolder}/skills/design-data-product/`);
-    info(`${ideFolder}/skills/build-data-product/`);
+    for (const skill of installedSkills) {
+      info(`${ideFolder}/skills/${skill}/`);
+    }
   }
   info(`dpbs-docs/vulcan-examples/${engine || '{all engines}'}/`);
   info(`dpbs-docs/vulcan-*.whl  — install: pip install "dpbs-docs/vulcan-*.whl[${engine || 'ENGINE'}]"`);
   log('');
+
+  if (installedSkills.includes('fix-data-product')) {
+    log(`${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}`);
+    log(`${BOLD}${YELLOW}  WHAT'S NEW${RESET}`);
+    log(`${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}`);
+    log('');
+    log(`  ${BOLD}${CYAN}fix-data-product${RESET} — new skill`);
+    log(`  ${DIM}Reads an existing 'vulcan review' report and, with your sign-off,${RESET}`);
+    log(`  ${DIM}syncs findings into the plan and fixes blocker/high issues + AI readiness.${RESET}`);
+    log('');
+    log(`${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}`);
+    log('');
+  }
+
   log('Ask the agent to use the skills — e.g.:');
   log(`  ${CYAN}"design a data product for daily revenue by customer segment"${RESET}`);
   log('');
