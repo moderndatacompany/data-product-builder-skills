@@ -145,10 +145,12 @@ def main():
 
     # ── skills ──
     skills_src = DATA_DIR / "skills"
+    installed_skills = []
     if not skills_src.exists():
         warn("skills/ directory not found in package — skipping")
     else:
         skills = [p.name for p in skills_src.iterdir() if p.is_dir()]
+        installed_skills = skills
         for ide_folder in ide_folders:
             for skill in skills:
                 src = skills_src / skill
@@ -201,11 +203,28 @@ def main():
     log(f"{GREEN}{BOLD}Done!{RESET}  Your project now has:")
     log()
     for ide_folder in ide_folders:
-        info(f"{ide_folder}/skills/design-data-product/")
-        info(f"{ide_folder}/skills/build-data-product/")
+        for skill in installed_skills:
+            info(f"{ide_folder}/skills/{skill}/")
     info(f"dpbs-docs/vulcan-examples/{engine or '{all engines}'}/")
     info(f"dpbs-docs/vulcan-*.whl  — install: pip install \"dpbs-docs/vulcan-*.whl[{engine or 'ENGINE'}]\"")
     log()
+
+    if "grill-data-product" in installed_skills or "fix-data-product" in installed_skills:
+        log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
+        log(f"{BOLD}{YELLOW}  WHAT'S NEW{RESET}")
+        log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
+        log()
+        log(f"  {BOLD}design-data-product{RESET} → replaced by {BOLD}{CYAN}grill-data-product{RESET}")
+        log(f"  {DIM}Same output (data-product-plan.md), adaptive one-question-at-a-time{RESET}")
+        log(f"  {DIM}interrogation instead of a scripted questionnaire.{RESET}")
+        log()
+        log(f"  {BOLD}{CYAN}fix-data-product{RESET} — new skill")
+        log(f"  {DIM}Reads an existing 'vulcan review' report and, with your sign-off,{RESET}")
+        log(f"  {DIM}syncs findings into the plan and fixes blocker/high issues + AI readiness.{RESET}")
+        log()
+        log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
+        log()
+
     log("Ask the agent to use the skills — e.g.:")
     log(f'  {CYAN}"design a data product for daily revenue by customer segment"{RESET}')
     log()
