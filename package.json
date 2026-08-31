@@ -23,7 +23,8 @@
     "data-product",
     "builder-skills",
     "design-data-product",
-    "build-data-product"
+    "build-data-product",
+    "fix-data-product"
   ],
   "license": "MIT",
   "engines": {

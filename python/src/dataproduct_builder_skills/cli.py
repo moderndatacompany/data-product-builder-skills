@@ -145,10 +145,12 @@ def main():
 
     # ── skills ──
     skills_src = DATA_DIR / "skills"
+    installed_skills = []
     if not skills_src.exists():
         warn("skills/ directory not found in package — skipping")
     else:
         skills = [p.name for p in skills_src.iterdir() if p.is_dir()]
+        installed_skills = skills
         for ide_folder in ide_folders:
             for skill in skills:
                 src = skills_src / skill
@@ -201,8 +203,8 @@ def main():
     log(f"{GREEN}{BOLD}Done!{RESET}  Your project now has:")
     log()
     for ide_folder in ide_folders:
-        info(f"{ide_folder}/skills/design-data-product/")
-        info(f"{ide_folder}/skills/build-data-product/")
+        for skill in installed_skills:
+            info(f"{ide_folder}/skills/{skill}/")
     info(f"dpbs-docs/vulcan-examples/{engine or '{all engines}'}/")
     info(f"dpbs-docs/vulcan-*.whl  — install: pip install \"dpbs-docs/vulcan-*.whl[{engine or 'ENGINE'}]\"")
     log()

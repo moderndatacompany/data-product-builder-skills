@@ -511,34 +511,39 @@ If they request changes, incorporate their feedback and re-present before writin
 
 ---
 
-**Step 2.6 — Draft ai_context for semantic objects**
+**Step 2.6 — Draft ai_context and tags for semantic objects**
 
-From the conversation so far (business terms from Q1–Q4, consumer info from Q3, key questions from Q4, confirmed dimension/measure names), draft `ai_context` for each semantic object.
+AI readiness is graded on three axes, and all three are mandatory here, not optional extras: every semantic object needs a `description` (already required elsewhere in this workflow), `tags` (taxonomy), and `ai_context` (instructions/synonyms/examples). Do not let any dimension, measure, segment, or join reach Section 15.5 with zero tags or zero ai_context content — a field with genuinely nothing meaningful to add still gets at least one taxonomy `tag` (see below), because "no tags" is exactly the gap `vulcan review`'s AI-readiness score flags.
+
+From the conversation so far (business terms from Q1–Q4, consumer info from Q3, key questions from Q4, confirmed dimension/measure names), draft both `ai_context` and `tags` for each semantic object.
 
 For the **semantic model** (top-level):
 
 - `instructions`: 2–3 sentences on how to interpret this model — what a row represents, which measure to use for which question type. May be a single string OR a YAML list of strings when multiple distinct instructions apply.
 - `synonyms`: alternate names consumers or LLMs might use to refer to this data product
 - `examples`: 2–3 example queries this data product answers, each as an OBJECT `{description, format, query}` — `description` is the natural-language question (pull verbatim from Q4 where they fit), `format` is e.g. `sql`, `query` is the semantic/SQL query that answers it. Vulcan requires ai_context examples to be objects, NOT bare strings.
+- `tags`: 2–4 taxonomy labels for the product as a whole (domain area, subject matter, e.g. `revenue`, `retention`, `executive-reporting`)
 
 For each **dimension**:
 
 - `synonyms`: alternate column names a consumer might say (e.g. `"plan"` for `plan_type`, `"tier"` for `customer_segment`)
 - `caveats`: (optional) list of interpretation warnings — add only when the dimension has a meaningful misuse risk (e.g. "do not group by raw timestamp; use the date granularity", "values include soft-deleted records")
+- `tags`: 1–3 taxonomy labels classifying what kind of dimension this is (e.g. `identifier`, `geography`, `time`, `categorical`) — every dimension gets at least one tag, even a purely structural one
 
 For each **measure**:
 
 - `synonyms`: alternate phrasings for this measure (e.g. `"bookings"` for `total_revenue`)
 - `examples`: example queries for this measure, each an OBJECT `{description, format, query}` (`description` = the NL question, `query` = the query that uses this measure)
 - `caveats`: (optional) list of interpretation warnings — add only when the measure has aggregation-specific pitfalls or misuse risks (e.g. "do not sum ARR across daily rows in a range", "pin start_date to period end", "query numerator and denominator separately when a time grain is present")
+- `tags`: 1–3 taxonomy labels (e.g. `revenue`, `financial`, `arr`, `retention`, `growth`) — every measure gets at least one tag
 
-For **segments** and **joins**: add `synonyms` and/or `instructions` only where the spec provides enough context to be meaningful. `instructions` may be a string or a list of strings. Skip if there is nothing useful to add.
+For **segments** and **joins**: add `synonyms` and/or `instructions` only where the spec provides enough context to be meaningful, but `tags` is still mandatory — at minimum one label naming what the segment/join represents (e.g. `cohort`, `region-mapping`).
 
 Present the full draft to the user:
 
-> "Here is the ai_context I've drafted for the semantic layer. Review and edit before I lock it into the spec:
-> [show each object with its proposed ai_context fields]
-> Does this look right? Any synonyms missing, instructions to tweak, or examples to swap?"
+> "Here is the ai_context and tags I've drafted for the semantic layer. Review and edit before I lock it into the spec:
+> [show each object with its proposed ai_context fields and tags]
+> Does this look right? Any synonyms missing, instructions to tweak, tags off, or examples to swap?"
 
 Wait for confirmation. Incorporate any edits. Only after the user approves: populate **Section 15.5: AI Context** in `data-product-plan.md` using this structure:
 
@@ -561,6 +566,8 @@ examples:
     format: sql
     query: |
       SELECT ...         # the semantic/SQL query that answers it
+tags:
+  - "..."
 ```
 
 ### Dimensions
@@ -568,6 +575,7 @@ examples:
 - **dimension_name**:
   - `synonyms`: ["..."]
   - `caveats`: ["..."]  (optional — only when the dimension has a misuse risk)
+  - `tags`: ["..."]  (mandatory — at least one taxonomy label)
 
 ### Measures
 
@@ -575,13 +583,14 @@ examples:
   - `synonyms`: ["..."]
   - `examples`: `[{description: "...", format: sql, query: "SELECT ..."}]`
   - `caveats`: ["..."]  (optional — only when aggregation pitfalls or misuse warnings apply)
+  - `tags`: ["..."]  (mandatory — at least one taxonomy label)
 
 ### Granularities / Segments / Joins
 
-- [only include objects where there is meaningful content]
+- [include every object; `synonyms`/`instructions` only where meaningful, but `tags` always present]
 ````
 
-Keep `ai_context` in the plan only — it is consumed by the build workflow, not re-derived.
+Keep `ai_context` (including `tags`) in the plan only — it is consumed by the build workflow, not re-derived.
 
 ---
 
@@ -851,7 +860,7 @@ rules: [rules you derived in Stage 3.5 Step 2.5]
 
 ## 15.5 AI Context (for semantic layer)
 
-[populated at Stage 3.5 Step 2.6 — ai_context for model, dimensions, measures, segments, joins]
+[populated at Stage 3.5 Step 2.6 — ai_context AND tags for model, dimensions, measures, segments, joins]
 
 ## 15.6 Behavior (typed dimensions and measures)
 
@@ -899,7 +908,7 @@ rules: [rules you derived in Stage 3.5 Step 2.5]
 - [ ] Open questions resolved or documented as out-of-scope
 - [ ] YAML contract parseable and complete
 - [ ] Quality rules reviewed and added to spec (Section 15) — format is kind: dq
-- [ ] AI context drafted and confirmed (Section 15.5)
+- [ ] AI context AND tags drafted and confirmed for every semantic object — model, dimensions, measures, segments, joins (Section 15.5) — no object left with zero tags
 - [ ] Semantic types (behavior) drafted and confirmed (Section 15.6) — or genuinely ambiguous ones moved to Open Questions
 - [ ] Ready for implementation → proceed to the build-data-product skill
 ````

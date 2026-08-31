@@ -50,20 +50,28 @@ Engine selection is **not** interactive — it's `all` by default, or whichever 
     SKILL.md
   build-data-product/
     SKILL.md
+  fix-data-product/
+    SKILL.md
 .claude/skills/               ← Claude Code (created if you chose Claude Code or All)
   design-data-product/
     SKILL.md
   build-data-product/
+    SKILL.md
+  fix-data-product/
     SKILL.md
 .codex/skills/               ← Codex (created if you chose Codex or All)
   design-data-product/
     SKILL.md
   build-data-product/
     SKILL.md
+  fix-data-product/
+    SKILL.md
 .github/skills/               ← VS Code / GitHub Copilot (created if you chose VS Code or All)
   design-data-product/
     SKILL.md
   build-data-product/
+    SKILL.md
+  fix-data-product/
     SKILL.md
 dpbs-docs/
   dataos-philosophy/  ← DataOS core concepts
@@ -90,9 +98,17 @@ Guides you from a vague idea to a validated `data-product-plan.md` spec through:
 
 ### `build-data-product`
 
-Turns the validated design spec into a working, deployed Vulcan data product — scaffolding models, generating SQL/YAML, running `vulcan plan/evaluate`, enriching metadata, applying quality checks, and deploying to dev and prod.
+Turns the validated design spec into a working, deployed Vulcan data product — scaffolding models, generating SQL/YAML, running `vulcan plan/evaluate`, enriching metadata, applying quality checks, and deploying to dev and prod. After the build, it tells you what `vulcan review` needs (a `review.model` config, a provider API key) without ever running review itself.
 
 **Trigger**: ask the agent to *"build the data product"*, *"scaffold the Vulcan project"*, or *"run vulcan plan"*.
+
+### `fix-data-product`
+
+Reads an existing `vulcan review` report (it never generates one — that's your call, from your own shell), summarizes findings by severity, and — only after you agree — updates `data-product-plan.md` and fixes blocker/high findings plus the compulsory AI-readiness gaps (descriptions/tags/ai_context coverage). Medium/low findings stay tracked, not auto-fixed.
+
+**Trigger**: ask the agent to *"interpret this review report"*, *"check review findings"*, or *"fix what vulcan review flagged"*.
+
+> **Requires**: an existing `vulcan review` report in `.vulcan/reviews/` — generate one yourself with `pip install 'vulcan[review]'` then `vulcan review -e <environment> --output .vulcan/reviews` (needs `review.model` in `config.yaml` and a provider API key exported in your shell).
 
 ## Requirements
 

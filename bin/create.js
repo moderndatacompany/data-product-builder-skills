@@ -251,6 +251,7 @@ async function main() {
 
   // ── Step 3: Skills ────────────────────────────────────────────────────────
   const skillsSrc = path.join(packageDir, 'skills');
+  let installedSkills = [];
 
   if (!fs.existsSync(skillsSrc)) {
     warn('skills/ directory not found in package — skipping');
@@ -258,6 +259,7 @@ async function main() {
     const skills = fs.readdirSync(skillsSrc, { withFileTypes: true })
       .filter(e => e.isDirectory())
       .map(e => e.name);
+    installedSkills = skills;
 
     for (const ideFolder of ideFolders) {
       for (const skill of skills) {
@@ -337,8 +339,9 @@ async function main() {
   log(`${GREEN}${BOLD}Done!${RESET}  Your project now has:`);
   log('');
   for (const ideFolder of ideFolders) {
-    info(`${ideFolder}/skills/design-data-product/`);
-    info(`${ideFolder}/skills/build-data-product/`);
+    for (const skill of installedSkills) {
+      info(`${ideFolder}/skills/${skill}/`);
+    }
   }
   info(`dpbs-docs/vulcan-examples/${engine || '{all engines}'}/`);
   info(`dpbs-docs/vulcan-*.whl  — install: pip install "dpbs-docs/vulcan-*.whl[${engine || 'ENGINE'}]"`);
