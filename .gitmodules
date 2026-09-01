@@ -5,4 +5,4 @@
 [submodule "dpbs-docs/dataos"]
 	path = dpbs-docs/dataos
 	url = git@github.com:moderndatacompany/dataos.git
-	branch = July
+	branch = main
