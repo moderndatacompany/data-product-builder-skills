@@ -20,7 +20,7 @@ Interpret an already-generated `vulcan review` report, keep `data-product-plan.m
 ## What this skill does and does not do
 
 - **Does**: locate/read a `vulcan review` report, summarize it, propose a plan update and (for blocker/high, plus AI-readiness gaps) fixes — and waits for explicit agreement before writing anything.
-- **Does not run `vulcan review`.** Generating the report is the user's job, run from their own shell — it needs `pip install 'vulcan[review]'`, a `review.model` set in `config.yaml`, and a provider API key exported there (see Step 0). This skill only ever *reads* a report that already exists.
+- **Does not run `vulcan review`.** Generating the report is the user's job, run from their own shell — it needs `pip install "dpbs-docs/vulcan-*.whl[review]"`, a model (either `review.model` in `config.yaml` or the `--llm` flag), and a provider API key exported there (see Step 0). This skill only ever *reads* a report that already exists.
 - **Does not auto-trigger itself or get triggered by another skill.** Including `build-data-product`, whose post-build stage only reminds the user what's needed — it never runs review and never calls this skill on the user's behalf.
 
 ---
@@ -30,14 +30,14 @@ Interpret an already-generated `vulcan review` report, keep `data-product-plan.m
 Ask the user (if they haven't already said) whether they have a specific report to point you to, or want you to find the latest one:
 
 1. **User provides a path** → use exactly that file. If it doesn't exist or can't be read, say so and stop — do not silently fall back to auto-discovery instead of the path they gave you.
-2. **User has no path / says "use the latest"** → look in `.vulcan/reviews/` for files named `{YYYY-MM-DD-HHMM}[-N]-review.html` and pick the latest by the filename's embedded timestamp (the `-N` suffix breaks ties within the same minute). **The report is HTML only** — `vulcan review --help` confirms `--type` accepts only `html`; do not look for or expect a `.md` variant.
+2. **User has no path / says "use the latest"** → look in `.vulcan/reviews/` for files named `{YYYY-MM-DD-HHMM}[-N]-review.html` and pick the latest by the filename's embedded timestamp (the `-N` suffix breaks ties within the same minute). **The report is HTML only** — `vulcan review --help` confirms `--report-format` accepts only `html`; do not look for or expect a `.md` variant.
 3. **No report found anywhere** (no path given, and `.vulcan/reviews/` is missing or empty) → do not attempt to generate one. Tell the user:
    > "I couldn't find a review report. This skill only reads an existing `vulcan review` report — it doesn't generate one. To create one, run it yourself:
    > ```
-   > pip install 'vulcan[review]'
-   > vulcan review -e <environment> --output .vulcan/reviews
+   > pip install "dpbs-docs/vulcan-*.whl[review]"
+   > vulcan review -e <environment>
    > ```
-   > That needs a `review.model` set in `config.yaml` and the matching provider API key exported in your shell. `-e/--environment` is the environment to compare the working tree against for live metadata and plan state — which environment you pick can change what the review finds (e.g. a model authored locally but not yet deployed reads differently than one deployed but no longer matching the authored source), so ask the user which environment they reviewed against if it isn't obvious, and record it in Section 17. Once it's done, tell me the report path, or just say 'use the latest' and I'll find it."
+   > That needs a model — either `review.model` set in `config.yaml` or passed as `--llm <model>` — and the matching provider API key exported in your shell. The report is written to `.vulcan/reviews` unless you pass `--output`. `-e/--environment` is the environment to compare the working tree against for live metadata and plan state — which environment you pick can change what the review finds (e.g. a model authored locally but not yet deployed reads differently than one deployed but no longer matching the authored source), so ask the user which environment they reviewed against if it isn't obvious, and record it in Section 17. Once it's done, tell me the report path, or just say 'use the latest' and I'll find it."
    Stop here.
 4. **Located file is unreadable / empty / truncated** → don't silently substitute an older report:
    > "The report at `<path>` looks incomplete or unreadable. [If auto-discovered: falling back to the next most recent report, `<filename>` — let me know if you'd rather regenerate.] [If user-provided: please check the path or regenerate it.]"

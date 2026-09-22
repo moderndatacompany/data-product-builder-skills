@@ -85,20 +85,22 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
       - If **no match** → tell the user: "The Vulcan wheel is not found under `dpbs-docs/`. Please run `npx builder-skills` first to install it, then let me know." **STOP** until confirmed.
       - If **found** → let `WHEEL=$(ls dpbs-docs/vulcan-*.whl | head -1)` and proceed.
    3. Create the `.venv` — run this unconditionally (it is a no-op if `.venv` already exists):
-      - First verify Python 3.10 is available (Vulcan requires `>=3.9, <3.11`):
+      - First find a compatible interpreter (Vulcan requires `>=3.10, <3.12` — either 3.10 or 3.11 works):
         ```bash
-        python3.10 --version
+        python3.10 --version || python3.11 --version
         ```
-        If the command fails, tell the user: "Python 3.10 is required but not found. Please install it (`brew install python@3.10` on macOS) and try again." **STOP** until confirmed.
-      - Then create the venv using Python 3.10 explicitly:
+        Use whichever one succeeds as `PY` for the rest of this step; if both are present, prefer `python3.10`.
+        If **neither** is found, tell the user: "Vulcan needs Python 3.10 or 3.11, and neither was found. Please install one (`brew install python@3.11` on macOS) and try again." **STOP** until confirmed.
+        Do **not** use the system default `python3` — it is very often 3.12+, which Vulcan does not support.
+      - Then create the venv using that interpreter explicitly:
         ```bash
-        python3.10 -m venv .venv
+        "${PY}" -m venv .venv
         ```
       - Confirm it worked before proceeding:
         ```bash
         ls .venv/bin/pip
         ```
-        If `ls` fails, stop and tell the user: "Could not create `.venv` — please ensure Python 3.10 is installed (`python3.10 --version`) and try again."
+        If `ls` fails, stop and tell the user: "Could not create `.venv` — please ensure Python 3.10 or 3.11 is installed and try again."
    4. Determine the engine extra:
       - Check `data-product-plan.md` Section 2 for the engine (e.g. `postgres`, `snowflake`, `databricks`, `spark`, `trino`).
       - If not found in the spec, ask the user: "Which engine are you using? (postgres / snowflake / databricks / spark / trino)"
@@ -702,6 +704,11 @@ Only run this stage once Stage 5 has no remaining ❌ items.
 
 1. **Check what's in place, don't run anything**:
    - A business-intent doc (`usage.yaml` — already populated in Step 1.5 of this workflow).
+   - The `review` extra installed in the environment they will run `vulcan` from. **The `.venv` this workflow creates installs only the engine extra, so `vulcan review` does not exist in it yet** — they must add it:
+     ```
+     .venv/bin/pip install "dpbs-docs/vulcan-*.whl[review]"
+     ```
+     Check with `.venv/bin/vulcan review --help`; if it errors, the extra is missing.
    - A `review:` block in `config.yaml` with a `model:` value in `provider:model` form, e.g.:
      ```yaml
      review:
@@ -716,14 +723,20 @@ Only run this stage once Stage 5 has no remaining ❌ items.
    > review:
    >   model: \"openai:gpt-5.6-luna\"
    > ```
-   > and export the matching provider API key in your shell (e.g. `export OPENAI_API_KEY=...`). Once both are set, run:
+   > and export the matching provider API key in your shell (e.g. `export OPENAI_API_KEY=...`). You also need the `review` extra, which this build's `.venv` does not have yet. Then run both:
    > ```
-   > vulcan review --output .vulcan/reviews
+   > .venv/bin/pip install "dpbs-docs/vulcan-*.whl[review]"
+   > .venv/bin/vulcan review
    > ```
-   > yourself, then invoke the `fix-data-product` skill to interpret the report — it only reads an existing report, it doesn't generate one."
+   > yourself, then invoke the `fix-data-product` skill to interpret the report — it only reads an existing report, it doesn't generate one. (The report lands in `.vulcan/reviews` by default; pass `--output` to change it, or `--llm <model>` instead of the `config.yaml` entry.)"
 
    If `review.model` is already set:
-   > "Build complete. To review this data product: make sure the API key for `<review.model's provider>` is exported in your shell (e.g. `export OPENAI_API_KEY=...`), run `vulcan review --output .vulcan/reviews` yourself, then invoke the `fix-data-product` skill to interpret the report — neither step is triggered automatically."
+   > "Build complete. To review this data product: make sure the API key for `<review.model's provider>` is exported in your shell (e.g. `export OPENAI_API_KEY=...`), install the `review` extra (this build's `.venv` doesn't have it yet) and run review yourself:
+   > ```
+   > .venv/bin/pip install "dpbs-docs/vulcan-*.whl[review]"
+   > .venv/bin/vulcan review
+   > ```
+   > then invoke the `fix-data-product` skill to interpret the report — neither step is triggered automatically. (The report lands in `.vulcan/reviews` by default.)"
 
 ---
 

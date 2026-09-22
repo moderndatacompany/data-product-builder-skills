@@ -77,6 +77,24 @@ dpbs-docs/
   vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install dpbs-docs/vulcan-*.whl
 ```
 
+> **Experimental — Vulcan Review**
+> The bundled wheel ships an experimental `vulcan review` command that audits a
+> built data product and writes an HTML findings report to `.vulcan/reviews/`.
+> It's an optional extra, independent of the engine extras — install it only if
+> you want it:
+>
+> ```bash
+> pip install "dpbs-docs/vulcan-*.whl[review]"
+> vulcan review -e <environment>
+> ```
+>
+> It also needs a model — `review.model` in `config.yaml`, or `--llm <provider:model>`
+> — plus that provider's API key exported in your shell.
+>
+> Extras are per-install, not cumulative: if you later reinstall with an engine
+> extra, include `review` again to keep it. The `fix-data-product` skill reads the
+> report this produces.
+
 
 
 ## What the skills do
@@ -112,11 +130,13 @@ Reads an existing `vulcan review` report (it never generates one — that's your
 
 **Trigger**: ask the agent to *"interpret this review report"*, *"check review findings"*, or *"fix what vulcan review flagged"*.
 
-> **Requires**: an existing `vulcan review` report in `.vulcan/reviews/` — generate one yourself with `pip install 'vulcan[review]'` then `vulcan review -e <environment> --output .vulcan/reviews` (needs `review.model` in `config.yaml` and a provider API key exported in your shell).
+> **Requires**: an existing `vulcan review` report in `.vulcan/reviews/` — generate one yourself with `pip install "dpbs-docs/vulcan-*.whl[review]"` then `vulcan review -e <environment>` (the report lands in `.vulcan/reviews` by default). The model comes from `review.model` in `config.yaml` **or** the `--llm/--llm-model` flag, and the matching provider API key must be exported in your shell.
 
 ## Requirements
 
-- Node.js ≥ 16
+- Node.js ≥ 16 — to run this installer
+- Python 3.10 or 3.11 — to run Vulcan itself (the bundled wheel requires `>=3.10, <3.12`).
+  The build skill creates a dedicated `.venv` for Vulcan using one of these.
 - Data Product MCP connected in Cursor (for the design skill)
 - Vulcan CLI (`pip install vulcan-data-tool`) for the build skill
 

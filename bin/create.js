@@ -347,16 +347,38 @@ async function main() {
   info(`dpbs-docs/vulcan-*.whl  — install: pip install "dpbs-docs/vulcan-*.whl[${engine || 'ENGINE'}]"`);
   log('');
 
+  // ── Experimental: Vulcan Review ───────────────────────────────────────────
+  // Resolve the actual wheel we just copied so the printed command is
+  // copy-pasteable and stays correct across version bumps.
+  const wheelName = fs.existsSync(docsDest)
+    ? fs.readdirSync(docsDest).find(f => /^vulcan-.*\.whl$/.test(f))
+    : null;
+  if (wheelName) {
+    log(`${BOLD}${CYAN}${'\u2550'.repeat(62)}${RESET}`);
+    log(`${BOLD}${CYAN}  EXPERIMENTAL \u2014 Vulcan Review${RESET}`);
+    log(`${BOLD}${CYAN}${'\u2550'.repeat(62)}${RESET}`);
+    log('');
+    log(`  Want to try the experimental ${BOLD}vulcan review${RESET} feature?`);
+    log(`  Install the bundled wheel:`);
+    log('');
+    log(`    ${CYAN}pip install "dpbs-docs/${wheelName}[review]"${RESET}`);
+    log('');
+    log(`  ${DIM}Then run:  vulcan review${RESET}`);
+    log('');
+    log(`${BOLD}${CYAN}${'\u2550'.repeat(62)}${RESET}`);
+    log('');
+  }
+
   if (installedSkills.includes('fix-data-product')) {
-    log(`${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}`);
+    log(`${BOLD}${YELLOW}══════════════════════════════════════════════════════════════${RESET}`);
     log(`${BOLD}${YELLOW}  WHAT'S NEW${RESET}`);
-    log(`${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}`);
+    log(`${BOLD}${YELLOW}══════════════════════════════════════════════════════════════${RESET}`);
     log('');
     log(`  ${BOLD}${CYAN}fix-data-product${RESET} — new skill`);
     log(`  ${DIM}Reads an existing 'vulcan review' report and, with your sign-off,${RESET}`);
     log(`  ${DIM}syncs findings into the plan and fixes blocker/high issues + AI readiness.${RESET}`);
     log('');
-    log(`${BOLD}${YELLOW}════════════════════════════════════════════════════════════${RESET}`);
+    log(`${BOLD}${YELLOW}══════════════════════════════════════════════════════════════${RESET}`);
     log('');
   }
 

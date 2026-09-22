@@ -209,6 +209,25 @@ def main():
     info(f"dpbs-docs/vulcan-*.whl  — install: pip install \"dpbs-docs/vulcan-*.whl[{engine or 'ENGINE'}]\"")
     log()
 
+    # ── Experimental: Vulcan Review ──
+    # Resolve the actual wheel we just copied so the printed command is
+    # copy-pasteable and stays correct across version bumps.
+    wheel = next(iter(sorted(docs_dest.glob("vulcan-*.whl"))), None) if docs_dest.exists() else None
+    if wheel:
+        log(f"{BOLD}{CYAN}{'═' * 62}{RESET}")
+        log(f"{BOLD}{CYAN}  EXPERIMENTAL — Vulcan Review{RESET}")
+        log(f"{BOLD}{CYAN}{'═' * 62}{RESET}")
+        log()
+        log(f"  Want to try the experimental {BOLD}vulcan review{RESET} feature?")
+        log("  Install the bundled wheel:")
+        log()
+        log(f"    {CYAN}pip install \"dpbs-docs/{wheel.name}[review]\"{RESET}")
+        log()
+        log(f"  {DIM}Then run:  vulcan review{RESET}")
+        log()
+        log(f"{BOLD}{CYAN}{'═' * 62}{RESET}")
+        log()
+
     if "fix-data-product" in installed_skills:
         log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
         log(f"{BOLD}{YELLOW}  WHAT'S NEW{RESET}")
