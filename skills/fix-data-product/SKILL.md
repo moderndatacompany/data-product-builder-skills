@@ -22,6 +22,8 @@ Interpret an already-generated `vulcan review` report, keep `data-product-plan.m
 - **Does**: locate/read a `vulcan review` report, summarize it, propose a plan update and (for blocker/high, plus AI-readiness gaps) fixes — and waits for explicit agreement before writing anything.
 - **Does not run `vulcan review`.** Generating the report is the user's job, run from their own shell — it needs `pip install "dpbs-docs/vulcan-*.whl[review]"`, a model (either `review.model` in `config.yaml` or the `--llm` flag), and a provider API key exported there (see Step 0). This skill only ever *reads* a report that already exists.
 - **Does not auto-trigger itself or get triggered by another skill.** Including `build-data-product`, whose post-build stage only reminds the user what's needed — it never runs review and never calls this skill on the user's behalf.
+- **Does not open the wheel.** `dpbs-docs/vulcan-*.whl` is an install artifact only. You may glob its filename and pass that path to `pip install`. Do not Read, grep, unzip, or otherwise inspect the archive (no METADATA, no bundled source, no embedded docs). If you need Vulcan behavior, read `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`. After install, use `vulcan --help` — do not recover CLI flags by opening the wheel.
+- **Engine-specific fixes use the official guide.** Read `dpbs-docs/vulcan-docs/engine-guide/README.md`, the matching engine folder, and only the matching `dpbs-docs/vulcan-examples/<engine>/` folder. If the official guide does not list the engine, say so and use the matching examples plus general Vulcan docs; never borrow another engine's behavior.
 
 ---
 

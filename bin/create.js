@@ -56,6 +56,7 @@ const DEST_NAME_OVERRIDES = { dataos: 'vulcan-docs' };
 // directly under dpbs-docs/vulcan-docs/ instead of nesting the full
 // documentation/references/resources/vulcan/ path from the submodule.
 const SRC_SUBPATH_OVERRIDES = { dataos: ['documentation', 'references', 'resources', 'vulcan'] };
+const DATAOS_ENGINE_GUIDE_SUBPATH = ['documentation', 'references', 'engine-guide'];
 
 // Mirrors scripts/sync-vulcan-sources.sh's PRUNE_NAMES — a safety net so
 // vulcan-examples never ships README/*.md/csv/tsv/lockfile noise into a
@@ -115,6 +116,14 @@ function rewritePathReferences(dir, from, to) {
   }
 }
 
+// The upstream engine guide sits beside resources/vulcan, but both are
+// installed under dpbs-docs/vulcan-docs/. Rebase links from the guide back to
+// Vulcan pages after flattening those two source trees into one destination.
+function rewriteEngineGuideLinks(dir) {
+  rewritePathReferences(dir, '../../../resources/vulcan/', '../../../');
+  rewritePathReferences(dir, '../../resources/vulcan/', '../../');
+}
+
 // Prompts interactively over a TTY, or replays piped/scripted stdin lines
 // in order when stdin isn't a TTY (e.g. `echo "1\n2" | npx dataproduct-builder-skills`).
 async function createPrompt() {
@@ -162,7 +171,7 @@ async function main() {
   const targetDir   = process.cwd();               // the user's project (destination)
   const examplesDir = path.join(packageDir, 'dpbs-docs', 'vulcan-examples');
 
-  const ALLOWED_ENGINES = ['databricks', 'fabric', 'mssql', 'postgres', 'snowflake', 'spark', 'trino'];
+  const ALLOWED_ENGINES = ['athena', 'databricks', 'fabric', 'mssql', 'postgres', 'redshift', 'snowflake', 'spark', 'trino'];
 
   // Only offer engines that actually shipped examples in this package version.
   const validEngines = fs.existsSync(examplesDir)
@@ -289,7 +298,15 @@ async function main() {
       const dest    = path.join(docsDest, destName);
       const existed = fs.existsSync(dest);
       syncDir(src, dest);
-      const n = countFiles(src);
+      if (dir === 'dataos') {
+        const engineGuideSrc = path.join(docsSrc, dir, ...DATAOS_ENGINE_GUIDE_SUBPATH);
+        if (fs.existsSync(engineGuideSrc)) {
+          const engineGuideDest = path.join(dest, 'engine-guide');
+          syncDir(engineGuideSrc, engineGuideDest);
+          rewriteEngineGuideLinks(engineGuideDest);
+        }
+      }
+      const n = countFiles(dest);
       ok(`${existed ? 'updated' : 'created'}  dpbs-docs/${destName}/  (${n} file${n === 1 ? '' : 's'})`);
     }
     // Clean up a stale `dataos/` folder left by a pre-rename version of this
@@ -374,16 +391,15 @@ async function main() {
     log(`${BOLD}${YELLOW}  WHAT'S NEW${RESET}`);
     log(`${BOLD}${YELLOW}══════════════════════════════════════════════════════════════${RESET}`);
     log('');
-    log(`  ${BOLD}${CYAN}fix-data-product${RESET} — new skill`);
-    log(`  ${DIM}Reads an existing 'vulcan review' report and, with your sign-off,${RESET}`);
-    log(`  ${DIM}syncs findings into the plan and fixes blocker/high issues + AI readiness.${RESET}`);
+    log(`  ${BOLD}${CYAN}Athena + Redshift${RESET} — engine support`);
+    log(`  ${DIM}Design and build data products for both engines with dedicated examples.${RESET}`);
     log('');
     log(`${BOLD}${YELLOW}══════════════════════════════════════════════════════════════${RESET}`);
     log('');
   }
 
   log('Ask the agent to use the skills — e.g.:');
-  log(`  ${CYAN}"design a data product for daily revenue by customer segment"${RESET}`);
+  log(`  ${CYAN}/design-data-product for daily revenue by customer segment${RESET}`);
   log('');
 }
 

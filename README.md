@@ -71,7 +71,8 @@ Engine selection is **not** interactive — it's `all` by default, or whichever 
     SKILL.md
 dpbs-docs/
   dataos-philosophy/  ← DataOS core concepts
-  vulcan-docs/        ← Vulcan CLI & framework reference
+  vulcan-docs/        ← Vulcan CLI/framework reference + official engine guide
+    engine-guide/     ← per-engine DataOS guidance
   vulcan-examples/
     <engine>/         ← real working data product examples for your chosen engine
   vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install dpbs-docs/vulcan-*.whl
@@ -155,7 +156,7 @@ npm run sync:vulcan          # dry-run — shows what would change
 npm run sync:vulcan:apply    # applies it
 ```
 
-This updates/force-restores both submodules to their currently pinned commits, and restricts `dpbs-docs/dataos`'s working tree to just `documentation/references/resources/vulcan` via sparse-checkout. It does **not** filter `dpbs-docs/vulcan-examples` — that submodule is left with its full raw content after this script runs; engine/file filtering happens only at install time (`bin/create.js`) and at packaging time (see below). Run this whenever you want the full submodule content back for local browsing after packaging has pruned it, or after pulling `main` and seeing the submodules show up as "modified (new commits)" — a teammate updated the pinned commit and you just need to check it out locally.
+This updates/force-restores both submodules to their currently pinned commits, and restricts `dpbs-docs/dataos`'s working tree to `documentation/references/resources/vulcan` plus `documentation/references/engine-guide` via sparse-checkout. The installer flattens the Vulcan reference into `dpbs-docs/vulcan-docs/` and places the official guide at `dpbs-docs/vulcan-docs/engine-guide/`. It does **not** filter `dpbs-docs/vulcan-examples` — that submodule is left with its full raw content after this script runs; engine/file filtering happens only at install time (`bin/create.js`) and at packaging time (see below). Run this whenever you want the full submodule content back for local browsing after packaging has pruned it, or after pulling `main` and seeing the submodules show up as "modified (new commits)" — a teammate updated the pinned commit and you just need to check it out locally.
 
 To pull the *latest* upstream commit for both submodules (not just re-apply the currently pinned one):
 
@@ -169,7 +170,7 @@ git add dpbs-docs/dataos dpbs-docs/vulcan-examples   # stage the new pinned comm
 
 ### Automatic pruning before packaging
 
-`npm pack`/`npm publish` runs `scripts/prepack-clean-examples.sh` automatically via the `prepack` npm lifecycle hook. It deletes everything in `dpbs-docs/vulcan-examples` except the allowed engines (`databricks`, `fabric`, `mssql`, `postgres`, `snowflake`, `spark`, `trino`) and strips junk files (`README.md`, `*.md`, `*.csv`, `*.tsv`, lockfiles, etc.) — without it, the raw submodule (200MB+ of seed CSVs, disallowed engines) would ship verbatim in the published tarball.
+`npm pack`/`npm publish` runs `scripts/prepack-clean-examples.sh` automatically via the `prepack` npm lifecycle hook. It deletes everything in `dpbs-docs/vulcan-examples` except the allowed engines (`athena`, `databricks`, `fabric`, `mssql`, `postgres`, `redshift`, `snowflake`, `spark`, `trino`) and strips junk files (`README.md`, `*.md`, `*.csv`, `*.tsv`, lockfiles, etc.) — without it, the raw submodule (200MB+ of seed CSVs, disallowed engines) would ship verbatim in the published tarball.
 
 ⚠️ This **mutates your working tree**, not just the pack output — after running `npm pack`/`npm publish`, `dpbs-docs/vulcan-examples` on disk will be pruned down. Run `npm run sync:vulcan:apply` (or `git submodule update --init --force dpbs-docs/vulcan-examples`) afterward to restore full content for local dev.
 
