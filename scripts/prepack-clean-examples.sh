@@ -18,6 +18,8 @@ EXAMPLES_DIR="${REPO_ROOT}/dpbs-docs/vulcan-examples"
 ALLOWED_ENGINES=(athena databricks fabric mssql postgres redshift snowflake spark trino)
 PRUNE_NAMES=(
   ".gitignore"
+  ".gitkeep"
+  ".env.example"
   "README.md"
   "*.md"
   "*.csv"

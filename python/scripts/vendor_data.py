@@ -28,6 +28,8 @@ ALLOWED_ENGINES = [
 ]
 PRUNE_NAMES = [
     ".gitignore",
+    ".gitkeep",
+    ".env.example",
     "README.md",
     "*.md",
     "*.csv",

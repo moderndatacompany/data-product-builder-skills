@@ -63,6 +63,8 @@ const DATAOS_ENGINE_GUIDE_SUBPATH = ['documentation', 'references', 'engine-guid
 // user's project, even if a stray file ever slips into a published tarball.
 const EXAMPLES_PRUNE_NAMES = [
   '.gitignore',
+  '.gitkeep',
+  '.env.example',
   'README.md',
   '*.md',
   '*.csv',
