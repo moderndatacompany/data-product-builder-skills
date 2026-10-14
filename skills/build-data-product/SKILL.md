@@ -22,6 +22,8 @@ This skill turns a validated design spec into a working, deployed data product a
 
 **Language note**: Vulcan is anti-pipeline. Never use "pipeline" in output or conversation. Use "model DAG", "data product", or "model layers" instead.
 
+**Do not open the wheel.** `dpbs-docs/vulcan-*.whl` is an install artifact only. You may glob its filename and pass that path to `pip install`. Do not Read, grep, unzip, or otherwise inspect the archive (no METADATA, no bundled source, no embedded docs). If you need Vulcan behavior, read `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`. After install, use `vulcan --help` — do not recover CLI flags by opening the wheel.
+
 ## Vulcan Project Layout (standard structure created by `vulcan init`)
 
 ```
@@ -81,7 +83,7 @@ Always use the `vulcan` CLI directly. Before running any `vulcan` command, deter
 2. **Workspace venv**: If step 1 fails, look for an existing virtual environment (`.venv/` or `venv/` in the project root) and check it — `.venv/bin/vulcan --version`. If `vulcan` resolves there, use that invocation for the rest of the session.
 3. **Auto-install from bundled wheel**: If `vulcan` is not found in steps 1–2, install it automatically using the bundled wheel:
    1. Read `dpbs-docs/vulcan-docs/ldk.md` and present it to the user so they understand the setup.
-   2. Find the wheel file: look for `dpbs-docs/vulcan-*.whl` (glob — pick the first match).
+   2. Find the wheel file: look for `dpbs-docs/vulcan-*.whl` (glob — pick the first match). Use the path only. Do not open or unzip the `.whl`.
       - If **no match** → tell the user: "The Vulcan wheel is not found under `dpbs-docs/`. Please run `npx builder-skills` first to install it, then let me know." **STOP** until confirmed.
       - If **found** → let `WHEEL=$(ls dpbs-docs/vulcan-*.whl | head -1)` and proceed.
    3. Create the `.venv` — run this unconditionally (it is a no-op if `.venv` already exists):
@@ -247,8 +249,9 @@ CHECKPOINT: Present this summary to the user and STOP. Do NOT proceed to Stage 1
 
 1. **Ground in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` (and read from `dpbs-docs/vulcan-examples/` for syntax). See Resource Selection Quick Reference.
 2. **Never reason beyond the docs** — if a concept, syntax, or pattern isn't explicitly covered in `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`, don't deduce or extrapolate an answer from general knowledge. Say it's undocumented and ask the user or point to the closest documented alternative. Do NOT search the web or consult dataos.info (or any other online DataOS/Vulcan documentation site) as a fallback — it may not match this project's bundled version. `https://v2.dataos.info` is the one exception — it's the correct, current documentation domain and may be used.
-3. **Fix, don't explain** — when errors occur, apply the exact fix. Don't stop at diagnosis.
-4. **Iterate per component** — generate → `vulcan evaluate` → fix → `vulcan plan` → fix → next component. Never batch all files before your first plan run.
+3. **Do not open the wheel** — `dpbs-docs/vulcan-*.whl` is an install artifact only. You may glob its filename and pass that path to `pip install`. Do not Read, grep, unzip, or otherwise inspect the archive. Vulcan behavior comes from the docs above, or from `vulcan --help` after install.
+4. **Fix, don't explain** — when errors occur, apply the exact fix. Don't stop at diagnosis.
+5. **Iterate per component** — generate → `vulcan evaluate` → fix → `vulcan plan` → fix → next component. Never batch all files before your first plan run.
 
 ---
 
@@ -311,25 +314,23 @@ When a docs page you used has a reference URL, show it to the user as "Reference
 
 ---
 
-### Per-Engine Reference Notes
+### Official DataOS Engine Guide
 
-`dpbs-docs/vulcan-examples/<engine>/` gives you real files for the target engine, but doesn't call out *why* one engine's file looks different from another's. `engines/<engine>.md` (in this skill's own directory, next to this SKILL.md) fills that gap: identifier casing convention, physical-model typing style, model-kind default pattern, and — the highest-defect-rate item — the per-engine date/time function syntax used inside semantic `segments:`/measure `expression:` fields (e.g. Postgres's `CURRENT_DATE - INTERVAL '7 days'` vs Databricks/Spark's `DATE_SUB(CURRENT_DATE(), 7)` vs MSSQL/Fabric's `DATEADD(DAY, -7, CAST(GETDATE() AS DATE))` vs Trino's `INTERVAL '7' DAY`).
+Use the bundled official DataOS engine guide for engine-specific connection, dialect, identifier casing, supported model kinds, materialization, permissions, limits, and troubleshooting. Use the matching `dpbs-docs/vulcan-examples/<engine>/` folder for concrete project syntax. Never substitute another engine's guide or examples.
 
-| `<ENGINE>` | File | Notes |
-|---|---|---|
-| `postgres` | `engines/postgres.md` | Reference dialect — ANSI intervals, `::` casts |
-| `snowflake` | `engines/snowflake.md` | UPPERCASE everywhere, defensive `::` casts even in `WHERE` |
-| `databricks` | `engines/databricks.md` | Spark SQL family — no `::`, use `CAST()`; `DATE_SUB(CURRENT_DATE(), N)` |
-| `spark` | `engines/spark.md` | Same cast rule as Databricks; casing follows the source table, not a fixed convention |
-| `trino` | `engines/trino.md` | Explicit `columns()` block; `INTERVAL 'N' DAY` (number/unit split, not a quoted phrase) |
-| `mssql` | `engines/mssql.md` | T-SQL — no `::`, use `CAST()`; `DATEADD`/`GETDATE()`, no native `DATE_TRUNC` |
-| `fabric` | `engines/fabric.md` | Same T-SQL surface as `mssql` — thin file, points back to `mssql.md` |
+| `<ENGINE>` | Official guide |
+|---|---|
+| `postgres` | `dpbs-docs/vulcan-docs/engine-guide/postgres/` |
+| `snowflake` | `dpbs-docs/vulcan-docs/engine-guide/snowflake/` |
+| `databricks` | `dpbs-docs/vulcan-docs/engine-guide/databricks/` |
+| `spark` | `dpbs-docs/vulcan-docs/engine-guide/spark-1/` |
+| `trino` | `dpbs-docs/vulcan-docs/engine-guide/trino-1/` |
+| `mssql` | `dpbs-docs/vulcan-docs/engine-guide/sql-server/` |
+| `fabric` | `dpbs-docs/vulcan-docs/engine-guide/microsoft-fabric/` |
 
-**When**: read the file for `<ENGINE>` once, right before starting Group A/B (models) and again before Group C (semantics) — same timing as the `dpbs-docs/vulcan-examples/<engine>/` read, not a separate pass.
+**When**: read `dpbs-docs/vulcan-docs/engine-guide/README.md` and the matching engine folder once before Groups A/B, then revisit the relevant page before Group C or when troubleshooting. Read the matching examples at the same points.
 
-**How**: use it to decide casing and typing style *before* writing a file, and to look up the correct date/time function whenever a segment or measure `expression:` needs "last N days"/date-truncation/current-date logic — do not reuse another engine's date-function syntax verbatim even if the rest of the semantic YAML structure is identical across engines. If a shared `macros/*.py` file is in play (e.g. a `safe_divide` macro emitting `::FLOAT`), check the target engine's file for the `::`-cast note before assuming the macro is portable.
-
-If no file exists yet for the target engine, say so and fall back to the general syntax rules in this document plus `dpbs-docs/vulcan-book/`.
+**How**: use the guide to make engine-specific decisions and the examples to confirm file-level syntax. If the target engine is not listed or its guide folder is absent, say that the bundled official guide does not cover it yet; use only its matching example folder plus the general Vulcan docs, and do not infer behavior from a different engine.
 
 ---
 
@@ -462,7 +463,7 @@ Follow `generation_order`, grouped by component type. After each group, run `vul
 - **`vars: {execution_time: <ISO-date>}`** — required for INCREMENTAL_BY_TIME_RANGE models; the date controls which weekly/daily interval the model processes during the test. The date MUST fall within the test mock data's date range or the model will return empty results
 - **Mock the direct dependency** — test inputs must mock the silver/staging model (the direct FROM clause target), not the raw seed tables
 
-**Before generating any file in a group**, read from `dpbs-docs/vulcan-examples/<engine>/` once to load real syntax examples for that group. **Only read from this one engine folder — never from any other engine subfolder.** Also read `engines/<engine>.md` per the Per-Engine Reference Notes table above, same timing.
+**Before generating any file in a group**, read from `dpbs-docs/vulcan-examples/<engine>/` once to load real syntax examples for that group. **Only read from this one engine folder — never from any other engine subfolder.** Also read the matching official DataOS guide from the table above; never use another engine's guide as a substitute.
 
 - Group A/B → read models files from `dpbs-docs/vulcan-examples/<engine>/`
 - Group C → read semantics files from `dpbs-docs/vulcan-examples/<engine>/` (files live in `models/semantics/`)

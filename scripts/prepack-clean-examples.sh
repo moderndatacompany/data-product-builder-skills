@@ -15,7 +15,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 EXAMPLES_DIR="${REPO_ROOT}/dpbs-docs/vulcan-examples"
-ALLOWED_ENGINES=(databricks fabric mssql postgres snowflake spark trino)
+ALLOWED_ENGINES=(athena databricks fabric mssql postgres redshift snowflake spark trino)
 PRUNE_NAMES=(
   ".gitignore"
   "README.md"

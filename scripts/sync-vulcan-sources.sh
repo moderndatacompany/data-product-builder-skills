@@ -8,6 +8,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 MODE="dry-run"
 
 DATAOS_VULCAN_PATH="documentation/references/resources/vulcan"
+DATAOS_ENGINE_GUIDE_PATH="documentation/references/engine-guide"
 
 usage() {
   cat <<'EOF'
@@ -16,7 +17,7 @@ Usage: scripts/sync-vulcan-sources.sh [--dry-run|--apply]
 Syncs the Vulcan submodules in place under dpbs-docs:
   - dpbs-docs/dataos          (GitHub moderndatacompany/dataos, sparse-checked
                                out to documentation/references/resources/vulcan
-                               only)
+                               and documentation/references/engine-guide)
   - dpbs-docs/vulcan-examples (Bitbucket rubik_/vulcan-examples, unfiltered —
                                engine/file filtering happens at install time
                                in bin/create.js, not here)
@@ -24,8 +25,8 @@ Syncs the Vulcan submodules in place under dpbs-docs:
 Operations:
   1. Initializes/force-updates both submodules to their pinned commits,
      restoring full content even if a prior run left it pruned
-  2. Restricts dpbs-docs/dataos's working tree to
-     documentation/references/resources/vulcan via sparse-checkout
+  2. Restricts dpbs-docs/dataos's working tree to the Vulcan reference and
+     engine guide via sparse-checkout
 
 Options:
   --dry-run   Show what would change without writing files (default)
@@ -86,16 +87,18 @@ update_submodules() {
 configure_dataos_sparse_checkout() {
   log ""
   if [[ "${MODE}" != "apply" ]]; then
-    log "[dry-run] would restrict dpbs-docs/dataos checkout to ${DATAOS_VULCAN_PATH}/*"
+    log "[dry-run] would restrict dpbs-docs/dataos checkout to ${DATAOS_VULCAN_PATH}/* and ${DATAOS_ENGINE_GUIDE_PATH}/*"
     return
   fi
 
-  log "Restricting dpbs-docs/dataos checkout to ${DATAOS_VULCAN_PATH}"
+  log "Restricting dpbs-docs/dataos checkout to the Vulcan reference and engine guide"
   (
     cd "${DATAOS_DIR}"
     git sparse-checkout init --no-cone
     git_dir="$(git rev-parse --git-dir)"
-    printf '/%s/*\n' "${DATAOS_VULCAN_PATH}" > "${git_dir}/info/sparse-checkout"
+    printf '/%s/*\n/%s/*\n' \
+      "${DATAOS_VULCAN_PATH}" \
+      "${DATAOS_ENGINE_GUIDE_PATH}" > "${git_dir}/info/sparse-checkout"
     git sparse-checkout reapply
   )
 }

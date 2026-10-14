@@ -15,7 +15,17 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PKG_DATA = Path(__file__).resolve().parents[1] / "src" / "dataproduct_builder_skills" / "data"
 
-ALLOWED_ENGINES = ["databricks", "fabric", "mssql", "postgres", "snowflake", "spark", "trino"]
+ALLOWED_ENGINES = [
+    "athena",
+    "databricks",
+    "fabric",
+    "mssql",
+    "postgres",
+    "redshift",
+    "snowflake",
+    "spark",
+    "trino",
+]
 PRUNE_NAMES = [
     ".gitignore",
     "README.md",
@@ -32,9 +42,11 @@ PRUNE_NAMES = [
     "usecases.yaml",
 ]
 
-# dataos is sparse-checked-out to only this subpath in the source repo.
+# dataos is sparse-checked-out to the Vulcan reference and engine guide. The
+# Vulcan reference is flattened into dpbs-docs/vulcan-docs/ when packaged.
 SRC_SUBPATH_OVERRIDES = {"dataos": ["documentation", "references", "resources", "vulcan"]}
 DEST_NAME_OVERRIDES = {"dataos": "vulcan-docs"}
+DATAOS_ENGINE_GUIDE_SUBPATH = ["documentation", "references", "engine-guide"]
 
 
 def matches_prune_name(name, patterns):
@@ -63,6 +75,20 @@ def copy_tree(src: Path, dest: Path, ignore_git=True):
     shutil.copytree(src, dest, ignore=ignore)
 
 
+def rewrite_engine_guide_links(root: Path):
+    replacements = {
+        "../../../resources/vulcan/": "../../../",
+        "../../resources/vulcan/": "../../",
+    }
+    for path in root.rglob("*.md"):
+        content = path.read_text(encoding="utf-8")
+        updated = content
+        for old, new in replacements.items():
+            updated = updated.replace(old, new)
+        if updated != content:
+            path.write_text(updated, encoding="utf-8")
+
+
 def main():
     if PKG_DATA.exists():
         shutil.rmtree(PKG_DATA)
@@ -88,6 +114,12 @@ def main():
         src = entry.joinpath(*subpath)
         dest = docs_dest / dest_name
         copy_tree(src, dest)
+        if entry.name == "dataos":
+            engine_guide_src = entry.joinpath(*DATAOS_ENGINE_GUIDE_SUBPATH)
+            if engine_guide_src.exists():
+                engine_guide_dest = dest / "engine-guide"
+                copy_tree(engine_guide_src, engine_guide_dest)
+                rewrite_engine_guide_links(engine_guide_dest)
         n = sum(1 for p in dest.rglob("*") if p.is_file())
         print(f"  vendored dpbs-docs/{dest_name}/  ({n} files)")
 

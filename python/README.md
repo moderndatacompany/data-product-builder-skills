@@ -75,7 +75,8 @@ Engine selection is **not** interactive — it's `all` by default, or whichever 
     SKILL.md
 dpbs-docs/
   dataos-philosophy/  ← DataOS core concepts
-  vulcan-docs/        ← Vulcan CLI & framework reference
+  vulcan-docs/        ← Vulcan CLI/framework reference + official engine guide
+    engine-guide/     ← per-engine DataOS guidance
   vulcan-examples/
     <engine>/         ← real working data product examples for your chosen engine
   vulcan-*.whl        ← Vulcan CLI wheel — install with: pip install dpbs-docs/vulcan-*.whl

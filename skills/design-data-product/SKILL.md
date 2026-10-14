@@ -23,9 +23,10 @@ Design data products for Vulcan/DataOS. Be methodical, artifact-driven, and assu
 2. **Never reason beyond the docs** — if a concept, syntax, or pattern isn't explicitly covered in `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`, don't deduce or extrapolate an answer from general knowledge. Say it's undocumented and ask the user or point to the closest documented alternative. Do NOT search the web or consult dataos.info (or any other online DataOS/Vulcan documentation site) as a fallback — it may not match this project's bundled version. `https://v2.dataos.info` is the one exception — it's the correct, current documentation domain and may be used.
 3. **Never skip requirements** — always gather context before jumping to solutions. Don't skip stages.
 4. **Ground everything in the docs** — before using any Vulcan concept, syntax, or pattern in output, confirm it against the Vulcan documentation in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` (search your indexed workspace and read the relevant page). For concrete code syntax, also read from `dpbs-docs/vulcan-examples/`. When in doubt, look it up — never rely on memory.
-5. **Build the artifact progressively** — create and update `data-product-plan.md` at every stage. Document decisions as you go.
-6. **Mark assumptions explicitly** — use the `[Assumption]` tag for anything not confirmed by the user.
-7. **Vulcan is anti-pipeline** — never use "pipeline." Use "model DAG", "data product", or "model layers" instead.
+5. **Do not open the wheel** — `dpbs-docs/vulcan-*.whl` is an install artifact only. You may glob its filename and pass that path to `pip install`. Do not Read, grep, unzip, or otherwise inspect the archive (no METADATA, no bundled source, no embedded docs). If you need Vulcan behavior, read `dpbs-docs/vulcan-docs/`, `dpbs-docs/dataos-philosophy/`, or `dpbs-docs/vulcan-examples/`. After install, use `vulcan --help` — do not recover CLI flags by opening the wheel.
+6. **Build the artifact progressively** — create and update `data-product-plan.md` at every stage. Document decisions as you go.
+7. **Mark assumptions explicitly** — use the `[Assumption]` tag for anything not confirmed by the user.
+8. **Vulcan is anti-pipeline** — never use "pipeline." Use "model DAG", "data product", or "model layers" instead.
 
 The data product you design will be implemented in this standard Vulcan project layout:
 
@@ -54,6 +55,7 @@ Use these resources proactively — grounding every decision in the docs is mand
 | Situation                           | What to do                                                                         | When                                                                           |
 | ----------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | Any Vulcan concept mentioned        | Read the relevant page(s) in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`     | BEFORE using the concept in any output                                         |
+| Engine-specific design decision     | Read `dpbs-docs/vulcan-docs/engine-guide/README.md` and the matching engine folder           | AFTER the engine is confirmed and BEFORE architecture decisions                |
 | Any design decision                 | Reason from the docs + confirmed requirements; record it in `data-product-plan.md` | AFTER each batch of questions                                                  |
 | Need implementation pattern         | read from `dpbs-docs/vulcan-examples/` (category=..., engine=...)                       | BEFORE generating any code or recommending patterns                            |
 | Quality checks for the data product | Derive them yourself from the spec columns, grounded in the `dq`/audits docs       | At end of Stage 3.5 (Step 2.5) after spec is finalized                         |
@@ -456,13 +458,15 @@ Read the `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/` pages for e
 
 **Step 2 — Retrieve reference patterns:**
 
+Read `dpbs-docs/vulcan-docs/engine-guide/README.md`, follow its link for `<Q5b>`, and read the relevant pages for connection, dialect, supported model kinds, materialization behavior, limits, and troubleshooting. If the guide has no entry for `<Q5b>`, record that the bundled official guide does not cover it yet. Never use another engine's guide as a substitute.
+
 Read files from `dpbs-docs/vulcan-examples/<Q5b>/` only — this is the confirmed engine folder. Do NOT read from any other engine subfolder. Browse within it for the relevant category (models, semantics, dq, checks, metrics, audits, tests).
 
 - [ ] Read model files from `dpbs-docs/vulcan-examples/<Q5b>/` — see how real models and grain are structured
 - [ ] Read semantics files from `dpbs-docs/vulcan-examples/<Q5b>/` — see how measures/dimensions are defined
 - [ ] Read metrics files from `dpbs-docs/vulcan-examples/<Q5b>/` — see how metrics reference measures
 
-If NO examples found: tell the user, and fall back to the patterns documented in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`.
+If NO examples are found: tell the user, and fall back to the matching official engine guide plus the patterns documented in `dpbs-docs/vulcan-docs/` and `dpbs-docs/dataos-philosophy/`.
 
 **Step 2.5 — Derive quality rules**:
 

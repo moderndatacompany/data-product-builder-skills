@@ -36,7 +36,17 @@ def err(msg):
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
 
-ALLOWED_ENGINES = ["databricks", "fabric", "mssql", "postgres", "snowflake", "spark", "trino"]
+ALLOWED_ENGINES = [
+    "athena",
+    "databricks",
+    "fabric",
+    "mssql",
+    "postgres",
+    "redshift",
+    "snowflake",
+    "spark",
+    "trino",
+]
 
 IDE_OPTIONS = [
     ("Cursor", ".cursor"),
@@ -233,15 +243,14 @@ def main():
         log(f"{BOLD}{YELLOW}  WHAT'S NEW{RESET}")
         log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
         log()
-        log(f"  {BOLD}{CYAN}fix-data-product{RESET} — new skill")
-        log(f"  {DIM}Reads an existing 'vulcan review' report and, with your sign-off,{RESET}")
-        log(f"  {DIM}syncs findings into the plan and fixes blocker/high issues + AI readiness.{RESET}")
+        log(f"  {BOLD}{CYAN}Athena + Redshift{RESET} — engine support")
+        log(f"  {DIM}Design and build data products for both engines with dedicated examples.{RESET}")
         log()
         log(f"{BOLD}{YELLOW}{'═' * 62}{RESET}")
         log()
 
     log("Ask the agent to use the skills — e.g.:")
-    log(f'  {CYAN}"design a data product for daily revenue by customer segment"{RESET}')
+    log(f"  {CYAN}/design-data-product for daily revenue by customer segment{RESET}")
     log()
 
 
