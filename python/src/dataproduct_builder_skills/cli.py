@@ -5,6 +5,7 @@ Python port of bin/create.js — same behavior, same prompts, same output
 layout, so it can be run via `uvx`/`pipx run` alongside the npm package's
 `npx` flow.
 """
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -83,11 +84,12 @@ def count_files(d: Path) -> int:
     return sum(1 for p in d.rglob("*") if p.is_file())
 
 
-def rewrite_path_references(d: Path, old: str, new: str):
+def rewrite_path_references(d: Path, pattern: str, new: str):
     for p in d.rglob("*.md"):
         content = p.read_text(encoding="utf-8")
-        if old in content:
-            p.write_text(content.replace(old, new), encoding="utf-8")
+        updated = re.sub(pattern, new, content)
+        if updated != content:
+            p.write_text(updated, encoding="utf-8")
 
 
 def prompt_ides() -> list[str]:
@@ -167,7 +169,8 @@ def main():
                 dest = target_dir / ide_folder / "skills" / skill
                 existed = dest.exists()
                 sync_dir(src, dest)
-                rewrite_path_references(dest, "dpbs-docs/dataos", "dpbs-docs/vulcan-docs")
+                # Negative lookahead: don't touch `dpbs-docs/dataos-philosophy`.
+                rewrite_path_references(dest, r"dpbs-docs/dataos(?![-\w])", "dpbs-docs/vulcan-docs")
                 ok(f"{'updated' if existed else 'created'}  {ide_folder}/skills/{skill}/")
 
     # ── dpbs-docs (non-examples) ──

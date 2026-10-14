@@ -101,7 +101,8 @@ function cleanDisallowedFiles(dir, patterns) {
 
 // Rewrites `dpbs-docs/dataos` references inside copied skill .md files to
 // `dpbs-docs/vulcan-docs`, so the skill's instructions match the renamed
-// folder that actually exists in the target project.
+// folder that actually exists in the target project. `from` may be a string
+// (literal match) or a RegExp (used to avoid matching `dataos-philosophy`).
 function rewritePathReferences(dir, from, to) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, entry.name);
@@ -109,9 +110,8 @@ function rewritePathReferences(dir, from, to) {
       rewritePathReferences(p, from, to);
     } else if (entry.name.endsWith('.md')) {
       const content = fs.readFileSync(p, 'utf8');
-      if (content.includes(from)) {
-        fs.writeFileSync(p, content.split(from).join(to));
-      }
+      const next = typeof from === 'string' ? content.split(from).join(to) : content.replace(from, to);
+      if (next !== content) fs.writeFileSync(p, next);
     }
   }
 }
@@ -276,7 +276,8 @@ async function main() {
         const dest   = path.join(targetDir, ideFolder, 'skills', skill);
         const existed = fs.existsSync(dest);
         syncDir(src, dest);
-        rewritePathReferences(dest, 'dpbs-docs/dataos', 'dpbs-docs/vulcan-docs');
+        // Negative lookahead: don't touch `dpbs-docs/dataos-philosophy`.
+        rewritePathReferences(dest, /dpbs-docs\/dataos(?![-\w])/g, 'dpbs-docs/vulcan-docs');
         ok(`${existed ? 'updated' : 'created'}  ${ideFolder}/skills/${skill}/`);
       }
     }
