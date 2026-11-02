@@ -394,8 +394,8 @@ async function main() {
     log(`${BOLD}${YELLOW}  WHAT'S NEW${RESET}`);
     log(`${BOLD}${YELLOW}══════════════════════════════════════════════════════════════${RESET}`);
     log('');
-    log(`  ${BOLD}${CYAN}Athena + Redshift${RESET} — engine support`);
-    log(`  ${DIM}Design and build data products for both engines with dedicated examples.${RESET}`);
+    log(`  ${BOLD}${CYAN}Athena + Redshift${RESET} — official engine guides`);
+    log(`  ${DIM}Engine guide now covers both, alongside new Spark recipes and Trino dedicated-cluster docs.${RESET}`);
     log('');
     log(`${BOLD}${YELLOW}══════════════════════════════════════════════════════════════${RESET}`);
     log('');

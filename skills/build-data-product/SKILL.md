@@ -327,6 +327,8 @@ Use the bundled official DataOS engine guide for engine-specific connection, dia
 | `trino` | `dpbs-docs/vulcan-docs/engine-guide/trino-1/` |
 | `mssql` | `dpbs-docs/vulcan-docs/engine-guide/sql-server/` |
 | `fabric` | `dpbs-docs/vulcan-docs/engine-guide/microsoft-fabric/` |
+| `athena` | `dpbs-docs/vulcan-docs/engine-guide/athena/` |
+| `redshift` | `dpbs-docs/vulcan-docs/engine-guide/redshift/` |
 
 **When**: read `dpbs-docs/vulcan-docs/engine-guide/README.md` and the matching engine folder once before Groups A/B, then revisit the relevant page before Group C or when troubleshooting. Read the matching examples at the same points.
 
